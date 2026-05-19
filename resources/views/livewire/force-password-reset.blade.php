@@ -6,12 +6,12 @@
         <div class="w-full bg-white shadow-sm md:mt-0 sm:max-w-md xl:p-0 dark:bg-base ">
             <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
                 <form class="flex flex-col gap-2" wire:submit='submit'>
-                    <x-forms.input id="email" type="email" placeholder="Email" readonly label="Email" />
-                    <x-forms.input id="password" type="password" placeholder="New Password" label="New Password"
+                    <x-forms.input id="email" type="email" :placeholder="__('input.email')" readonly :label="__('input.email')" />
+                    <x-forms.input id="password" type="password" :placeholder="__('New Password')" :label="__('New Password')"
                         required />
-                    <x-forms.input id="password_confirmation" type="password" placeholder="Confirm New Password"
-                        label="Confirm New Password" required />
-                    <x-forms.button type="submit">Reset Password</x-forms.button>
+                    <x-forms.input id="password_confirmation" type="password" :placeholder="__('Confirm New Password')"
+                        :label="__('Confirm New Password')" required />
+                    <x-forms.button type="submit">{{ __('auth.reset_password') }}</x-forms.button>
                 </form>
             </div>
         </div>

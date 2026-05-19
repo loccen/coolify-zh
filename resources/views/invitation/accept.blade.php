@@ -10,17 +10,17 @@
 
                 <div class="space-y-6">
                     <div class="p-6 rounded-lg border border-neutral-500/20 bg-white/5">
-                        <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Team Invitation</h2>
+                        <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">{{ __('Team Invitation') }}</h2>
 
                         <p class="text-sm text-gray-600 dark:text-neutral-400 mb-2">
-                            You have been invited to join:
+                            {{ __('You have been invited to join:') }}
                         </p>
                         <p class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                             {{ $team->name }}
                         </p>
 
                         <p class="text-sm text-gray-600 dark:text-neutral-400 mb-1">
-                            Role: <span class="font-medium text-gray-900 dark:text-white">{{ ucfirst($invitation->role) }}</span>
+                            {{ __('Role:') }} <span class="font-medium text-gray-900 dark:text-white">{{ __(str($invitation->role)->headline()->toString()) }}</span>
                         </p>
 
                         @if ($alreadyMember)
@@ -32,7 +32,7 @@
                         <form method="POST" action="{{ route('team.invitation.accept', $invitation->uuid) }}" class="mt-6">
                             @csrf
                             <x-forms.button class="w-full justify-center py-3 box-boarding" type="submit" isHighlighted>
-                                {{ $alreadyMember ? 'Dismiss Invitation' : 'Accept Invitation' }}
+                                {{ $alreadyMember ? __('Dismiss Invitation') : __('Accept Invitation') }}
                             </x-forms.button>
                         </form>
                     </div>
