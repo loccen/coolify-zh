@@ -4,7 +4,7 @@
     </x-slot>
 
     <div class="flex items-center gap-2">
-        <h1>{{ __('Storage Details') }}</h1>
+        <h1>{{ __('storage.title') }}</h1>
         @if ($storage->is_usable)
             <span class="px-2 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded dark:text-green-100 dark:bg-green-800">
                 {{ __('Usable') }}
@@ -16,15 +16,16 @@
         @endif
         <x-forms.button canGate="update" :canResource="$storage" wire:click="$dispatch('submitStorage')" :disabled="$currentRoute !== 'storage.show'">{{ __('Save') }}</x-forms.button>
         @can('delete', $storage)
-            <x-modal-confirmation title="{{ __('Confirm Storage Deletion?') }}" isErrorButton buttonTitle="{{ __('Delete') }}"
+            <x-modal-confirmation :title="__('storage.delete_confirmation.title')" isErrorButton buttonTitle="{{ __('Delete') }}"
                 submitAction="delete({{ $storage->id }})" :actions="array_filter([
-                    __('The selected storage location will be permanently deleted from Coolify.'),
+                    __('storage.delete_confirmation.actions.delete_storage'),
                     $backupCount > 0
-                        ? $backupCount . ' ' . __('backup schedule(s) will be updated to no longer save to S3 and will only store backups locally on the server.')
+                        ? __('storage.delete_confirmation.actions.update_backups', ['count' => $backupCount])
                         : null,
                 ])" confirmationText="{{ $storage->name }}"
-                confirmationLabel="{{ __('Please confirm the execution of the actions by entering the Storage Name below') }}"
-                shortConfirmationLabel="{{ __('Storage Name') }}" :confirmWithPassword="false" step2ButtonText="{{ __('Permanently Delete') }}" />
+                :confirmationLabel="__('storage.delete_confirmation.label')"
+                :shortConfirmationLabel="__('storage.delete_confirmation.short_label')" :confirmWithPassword="false"
+                step2ButtonText="{{ __('Permanently Delete') }}" />
         @endcan
     </div>
     <div class="subtitle">{{ $storage->name }}</div>

@@ -1,6 +1,13 @@
 <?php
 
 return [
+    'subtitle' => 'Execute commands on your servers and containers without leaving the browser.',
+    'loading_containers' => 'Loading servers and containers...',
+    'select_target' => 'Select a server or container',
+    'no_servers' => 'No servers with terminal access found.',
+    'help' => [
+        'connection' => 'If you\'re having trouble connecting to your server, make sure that the port is open.<br><br><a class=\'underline\' href=\':url\' target=\'_blank\'>Documentation</a>',
+    ],
     'reasons' => [
         'connection_timeout' => 'Connection timeout',
         'failed_to_create_websocket_connection' => 'Failed to create WebSocket connection: :message',

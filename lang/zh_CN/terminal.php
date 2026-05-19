@@ -1,6 +1,13 @@
 <?php
 
 return [
+    'subtitle' => '无需离开浏览器即可在服务器和容器上执行命令。',
+    'loading_containers' => '正在加载服务器和容器...',
+    'select_target' => '选择服务器或容器',
+    'no_servers' => '未找到具有终端访问权限的服务器。',
+    'help' => [
+        'connection' => '如果连接服务器遇到问题，请确认端口已开放。<br><br><a class=\'underline\' href=\':url\' target=\'_blank\'>文档</a>',
+    ],
     'reasons' => [
         'connection_timeout' => '连接超时',
         'failed_to_create_websocket_connection' => '创建 WebSocket 连接失败：:message',
