@@ -52,14 +52,14 @@
                                         clip-rule="evenodd" />
                                 </svg>
                                 <div>
-                                    <p class="font-bold text-warning mb-2">Email Not Configured</p>
+                                    <p class="font-bold text-warning mb-2">{{ __('Email Not Configured') }}</p>
                                     <p class="text-sm dark:text-white text-black mb-2">
-                                        Transactional emails are not active on this instance.
+                                        {{ __('Transactional emails are not active on this instance.') }}
                                     </p>
                                     <p class="text-sm dark:text-white text-black">
-                                        See how to set it in our <a class="font-bold underline hover:text-coollabs"
-                                            target="_blank" href="{{ config('constants.urls.docs') }}">documentation</a>, or
-                                        learn how to manually reset your password.
+                                        {!! __('See how to set it in our :documentation, or learn how to manually reset your password.', [
+                                            'documentation' => '<a class="font-bold underline hover:text-coollabs" target="_blank" href="' . config('constants.urls.docs') . '">' . __('documentation') . '</a>',
+                                        ]) !!}
                                     </p>
                                 </div>
                             </div>
@@ -72,14 +72,14 @@
                         </div>
                         <div class="relative flex justify-center text-sm">
                             <span class="px-2 dark:bg-base text-neutral-500 dark:text-neutral-400">
-                                Remember your password?
+                                {{ __('Remember your password?') }}
                             </span>
                         </div>
                     </div>
 
                     <a href="/login"
                         class="block w-full text-center py-3 px-4 rounded-lg border border-neutral-300 dark:border-coolgray-400 font-medium hover:border-coollabs dark:hover:border-warning transition-colors">
-                        Back to Login
+                        {{ __('Back to Login') }}
                     </a>
                 </div>
             </div>

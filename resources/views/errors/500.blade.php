@@ -2,9 +2,10 @@
 <div class="flex items-center justify-center min-h-screen">
     <div class="w-full max-w-3xl px-8">
         <p class="font-mono font-semibold text-red-500 text-[200px] leading-none">500</p>
-        <h1 class="text-3xl font-bold tracking-tight dark:text-white">Wait, this is not cool...</h1>
-        <p class="mt-2 text-lg leading-7 dark:text-neutral-400 text-black">There has been an error with the following
-            error message:</p>
+        <h1 class="text-3xl font-bold tracking-tight dark:text-white">{{ __('Wait, this is not cool...') }}</h1>
+        <p class="mt-2 text-lg leading-7 dark:text-neutral-400 text-black">
+            {{ __('There has been an error with the following error message:') }}
+        </p>
         @if ($exception->getMessage() !== '')
             <div class="mt-6 text-sm text-red-500">
                 {!! Purify::clean($exception->getMessage()) !!}
@@ -12,13 +13,12 @@
         @endif
         <div class="flex items-center mt-10 gap-x-2">
             <a href="{{ url()->previous() }}">
-                <x-forms.button>Go back</x-forms.button>
+                <x-forms.button>{{ __('Go back') }}</x-forms.button>
             </a>
             <a href="{{ route('dashboard') }}" {{ wireNavigate() }}>
-                <x-forms.button>Dashboard</x-forms.button>
+                <x-forms.button>{{ __('Dashboard') }}</x-forms.button>
             </a>
-            <a target="_blank" class="text-xs" href="{{ config('constants.urls.contact') }}">Contact
-                support
+            <a target="_blank" class="text-xs" href="{{ config('constants.urls.contact') }}">{{ __('Contact support') }}
                 <x-external-link />
             </a>
         </div>

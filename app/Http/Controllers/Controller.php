@@ -75,7 +75,7 @@ class Controller extends BaseController
             ]);
             $type = set_transanctional_email_settings();
             if (blank($type)) {
-                return response()->json(['message' => 'Transactional emails are not active'], 400);
+                return response()->json(['message' => __('Transactional emails are not active')], 400);
             }
             $request->validate([Fortify::email() => 'required|email']);
             $status = Password::broker(config('fortify.passwords'))->sendResetLink(
@@ -85,13 +85,13 @@ class Controller extends BaseController
                 return app(SuccessfulPasswordResetLinkRequestResponse::class, ['status' => $status]);
             }
             if ($status == Password::RESET_THROTTLED) {
-                return response('Already requested a password reset in the past minutes.', 400);
+                return response(__('Already requested a password reset in the past minutes.'), 400);
             }
 
             return app(FailedPasswordResetLinkRequestResponse::class, ['status' => $status]);
         }
 
-        return response()->json(['message' => 'Transactional emails are not active'], 400);
+        return response()->json(['message' => __('Transactional emails are not active')], 400);
     }
 
     public function link()
@@ -121,7 +121,7 @@ class Controller extends BaseController
             }
         }
 
-        return redirect()->route('login')->with('error', 'Invalid credentials.');
+        return redirect()->route('login')->with('error', __('Invalid credentials.'));
     }
 
     public function showInvitation()
@@ -131,11 +131,11 @@ class Controller extends BaseController
         $user = User::whereEmail($invitation->email)->firstOrFail();
 
         if (Auth::id() !== $user->id) {
-            abort(400, 'You are not allowed to accept this invitation.');
+            abort(400, __('You are not allowed to accept this invitation.'));
         }
 
         if (! $invitation->isValid()) {
-            abort(400, 'Invitation expired.');
+            abort(400, __('Invitation expired.'));
         }
 
         $alreadyMember = $user->teams()->where('team_id', $invitation->team->id)->exists();
@@ -155,11 +155,11 @@ class Controller extends BaseController
         $user = User::whereEmail($invitation->email)->firstOrFail();
 
         if (Auth::id() !== $user->id) {
-            abort(400, 'You are not allowed to accept this invitation.');
+            abort(400, __('You are not allowed to accept this invitation.'));
         }
 
         if (! $invitation->isValid()) {
-            abort(400, 'Invitation expired.');
+            abort(400, __('Invitation expired.'));
         }
 
         if ($user->teams()->where('team_id', $invitation->team->id)->exists()) {
