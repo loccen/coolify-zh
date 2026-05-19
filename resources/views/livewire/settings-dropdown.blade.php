@@ -164,20 +164,28 @@
 
                     <div class="font-bold border-b dark:border-coolgray-500 border-neutral-300 dark:text-white pb-1">
                         Language</div>
-                    <a href="{{ route('locale.switch', ['locale' => 'en']) }}"
-                        class="px-1 dropdown-item-no-padding flex items-center justify-between gap-2">
-                        <span>English</span>
-                        @if (app()->getLocale() === 'en')
-                            <span class="text-xs dark:text-neutral-400">✓</span>
-                        @endif
-                    </a>
-                    <a href="{{ route('locale.switch', ['locale' => 'zh-cn']) }}"
-                        class="px-1 dropdown-item-no-padding flex items-center justify-between gap-2">
-                        <span>简体中文</span>
-                        @if (app()->getLocale() === 'zh-cn')
-                            <span class="text-xs dark:text-neutral-400">✓</span>
-                        @endif
-                    </a>
+                    <form method="POST" action="{{ route('locale.switch') }}">
+                        @csrf
+                        <input type="hidden" name="locale" value="en">
+                        <input type="hidden" name="redirect_to" value="{{ request()->getRequestUri() }}">
+                        <button type="submit" class="w-full px-1 dropdown-item-no-padding flex items-center justify-between gap-2">
+                            <span>English</span>
+                            @if (app()->getLocale() === 'en')
+                                <span class="text-xs dark:text-neutral-400">✓</span>
+                            @endif
+                        </button>
+                    </form>
+                    <form method="POST" action="{{ route('locale.switch') }}">
+                        @csrf
+                        <input type="hidden" name="locale" value="zh_CN">
+                        <input type="hidden" name="redirect_to" value="{{ request()->getRequestUri() }}">
+                        <button type="submit" class="w-full px-1 dropdown-item-no-padding flex items-center justify-between gap-2">
+                            <span>简体中文</span>
+                            @if (app()->getLocale() === 'zh_CN')
+                                <span class="text-xs dark:text-neutral-400">✓</span>
+                            @endif
+                        </button>
+                    </form>
 
                     <div class="border-b dark:border-coolgray-500 border-neutral-300"></div>
 

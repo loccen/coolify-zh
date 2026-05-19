@@ -113,7 +113,7 @@ return [
     |
     */
 
-    'locale' => 'zh-cn',
+    'locale' => 'zh_CN',
 
     /*
     |--------------------------------------------------------------------------
@@ -126,7 +126,19 @@ return [
     |
     */
 
-    'fallback_locale' => 'zh-cn',
+    'fallback_locale' => 'en',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Application Supported Locales
+    |--------------------------------------------------------------------------
+    |
+    | These locales are the only ones accepted by the locale middleware and
+    | the language switcher.
+    |
+    */
+
+    'supported_locales' => ['en', 'zh_CN'],
 
     /*
     |--------------------------------------------------------------------------
