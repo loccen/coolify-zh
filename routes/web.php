@@ -93,13 +93,29 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
+/**
+ * Keep locale bounce-backs inside this application.
+ */
+$localeRedirectPath = static function (Request $request): string {
+    $redirectTo = $request->string('redirect_to')->toString();
+
+    if ($redirectTo !== '' && str_starts_with($redirectTo, '/') && ! str_starts_with($redirectTo, '//')) {
+        return $redirectTo;
+    }
+
+    return route('dashboard');
+};
+
 Route::post('/forgot-password', [Controller::class, 'forgot_password'])->name('password.forgot')->middleware('throttle:forgot-password');
-Route::get('/locale/{locale}', function (string $locale, Request $request) {
-    abort_unless(in_array($locale, ['en', 'zh-cn'], true), 404);
+Route::post('/locale', function (Request $request) use ($localeRedirectPath) {
+    $supportedLocales = config('app.supported_locales', ['en', 'zh_CN']);
+    $locale = $request->string('locale')->toString();
 
-    Cookie::queue(Cookie::make('coolify_locale', $locale, 60 * 24 * 365));
+    abort_unless(in_array($locale, $supportedLocales, true), 404);
 
-    return redirect()->to($request->headers->get('referer') ?: '/');
+    Cookie::queue(Cookie::make('coolify_locale', $locale, 60 * 24 * 365 * 5));
+
+    return redirect()->to($localeRedirectPath($request));
 })->name('locale.switch');
 Route::get('/realtime', [Controller::class, 'realtime_test'])->middleware('auth');
 Route::get('/verify', [Controller::class, 'verify'])->middleware('auth')->name('verify.email');
