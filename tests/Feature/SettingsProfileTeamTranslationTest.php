@@ -12,17 +12,29 @@ function worktreePath(string $path = ''): string
 }
 
 test('zh CN translation catalogs contain T5B labels', function () {
+    $auth = require worktreePath('lang/zh_CN/auth.php');
     $settings = require worktreePath('lang/zh_CN/settings.php');
     $profile = require worktreePath('lang/zh_CN/profile.php');
     $team = require worktreePath('lang/zh_CN/team.php');
+    $json = json_decode(file_get_contents(worktreePath('lang/zh_CN.json')), true, 512, JSON_THROW_ON_ERROR);
 
-    expect(data_get($settings, 'title'))->toBe('设置')
+    expect(data_get($auth, 'already_registered'))->toBe('已有账号？')
+        ->and(data_get($auth, 'failed.email'))->toBe('如果该邮箱已注册，你很快会收到密码重置链接。')
+        ->and(data_get($settings, 'title'))->toBe('设置')
         ->and(data_get($settings, 'transactional_email'))->toBe('事务邮件')
+        ->and(data_get($settings, 'subtitle'))->toBe('管理整个 Coolify 实例的设置。')
+        ->and(data_get($settings, 'oauth_page.heading'))->toBe('认证')
         ->and(data_get($settings, 'scheduled_jobs_page.heading'))->toBe('计划任务异常')
         ->and(data_get($profile, 'title'))->toBe('个人资料')
         ->and(data_get($profile, 'change_email'))->toBe('更改邮箱')
+        ->and(data_get($profile, 'two_factor_authentication'))->toBe('双重验证')
         ->and(data_get($team, 'title'))->toBe('团队')
+        ->and(data_get($team, 'subtitle'))->toBe('团队设置。')
         ->and(data_get($team, 'invite_new_member'))->toBe('邀请新成员');
+    expect($json['Authentication'])->toBe('认证')
+        ->and($json['Two-Factor Authentication'])->toBe('双重验证')
+        ->and($json['Instance wide settings for Coolify.'])->toBe('管理整个 Coolify 实例的设置。')
+        ->and($json['Invite New Member'])->toBe('邀请新成员');
 });
 
 test('settings views use explicit translation lookups', function () {
