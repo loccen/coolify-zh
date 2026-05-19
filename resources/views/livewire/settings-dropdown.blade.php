@@ -3,6 +3,7 @@
     search: '',
     allEntries: [],
     darkColorContent: getComputedStyle($el).getPropertyValue('--color-base'),
+    localeForDates: @js(app()->getLocale() === 'zh_CN' ? 'zh-CN' : 'en-US'),
     whiteColorContent: getComputedStyle($el).getPropertyValue('--color-white'),
     init() {
         this.mounted();
@@ -108,9 +109,10 @@
     <div class="relative">
         <button @click="dropdownOpen = !dropdownOpen"
             class="relative p-2 dark:text-neutral-400 hover:dark:text-white transition-colors cursor-pointer"
-            title="Preferences">
+            title="{{ __('settings.preferences') }}"
+            aria-label="{{ __('settings.preferences') }}">
             <!-- Sliders Icon -->
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" title="Preferences">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" title="{{ __('settings.preferences') }}">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
             </svg>
@@ -141,7 +143,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-                                <span>What's New</span>
+                                <span>{{ __('settings.whats_new') }}</span>
                             </div>
                             <span
                                 class="bg-error text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
@@ -155,7 +157,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
-                            <span>Changelog</span>
+                            <span>{{ __('settings.changelog') }}</span>
                         </button>
                     @endif
 
@@ -163,13 +165,13 @@
                     <div class="border-b dark:border-coolgray-500 border-neutral-300"></div>
 
                     <div class="font-bold border-b dark:border-coolgray-500 border-neutral-300 dark:text-white pb-1">
-                        Language</div>
+                        {{ __('settings.language') }}</div>
                     <form method="POST" action="{{ route('locale.switch') }}">
                         @csrf
                         <input type="hidden" name="locale" value="en">
                         <input type="hidden" name="redirect_to" value="{{ request()->getRequestUri() }}">
                         <button type="submit" class="w-full px-1 dropdown-item-no-padding flex items-center justify-between gap-2">
-                            <span>English</span>
+                            <span>{{ __('settings.locale.en') }}</span>
                             @if (app()->getLocale() === 'en')
                                 <span class="text-xs dark:text-neutral-400">✓</span>
                             @endif
@@ -180,7 +182,7 @@
                         <input type="hidden" name="locale" value="zh_CN">
                         <input type="hidden" name="redirect_to" value="{{ request()->getRequestUri() }}">
                         <button type="submit" class="w-full px-1 dropdown-item-no-padding flex items-center justify-between gap-2">
-                            <span>简体中文</span>
+                            <span>{{ __('settings.locale.zh_CN') }}</span>
                             @if (app()->getLocale() === 'zh_CN')
                                 <span class="text-xs dark:text-neutral-400">✓</span>
                             @endif
@@ -191,14 +193,14 @@
 
                     <!-- Theme Section -->
                     <div class="font-bold border-b dark:border-coolgray-500 border-neutral-300 dark:text-white pb-1">
-                        Appearance</div>
+                        {{ __('settings.appearance') }}</div>
                     <button @click="setTheme('dark'); dropdownOpen = false"
                         class="px-1 dropdown-item-no-padding flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
                         </svg>
-                        <span>Dark</span>
+                        <span>{{ __('settings.theme.dark') }}</span>
                     </button>
                     <button @click="setTheme('light'); dropdownOpen = false"
                         class="px-1 dropdown-item-no-padding flex items-center gap-2">
@@ -206,7 +208,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
                         </svg>
-                        <span>Light</span>
+                        <span>{{ __('settings.theme.light') }}</span>
                     </button>
                     <button @click="setTheme('system'); dropdownOpen = false"
                         class="px-1 dropdown-item-no-padding flex items-center gap-2">
@@ -214,20 +216,20 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                         </svg>
-                        <span>System</span>
+                        <span>{{ __('settings.theme.system') }}</span>
                     </button>
 
                     <!-- Width Section -->
                     <div
                         class="my-1 font-bold border-b dark:border-coolgray-500 border-neutral-300 dark:text-white text-md">
-                        Width</div>
+                        {{ __('settings.width') }}</div>
                     <button @click="switchWidth(); dropdownOpen = false"
                         class="px-1 dropdown-item-no-padding flex items-center gap-2" x-show="full === 'full'">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M4 6h16M4 12h16M4 18h7" />
                         </svg>
-                        <span>Center</span>
+                        <span>{{ __('settings.width_options.center') }}</span>
                     </button>
                     <button @click="switchWidth(); dropdownOpen = false"
                         class="px-1 dropdown-item-no-padding flex items-center gap-2" x-show="full === 'center'">
@@ -235,13 +237,13 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
-                        <span>Full</span>
+                        <span>{{ __('settings.width_options.full') }}</span>
                     </button>
 
                     <!-- Zoom Section -->
                     <div
                         class="my-1 font-bold border-b dark:border-coolgray-500 border-neutral-300 dark:text-white text-md">
-                        Zoom</div>
+                        {{ __('settings.zoom') }}</div>
                     <button @click="setZoom(100); dropdownOpen = false"
                         class="px-1 dropdown-item-no-padding flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -278,13 +280,13 @@
                 <div class="flex items-center justify-between  pb-3">
                     <div>
                         <h3 class="text-2xl font-bold dark:text-white">
-                            Changelog
+                            {{ __('settings.changelog') }}
                         </h3>
                         <p class="mt-1 text-sm dark:text-neutral-400">
-                            Stay up to date with the latest features and improvements.
+                            {{ __('settings.stay_up_to_date') }}
                         </p>
                         <p class="mt-1 text-xs dark:text-neutral-500">
-                            Current version: <span class="font-semibold dark:text-neutral-300">{{ $currentVersion }}</span>
+                            {{ __('settings.current_version') }} <span class="font-semibold dark:text-neutral-300">{{ $currentVersion }}</span>
                         </p>
                     </div>
                     <div class="flex items-center gap-2">
@@ -295,15 +297,17 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                                 </svg>
-                                Fetch Latest
+                                {{ __('settings.fetch_latest') }}
                             </x-forms.button>
                         @endif
                         @if ($unreadCount > 0)
                             <x-forms.button @click="markAllEntriesAsRead">
-                                Mark all as read
+                                {{ __('settings.mark_all_as_read') }}
                             </x-forms.button>
                         @endif
                         <button wire:click="closeWhatsNewModal"
+                            title="{{ __('button.close') }}"
+                            aria-label="{{ __('button.close') }}"
                             class="flex items-center justify-center w-8 h-8 rounded-full dark:text-white hover:bg-neutral-100 dark:hover:bg-coolgray-300 outline-0 cursor-pointer">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -316,7 +320,7 @@
                 <!-- Search -->
                 <div class="pb-4 border-b dark:border-coolgray-200 flex-shrink-0">
                     <div class="relative">
-                        <input x-model="search" placeholder="Search updates..." class="input pl-10" />
+                        <input x-model="search" placeholder="{{ __('settings.search_updates') }}" class="input pl-10" />
                         <svg class="absolute left-3 top-2 w-4 h-4 dark:text-neutral-400" fill="none"
                             stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -345,10 +349,10 @@
                                                     </a></span>
                                                 <span x-show="entry.tag_name === '{{ $currentVersion }}'"
                                                     class="px-2 py-1 text-xs font-semibold bg-success text-white rounded-sm">
-                                                    CURRENT VERSION
+                                                    {{ __('settings.current_version_badge') }}
                                                 </span>
                                                 <span class="text-xs dark:text-neutral-400"
-                                                    x-text="new Date(entry.published_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })"></span>
+                                                    x-text="new Date(entry.published_at).toLocaleDateString(localeForDates, { month: 'short', day: 'numeric', year: 'numeric' })"></span>
                                             </div>
                                             <div class="dark:text-neutral-300 leading-relaxed max-w-none"
                                                 x-html="entry.content_html">
@@ -356,9 +360,10 @@
                                         </div>
 
                                         <button x-show="!entry.is_read" @click="markEntryAsRead(entry.tag_name)"
-                                            class="ml-4 px-3 py-1 text-xs dark:text-neutral-400 hover:dark:text-white border dark:border-neutral-600 rounded hover:dark:bg-neutral-700 transition-colors cursor-pointer"
-                                            title="Mark as read">
-                                            mark as read
+                                            title="{{ __('settings.mark_as_read') }}"
+                                            aria-label="{{ __('settings.mark_as_read') }}"
+                                            class="ml-4 px-3 py-1 text-xs dark:text-neutral-400 hover:dark:text-white border dark:border-neutral-600 rounded hover:dark:bg-neutral-700 transition-colors cursor-pointer">
+                                            {{ __('settings.mark_as_read') }}
                                         </button>
                                     </div>
                                 </div>
@@ -372,10 +377,10 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                         </svg>
-                        <h3 class="mt-2 text-sm font-medium dark:text-white">No updates found</h3>
+                        <h3 class="mt-2 text-sm font-medium dark:text-white">{{ __('settings.no_updates_found') }}</h3>
                         <p class="mt-1 text-sm dark:text-neutral-400">
-                            <span x-show="search.trim() !== ''">No updates match your search criteria.</span>
-                            <span x-show="search.trim() === ''">There are no updates available at the moment.</span>
+                            <span x-show="search.trim() !== ''">{{ __('settings.no_updates_match_search') }}</span>
+                            <span x-show="search.trim() === ''">{{ __('settings.no_updates_available') }}</span>
                         </p>
                     </div>
                 </div>

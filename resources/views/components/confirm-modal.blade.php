@@ -3,7 +3,7 @@
         Alpine.data('confirmModal', () => ({
             open: false,
             confirmAction: null,
-            message: 'Are you sure?',
+            message: @js(__('modal.confirm_default_message')),
             toggleConfirmModal(customMessage, confirmAction) {
                 this.confirmAction = confirmAction
                 this.message = customMessage
@@ -22,8 +22,8 @@
         <div class="flex flex-col items-center justify-center h-full">
             <div class="pb-5 dark:text-white" x-text="message"></div>
             <div>
-                <x-forms.button x-on:click='confirmed()'>Confirm</x-forms.button>
-                <x-forms.button x-on:click="open = false">Cancel</x-forms.button>
+                <x-forms.button x-on:click='confirmed()'>{{ __('button.confirm') }}</x-forms.button>
+                <x-forms.button x-on:click="open = false">{{ __('button.cancel') }}</x-forms.button>
             </div>
         </div>
     </div>

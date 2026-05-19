@@ -1,0 +1,151 @@
+<?php
+
+use App\Livewire\SettingsDropdown;
+use App\Models\InstanceSettings;
+use App\Models\User;
+use App\Services\ChangelogService;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\MessageBag;
+use Illuminate\Support\ViewErrorBag;
+use Livewire\Livewire;
+use Tests\TestCase;
+
+uses(TestCase::class, RefreshDatabase::class);
+
+beforeEach(function () {
+    InstanceSettings::create(['id' => 0]);
+    config([
+        'constants.coolify.self_hosted' => true,
+        'constants.coolify.version' => '4.0.0',
+    ]);
+
+    $errors = new ViewErrorBag;
+    $errors->put('default', new MessageBag);
+    view()->share('errors', $errors);
+});
+
+function setEnLocale(): void
+{
+    config([
+        'app.locale' => 'en',
+        'app.fallback_locale' => 'en',
+    ]);
+
+    app()->setLocale('en');
+}
+
+function fakeChangelogService(Collection $entries, int $unreadCount): ChangelogService
+{
+    return new class($entries, $unreadCount) extends ChangelogService
+    {
+        public function __construct(
+            private Collection $entries,
+            private int $unreadCount,
+        ) {}
+
+        public function getEntriesForUser(User $user): Collection
+        {
+            return $this->entries;
+        }
+
+        public function getUnreadCountForUser(User $user): int
+        {
+            return $this->unreadCount;
+        }
+
+        public function markAsReadForUser(string $version, User $user): void {}
+
+        public function markAllAsReadForUser(User $user): void {}
+    };
+}
+
+it('renders settings dropdown translations in component output', function () {
+    setEnLocale();
+
+    $user = User::factory()->create(['name' => '设置用户']);
+    $team = $user->teams()->firstOrFail();
+
+    $this->actingAs($user);
+    session(['currentTeam' => ['id' => $team->id]]);
+
+    app()->instance(ChangelogService::class, fakeChangelogService(collect([
+        (object) [
+            'tag_name' => 'v4.0.0',
+            'title' => 'v4.0.0',
+            'content' => 'test',
+            'content_html' => '<p>test</p>',
+            'published_at' => now()->toIso8601String(),
+            'is_read' => false,
+        ],
+    ]), 1));
+
+    Livewire::test(SettingsDropdown::class)
+        ->assertSee('Language')
+        ->assertSee('Appearance')
+        ->call('openWhatsNewModal')
+        ->assertSee('Changelog')
+        ->assertSee('Stay up to date with the latest features and improvements.')
+        ->assertSee('Current version:')
+        ->assertSee('Search updates...')
+        ->assertSee('CURRENT VERSION')
+        ->assertSee('mark as read');
+});
+
+it('renders translated modal buttons and default confirm copy', function () {
+    setEnLocale();
+
+    $modalHtml = Blade::render('<x-modal modal-id="danger" :yes-or-no="true" />');
+    $confirmHtml = Blade::render('<x-confirm-modal />');
+
+    expect($modalHtml)
+        ->toContain('Cancel')
+        ->toContain('Continue')
+        ->and($confirmHtml)
+        ->toContain('Are you sure?')
+        ->toContain('Confirm')
+        ->toContain('Cancel');
+});
+
+it('renders translated navbar labels in component output', function () {
+    setEnLocale();
+
+    $user = User::factory()->create(['name' => '导航用户']);
+    $team = $user->teams()->firstOrFail();
+
+    $this->actingAs($user);
+    session(['currentTeam' => ['id' => $team->id]]);
+
+    app()->instance(ChangelogService::class, fakeChangelogService(collect(), 0));
+
+    $html = Blade::render('<x-navbar />');
+
+    expect($html)
+        ->toContain('Dashboard')
+        ->toContain('Projects')
+        ->toContain('Servers')
+        ->toContain('Sources')
+        ->toContain('Destinations')
+        ->toContain('Sponsor us');
+});
+
+it('renders translated password visibility labels in form components', function () {
+    setEnLocale();
+
+    $inputHtml = Blade::render('<x-forms.input type="password" id="secret" />');
+    $textareaHtml = Blade::render('<x-forms.textarea type="password" id="secret" />');
+
+    expect($inputHtml)
+        ->toContain('Toggle password visibility')
+        ->and($textareaHtml)
+        ->toContain('Toggle password visibility');
+});
+
+it('renders translated default toast title in component output', function () {
+    setEnLocale();
+
+    $html = Blade::render('<x-toast />');
+
+    expect($html)->toContain('Default Toast Notification');
+});

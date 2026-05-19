@@ -1,5 +1,5 @@
 <div x-data="{
-    title: 'Default Toast Notification',
+    title: @js(__('toast.default_title')),
     description: '',
     type: 'default',
     expanded: false,
