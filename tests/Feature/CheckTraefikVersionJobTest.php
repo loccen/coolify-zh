@@ -279,6 +279,27 @@ it('notification transforms multiple servers with URLs correctly', function () {
     expect($mail->viewData['servers'][1]['url'])->toBe(base_url().'/server/uuid-2/proxy');
 });
 
+it('renders translated channel text for outdated traefik notifications', function () {
+    $team = Team::factory()->create();
+    $server = Server::factory()->make([
+        'name' => '代理节点',
+        'team_id' => $team->id,
+        'detected_traefik_version' => 'v3.5.0',
+    ]);
+    $server->outdatedInfo = [
+        'current' => '3.5.0',
+        'latest' => '3.5.6',
+        'type' => 'patch_update',
+    ];
+
+    $notification = new TraefikVersionOutdated(collect([$server]));
+    $notification->locale = 'zh_CN';
+
+    expect($notification->toSlack()->title)->toBe('Coolify: Traefik 代理版本过旧')
+        ->and($notification->toTelegram()['message'])->toContain('有 1 台服务器的 Traefik 代理版本过旧')
+        ->and($notification->toWebhook()['message'])->toBe('Traefik 代理版本过旧');
+});
+
 it('notification uses base_url helper not config app.url', function () {
     $team = Team::factory()->create();
     $server = Server::factory()->create([

@@ -62,7 +62,7 @@ class StatusChanged extends CustomEmailNotification
     {
         return new DiscordMessage(
             title: $this->trans('notifications.status_changed.discord_title'),
-            description: '[Open Application in Coolify]('.$this->resource_url.')',
+            description: "[{$this->trans('notifications.common.open_application_in_coolify')}]({$this->resource_url})",
             color: DiscordMessage::errorColor(),
             isCritical: true,
         );
@@ -120,7 +120,7 @@ class StatusChanged extends CustomEmailNotification
     {
         return [
             'success' => false,
-            'message' => 'Application stopped',
+            'message' => $this->trans('notifications.status_changed.webhook_message'),
             'event' => 'status_changed',
             'application_name' => $this->resource_name,
             'application_uuid' => $this->resource->uuid,

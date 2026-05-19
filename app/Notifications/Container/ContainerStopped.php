@@ -43,13 +43,16 @@ class ContainerStopped extends CustomEmailNotification
     public function toDiscord(): DiscordMessage
     {
         $message = new DiscordMessage(
-            title: ':cross_mark: Resource stopped',
-            description: "{$this->name} has been stopped unexpectedly on {$this->server->name}.",
+            title: $this->trans('notifications.container_stopped.discord_title'),
+            description: $this->trans('notifications.container_stopped.discord_description', [
+                'name' => $this->name,
+                'server' => $this->server->name,
+            ]),
             color: DiscordMessage::errorColor(),
         );
 
         if ($this->url) {
-            $message->addField('Resource', '[Link]('.$this->url.')');
+            $message->addField($this->trans('notifications.common.resource'), "[{$this->trans('notifications.common.link')}]({$this->url})");
         }
 
         return $message;
@@ -57,7 +60,10 @@ class ContainerStopped extends CustomEmailNotification
 
     public function toTelegram(): array
     {
-        $message = "Coolify: A resource ($this->name) has been stopped unexpectedly on {$this->server->name}";
+        $message = $this->trans('notifications.container_stopped.telegram_message', [
+            'name' => $this->name,
+            'server' => $this->server->name,
+        ]);
         $payload = [
             'message' => $message,
         ];
@@ -65,7 +71,7 @@ class ContainerStopped extends CustomEmailNotification
             $payload['buttons'] = [
                 [
                     [
-                        'text' => 'Open Application in Coolify',
+                        'text' => $this->trans('notifications.common.open_application_in_coolify'),
                         'url' => $this->url,
                     ],
                 ],
@@ -80,26 +86,32 @@ class ContainerStopped extends CustomEmailNotification
         $buttons = [];
         if ($this->url) {
             $buttons[] = [
-                'text' => 'Open Application in Coolify',
+                'text' => $this->trans('notifications.common.open_application_in_coolify'),
                 'url' => $this->url,
             ];
         }
 
         return new PushoverMessage(
-            title: 'Resource stopped',
+            title: $this->trans('notifications.container_stopped.pushover_title'),
             level: 'error',
-            message: "A resource ({$this->name}) has been stopped unexpectedly on {$this->server->name}",
+            message: $this->trans('notifications.container_stopped.pushover_message', [
+                'name' => $this->name,
+                'server' => $this->server->name,
+            ]),
             buttons: $buttons,
         );
     }
 
     public function toSlack(): SlackMessage
     {
-        $title = 'Resource stopped';
-        $description = "A resource ({$this->name}) has been stopped unexpectedly on {$this->server->name}";
+        $title = $this->trans('notifications.container_stopped.slack_title');
+        $description = $this->trans('notifications.container_stopped.slack_description', [
+            'name' => $this->name,
+            'server' => $this->server->name,
+        ]);
 
         if ($this->url) {
-            $description .= "\n*Resource URL:* {$this->url}";
+            $description .= "\n*".$this->trans('notifications.common.resource_url').":* {$this->url}";
         }
 
         return new SlackMessage(
@@ -113,7 +125,7 @@ class ContainerStopped extends CustomEmailNotification
     {
         $data = [
             'success' => false,
-            'message' => 'Resource stopped unexpectedly',
+            'message' => $this->trans('notifications.container_stopped.webhook_message'),
             'event' => 'container_stopped',
             'container_name' => $this->name,
             'server_name' => $this->server->name,

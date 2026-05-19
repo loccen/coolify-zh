@@ -47,19 +47,26 @@ class BackupSuccess extends CustomEmailNotification
     public function toDiscord(): DiscordMessage
     {
         $message = new DiscordMessage(
-            title: ':white_check_mark: Database backup successful',
-            description: "Database backup for {$this->name} (db:{$this->database_name}) was successful.",
+            title: $this->trans('notifications.backup_success.discord_title'),
+            description: $this->trans('notifications.backup_success.discord_description', [
+                'name' => $this->name,
+                'database' => $this->database_name,
+            ]),
             color: DiscordMessage::successColor(),
         );
 
-        $message->addField('Frequency', $this->frequency, true);
+        $message->addField($this->trans('notifications.common.frequency'), $this->frequency, true);
 
         return $message;
     }
 
     public function toTelegram(): array
     {
-        $message = "Coolify: Database backup for {$this->name} (db:{$this->database_name}) with frequency of {$this->frequency} was successful.";
+        $message = $this->trans('notifications.backup_success.telegram_message', [
+            'name' => $this->name,
+            'database' => $this->database_name,
+            'frequency' => $this->frequency,
+        ]);
 
         return [
             'message' => $message,
@@ -69,18 +76,24 @@ class BackupSuccess extends CustomEmailNotification
     public function toPushover(): PushoverMessage
     {
         return new PushoverMessage(
-            title: 'Database backup successful',
+            title: $this->trans('notifications.backup_success.pushover_title'),
             level: 'success',
-            message: "Database backup for {$this->name} (db:{$this->database_name}) was successful.<br/><br/><b>Frequency:</b> {$this->frequency}.",
+            message: $this->trans('notifications.backup_success.pushover_message', [
+                'name' => $this->name,
+                'database' => $this->database_name,
+            ]).'<br/><br/><b>'.$this->trans('notifications.common.frequency').":</b> {$this->frequency}.",
         );
     }
 
     public function toSlack(): SlackMessage
     {
-        $title = 'Database backup successful';
-        $description = "Database backup for {$this->name} (db:{$this->database_name}) was successful.";
+        $title = $this->trans('notifications.backup_success.slack_title');
+        $description = $this->trans('notifications.backup_success.slack_description', [
+            'name' => $this->name,
+            'database' => $this->database_name,
+        ]);
 
-        $description .= "\n\n*Frequency:* {$this->frequency}";
+        $description .= "\n\n*".$this->trans('notifications.common.frequency').":* {$this->frequency}";
 
         return new SlackMessage(
             title: $title,
@@ -95,7 +108,7 @@ class BackupSuccess extends CustomEmailNotification
 
         return [
             'success' => true,
-            'message' => 'Database backup successful',
+            'message' => $this->trans('notifications.backup_success.webhook_message'),
             'event' => 'backup_success',
             'database_name' => $this->name,
             'database_uuid' => $this->database->uuid,

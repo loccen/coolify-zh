@@ -95,13 +95,13 @@ class DeploymentFailed extends CustomEmailNotification
             $message->addField($this->trans('notifications.common.environment'), $this->environment_name, true);
             $message->addField($this->trans('notifications.common.name'), $this->application_name, true);
 
-            $message->addField($this->trans('notifications.common.deployment_logs'), '[Link]('.$this->deployment_url.')');
+            $message->addField($this->trans('notifications.common.deployment_logs'), "[{$this->trans('notifications.common.link')}]({$this->deployment_url})");
             if ($this->fqdn) {
                 $message->addField($this->trans('notifications.common.domain'), $this->fqdn, true);
             }
         } else {
             if ($this->fqdn) {
-                $description = '[Open application]('.$this->fqdn.')';
+                $description = "[{$this->trans('notifications.common.open_application')}]({$this->fqdn})";
             } else {
                 $description = '';
             }
@@ -116,7 +116,7 @@ class DeploymentFailed extends CustomEmailNotification
             $message->addField($this->trans('notifications.common.environment'), $this->environment_name, true);
             $message->addField($this->trans('notifications.common.name'), $this->application_name, true);
 
-            $message->addField($this->trans('notifications.common.deployment_logs'), '[Link]('.$this->deployment_url.')');
+            $message->addField($this->trans('notifications.common.deployment_logs'), "[{$this->trans('notifications.common.link')}]({$this->deployment_url})");
         }
 
         return $message;
@@ -205,7 +205,7 @@ class DeploymentFailed extends CustomEmailNotification
     {
         $data = [
             'success' => false,
-            'message' => 'Deployment failed',
+            'message' => $this->trans('notifications.deployment_failed.webhook_message'),
             'event' => 'deployment_failed',
             'application_name' => $this->application_name,
             'application_uuid' => $this->application->uuid,

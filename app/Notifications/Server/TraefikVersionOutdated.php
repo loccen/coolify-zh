@@ -71,8 +71,8 @@ class TraefikVersionOutdated extends CustomEmailNotification
             isset($s->outdatedInfo['newer_branch_target'])
         );
 
-        $description = "**{$count} server(s)** running outdated Traefik proxy. Update recommended for security and features.\n\n";
-        $description .= "**Affected servers:**\n";
+        $description = $this->trans('notifications.traefik_version_outdated.discord_description', ['count' => $count])."\n\n";
+        $description .= '**'.$this->trans('notifications.common.affected_servers').":**\n";
 
         foreach ($this->servers as $server) {
             $info = $server->outdatedInfo ?? [];
@@ -85,23 +85,23 @@ class TraefikVersionOutdated extends CustomEmailNotification
             if ($isPatch && $hasNewerBranch) {
                 $newerBranchTarget = $info['newer_branch_target'];
                 $newerBranchLatest = $this->formatVersion($info['newer_branch_latest']);
-                $description .= "• {$server->name}: {$current} → {$upgradeTarget} (patch update available)\n";
-                $description .= "  ↳ Also available: {$newerBranchTarget} (latest patch: {$newerBranchLatest}) - new minor version\n";
+                $description .= $this->trans('notifications.traefik_version_outdated.server_line_patch', ['name' => $server->name, 'current' => $current, 'target' => $upgradeTarget])."\n";
+                $description .= $this->trans('notifications.traefik_version_outdated.server_line_newer_branch', ['target' => $newerBranchTarget, 'latest' => $newerBranchLatest])."\n";
             } elseif ($isPatch) {
-                $description .= "• {$server->name}: {$current} → {$upgradeTarget} (patch update available)\n";
+                $description .= $this->trans('notifications.traefik_version_outdated.server_line_patch', ['name' => $server->name, 'current' => $current, 'target' => $upgradeTarget])."\n";
             } else {
-                $description .= "• {$server->name}: {$current} (latest patch: {$latest}) → {$upgradeTarget} (new minor version available)\n";
+                $description .= $this->trans('notifications.traefik_version_outdated.server_line_minor', ['name' => $server->name, 'current' => $current, 'latest' => $latest, 'target' => $upgradeTarget])."\n";
             }
         }
 
-        $description .= "\n⚠️ It is recommended to test before switching the production version.";
+        $description .= "\n⚠️ ".$this->trans('notifications.traefik_version_outdated.recommendation');
 
         if ($hasUpgrades) {
-            $description .= "\n\n📖 **For minor version upgrades**: Read the Traefik changelog before upgrading to understand breaking changes and new features.";
+            $description .= "\n\n📖 ".$this->trans('notifications.traefik_version_outdated.changelog_note');
         }
 
         return new DiscordMessage(
-            title: ':warning: Coolify: Traefik proxy outdated',
+            title: $this->trans('notifications.traefik_version_outdated.discord_title'),
             description: $description,
             color: DiscordMessage::warningColor(),
         );
@@ -114,9 +114,8 @@ class TraefikVersionOutdated extends CustomEmailNotification
             isset($s->outdatedInfo['newer_branch_target'])
         );
 
-        $message = "⚠️ Coolify: Traefik proxy outdated on {$count} server(s)!\n\n";
-        $message .= "Update recommended for security and features.\n";
-        $message .= "📊 Affected servers:\n";
+        $message = $this->trans('notifications.traefik_version_outdated.telegram_message', ['count' => $count])."\n\n";
+        $message .= $this->trans('notifications.common.affected_servers').":\n";
 
         foreach ($this->servers as $server) {
             $info = $server->outdatedInfo ?? [];
@@ -129,19 +128,19 @@ class TraefikVersionOutdated extends CustomEmailNotification
             if ($isPatch && $hasNewerBranch) {
                 $newerBranchTarget = $info['newer_branch_target'];
                 $newerBranchLatest = $this->formatVersion($info['newer_branch_latest']);
-                $message .= "• {$server->name}: {$current} → {$upgradeTarget} (patch update available)\n";
-                $message .= "  ↳ Also available: {$newerBranchTarget} (latest patch: {$newerBranchLatest}) - new minor version\n";
+                $message .= $this->trans('notifications.traefik_version_outdated.server_line_patch', ['name' => $server->name, 'current' => $current, 'target' => $upgradeTarget])."\n";
+                $message .= $this->trans('notifications.traefik_version_outdated.server_line_newer_branch', ['target' => $newerBranchTarget, 'latest' => $newerBranchLatest])."\n";
             } elseif ($isPatch) {
-                $message .= "• {$server->name}: {$current} → {$upgradeTarget} (patch update available)\n";
+                $message .= $this->trans('notifications.traefik_version_outdated.server_line_patch', ['name' => $server->name, 'current' => $current, 'target' => $upgradeTarget])."\n";
             } else {
-                $message .= "• {$server->name}: {$current} (latest patch: {$latest}) → {$upgradeTarget} (new minor version available)\n";
+                $message .= $this->trans('notifications.traefik_version_outdated.server_line_minor', ['name' => $server->name, 'current' => $current, 'latest' => $latest, 'target' => $upgradeTarget])."\n";
             }
         }
 
-        $message .= "\n⚠️ It is recommended to test before switching the production version.";
+        $message .= "\n⚠️ ".$this->trans('notifications.traefik_version_outdated.recommendation');
 
         if ($hasUpgrades) {
-            $message .= "\n\n📖 For minor version upgrades: Read the Traefik changelog before upgrading to understand breaking changes and new features.";
+            $message .= "\n\n📖 ".$this->trans('notifications.traefik_version_outdated.changelog_note');
         }
 
         return [
@@ -157,8 +156,8 @@ class TraefikVersionOutdated extends CustomEmailNotification
             isset($s->outdatedInfo['newer_branch_target'])
         );
 
-        $message = "Traefik proxy outdated on {$count} server(s)!\n";
-        $message .= "Affected servers:\n";
+        $message = $this->trans('notifications.traefik_version_outdated.pushover_message', ['count' => $count])."\n";
+        $message .= $this->trans('notifications.common.affected_servers').":\n";
 
         foreach ($this->servers as $server) {
             $info = $server->outdatedInfo ?? [];
@@ -171,23 +170,23 @@ class TraefikVersionOutdated extends CustomEmailNotification
             if ($isPatch && $hasNewerBranch) {
                 $newerBranchTarget = $info['newer_branch_target'];
                 $newerBranchLatest = $this->formatVersion($info['newer_branch_latest']);
-                $message .= "• {$server->name}: {$current} → {$upgradeTarget} (patch update available)\n";
-                $message .= "  Also: {$newerBranchTarget} (latest: {$newerBranchLatest}) - new minor version\n";
+                $message .= $this->trans('notifications.traefik_version_outdated.server_line_patch', ['name' => $server->name, 'current' => $current, 'target' => $upgradeTarget])."\n";
+                $message .= $this->trans('notifications.traefik_version_outdated.server_line_newer_branch', ['target' => $newerBranchTarget, 'latest' => $newerBranchLatest])."\n";
             } elseif ($isPatch) {
-                $message .= "• {$server->name}: {$current} → {$upgradeTarget} (patch update available)\n";
+                $message .= $this->trans('notifications.traefik_version_outdated.server_line_patch', ['name' => $server->name, 'current' => $current, 'target' => $upgradeTarget])."\n";
             } else {
-                $message .= "• {$server->name}: {$current} (latest patch: {$latest}) → {$upgradeTarget} (new minor version available)\n";
+                $message .= $this->trans('notifications.traefik_version_outdated.server_line_minor', ['name' => $server->name, 'current' => $current, 'latest' => $latest, 'target' => $upgradeTarget])."\n";
             }
         }
 
-        $message .= "\nIt is recommended to test before switching the production version.";
+        $message .= "\n".$this->trans('notifications.traefik_version_outdated.recommendation');
 
         if ($hasUpgrades) {
-            $message .= "\n\nFor minor version upgrades: Read the Traefik changelog before upgrading.";
+            $message .= "\n\n".$this->trans('notifications.traefik_version_outdated.changelog_note');
         }
 
         return new PushoverMessage(
-            title: 'Traefik proxy outdated',
+            title: $this->trans('notifications.traefik_version_outdated.pushover_title'),
             level: 'warning',
             message: $message,
         );
@@ -200,8 +199,8 @@ class TraefikVersionOutdated extends CustomEmailNotification
             isset($s->outdatedInfo['newer_branch_target'])
         );
 
-        $description = "Traefik proxy outdated on {$count} server(s)!\n";
-        $description .= "*Affected servers:*\n";
+        $description = $this->trans('notifications.traefik_version_outdated.slack_description', ['count' => $count])."\n";
+        $description .= '*'.$this->trans('notifications.common.affected_servers').":*\n";
 
         foreach ($this->servers as $server) {
             $info = $server->outdatedInfo ?? [];
@@ -214,23 +213,23 @@ class TraefikVersionOutdated extends CustomEmailNotification
             if ($isPatch && $hasNewerBranch) {
                 $newerBranchTarget = $info['newer_branch_target'];
                 $newerBranchLatest = $this->formatVersion($info['newer_branch_latest']);
-                $description .= "• `{$server->name}`: {$current} → {$upgradeTarget} (patch update available)\n";
-                $description .= "  ↳ Also available: {$newerBranchTarget} (latest patch: {$newerBranchLatest}) - new minor version\n";
+                $description .= $this->trans('notifications.traefik_version_outdated.server_line_patch', ['name' => "`{$server->name}`", 'current' => $current, 'target' => $upgradeTarget])."\n";
+                $description .= $this->trans('notifications.traefik_version_outdated.server_line_newer_branch', ['target' => $newerBranchTarget, 'latest' => $newerBranchLatest])."\n";
             } elseif ($isPatch) {
-                $description .= "• `{$server->name}`: {$current} → {$upgradeTarget} (patch update available)\n";
+                $description .= $this->trans('notifications.traefik_version_outdated.server_line_patch', ['name' => "`{$server->name}`", 'current' => $current, 'target' => $upgradeTarget])."\n";
             } else {
-                $description .= "• `{$server->name}`: {$current} (latest patch: {$latest}) → {$upgradeTarget} (new minor version available)\n";
+                $description .= $this->trans('notifications.traefik_version_outdated.server_line_minor', ['name' => "`{$server->name}`", 'current' => $current, 'latest' => $latest, 'target' => $upgradeTarget])."\n";
             }
         }
 
-        $description .= "\n:warning: It is recommended to test before switching the production version.";
+        $description .= "\n:warning: ".$this->trans('notifications.traefik_version_outdated.recommendation');
 
         if ($hasUpgrades) {
-            $description .= "\n\n:book: For minor version upgrades: Read the Traefik changelog before upgrading to understand breaking changes and new features.";
+            $description .= "\n\n:book: ".$this->trans('notifications.traefik_version_outdated.changelog_note');
         }
 
         return new SlackMessage(
-            title: 'Coolify: Traefik proxy outdated',
+            title: $this->trans('notifications.traefik_version_outdated.slack_title'),
             description: $description,
             color: SlackMessage::warningColor()
         );
@@ -265,7 +264,7 @@ class TraefikVersionOutdated extends CustomEmailNotification
 
         return [
             'success' => false,
-            'message' => 'Traefik proxy outdated',
+            'message' => $this->trans('notifications.traefik_version_outdated.webhook_message'),
             'event' => 'traefik_version_outdated',
             'affected_servers_count' => $this->servers->count(),
             'servers' => $servers,

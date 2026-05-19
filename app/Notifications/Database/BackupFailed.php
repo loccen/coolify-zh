@@ -47,21 +47,29 @@ class BackupFailed extends CustomEmailNotification
     public function toDiscord(): DiscordMessage
     {
         $message = new DiscordMessage(
-            title: ':cross_mark: Database backup failed',
-            description: "Database backup for {$this->name} (db:{$this->database_name}) has FAILED.",
+            title: $this->trans('notifications.backup_failed.discord_title'),
+            description: $this->trans('notifications.backup_failed.discord_description', [
+                'name' => $this->name,
+                'database' => $this->database_name,
+            ]),
             color: DiscordMessage::errorColor(),
             isCritical: true,
         );
 
-        $message->addField('Frequency', $this->frequency, true);
-        $message->addField('Output', $this->output);
+        $message->addField($this->trans('notifications.common.frequency'), $this->frequency, true);
+        $message->addField($this->trans('notifications.common.output'), $this->output);
 
         return $message;
     }
 
     public function toTelegram(): array
     {
-        $message = "Coolify: Database backup for {$this->name} (db:{$this->database_name}) with frequency of {$this->frequency} was FAILED.\n\nReason:\n{$this->output}";
+        $message = $this->trans('notifications.backup_failed.telegram_message', [
+            'name' => $this->name,
+            'database' => $this->database_name,
+            'frequency' => $this->frequency,
+            'output' => $this->output,
+        ]);
 
         return [
             'message' => $message,
@@ -71,19 +79,25 @@ class BackupFailed extends CustomEmailNotification
     public function toPushover(): PushoverMessage
     {
         return new PushoverMessage(
-            title: 'Database backup failed',
+            title: $this->trans('notifications.backup_failed.pushover_title'),
             level: 'error',
-            message: "Database backup for {$this->name} (db:{$this->database_name}) was FAILED<br/><br/><b>Frequency:</b> {$this->frequency} .<br/><b>Reason:</b> {$this->output}",
+            message: $this->trans('notifications.backup_failed.pushover_message', [
+                'name' => $this->name,
+                'database' => $this->database_name,
+            ]).'<br/><br/><b>'.$this->trans('notifications.common.frequency').":</b> {$this->frequency} .<br/><b>".$this->trans('notifications.common.reason').":</b> {$this->output}",
         );
     }
 
     public function toSlack(): SlackMessage
     {
-        $title = 'Database backup failed';
-        $description = "Database backup for {$this->name} (db:{$this->database_name}) has FAILED.";
+        $title = $this->trans('notifications.backup_failed.slack_title');
+        $description = $this->trans('notifications.backup_failed.slack_description', [
+            'name' => $this->name,
+            'database' => $this->database_name,
+        ]);
 
-        $description .= "\n\n*Frequency:* {$this->frequency}";
-        $description .= "\n\n*Error Output:* {$this->output}";
+        $description .= "\n\n*".$this->trans('notifications.common.frequency').":* {$this->frequency}";
+        $description .= "\n\n*".$this->trans('notifications.common.error_output').":* {$this->output}";
 
         return new SlackMessage(
             title: $title,
@@ -98,7 +112,7 @@ class BackupFailed extends CustomEmailNotification
 
         return [
             'success' => false,
-            'message' => 'Database backup failed',
+            'message' => $this->trans('notifications.backup_failed.webhook_message'),
             'event' => 'backup_failed',
             'database_name' => $this->name,
             'database_uuid' => $this->database->uuid,

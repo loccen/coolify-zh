@@ -2,12 +2,14 @@
 
 namespace App\Notifications\Internal;
 
+use App\Support\UserVisibleLocale;
 use App\Notifications\Dto\DiscordMessage;
 use App\Notifications\Dto\PushoverMessage;
 use App\Notifications\Dto\SlackMessage;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Lang;
 
 class GeneralNotification extends Notification implements ShouldQueue
 {
@@ -18,6 +20,12 @@ class GeneralNotification extends Notification implements ShouldQueue
     public function __construct(public string $message)
     {
         $this->onQueue('high');
+        $this->locale = UserVisibleLocale::resolve();
+    }
+
+    private function trans(string $key, array $replace = []): string
+    {
+        return Lang::get($key, $replace, UserVisibleLocale::resolve($this->locale ?? null));
     }
 
     public function via(object $notifiable): array
@@ -28,7 +36,7 @@ class GeneralNotification extends Notification implements ShouldQueue
     public function toDiscord(): DiscordMessage
     {
         return new DiscordMessage(
-            title: 'Coolify: General Notification',
+            title: $this->trans('notifications.general_notification.discord_title'),
             description: $this->message,
             color: DiscordMessage::infoColor(),
         );
@@ -44,7 +52,7 @@ class GeneralNotification extends Notification implements ShouldQueue
     public function toPushover(): PushoverMessage
     {
         return new PushoverMessage(
-            title: 'General Notification',
+            title: $this->trans('notifications.general_notification.pushover_title'),
             level: 'info',
             message: $this->message,
         );
@@ -53,7 +61,7 @@ class GeneralNotification extends Notification implements ShouldQueue
     public function toSlack(): SlackMessage
     {
         return new SlackMessage(
-            title: 'Coolify: General Notification',
+            title: $this->trans('notifications.general_notification.slack_title'),
             description: $this->message,
             color: SlackMessage::infoColor(),
         );

@@ -41,8 +41,11 @@ class HetznerDeletionFailed extends CustomEmailNotification
     public function toDiscord(): DiscordMessage
     {
         return new DiscordMessage(
-            title: ':cross_mark: Coolify: [ACTION REQUIRED] Failed to delete Hetzner server',
-            description: "Failed to delete Hetzner server #{$this->hetznerServerId} from Hetzner Cloud.\n\n**Error:** {$this->errorMessage}\n\nThe server has been removed from Coolify, but may still exist in your Hetzner Cloud account. Please check your Hetzner Cloud console and manually delete the server if needed.",
+            title: $this->trans('notifications.hetzner_deletion_failed.discord_title'),
+            description: $this->trans('notifications.hetzner_deletion_failed.discord_description', [
+                'id' => $this->hetznerServerId,
+                'error' => $this->errorMessage,
+            ]),
             color: DiscordMessage::errorColor(),
         );
     }
@@ -50,24 +53,33 @@ class HetznerDeletionFailed extends CustomEmailNotification
     public function toTelegram(): array
     {
         return [
-            'message' => "Coolify: [ACTION REQUIRED] Failed to delete Hetzner server #{$this->hetznerServerId} from Hetzner Cloud.\n\nError: {$this->errorMessage}\n\nThe server has been removed from Coolify, but may still exist in your Hetzner Cloud account. Please check your Hetzner Cloud console and manually delete the server if needed.",
+            'message' => $this->trans('notifications.hetzner_deletion_failed.telegram_message', [
+                'id' => $this->hetznerServerId,
+                'error' => $this->errorMessage,
+            ]),
         ];
     }
 
     public function toPushover(): PushoverMessage
     {
         return new PushoverMessage(
-            title: 'Hetzner Server Deletion Failed',
+            title: $this->trans('notifications.hetzner_deletion_failed.pushover_title'),
             level: 'error',
-            message: "[ACTION REQUIRED] Failed to delete Hetzner server #{$this->hetznerServerId}.\n\nError: {$this->errorMessage}\n\nThe server has been removed from Coolify, but may still exist in your Hetzner Cloud account. Please check and manually delete if needed.",
+            message: $this->trans('notifications.hetzner_deletion_failed.pushover_message', [
+                'id' => $this->hetznerServerId,
+                'error' => $this->errorMessage,
+            ]),
         );
     }
 
     public function toSlack(): SlackMessage
     {
         return new SlackMessage(
-            title: 'Coolify: [ACTION REQUIRED] Hetzner Server Deletion Failed',
-            description: "Failed to delete Hetzner server #{$this->hetznerServerId} from Hetzner Cloud.\n\nError: {$this->errorMessage}\n\nThe server has been removed from Coolify, but may still exist in your Hetzner Cloud account. Please check your Hetzner Cloud console and manually delete the server if needed.",
+            title: $this->trans('notifications.hetzner_deletion_failed.slack_title'),
+            description: $this->trans('notifications.hetzner_deletion_failed.slack_description', [
+                'id' => $this->hetznerServerId,
+                'error' => $this->errorMessage,
+            ]),
             color: SlackMessage::errorColor()
         );
     }

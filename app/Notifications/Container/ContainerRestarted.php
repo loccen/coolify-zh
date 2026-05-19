@@ -43,13 +43,16 @@ class ContainerRestarted extends CustomEmailNotification
     public function toDiscord(): DiscordMessage
     {
         $message = new DiscordMessage(
-            title: ':warning: Resource restarted',
-            description: "{$this->name} has been restarted automatically on {$this->server->name}.",
+            title: $this->trans('notifications.container_restarted.discord_title'),
+            description: $this->trans('notifications.container_restarted.discord_description', [
+                'name' => $this->name,
+                'server' => $this->server->name,
+            ]),
             color: DiscordMessage::infoColor(),
         );
 
         if ($this->url) {
-            $message->addField('Resource', '[Link]('.$this->url.')');
+            $message->addField($this->trans('notifications.common.resource'), "[{$this->trans('notifications.common.link')}]({$this->url})");
         }
 
         return $message;
@@ -57,7 +60,10 @@ class ContainerRestarted extends CustomEmailNotification
 
     public function toTelegram(): array
     {
-        $message = "Coolify: A resource ({$this->name}) has been restarted automatically on {$this->server->name}";
+        $message = $this->trans('notifications.container_restarted.telegram_message', [
+            'name' => $this->name,
+            'server' => $this->server->name,
+        ]);
         $payload = [
             'message' => $message,
         ];
@@ -65,7 +71,7 @@ class ContainerRestarted extends CustomEmailNotification
             $payload['buttons'] = [
                 [
                     [
-                        'text' => 'Check Proxy in Coolify',
+                        'text' => $this->trans('notifications.common.check_proxy_in_coolify'),
                         'url' => $this->url,
                     ],
                 ],
@@ -80,26 +86,32 @@ class ContainerRestarted extends CustomEmailNotification
         $buttons = [];
         if ($this->url) {
             $buttons[] = [
-                'text' => 'Check Proxy in Coolify',
+                'text' => $this->trans('notifications.common.check_proxy_in_coolify'),
                 'url' => $this->url,
             ];
         }
 
         return new PushoverMessage(
-            title: 'Resource restarted',
+            title: $this->trans('notifications.container_restarted.pushover_title'),
             level: 'warning',
-            message: "A resource ({$this->name}) has been restarted automatically on {$this->server->name}",
+            message: $this->trans('notifications.container_restarted.pushover_message', [
+                'name' => $this->name,
+                'server' => $this->server->name,
+            ]),
             buttons: $buttons,
         );
     }
 
     public function toSlack(): SlackMessage
     {
-        $title = 'Resource restarted';
-        $description = "A resource ({$this->name}) has been restarted automatically on {$this->server->name}";
+        $title = $this->trans('notifications.container_restarted.slack_title');
+        $description = $this->trans('notifications.container_restarted.slack_description', [
+            'name' => $this->name,
+            'server' => $this->server->name,
+        ]);
 
         if ($this->url) {
-            $description .= "\n*Resource URL:* {$this->url}";
+            $description .= "\n*".$this->trans('notifications.common.resource_url').":* {$this->url}";
         }
 
         return new SlackMessage(
@@ -113,7 +125,7 @@ class ContainerRestarted extends CustomEmailNotification
     {
         $data = [
             'success' => true,
-            'message' => 'Resource restarted automatically',
+            'message' => $this->trans('notifications.container_restarted.webhook_message'),
             'event' => 'container_restarted',
             'container_name' => $this->name,
             'server_name' => $this->server->name,

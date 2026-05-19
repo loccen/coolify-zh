@@ -47,13 +47,13 @@ class TaskSuccess extends CustomEmailNotification
     public function toDiscord(): DiscordMessage
     {
         $message = new DiscordMessage(
-            title: ':white_check_mark: Scheduled task succeeded',
-            description: "Scheduled task ({$this->task->name}) succeeded.",
+            title: $this->trans('notifications.scheduled_task_success.discord_title'),
+            description: $this->trans('notifications.scheduled_task_success.discord_description', ['name' => $this->task->name]),
             color: DiscordMessage::successColor(),
         );
 
         if ($this->url) {
-            $message->addField('Scheduled task', '[Link]('.$this->url.')');
+            $message->addField($this->trans('notifications.common.task'), "[{$this->trans('notifications.common.link')}]({$this->url})");
         }
 
         return $message;
@@ -61,10 +61,10 @@ class TaskSuccess extends CustomEmailNotification
 
     public function toTelegram(): array
     {
-        $message = "Coolify: Scheduled task ({$this->task->name}) succeeded.";
+        $message = $this->trans('notifications.scheduled_task_success.telegram_message', ['name' => $this->task->name]);
         if ($this->url) {
             $buttons[] = [
-                'text' => 'Open task in Coolify',
+                'text' => $this->trans('notifications.common.open_task_in_coolify'),
                 'url' => (string) $this->url,
             ];
         }
@@ -76,17 +76,17 @@ class TaskSuccess extends CustomEmailNotification
 
     public function toPushover(): PushoverMessage
     {
-        $message = "Coolify: Scheduled task ({$this->task->name}) succeeded.";
+        $message = $this->trans('notifications.scheduled_task_success.pushover_message', ['name' => $this->task->name]);
         $buttons = [];
         if ($this->url) {
             $buttons[] = [
-                'text' => 'Open task in Coolify',
+                'text' => $this->trans('notifications.common.open_task_in_coolify'),
                 'url' => (string) $this->url,
             ];
         }
 
         return new PushoverMessage(
-            title: 'Scheduled task succeeded',
+            title: $this->trans('notifications.scheduled_task_success.pushover_title'),
             level: 'success',
             message: $message,
             buttons: $buttons,
@@ -95,11 +95,11 @@ class TaskSuccess extends CustomEmailNotification
 
     public function toSlack(): SlackMessage
     {
-        $title = 'Scheduled task succeeded';
-        $description = "Scheduled task ({$this->task->name}) succeeded.";
+        $title = $this->trans('notifications.scheduled_task_success.slack_title');
+        $description = $this->trans('notifications.scheduled_task_success.slack_description', ['name' => $this->task->name]);
 
         if ($this->url) {
-            $description .= "\n\n*Task URL:* {$this->url}";
+            $description .= "\n\n*".$this->trans('notifications.common.task_url').":* {$this->url}";
         }
 
         return new SlackMessage(
@@ -113,7 +113,7 @@ class TaskSuccess extends CustomEmailNotification
     {
         $data = [
             'success' => true,
-            'message' => 'Scheduled task succeeded',
+            'message' => $this->trans('notifications.scheduled_task_success.webhook_message'),
             'event' => 'task_success',
             'task_name' => $this->task->name,
             'task_uuid' => $this->task->uuid,
