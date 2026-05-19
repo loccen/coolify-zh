@@ -1,16 +1,16 @@
 <div>
     <x-slot:title>
-        Servers | Coolify
+        {{ __('Servers') }} | Coolify
     </x-slot>
     <div class="flex items-center gap-2">
-        <h1>Servers</h1>
+        <h1>{{ __('Servers') }}</h1>
         @can('createAnyResource')
-            <x-modal-input buttonTitle="+ Add" title="New Server" :closeOutside="false">
+            <x-modal-input buttonTitle="{{ __('+ Add') }}" title="{{ __('New Server') }}" :closeOutside="false">
                 <livewire:server.create />
             </x-modal-input>
         @endcan
     </div>
-    <div class="subtitle">All your servers are here.</div>
+    <div class="subtitle">{{ __('All your servers are here.') }}</div>
     <div class="grid gap-4 lg:grid-cols-2 -mt-1">
         @forelse ($servers as $server)
             <a href="{{ route('server.show', ['server_uuid' => data_get($server, 'uuid')]) }}" {{ wireNavigate() }}
@@ -27,16 +27,16 @@
                         {{ $server->description }}</div>
                     <div class="flex gap-1 text-xs text-error">
                         @if (!$server->settings->is_reachable)
-                            <span>Not reachable</span>
+                            <span>{{ __('Not reachable') }}</span>
                         @endif
                         @if (!$server->settings->is_reachable && !$server->settings->is_usable)
                             &
                         @endif
                         @if (!$server->settings->is_usable)
-                            <span>Not usable by Coolify</span>
+                            <span>{{ __('Not usable by Coolify') }}</span>
                         @endif
                         @if ($server->settings->force_disabled)
-                            <span>Disabled by the system</span>
+                            <span>{{ __('Disabled by the system') }}</span>
                         @endif
                     </div>
                 </div>
@@ -44,7 +44,7 @@
             </a>
         @empty
             <div>
-                <div>No servers found. Without a server, you won't be able to do much.</div>
+                <div>{{ __('No servers found. Without a server, you won\'t be able to do much.') }}</div>
             </div>
         @endforelse
         @isset($error)

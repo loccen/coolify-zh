@@ -296,7 +296,7 @@
                         </svg>
                     </div>
                     <input type="text" x-model="searchQuery"
-                        placeholder="Search resources, paths, everything (type new for create)..." x-ref="searchInput"
+                        placeholder="{{ __('Search resources, paths, everything (type new for create)...') }}" x-ref="searchInput"
                         x-init="$watch('modalOpen', value => { if (value) setTimeout(() => $refs.searchInput.focus(), 100) })"
                         class="w-full pl-12 pr-32 py-4 text-base bg-white dark:bg-coolgray-100 border-none rounded-lg shadow-xl ring-1 ring-neutral-200 dark:ring-coolgray-300 dark:text-white placeholder-neutral-400 dark:placeholder-neutral-500 focus-visible:outline-none focus-visible:border-l-4 focus-visible:border-l-coollabs dark:focus-visible:border-l-warning" />
                     <div class="absolute inset-y-0 right-2 flex items-center gap-2 pointer-events-none">
@@ -333,7 +333,7 @@
                                             </button>
                                             <div>
                                                 <h2 class="text-base font-semibold text-neutral-900 dark:text-white">
-                                                    Select Server
+                                                    {{ __('Select Server') }}
                                                 </h2>
                                                 @if ($this->selectedResourceName)
                                                     <div class="text-xs text-neutral-500 dark:text-neutral-400">
@@ -352,8 +352,7 @@
                                                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
                                                     </path>
                                                 </svg>
-                                                <span class="text-sm text-neutral-600 dark:text-neutral-400">Loading
-                                                    servers...</span>
+                                                <span class="text-sm text-neutral-600 dark:text-neutral-400">{{ __('Loading servers...') }}</span>
                                             </div>
                                         @elseif (count($availableServers) > 0)
                                             @foreach ($availableServers as $index => $server)
@@ -477,7 +476,7 @@
                                             </button>
                                             <div>
                                                 <h2 class="text-base font-semibold text-neutral-900 dark:text-white">
-                                                    Select Project
+                                                    {{ __('Select Project') }}
                                                 </h2>
                                                 @if ($this->selectedResourceName)
                                                     <div class="text-xs text-neutral-500 dark:text-neutral-400">
@@ -496,8 +495,7 @@
                                                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
                                                     </path>
                                                 </svg>
-                                                <span class="text-sm text-neutral-600 dark:text-neutral-400">Loading
-                                                    projects...</span>
+                                                <span class="text-sm text-neutral-600 dark:text-neutral-400">{{ __('Loading projects...') }}</span>
                                             </div>
                                         @elseif (count($availableProjects) > 0)
                                             @foreach ($availableProjects as $index => $project)
@@ -552,7 +550,7 @@
                                             </button>
                                             <div>
                                                 <h2 class="text-base font-semibold text-neutral-900 dark:text-white">
-                                                    Select Environment
+                                                    {{ __('Select Environment') }}
                                                 </h2>
                                                 @if ($this->selectedResourceName)
                                                     <div class="text-xs text-neutral-500 dark:text-neutral-400">
@@ -571,8 +569,7 @@
                                                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
                                                     </path>
                                                 </svg>
-                                                <span class="text-sm text-neutral-600 dark:text-neutral-400">Loading
-                                                    environments...</span>
+                                                <span class="text-sm text-neutral-600 dark:text-neutral-400">{{ __('Loading environments...') }}</span>
                                             </div>
                                         @elseif (count($availableEnvironments) > 0)
                                             @foreach ($availableEnvironments as $index => $environment)
@@ -626,7 +623,7 @@
                                     <div class="px-4 pt-3 pb-1">
                                         <h4
                                             class="text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                                            Existing Resources
+                                            {{ __('Existing Resources') }}
                                         </h4>
                                     </div>
                                     @foreach ($searchResults as $result)
@@ -764,14 +761,14 @@
                                                     </span>
                                                     <span
                                                         class="px-2 py-0.5 text-xs rounded-full bg-neutral-100 dark:bg-coolgray-300 text-neutral-700 dark:text-neutral-300 shrink-0">
-                                                        <span x-show="result.type === 'navigation'">Navigation</span>
-                                                        <span x-show="result.type === 'application'">Application</span>
-                                                        <span x-show="result.type === 'service'">Service</span>
+                                                        <span x-show="result.type === 'navigation'">{{ __('Navigation') }}</span>
+                                                        <span x-show="result.type === 'application'">{{ __('Application') }}</span>
+                                                        <span x-show="result.type === 'service'">{{ __('Service') }}</span>
                                                         <span x-show="result.type === 'database'"
-                                                            x-text="result.subtype ? result.subtype.charAt(0).toUpperCase() + result.subtype.slice(1) : 'Database'"></span>
-                                                        <span x-show="result.type === 'server'">Server</span>
-                                                        <span x-show="result.type === 'project'">Project</span>
-                                                        <span x-show="result.type === 'environment'">Environment</span>
+                                                            x-text="result.subtype ? result.subtype.charAt(0).toUpperCase() + result.subtype.slice(1) : @js(__('Database'))"></span>
+                                                        <span x-show="result.type === 'server'">{{ __('Server') }}</span>
+                                                        <span x-show="result.type === 'project'">{{ __('Project') }}</span>
+                                                        <span x-show="result.type === 'environment'">{{ __('Environment') }}</span>
                                                     </span>
                                                 </div>
                                                 <template x-if="result.project && result.environment">
@@ -879,13 +876,13 @@
                             <div class="flex items-center justify-center py-12 px-4">
                                 <div class="text-center">
                                     <p class="mt-4 text-sm font-medium text-neutral-900 dark:text-white">
-                                        No results found
+                                        {{ __('No results found') }}
                                     </p>
                                     <p class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-                                        Try different keywords or check the spelling
+                                        {{ __('Try different keywords or check the spelling') }}
                                     </p>
                                     <p class="mt-2 text-xs text-neutral-400 dark:text-neutral-500">
-                                        💡 Tip: Search for service names like "wordpress", "postgres", or "redis"
+                                        {{ __('Tip: Search for service names like "wordpress", "postgres", or "redis"') }}
                                     </p>
                                 </div>
                             </div>
@@ -920,7 +917,7 @@
                     x-transition:leave-end="opacity-0 -translate-y-2 sm:scale-95"
                     class="relative w-full py-6 border rounded-sm drop-shadow-sm min-w-full lg:min-w-[36rem] max-w-fit bg-white border-neutral-200 dark:bg-base px-6 dark:border-coolgray-300">
                     <div class="flex items-center justify-between pb-3">
-                        <h3 class="text-2xl font-bold">New Project</h3>
+                        <h3 class="text-2xl font-bold">{{ __('New Project') }}</h3>
                         <button @click="modalOpen=false"
                             class="absolute top-0 right-0 flex items-center justify-center w-8 h-8 mt-5 mr-5 rounded-full dark:text-white hover:bg-neutral-100 dark:hover:bg-coolgray-300 outline-0 focus-visible:ring-2 focus-visible:ring-coollabs dark:focus-visible:ring-warning">
                             <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -960,7 +957,7 @@
                     x-transition:leave-end="opacity-0 -translate-y-2 sm:scale-95"
                     class="relative w-full py-6 border rounded-sm drop-shadow-sm min-w-full lg:min-w-[36rem] max-w-fit bg-white border-neutral-200 dark:bg-base px-6 dark:border-coolgray-300">
                     <div class="flex items-center justify-between pb-3">
-                        <h3 class="text-2xl font-bold">New Server</h3>
+                        <h3 class="text-2xl font-bold">{{ __('New Server') }}</h3>
                         <button @click="modalOpen=false"
                             class="absolute top-0 right-0 flex items-center justify-center w-8 h-8 mt-5 mr-5 rounded-full dark:text-white hover:bg-neutral-100 dark:hover:bg-coolgray-300 outline-0 focus-visible:ring-2 focus-visible:ring-coollabs dark:focus-visible:ring-warning">
                             <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -1040,7 +1037,7 @@
                     x-transition:leave-end="opacity-0 -translate-y-2 sm:scale-95"
                     class="relative w-full py-6 border rounded-sm drop-shadow-sm min-w-full lg:min-w-[36rem] max-w-fit bg-white border-neutral-200 dark:bg-base px-6 dark:border-coolgray-300">
                     <div class="flex items-center justify-between pb-3">
-                        <h3 class="text-2xl font-bold">New S3 Storage</h3>
+                        <h3 class="text-2xl font-bold">{{ __('New S3 Storage') }}</h3>
                         <button @click="modalOpen=false"
                             class="absolute top-0 right-0 flex items-center justify-center w-8 h-8 mt-5 mr-5 rounded-full dark:text-white hover:bg-neutral-100 dark:hover:bg-coolgray-300 outline-0 focus-visible:ring-2 focus-visible:ring-coollabs dark:focus-visible:ring-warning">
                             <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"

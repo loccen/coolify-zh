@@ -1,27 +1,27 @@
 <div>
     <x-slot:title>
-        {{ data_get_str($project, 'name')->limit(10) }} > Resources | Coolify
+        {{ data_get_str($project, 'name')->limit(10) }} > {{ __('Resources') }} | Coolify
     </x-slot>
     <div class="flex flex-col">
         <div class="flex min-w-0 flex-nowrap items-center gap-1">
-            <h1>Resources</h1>
+            <h1>{{ __('Resources') }}</h1>
             @if ($environment->isEmpty())
                 @can('createAnyResource')
                     <a class="button" {{ wireNavigate() }}
                         href="{{ route('project.clone-me', ['project_uuid' => data_get($project, 'uuid'), 'environment_uuid' => data_get($environment, 'uuid')]) }}">
-                        Clone
+                        {{ __('Clone') }}
                     </a>
                 @endcan
             @else
                 @can('createAnyResource')
                     <a href="{{ route('project.resource.create', ['project_uuid' => data_get($parameters, 'project_uuid'), 'environment_uuid' => data_get($environment, 'uuid')]) }}"
                         {{ wireNavigate() }} class="button">+
-                        New</a>
+                        {{ __('New') }}</a>
                 @endcan
                 @can('createAnyResource')
                     <a class="button" {{ wireNavigate() }}
                         href="{{ route('project.clone-me', ['project_uuid' => data_get($project, 'uuid'), 'environment_uuid' => data_get($environment, 'uuid')]) }}">
-                        Clone
+                        {{ __('Clone') }}
                     </a>
                 @endcan
             @endif
@@ -121,7 +121,7 @@
                                                 d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
                                             </path>
                                         </svg>
-                                        Create / Edit
+                                        {{ __('Create / Edit') }}
                                     </a>
                                 </div>
                             </div>
@@ -193,41 +193,38 @@
     @if ($environment->isEmpty())
         @can('createAnyResource')
             <a href="{{ route('project.resource.create', ['project_uuid' => data_get($parameters, 'project_uuid'), 'environment_uuid' => data_get($environment, 'uuid')]) }}"
-                {{ wireNavigate() }} class="items-center justify-center coolbox">+ Add Resource</a>
+                {{ wireNavigate() }} class="items-center justify-center coolbox">{{ __('+ Add Resource') }}</a>
         @else
             <div
                 class="flex flex-col items-center justify-center p-8 text-center border border-dashed border-neutral-300 dark:border-coolgray-300 rounded-lg">
-                <h3 class="mb-2 text-lg font-semibold text-neutral-600 dark:text-neutral-400">No Resources Found</h3>
+                <h3 class="mb-2 text-lg font-semibold text-neutral-600 dark:text-neutral-400">{{ __('No Resources Found') }}</h3>
                 <p class="text-sm text-neutral-600 dark:text-neutral-400">
-                    This environment doesn't have any resources yet.<br>
-                    Contact your team administrator to add resources.
+                    {!! __('This environment doesn\'t have any resources yet.<br>Contact your team administrator to add resources.') !!}
                 </p>
             </div>
         @endcan
     @else
         <div x-data="searchComponent()">
-            <x-forms.input placeholder="Search for name, fqdn..." x-model="search" id="null" />
+            <x-forms.input placeholder="{{ __('Search for name, fqdn...') }}" x-model="search" id="null" />
             <template
                 x-if="filteredApplications.length === 0 && filteredDatabases.length === 0 && filteredServices.length === 0">
                 <div class="flex flex-col items-center justify-center p-8 text-center">
                     <div x-show="search.length > 0">
-                        <p class="text-neutral-600 dark:text-neutral-400">No resource found with the search term "<span
+                        <p class="text-neutral-600 dark:text-neutral-400">{{ __('No resource found with the search term') }} "<span
                                 class="font-semibold" x-text="search"></span>".</p>
-                        <p class="text-sm text-neutral-500 dark:text-neutral-500 mt-1">Try adjusting your search
-                            criteria.</p>
+                        <p class="text-sm text-neutral-500 dark:text-neutral-500 mt-1">{{ __('Try adjusting your search criteria.') }}</p>
                     </div>
                     <div x-show="search.length === 0">
-                        <p class="text-neutral-600 dark:text-neutral-400">No resources found in this environment.</p>
+                        <p class="text-neutral-600 dark:text-neutral-400">{{ __('No resources found in this environment.') }}</p>
                         @cannot('createAnyResource')
-                            <p class="text-sm text-neutral-500 dark:text-neutral-500 mt-1">Contact your team administrator
-                                to add resources.</p>
+                            <p class="text-sm text-neutral-500 dark:text-neutral-500 mt-1">{{ __('Contact your team administrator to add resources.') }}</p>
                         @endcannot
                     </div>
                 </div>
             </template>
 
             <template x-if="filteredApplications.length > 0">
-                <h2 class="pt-4">Applications</h2>
+                <h2 class="pt-4">{{ __('Applications') }}</h2>
             </template>
             <div x-show="filteredApplications.length > 0"
                 class="grid grid-cols-1 gap-4 pt-4 lg:grid-cols-2 xl:grid-cols-3">
@@ -279,7 +276,7 @@
                 </template>
             </div>
             <template x-if="filteredDatabases.length > 0">
-                <h2 class="pt-4">Databases</h2>
+                <h2 class="pt-4">{{ __('Databases') }}</h2>
             </template>
             <div x-show="filteredDatabases.length > 0"
                 class="grid grid-cols-1 gap-4 pt-4 lg:grid-cols-2 xl:grid-cols-3">
@@ -331,7 +328,7 @@
                 </template>
             </div>
             <template x-if="filteredServices.length > 0">
-                <h2 class="pt-4">Services</h2>
+                <h2 class="pt-4">{{ __('Services') }}</h2>
             </template>
             <div x-show="filteredServices.length > 0"
                 class="grid grid-cols-1 gap-4 pt-4 lg:grid-cols-2 xl:grid-cols-3">

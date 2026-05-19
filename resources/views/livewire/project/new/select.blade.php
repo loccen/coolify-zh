@@ -4,26 +4,26 @@
             <div x-init="window.addEventListener('scroll', () => isSticky = window.pageYOffset > 100)"
                 class="sticky z-10 top-0  backdrop-blur-sm border-b border-neutral-200 dark:border-coolgray-400">
                 <div class="flex flex-col gap-4 lg:flex-row">
-                    <h1>New Resource</h1>
+                    <h1>{{ __('New Resource') }}</h1>
                     <div class="w-full lg:w-96">
                         <x-forms.select wire:model.live="selectedEnvironment">
                             @foreach ($environments as $environment)
-                                <option value="{{ $environment->name }}">Environment: {{ $environment->name }}</option>
+                                <option value="{{ $environment->name }}">{{ __('Environment') }}: {{ $environment->name }}</option>
                             @endforeach
                         </x-forms.select>
                     </div>
                 </div>
-                <div class="mb-4">Deploy resources, like Applications, Databases, Services...</div>
+                <div class="mb-4">{{ __('Deploy resources, like Applications, Databases, Services...') }}</div>
                 <div class="flex gap-2 items-start">
                     <input autocomplete="off" x-ref="searchInput" class="input-sticky flex-1"
-                        :class="{ 'input-sticky-active': isSticky }" x-model="search" placeholder="Type / to search..."
+                        :class="{ 'input-sticky-active': isSticky }" x-model="search" placeholder="{{ __('Type / to search...') }}"
                         @keydown.window.slash.prevent="$refs.searchInput.focus()">
                     <!-- Category Filter Dropdown -->
                     <div class="relative" x-data="{ openCategoryDropdown: false, categorySearch: '' }" @click.outside="openCategoryDropdown = false">
                         <!-- Loading/Disabled State -->
                         <div x-show="loading || categories.length === 0"
                             class="flex items-center justify-between gap-2 py-1.5 px-3 w-64 text-sm rounded-sm border-0 ring-2 ring-inset ring-neutral-200 dark:ring-coolgray-300 bg-neutral-100 dark:bg-coolgray-200 cursor-not-allowed whitespace-nowrap opacity-50">
-                            <span class="text-sm text-neutral-400 dark:text-neutral-600">Filter by category</span>
+                            <span class="text-sm text-neutral-400 dark:text-neutral-600">{{ __('Filter by category') }}</span>
                             <svg class="w-4 h-4 text-neutral-400 shrink-0" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -35,7 +35,7 @@
                             @click="openCategoryDropdown = !openCategoryDropdown; $nextTick(() => { if (openCategoryDropdown) $refs.categorySearchInput.focus() })"
                             class="flex items-center justify-between gap-2 py-1.5 px-3 w-64 text-sm rounded-sm border-0 ring-2 ring-inset ring-neutral-200 dark:ring-coolgray-300 bg-white dark:bg-coolgray-100 cursor-pointer hover:ring-coolgray-400 transition-all whitespace-nowrap">
                             <span class="text-sm truncate"
-                                x-text="selectedCategory === '' ? 'Filter by category' : selectedCategory"
+                                x-text="selectedCategory === '' ? @js(__('Filter by category')) : selectedCategory"
                                 :class="selectedCategory === '' ? 'text-neutral-400 dark:text-neutral-600' :
                                     'capitalize text-black dark:text-white'"></span>
                             <svg class="w-4 h-4 transition-transform text-neutral-400 shrink-0"
@@ -51,7 +51,7 @@
                             <div
                                 class="sticky top-0 p-2 bg-white dark:bg-coolgray-100 border-b border-neutral-300 dark:border-coolgray-400">
                                 <input type="text" x-ref="categorySearchInput" x-model="categorySearch"
-                                    placeholder="Search categories..."
+                                    placeholder="{{ __('Search categories...') }}"
                                     class="w-full px-2 py-1 text-sm rounded border border-neutral-300 dark:border-coolgray-400 bg-white dark:bg-coolgray-200 focus:outline-none focus:ring-2 focus:ring-coolgray-400"
                                     @click.stop>
                             </div>
@@ -59,7 +59,7 @@
                                 <div @click="selectedCategory = ''; categorySearch = ''; openCategoryDropdown = false"
                                     class="px-3 py-2 cursor-pointer hover:bg-neutral-100 dark:hover:bg-coolgray-200"
                                     :class="{ 'bg-neutral-50 dark:bg-coolgray-300': selectedCategory === '' }">
-                                    <span class="text-sm">All Categories</span>
+                                    <span class="text-sm">{{ __('All Categories') }}</span>
                                 </div>
                                 <template
                                     x-for="category in categories.filter(cat => categorySearch === '' || cat.toLowerCase().includes(categorySearch.toLowerCase()))"
@@ -75,13 +75,13 @@
                     </div>
                 </div>
             </div>
-            <div x-show="loading">Loading...</div>
+            <div x-show="loading">{{ __('Loading...') }}</div>
             <div x-show="!loading" class="flex flex-col gap-4 py-4">
-                <h2 x-show="filteredGitBasedApplications.length > 0">Applications</h2>
+                <h2 x-show="filteredGitBasedApplications.length > 0">{{ __('Applications') }}</h2>
                 <div x-show="filteredGitBasedApplications.length > 0 || filteredDockerBasedApplications.length > 0"
                     class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <div x-show="filteredGitBasedApplications.length > 0" class="space-y-4">
-                        <h4>Git Based</h4>
+                        <h4>{{ __('Git Based') }}</h4>
                         <div class="grid justify-start grid-cols-1 gap-4 text-left">
                             <template x-for="application in filteredGitBasedApplications" :key="application.name">
                                 <div x-on:click='setType(application.id)'
@@ -101,7 +101,7 @@
                         </div>
                     </div>
                     <div x-show="filteredDockerBasedApplications.length > 0" class="space-y-4">
-                        <h4>Docker Based</h4>
+                        <h4>{{ __('Docker Based') }}</h4>
                         <div class="grid justify-start grid-cols-1 gap-4 text-left">
                             <template x-for="application in filteredDockerBasedApplications" :key="application.name">
                                 <div x-on:click="setType(application.id)"
@@ -119,7 +119,7 @@
                     </div>
                 </div>
                 <div x-show="filteredDatabases.length > 0" class="mt-8">
-                    <h2 class="mb-4">Databases</h2>
+                    <h2 class="mb-4">{{ __('Databases') }}</h2>
                     <div class="grid justify-start grid-cols-1 gap-4 text-left xl:grid-cols-3">
                         <template x-for="database in filteredDatabases" :key="database.id">
                             <div x-on:click="setType(database.id)"
@@ -139,12 +139,11 @@
                 </div>
                 <div x-show="filteredServices.length > 0" class="mt-8">
                     <div class="flex items-center gap-4" x-init="loadResources">
-                        <h2>Services</h2>
-                        <x-forms.button x-on:click="loadResources">Reload List</x-forms.button>
+                        <h2>{{ __('Services') }}</h2>
+                        <x-forms.button x-on:click="loadResources">{{ __('Reload List') }}</x-forms.button>
                     </div>
-                    <x-callout type="info" title="Trademarks Policy" class="mt-4 mb-6">
-                        The respective trademarks mentioned here are owned by the respective companies, and use of them
-                        does not imply any affiliation or endorsement.
+                    <x-callout type="info" title="{{ __('Trademarks Policy') }}" class="mt-4 mb-6">
+                        {{ __('The respective trademarks mentioned here are owned by the respective companies, and use of them does not imply any affiliation or endorsement.') }}
                     </x-callout>
 
                     <div class="grid justify-start grid-cols-1 gap-4 text-left xl:grid-cols-3">
@@ -177,12 +176,11 @@
                                     <div class="absolute top-2 right-10 group">
                                         <span
                                             class="px-2 py-0.5 text-xs rounded bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-200 cursor-pointer">
-                                            AMD only
+                                            {{ __('AMD only') }}
                                         </span>
                                         <div class="info-helper-popup right-0 w-sm">
                                             <div class="p-4">
-                                                This service only supports AMD64/x86_64 architecture. It will not work
-                                                on ARM-based servers (e.g., Apple Silicon, Raspberry Pi, AWS Graviton).
+                                                {{ __('This service only supports AMD64/x86_64 architecture. It will not work on ARM-based servers (e.g., Apple Silicon, Raspberry Pi, AWS Graviton).') }}
                                             </div>
                                         </div>
                                     </div>
@@ -191,12 +189,11 @@
                                     <div class="absolute top-2 right-10 group">
                                         <span
                                             class="px-2 py-0.5 text-xs rounded-full bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-200 cursor-pointer">
-                                            ARM only
+                                            {{ __('ARM only') }}
                                         </span>
                                         <div class="info-helper-popup right-0 w-sm">
                                             <div class="p-4">
-                                                This service only supports ARM64/aarch64 architecture. It will not work
-                                                on AMD64/x86_64-based servers.
+                                                {{ __('This service only supports ARM64/aarch64 architecture. It will not work on AMD64/x86_64-based servers.') }}
                                             </div>
                                         </div>
                                     </div>
@@ -206,7 +203,7 @@
                                         @click.stop @mouseenter="resolveDocLink(service)"
                                         class="absolute top-2 right-2 p-1.5 rounded hover:bg-neutral-200 dark:hover:bg-coolgray-300 transition-colors"
                                         :class="{ 'opacity-50': docCheckInProgress[service.name] }"
-                                        title="View documentation">
+                                        title="{{ __('View documentation') }}">
                                         <svg class="w-4 h-4 text-neutral-600 dark:text-neutral-400" fill="none"
                                             stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -220,7 +217,7 @@
                 </div>
                 <div
                     x-show="filteredGitBasedApplications.length === 0 && filteredDockerBasedApplications.length === 0 && filteredDatabases.length === 0 && filteredServices.length === 0 && loading === false">
-                    <div>No resources found.</div>
+                    <div>{{ __('No resources found.') }}</div>
                 </div>
             </div>
             <script>
