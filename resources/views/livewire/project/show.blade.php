@@ -1,15 +1,15 @@
 <div>
     <x-slot:title>
-        {{ data_get_str($project, 'name')->limit(10) }} > Environments | Coolify
+        {{ data_get_str($project, 'name')->limit(10) }} > {{ __('Environments') }} | Coolify
     </x-slot>
     <div class="flex items-center gap-2">
-        <h1>Environments</h1>
+        <h1>{{ __('Environments') }}</h1>
         @can('update', $project)
-            <x-modal-input buttonTitle="+ Add" title="New Environment">
+            <x-modal-input buttonTitle="{{ __('+ Add') }}" title="{{ __('New Environment') }}">
                 <form class="flex flex-col w-full gap-2 rounded-sm" wire:submit='submit'>
-                    <x-forms.input placeholder="production" id="name" label="Name" required />
+                    <x-forms.input placeholder="{{ __('production') }}" id="name" label="{{ __('Name') }}" required />
                     <x-forms.button type="submit">
-                        Save
+                        {{ __('Save') }}
                     </x-forms.button>
                 </form>
             </x-modal-input>
@@ -33,14 +33,14 @@
                         <div class="flex items-center justify-center gap-2 text-xs">
                             <a class="font-bold hover:underline" {{ wireNavigate() }}
                                 href="{{ route('project.environment.edit', ['project_uuid' => $project->uuid, 'environment_uuid' => $environment->uuid]) }}">
-                                Settings
+                                {{ __('Settings') }}
                             </a>
                         </div>
                     @endcan
                 </div>
             </div>
         @empty
-            <p>No environments found.</p>
+            <p>{{ __('No environments found.') }}</p>
         @endforelse
     </div>
 </div>

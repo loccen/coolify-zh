@@ -1,9 +1,9 @@
 <div wire:poll.10000ms="checkStatus" class="pb-6">
     <livewire:project.shared.configuration-checker :resource="$service" />
     <x-slide-over @startservice.window="slideOverOpen = true" closeWithX fullScreen>
-        <x-slot:title>Service Startup</x-slot:title>
+        <x-slot:title>{{ __('Service Startup') }}</x-slot:title>
         <x-slot:content>
-            <livewire:activity-monitor header="Logs" fullHeight />
+            <livewire:activity-monitor header="{{ __('Logs') }}" fullHeight />
         </x-slot:content>
     </x-slide-over>
     <h1>{{ $title }}</h1>
@@ -13,16 +13,16 @@
             class="scrollbar flex min-h-10 w-full flex-nowrap items-center gap-6 overflow-x-scroll overflow-y-hidden pb-1 whitespace-nowrap md:w-auto md:overflow-visible">
             <a class="shrink-0 {{ request()->routeIs('project.service.configuration') ? 'dark:text-white' : '' }}" {{ wireNavigate() }}
                 href="{{ route('project.service.configuration', $parameters) }}">
-                <button>Configuration</button>
+                <button>{{ __('Configuration') }}</button>
             </a>
             <a class="shrink-0 {{ request()->routeIs('project.service.logs') ? 'dark:text-white' : '' }}"
                 href="{{ route('project.service.logs', $parameters) }}">
-                <button>Logs</button>
+                <button>{{ __('Logs') }}</button>
             </a>
             @can('canAccessTerminal')
                 <a class="shrink-0 {{ request()->routeIs('project.service.command') ? 'dark:text-white' : '' }}"
                     href="{{ route('project.service.command', $parameters) }}">
-                    <button>Terminal</button>
+                    <button>{{ __('Terminal') }}</button>
                 </a>
             @endcan
             <div class="shrink-0">
@@ -34,72 +34,72 @@
                 <div class="md:hidden">
                     <x-dropdown>
                         <x-slot:title>
-                            Actions
+                            {{ __('Actions') }}
                         </x-slot>
                         @if (str($service->status)->contains('running'))
                             <div class="dropdown-item dropdown-item-touch" @click="$wire.dispatch('restartEvent')">
-                                Restart
+                                {{ __('Restart') }}
                             </div>
-                            <x-modal-confirmation title="Confirm Service Stopping?" buttonTitle="Stop" :dispatchEvent="true"
+                            <x-modal-confirmation title="{{ __('Confirm Service Stopping?') }}" buttonTitle="{{ __('Stop') }}" :dispatchEvent="true"
                                 submitAction="stop" dispatchEventType="stopEvent" :checkboxes="$checkboxes" :actions="[__('service.stop'), __('resource.non_persistent')]"
-                                :confirmWithText="false" :confirmWithPassword="false" step1ButtonText="Continue" step2ButtonText="Confirm">
+                                :confirmWithText="false" :confirmWithPassword="false" step1ButtonText="{{ __('Continue') }}" step2ButtonText="{{ __('Confirm') }}">
                                 <x-slot:trigger>
                                     <div class="dropdown-item dropdown-item-touch text-error">
-                                        Stop
+                                        {{ __('Stop') }}
                                     </div>
                                 </x-slot:trigger>
                             </x-modal-confirmation>
                             <div class="mx-2 my-1 border-t border-neutral-200 dark:border-coolgray-300"></div>
                             <div class="dropdown-item dropdown-item-touch" @click="$wire.dispatch('pullAndRestartEvent')">
-                                Pull Latest Images & Restart
+                                {{ __('Pull Latest Images & Restart') }}
                             </div>
                         @elseif (str($service->status)->contains('degraded'))
                             <div class="dropdown-item dropdown-item-touch" @click="$wire.dispatch('restartEvent')">
-                                Restart
+                                {{ __('Restart') }}
                             </div>
-                            <x-modal-confirmation title="Confirm Service Stopping?" buttonTitle="Stop" :dispatchEvent="true"
+                            <x-modal-confirmation title="{{ __('Confirm Service Stopping?') }}" buttonTitle="{{ __('Stop') }}" :dispatchEvent="true"
                                 submitAction="stop" dispatchEventType="stopEvent" :checkboxes="$checkboxes" :actions="[__('service.stop'), __('resource.non_persistent')]"
-                                :confirmWithText="false" :confirmWithPassword="false" step1ButtonText="Continue" step2ButtonText="Confirm">
+                                :confirmWithText="false" :confirmWithPassword="false" step1ButtonText="{{ __('Continue') }}" step2ButtonText="{{ __('Confirm') }}">
                                 <x-slot:trigger>
                                     <div class="dropdown-item dropdown-item-touch text-error">
-                                        Stop
+                                        {{ __('Stop') }}
                                     </div>
                                 </x-slot:trigger>
                             </x-modal-confirmation>
                             <div class="mx-2 my-1 border-t border-neutral-200 dark:border-coolgray-300"></div>
                             <div class="dropdown-item dropdown-item-touch" @click="$wire.dispatch('forceDeployEvent')">
-                                Force Restart
+                                {{ __('Force Restart') }}
                             </div>
                         @elseif (str($service->status)->contains('exited'))
                             <div class="dropdown-item dropdown-item-touch" @click="$wire.dispatch('startEvent')">
-                                Deploy
+                                {{ __('Deploy') }}
                             </div>
                             <div class="mx-2 my-1 border-t border-neutral-200 dark:border-coolgray-300"></div>
                             <div class="dropdown-item dropdown-item-touch" @click="$wire.dispatch('forceDeployEvent')">
-                                Force Deploy
+                                {{ __('Force Deploy') }}
                             </div>
                             <div class="dropdown-item dropdown-item-touch" wire:click='stop(true)'>
-                                Force Cleanup Containers
+                                {{ __('Force Cleanup Containers') }}
                             </div>
                         @else
-                            <x-modal-confirmation title="Confirm Service Stopping?" buttonTitle="Stop" :dispatchEvent="true"
+                            <x-modal-confirmation title="{{ __('Confirm Service Stopping?') }}" buttonTitle="{{ __('Stop') }}" :dispatchEvent="true"
                                 submitAction="stop" dispatchEventType="stopEvent" :checkboxes="$checkboxes" :actions="[__('service.stop'), __('resource.non_persistent')]"
-                                :confirmWithText="false" :confirmWithPassword="false" step1ButtonText="Continue" step2ButtonText="Confirm">
+                                :confirmWithText="false" :confirmWithPassword="false" step1ButtonText="{{ __('Continue') }}" step2ButtonText="{{ __('Confirm') }}">
                                 <x-slot:trigger>
                                     <div class="dropdown-item dropdown-item-touch text-error">
-                                        Stop
+                                        {{ __('Stop') }}
                                     </div>
                                 </x-slot:trigger>
                             </x-modal-confirmation>
                             <div class="dropdown-item dropdown-item-touch" @click="$wire.dispatch('startEvent')">
-                                Deploy
+                                {{ __('Deploy') }}
                             </div>
                             <div class="mx-2 my-1 border-t border-neutral-200 dark:border-coolgray-300"></div>
                             <div class="dropdown-item dropdown-item-touch" @click="$wire.dispatch('forceDeployEvent')">
-                                Force Deploy
+                                {{ __('Force Deploy') }}
                             </div>
                             <div class="dropdown-item dropdown-item-touch" wire:click='stop(true)'>
-                                Force Cleanup Containers
+                                {{ __('Force Cleanup Containers') }}
                             </div>
                         @endif
                     </x-dropdown>
@@ -107,7 +107,7 @@
                 <div class="hidden flex-wrap items-center gap-2 md:flex">
                     <x-services.advanced :service="$service" />
                     @if (str($service->status)->contains('running'))
-                        <x-forms.button title="Restart" @click="$wire.dispatch('restartEvent')">
+                        <x-forms.button title="{{ __('Restart') }}" @click="$wire.dispatch('restartEvent')">
                             <svg class="w-5 h-5 dark:text-warning" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                     stroke-width="2">
@@ -115,11 +115,11 @@
                                     <path d="M20 4v5h-5" />
                                 </g>
                             </svg>
-                            Restart
+                            {{ __('Restart') }}
                         </x-forms.button>
-                        <x-modal-confirmation title="Confirm Service Stopping?" buttonTitle="Stop" :dispatchEvent="true"
+                        <x-modal-confirmation title="{{ __('Confirm Service Stopping?') }}" buttonTitle="{{ __('Stop') }}" :dispatchEvent="true"
                             submitAction="stop" dispatchEventType="stopEvent" :checkboxes="$checkboxes" :actions="[__('service.stop'), __('resource.non_persistent')]"
-                            :confirmWithText="false" :confirmWithPassword="false" step1ButtonText="Continue" step2ButtonText="Confirm">
+                            :confirmWithText="false" :confirmWithPassword="false" step1ButtonText="{{ __('Continue') }}" step2ButtonText="{{ __('Confirm') }}">
                             <x-slot:button-title>
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-error" viewBox="0 0 24 24"
                                     stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
@@ -131,11 +131,11 @@
                                         d="M14 5m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v12a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z">
                                     </path>
                                 </svg>
-                                Stop
+                                {{ __('Stop') }}
                             </x-slot:button-title>
                         </x-modal-confirmation>
                     @elseif (str($service->status)->contains('degraded'))
-                        <x-forms.button title="Restart" @click="$wire.dispatch('restartEvent')">
+                        <x-forms.button title="{{ __('Restart') }}" @click="$wire.dispatch('restartEvent')">
                             <svg class="w-5 h-5 dark:text-warning" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                     stroke-width="2">
@@ -143,11 +143,11 @@
                                     <path d="M20 4v5h-5" />
                                 </g>
                             </svg>
-                            Restart
+                            {{ __('Restart') }}
                         </x-forms.button>
-                        <x-modal-confirmation title="Confirm Service Stopping?" buttonTitle="Stop" :dispatchEvent="true"
+                        <x-modal-confirmation title="{{ __('Confirm Service Stopping?') }}" buttonTitle="{{ __('Stop') }}" :dispatchEvent="true"
                             submitAction="stop" dispatchEventType="stopEvent" :checkboxes="$checkboxes" :actions="[__('service.stop'), __('resource.non_persistent')]"
-                            :confirmWithText="false" :confirmWithPassword="false" step1ButtonText="Continue" step2ButtonText="Confirm">
+                            :confirmWithText="false" :confirmWithPassword="false" step1ButtonText="{{ __('Continue') }}" step2ButtonText="{{ __('Confirm') }}">
                             <x-slot:button-title>
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-error" viewBox="0 0 24 24"
                                     stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
@@ -159,7 +159,7 @@
                                         d="M14 5m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v12a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z">
                                     </path>
                                 </svg>
-                                Stop
+                                {{ __('Stop') }}
                             </x-slot:button-title>
                         </x-modal-confirmation>
                     @elseif (str($service->status)->contains('exited'))
@@ -170,12 +170,12 @@
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                 <path d="M7 4v16l13 -8z" />
                             </svg>
-                            Deploy
+                            {{ __('Deploy') }}
                         </button>
                     @else
-                        <x-modal-confirmation title="Confirm Service Stopping?" buttonTitle="Stop" :dispatchEvent="true"
+                        <x-modal-confirmation title="{{ __('Confirm Service Stopping?') }}" buttonTitle="{{ __('Stop') }}" :dispatchEvent="true"
                             submitAction="stop" dispatchEventType="stopEvent" :checkboxes="$checkboxes" :actions="[__('service.stop'), __('resource.non_persistent')]"
-                            :confirmWithText="false" :confirmWithPassword="false" step1ButtonText="Continue" step2ButtonText="Confirm">
+                            :confirmWithText="false" :confirmWithPassword="false" step1ButtonText="{{ __('Continue') }}" step2ButtonText="{{ __('Confirm') }}">
                             <x-slot:button-title>
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-error" viewBox="0 0 24 24"
                                     stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
@@ -187,7 +187,7 @@
                                         d="M14 5m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v12a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z">
                                     </path>
                                 </svg>
-                                Stop
+                                {{ __('Stop') }}
                             </x-slot:button-title>
                         </x-modal-confirmation>
                         <button @click="$wire.dispatch('startEvent')" class="gap-2 button">
@@ -197,7 +197,7 @@
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                 <path d="M7 4v16l13 -8z" />
                             </svg>
-                            Deploy
+                            {{ __('Deploy') }}
                         </button>
                     @endif
                 </div>
@@ -205,9 +205,9 @@
         @else
             <div class="flex flex-wrap order-first gap-2 items-center sm:order-last">
                 <div class="text-error">
-                    Unable to deploy. <a class="underline font-bold cursor-pointer" {{ wireNavigate() }}
+                    {{ __('Unable to deploy.') }} <a class="underline font-bold cursor-pointer" {{ wireNavigate() }}
                         href="{{ route('project.service.environment-variables', $parameters) }}">
-                        Required environment variables missing.</a>
+                        {{ __('Required environment variables missing.') }}</a>
                 </div>
             </div>
         @endif
@@ -216,14 +216,14 @@
         <script>
             $wire.$on('stopEvent', () => {
                 $wire.$dispatch('info',
-                    'Gracefully stopping service.<br/><br/>It could take a while depending on the service.');
+                    @js(__('Gracefully stopping service.<br/><br/>It could take a while depending on the service.')));
                 $wire.$call('stop');
             });
             $wire.$on('startEvent', async () => {
                 const isDeploymentProgress = await $wire.$call('checkDeployments');
                 if (isDeploymentProgress) {
                     $wire.$dispatch('error',
-                        'There is a deployment in progress.<br><br>You can force deploy in the "Advanced" section.'
+                        @js(__('There is a deployment in progress.<br><br>You can force deploy in the "Advanced" section.'))
                     );
                     return;
                 }
@@ -238,23 +238,23 @@
                 const isDeploymentProgress = await $wire.$call('checkDeployments');
                 if (isDeploymentProgress) {
                     $wire.$dispatch('error',
-                        'There is a deployment in progress.<br><br>You can force deploy in the "Advanced" section.'
+                        @js(__('There is a deployment in progress.<br><br>You can force deploy in the "Advanced" section.'))
                     );
                     return;
                 }
                 $wire.$dispatch('info',
-                    'Gracefully stopping service.<br/><br/>It could take a while depending on the service.');
+                    @js(__('Gracefully stopping service.<br/><br/>It could take a while depending on the service.')));
                 window.dispatchEvent(new CustomEvent('startservice'));
                 $wire.$call('restart');
             });
             $wire.$on('pullAndRestartEvent', () => {
-                $wire.$dispatch('info', 'Pulling new images and restarting service.');
+                $wire.$dispatch('info', @js(__('Pulling new images and restarting service.')));
                 window.dispatchEvent(new CustomEvent('startservice'));
                 $wire.$call('pullAndRestartEvent');
             });
             $wire.on('imagePulled', () => {
                 window.dispatchEvent(new CustomEvent('startservice'));
-                $wire.$dispatch('info', 'Restarting service.');
+                $wire.$dispatch('info', @js(__('Restarting service.')));
             });
         </script>
     @endscript
