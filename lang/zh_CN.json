@@ -467,7 +467,7 @@
     "Docker Image": "Docker 镜像",
     "Docker Image Tag": "Docker 镜像标签",
     "Docker Image Tag or Hash": "Docker 镜像标签或哈希",
-    "Docker Network": "码头网络",
+    "Docker Network": "Docker 网络",
     "Docker Registry": "Docker 注册表",
     "Docker Swarm requires the image to be available in a registry. More info": "Docker Swarm 要求镜像可从镜像仓库拉取。更多信息",
     "Docker Tag": "泊坞窗标签",
