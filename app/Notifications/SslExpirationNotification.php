@@ -18,6 +18,7 @@ class SslExpirationNotification extends CustomEmailNotification
     public function __construct(array|Collection $resources)
     {
         $this->onQueue('high');
+        $this->useLocale();
         $this->resources = collect($resources);
 
         // Collect URLs for each resource
@@ -61,14 +62,16 @@ class SslExpirationNotification extends CustomEmailNotification
 
     public function toMail(): MailMessage
     {
-        $mail = new MailMessage;
-        $mail->subject('Coolify: [Action Required] SSL Certificates Renewed - Manual Redeployment Needed');
-        $mail->view('emails.ssl-certificate-renewed', [
-            'resources' => $this->resources,
-            'urls' => $this->urls,
-        ]);
+        return $this->withUserVisibleLocale(function () {
+            $mail = new MailMessage;
+            $mail->subject($this->trans('mail.ssl_certificate_renewed.subject'));
+            $mail->view('emails.ssl-certificate-renewed', [
+                'resources' => $this->resources,
+                'urls' => $this->urls,
+            ]);
 
-        return $mail;
+            return $mail;
+        });
     }
 
     public function toDiscord(): DiscordMessage
@@ -76,13 +79,13 @@ class SslExpirationNotification extends CustomEmailNotification
         $resourceNames = $this->resources->pluck('name')->join(', ');
 
         $message = new DiscordMessage(
-            title: '🔒 SSL Certificates Renewed',
-            description: "SSL certificates have been renewed for: {$resourceNames}.\n\n**Action Required:** These resources need to be redeployed manually.",
+            title: $this->trans('notifications.ssl_certificate_renewed.discord_title'),
+            description: $this->trans('notifications.ssl_certificate_renewed.discord_description', ['resources' => $resourceNames]),
             color: DiscordMessage::warningColor(),
         );
 
         foreach ($this->urls as $name => $url) {
-            $message->addField($name, "[View Resource]({$url})");
+            $message->addField($name, "[{$this->trans('notifications.common.view_resource_generic')}]({$url})");
         }
 
         return $message;
@@ -91,18 +94,16 @@ class SslExpirationNotification extends CustomEmailNotification
     public function toTelegram(): array
     {
         $resourceNames = $this->resources->pluck('name')->join(', ');
-        $message = "Coolify: SSL certificates have been renewed for: {$resourceNames}.\n\nAction Required: These resources need to be redeployed manually for the new SSL certificates to take effect.";
-
         $buttons = [];
         foreach ($this->urls as $name => $url) {
             $buttons[] = [
-                'text' => "View {$name}",
+                'text' => $this->trans('notifications.common.view_resource', ['name' => $name]),
                 'url' => $url,
             ];
         }
 
         return [
-            'message' => $message,
+            'message' => $this->trans('notifications.ssl_certificate_renewed.telegram_message', ['resources' => $resourceNames]),
             'buttons' => $buttons,
         ];
     }
@@ -110,21 +111,18 @@ class SslExpirationNotification extends CustomEmailNotification
     public function toPushover(): PushoverMessage
     {
         $resourceNames = $this->resources->pluck('name')->join(', ');
-        $message = "SSL certificates have been renewed for: {$resourceNames}<br/><br/>";
-        $message .= '<b>Action Required:</b> These resources need to be redeployed manually for the new SSL certificates to take effect.';
-
         $buttons = [];
         foreach ($this->urls as $name => $url) {
             $buttons[] = [
-                'text' => "View {$name}",
+                'text' => $this->trans('notifications.common.view_resource', ['name' => $name]),
                 'url' => $url,
             ];
         }
 
         return new PushoverMessage(
-            title: 'SSL Certificates Renewed',
+            title: $this->trans('notifications.ssl_certificate_renewed.pushover_title'),
             level: 'warning',
-            message: $message,
+            message: $this->trans('notifications.ssl_certificate_renewed.pushover_message', ['resources' => $resourceNames]),
             buttons: $buttons,
         );
     }
@@ -132,18 +130,17 @@ class SslExpirationNotification extends CustomEmailNotification
     public function toSlack(): SlackMessage
     {
         $resourceNames = $this->resources->pluck('name')->join(', ');
-        $description = "SSL certificates have been renewed for: {$resourceNames}\n\n";
-        $description .= '**Action Required:** These resources need to be redeployed manually for the new SSL certificates to take effect.';
+        $description = $this->trans('notifications.ssl_certificate_renewed.slack_description', ['resources' => $resourceNames]);
 
         if (! empty($this->urls)) {
-            $description .= "\n\n**Resource URLs:**\n";
+            $description .= "\n\n**".$this->trans('notifications.common.resource_urls').":**\n";
             foreach ($this->urls as $name => $url) {
                 $description .= "• {$name}: {$url}\n";
             }
         }
 
         return new SlackMessage(
-            title: '🔒 SSL Certificates Renewed',
+            title: $this->trans('notifications.ssl_certificate_renewed.slack_title'),
             description: $description,
             color: SlackMessage::warningColor()
         );

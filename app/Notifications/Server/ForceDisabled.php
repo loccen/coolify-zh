@@ -14,6 +14,7 @@ class ForceDisabled extends CustomEmailNotification
     public function __construct(public Server $server)
     {
         $this->onQueue('high');
+        $this->useLocale();
     }
 
     public function via(object $notifiable): array
@@ -23,13 +24,15 @@ class ForceDisabled extends CustomEmailNotification
 
     public function toMail(): MailMessage
     {
-        $mail = new MailMessage;
-        $mail->subject("Coolify: Server ({$this->server->name}) disabled because it is not paid!");
-        $mail->view('emails.server-force-disabled', [
-            'name' => $this->server->name,
-        ]);
+        return $this->withUserVisibleLocale(function () {
+            $mail = new MailMessage;
+            $mail->subject($this->trans('mail.server_force_disabled.subject', ['name' => $this->server->name]));
+            $mail->view('emails.server-force-disabled', [
+                'name' => $this->server->name,
+            ]);
 
-        return $mail;
+            return $mail;
+        });
     }
 
     public function toDiscord(): DiscordMessage

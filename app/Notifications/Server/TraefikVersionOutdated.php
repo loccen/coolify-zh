@@ -14,6 +14,7 @@ class TraefikVersionOutdated extends CustomEmailNotification
     public function __construct(public Collection $servers)
     {
         $this->onQueue('high');
+        $this->useLocale();
     }
 
     public function via(object $notifiable): array
@@ -40,26 +41,27 @@ class TraefikVersionOutdated extends CustomEmailNotification
 
     public function toMail($notifiable = null): MailMessage
     {
-        $mail = new MailMessage;
-        $count = $this->servers->count();
+        return $this->withUserVisibleLocale(function () {
+            $mail = new MailMessage;
+            $count = $this->servers->count();
 
-        // Transform servers to include URLs
-        $serversWithUrls = $this->servers->map(function ($server) {
-            return [
-                'name' => $server->name,
-                'uuid' => $server->uuid,
-                'url' => base_url().'/server/'.$server->uuid.'/proxy',
-                'outdatedInfo' => $server->outdatedInfo ?? [],
-            ];
+            $serversWithUrls = $this->servers->map(function ($server) {
+                return [
+                    'name' => $server->name,
+                    'uuid' => $server->uuid,
+                    'url' => base_url().'/server/'.$server->uuid.'/proxy',
+                    'outdatedInfo' => $server->outdatedInfo ?? [],
+                ];
+            });
+
+            $mail->subject($this->trans('mail.traefik_version_outdated.subject', ['count' => $count]));
+            $mail->view('emails.traefik-version-outdated', [
+                'servers' => $serversWithUrls,
+                'count' => $count,
+            ]);
+
+            return $mail;
         });
-
-        $mail->subject("Coolify: Traefik proxy outdated on {$count} server(s)");
-        $mail->view('emails.traefik-version-outdated', [
-            'servers' => $serversWithUrls,
-            'count' => $count,
-        ]);
-
-        return $mail;
     }
 
     public function toDiscord(): DiscordMessage

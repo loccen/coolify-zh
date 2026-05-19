@@ -3,6 +3,7 @@
 namespace App\Notifications\TransactionalEmails;
 
 use App\Models\InstanceSettings;
+use App\Support\UserVisibleLocale;
 use Exception;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
@@ -19,6 +20,7 @@ class ResetPassword extends Notification
 
     public function __construct($token, public bool $isTransactionalEmail = true)
     {
+        $this->locale = UserVisibleLocale::resolve();
         $this->settings = instanceSettings();
         $this->token = $token;
     }
@@ -54,11 +56,13 @@ class ResetPassword extends Notification
 
     protected function buildMailMessage($url)
     {
-        $mail = new MailMessage;
-        $mail->subject('Coolify: Reset Password');
-        $mail->view('emails.reset-password', ['url' => $url, 'count' => config('auth.passwords.'.config('auth.defaults.passwords').'.expire')]);
+        return UserVisibleLocale::withLocale($this->locale ?? null, function () use ($url) {
+            $mail = new MailMessage;
+            $mail->subject(trans('mail.reset_password.subject', locale: UserVisibleLocale::resolve($this->locale ?? null)));
+            $mail->view('emails.reset-password', ['url' => $url, 'count' => config('auth.passwords.'.config('auth.defaults.passwords').'.expire')]);
 
-        return $mail;
+            return $mail;
+        });
     }
 
     protected function resetUrl($notifiable)

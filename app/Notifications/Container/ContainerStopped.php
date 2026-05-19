@@ -14,6 +14,7 @@ class ContainerStopped extends CustomEmailNotification
     public function __construct(public string $name, public Server $server, public ?string $url = null)
     {
         $this->onQueue('high');
+        $this->useLocale();
     }
 
     public function via(object $notifiable): array
@@ -23,15 +24,20 @@ class ContainerStopped extends CustomEmailNotification
 
     public function toMail(): MailMessage
     {
-        $mail = new MailMessage;
-        $mail->subject("Coolify: A resource  has been stopped unexpectedly on {$this->server->name}");
-        $mail->view('emails.container-stopped', [
-            'containerName' => $this->name,
-            'serverName' => $this->server->name,
-            'url' => $this->url,
-        ]);
+        return $this->withUserVisibleLocale(function () {
+            $mail = new MailMessage;
+            $mail->subject($this->trans('mail.container_stopped.subject', [
+                'name' => $this->name,
+                'server' => $this->server->name,
+            ]));
+            $mail->view('emails.container-stopped', [
+                'containerName' => $this->name,
+                'serverName' => $this->server->name,
+                'url' => $this->url,
+            ]);
 
-        return $mail;
+            return $mail;
+        });
     }
 
     public function toDiscord(): DiscordMessage

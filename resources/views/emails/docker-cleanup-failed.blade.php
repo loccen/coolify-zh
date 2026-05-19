@@ -1,5 +1,5 @@
 <x-emails.layout>
-Docker Cleanup on {{ $name }} FAILED with the following error:
+{{ __('mail.docker_cleanup_failed.body', ['server' => $name]) }}
 
 <pre>
 {{ $text }}

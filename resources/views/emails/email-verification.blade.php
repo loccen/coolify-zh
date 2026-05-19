@@ -1,3 +1,3 @@
 <x-emails.layout>
-Verify your email [here]({{ $url }}).
+{{ __('mail.email_verification.body', ['url' => $url]) }}
 </x-emails.layout>

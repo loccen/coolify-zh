@@ -4,9 +4,16 @@ namespace App\Notifications\Channels;
 
 use App\Exceptions\NonReportableException;
 use App\Models\Team;
+use App\Support\UserVisibleLocale;
 use Exception;
 use Illuminate\Notifications\Notification;
 use Resend;
+use Resend\Exceptions\ErrorException;
+use Resend\Exceptions\TransporterException;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 
 class EmailChannel
 {
@@ -66,7 +73,9 @@ class EmailChannel
                 }
             }
 
-            $mailMessage = $notification->toMail($notifiable);
+            $locale = UserVisibleLocale::resolve(data_get($notification, 'locale'));
+            $mailMessage = UserVisibleLocale::withLocale($locale, fn () => $notification->toMail($notifiable));
+            $rendered = UserVisibleLocale::withLocale($locale, fn () => (string) $mailMessage->render());
 
             if ($isResendEnabled) {
                 $resend = Resend::client($settings->resend_api_key);
@@ -75,7 +84,7 @@ class EmailChannel
                     'from' => $from,
                     'to' => $recipients,
                     'subject' => $mailMessage->subject,
-                    'html' => (string) $mailMessage->render(),
+                    'html' => $rendered,
                 ]);
             } elseif ($isSmtpEnabled) {
                 $encryption = match (strtolower($settings->smtp_encryption)) {
@@ -85,7 +94,7 @@ class EmailChannel
                     default => null,
                 };
 
-                $transport = new \Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport(
+                $transport = new EsmtpTransport(
                     $settings->smtp_host,
                     $settings->smtp_port,
                     $encryption
@@ -93,20 +102,20 @@ class EmailChannel
                 $transport->setUsername($settings->smtp_username ?? '');
                 $transport->setPassword($settings->smtp_password ?? '');
 
-                $mailer = new \Symfony\Component\Mailer\Mailer($transport);
+                $mailer = new Mailer($transport);
 
                 $fromEmail = $settings->smtp_from_address ?? 'noreply@localhost';
                 $fromName = $settings->smtp_from_name ?? 'System';
-                $from = new \Symfony\Component\Mime\Address($fromEmail, $fromName);
-                $email = (new \Symfony\Component\Mime\Email)
+                $from = new Address($fromEmail, $fromName);
+                $email = (new Email)
                     ->from($from)
                     ->to(...$recipients)
                     ->subject($mailMessage->subject)
-                    ->html((string) $mailMessage->render());
+                    ->html($rendered);
 
                 $mailer->send($email);
             }
-        } catch (\Resend\Exceptions\ErrorException $e) {
+        } catch (ErrorException $e) {
             // Map HTTP status codes to user-friendly messages
             $userMessage = match ($e->getErrorCode()) {
                 403 => 'Invalid Resend API key. Please verify your API key in the Resend dashboard and update it in settings.',
@@ -131,13 +140,13 @@ class EmailChannel
 
             // Don't report expected errors (invalid keys, validation) to Sentry
             if (in_array($e->getErrorCode(), [403, 401, 400])) {
-                throw NonReportableException::fromException(new \Exception($userMessage, $e->getCode(), $e));
+                throw NonReportableException::fromException(new Exception($userMessage, $e->getCode(), $e));
             }
 
-            throw new \Exception($userMessage, $e->getCode(), $e);
-        } catch (\Resend\Exceptions\TransporterException $e) {
+            throw new Exception($userMessage, $e->getCode(), $e);
+        } catch (TransporterException $e) {
             send_internal_notification("Resend Transport Error: {$e->getMessage()}");
-            throw new \Exception('Unable to connect to Resend API. Please check your internet connection and try again.');
+            throw new Exception('Unable to connect to Resend API. Please check your internet connection and try again.');
         } catch (\Throwable $e) {
             // Check if this is a Resend domain verification error on cloud instances
             if (isCloud() && str_contains($e->getMessage(), 'domain is not verified')) {

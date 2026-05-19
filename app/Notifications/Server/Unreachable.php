@@ -16,6 +16,7 @@ class Unreachable extends CustomEmailNotification
     public function __construct(public Server $server)
     {
         $this->onQueue('high');
+        $this->useLocale();
         $this->isRateLimited = isEmailRateLimited(
             limiterKey: 'server-unreachable:'.$this->server->id,
         );
@@ -32,13 +33,15 @@ class Unreachable extends CustomEmailNotification
 
     public function toMail(): ?MailMessage
     {
-        $mail = new MailMessage;
-        $mail->subject("Coolify: Your server ({$this->server->name}) is unreachable.");
-        $mail->view('emails.server-lost-connection', [
-            'name' => $this->server->name,
-        ]);
+        return $this->withUserVisibleLocale(function () {
+            $mail = new MailMessage;
+            $mail->subject($this->trans('mail.server_lost_connection.subject', ['name' => $this->server->name]));
+            $mail->view('emails.server-lost-connection', [
+                'name' => $this->server->name,
+            ]);
 
-        return $mail;
+            return $mail;
+        });
     }
 
     public function toDiscord(): ?DiscordMessage

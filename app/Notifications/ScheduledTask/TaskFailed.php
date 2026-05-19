@@ -16,6 +16,7 @@ class TaskFailed extends CustomEmailNotification
     public function __construct(public ScheduledTask $task, public string $output)
     {
         $this->onQueue('high');
+        $this->useLocale();
         if ($task->application) {
             $this->url = $task->application->taskLink($task->uuid);
         } elseif ($task->service) {
@@ -30,15 +31,17 @@ class TaskFailed extends CustomEmailNotification
 
     public function toMail(): MailMessage
     {
-        $mail = new MailMessage;
-        $mail->subject("Coolify: [ACTION REQUIRED] Scheduled task ({$this->task->name}) failed.");
-        $mail->view('emails.scheduled-task-failed', [
-            'task' => $this->task,
-            'url' => $this->url,
-            'output' => $this->output,
-        ]);
+        return $this->withUserVisibleLocale(function () {
+            $mail = new MailMessage;
+            $mail->subject($this->trans('mail.scheduled_task_failed.subject', ['name' => $this->task->name]));
+            $mail->view('emails.scheduled-task-failed', [
+                'task' => $this->task,
+                'url' => $this->url,
+                'output' => $this->output,
+            ]);
 
-        return $mail;
+            return $mail;
+        });
     }
 
     public function toDiscord(): DiscordMessage

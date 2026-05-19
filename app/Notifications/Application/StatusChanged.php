@@ -26,6 +26,7 @@ class StatusChanged extends CustomEmailNotification
     public function __construct(public Application $resource)
     {
         $this->onQueue('high');
+        $this->useLocale();
         $this->resource_name = data_get($resource, 'name');
         $this->project_uuid = data_get($resource, 'environment.project.uuid');
         $this->environment_uuid = data_get($resource, 'environment.uuid');
@@ -44,22 +45,23 @@ class StatusChanged extends CustomEmailNotification
 
     public function toMail(): MailMessage
     {
-        $mail = new MailMessage;
-        $fqdn = $this->fqdn;
-        $mail->subject("Coolify: {$this->resource_name} has been stopped");
-        $mail->view('emails.application-status-changes', [
-            'name' => $this->resource_name,
-            'fqdn' => $fqdn,
-            'resource_url' => $this->resource_url,
-        ]);
+        return $this->withUserVisibleLocale(function () {
+            $mail = new MailMessage;
+            $mail->subject($this->trans('mail.application_status_changed.subject', ['name' => $this->resource_name]));
+            $mail->view('emails.application-status-changes', [
+                'name' => $this->resource_name,
+                'fqdn' => $this->fqdn,
+                'resource_url' => $this->resource_url,
+            ]);
 
-        return $mail;
+            return $mail;
+        });
     }
 
     public function toDiscord(): DiscordMessage
     {
         return new DiscordMessage(
-            title: ':cross_mark: Application stopped',
+            title: $this->trans('notifications.status_changed.discord_title'),
             description: '[Open Application in Coolify]('.$this->resource_url.')',
             color: DiscordMessage::errorColor(),
             isCritical: true,
@@ -68,13 +70,13 @@ class StatusChanged extends CustomEmailNotification
 
     public function toTelegram(): array
     {
-        $message = 'Coolify: '.$this->resource_name.' has been stopped.';
+        $message = $this->trans('notifications.status_changed.telegram_message', ['name' => $this->resource_name]);
 
         return [
             'message' => $message,
             'buttons' => [
                 [
-                    'text' => 'Open Application in Coolify',
+                    'text' => $this->trans('notifications.common.open_application_in_coolify'),
                     'url' => $this->resource_url,
                 ],
             ],
@@ -86,12 +88,12 @@ class StatusChanged extends CustomEmailNotification
         $message = $this->resource_name.' has been stopped.';
 
         return new PushoverMessage(
-            title: 'Application stopped',
+            title: $this->trans('notifications.status_changed.pushover_title'),
             level: 'error',
-            message: $message,
+            message: $this->trans('notifications.status_changed.pushover_message', ['name' => $this->resource_name]),
             buttons: [
                 [
-                    'text' => 'Open Application in Coolify',
+                    'text' => $this->trans('notifications.common.open_application_in_coolify'),
                     'url' => $this->resource_url,
                 ],
             ],
@@ -100,12 +102,12 @@ class StatusChanged extends CustomEmailNotification
 
     public function toSlack(): SlackMessage
     {
-        $title = 'Application stopped';
-        $description = "{$this->resource_name} has been stopped";
+        $title = $this->trans('notifications.status_changed.slack_title');
+        $description = $this->trans('notifications.status_changed.slack_description', ['name' => $this->resource_name]);
 
-        $description .= "\n\n*Project:* ".data_get($this->resource, 'environment.project.name');
-        $description .= "\n*Environment:* {$this->environment_name}";
-        $description .= "\n*Application URL:* {$this->resource_url}";
+        $description .= "\n\n*".$this->trans('notifications.common.project').':* '.data_get($this->resource, 'environment.project.name');
+        $description .= "\n*".$this->trans('notifications.common.environment').":* {$this->environment_name}";
+        $description .= "\n*".$this->trans('notifications.common.application_url').":* {$this->resource_url}";
 
         return new SlackMessage(
             title: $title,

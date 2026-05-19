@@ -18,6 +18,7 @@ class BackupSuccess extends CustomEmailNotification
     public function __construct(ScheduledDatabaseBackup $backup, public $database, public $database_name)
     {
         $this->onQueue('high');
+        $this->useLocale();
 
         $this->name = $database->name;
         $this->frequency = $backup->frequency;
@@ -30,15 +31,17 @@ class BackupSuccess extends CustomEmailNotification
 
     public function toMail(): MailMessage
     {
-        $mail = new MailMessage;
-        $mail->subject("Coolify: Backup successfully done for {$this->database->name}");
-        $mail->view('emails.backup-success', [
-            'name' => $this->name,
-            'database_name' => $this->database_name,
-            'frequency' => $this->frequency,
-        ]);
+        return $this->withUserVisibleLocale(function () {
+            $mail = new MailMessage;
+            $mail->subject($this->trans('mail.backup_success.subject', ['name' => $this->database->name]));
+            $mail->view('emails.backup-success', [
+                'name' => $this->name,
+                'database_name' => $this->database_name,
+                'frequency' => $this->frequency,
+            ]);
 
-        return $mail;
+            return $mail;
+        });
     }
 
     public function toDiscord(): DiscordMessage

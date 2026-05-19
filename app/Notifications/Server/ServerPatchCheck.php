@@ -16,6 +16,7 @@ class ServerPatchCheck extends CustomEmailNotification
     public function __construct(public Server $server, public array $patchData)
     {
         $this->onQueue('high');
+        $this->useLocale();
         $this->serverUrl = base_url().'/server/'.$this->server->uuid.'/security/patches';
     }
 
@@ -26,34 +27,38 @@ class ServerPatchCheck extends CustomEmailNotification
 
     public function toMail($notifiable = null): MailMessage
     {
-        $mail = new MailMessage;
+        return $this->withUserVisibleLocale(function () {
+            $mail = new MailMessage;
 
-        // Handle error case
-        if (isset($this->patchData['error'])) {
-            $mail->subject("Coolify: [ERROR] Failed to check patches on {$this->server->name}");
-            $mail->view('emails.server-patches-error', [
+            if (isset($this->patchData['error'])) {
+                $mail->subject($this->trans('mail.server_patches_error.subject', ['name' => $this->server->name]));
+                $mail->view('emails.server-patches-error', [
+                    'name' => $this->server->name,
+                    'error' => $this->patchData['error'],
+                    'osId' => $this->patchData['osId'] ?? 'unknown',
+                    'package_manager' => $this->patchData['package_manager'] ?? 'unknown',
+                    'server_url' => $this->serverUrl,
+                ]);
+
+                return $mail;
+            }
+
+            $totalUpdates = $this->patchData['total_updates'] ?? 0;
+            $mail->subject($this->trans('mail.server_patches.subject', [
+                'count' => $totalUpdates,
                 'name' => $this->server->name,
-                'error' => $this->patchData['error'],
+            ]));
+            $mail->view('emails.server-patches', [
+                'name' => $this->server->name,
+                'total_updates' => $totalUpdates,
+                'updates' => $this->patchData['updates'] ?? [],
                 'osId' => $this->patchData['osId'] ?? 'unknown',
                 'package_manager' => $this->patchData['package_manager'] ?? 'unknown',
                 'server_url' => $this->serverUrl,
             ]);
 
             return $mail;
-        }
-
-        $totalUpdates = $this->patchData['total_updates'] ?? 0;
-        $mail->subject("Coolify: [ACTION REQUIRED] {$totalUpdates} server patches available on {$this->server->name}");
-        $mail->view('emails.server-patches', [
-            'name' => $this->server->name,
-            'total_updates' => $totalUpdates,
-            'updates' => $this->patchData['updates'] ?? [],
-            'osId' => $this->patchData['osId'] ?? 'unknown',
-            'package_manager' => $this->patchData['package_manager'] ?? 'unknown',
-            'server_url' => $this->serverUrl,
-        ]);
-
-        return $mail;
+        });
     }
 
     public function toDiscord(): DiscordMessage

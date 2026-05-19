@@ -3,6 +3,7 @@
 namespace App\Notifications\Channels;
 
 use App\Models\User;
+use App\Support\UserVisibleLocale;
 use Exception;
 use Illuminate\Mail\Message;
 use Illuminate\Notifications\Notification;
@@ -26,14 +27,16 @@ class TransactionalEmailChannel
             return;
         }
         $this->bootConfigs();
-        $mailMessage = $notification->toMail($notifiable);
+        $locale = UserVisibleLocale::resolve(data_get($notification, 'locale'));
+        $mailMessage = UserVisibleLocale::withLocale($locale, fn () => $notification->toMail($notifiable));
+        $rendered = UserVisibleLocale::withLocale($locale, fn () => (string) $mailMessage->render());
         Mail::send(
             [],
             [],
             fn (Message $message) => $message
                 ->to($email)
                 ->subject($mailMessage->subject)
-                ->html((string) $mailMessage->render())
+                ->html($rendered)
         );
     }
 

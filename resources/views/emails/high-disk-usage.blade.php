@@ -1,7 +1,7 @@
 <x-emails.layout>
-Your server ({{ $name }}) has high disk usage ({{ $disk_usage }}% used). Threshold is {{ $threshold }}%.
+{{ __('mail.high_disk_usage.body', ['name' => $name, 'usage' => $disk_usage, 'threshold' => $threshold]) }}
 
-Please cleanup your disk to prevent data-loss. Here are some [tips](https://coolify.io/docs/knowledge-base/server/automated-cleanup).
+{{ __('mail.high_disk_usage.cleanup') }}
 
-(You can change the threshold in the Server Settings menu.)
+{{ __('mail.high_disk_usage.threshold_hint') }}
 </x-emails.layout>

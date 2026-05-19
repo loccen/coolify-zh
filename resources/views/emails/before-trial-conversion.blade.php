@@ -1,7 +1,7 @@
 <x-emails.layout>
-We would like to inform you that a {{ config('constants.limits.trial_period') }} days of trial has been added to all subscription plans.
+{{ trans_choice('mail.before_trial_conversion.intro', 1, ['days' => config('constants.limits.trial_period')]) }}
 
-You can try out Coolify, without payment information for free. If you like it, you can upgrade to a paid plan at any time.
+{{ __('mail.before_trial_conversion.description') }}
 
-[Click here](https://app.coolify.io/subscription/new) to start your trial.
+{!! Illuminate\Mail\Markdown::parse(__('mail.before_trial_conversion.cta')) !!}
 </x-emails.layout>

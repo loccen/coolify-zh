@@ -16,6 +16,7 @@ class Reachable extends CustomEmailNotification
     public function __construct(public Server $server)
     {
         $this->onQueue('high');
+        $this->useLocale();
         $this->isRateLimited = isEmailRateLimited(
             limiterKey: 'server-reachable:'.$this->server->id,
         );
@@ -32,13 +33,15 @@ class Reachable extends CustomEmailNotification
 
     public function toMail(): MailMessage
     {
-        $mail = new MailMessage;
-        $mail->subject("Coolify: Server ({$this->server->name}) revived.");
-        $mail->view('emails.server-revived', [
-            'name' => $this->server->name,
-        ]);
+        return $this->withUserVisibleLocale(function () {
+            $mail = new MailMessage;
+            $mail->subject($this->trans('mail.server_revived.subject', ['name' => $this->server->name]));
+            $mail->view('emails.server-revived', [
+                'name' => $this->server->name,
+            ]);
 
-        return $mail;
+            return $mail;
+        });
     }
 
     public function toDiscord(): DiscordMessage

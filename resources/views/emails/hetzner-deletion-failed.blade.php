@@ -1,13 +1,13 @@
 <x-emails.layout>
-Failed to delete Hetzner server #{{ $hetznerServerId }} from Hetzner Cloud.
+{{ __('mail.hetzner_deletion_failed.body', ['id' => $hetznerServerId]) }}
 
-Error:
+{{ __('mail.common.error_heading') }}:
 <pre>
 {{ $errorMessage }}
 </pre>
 
-The server has been removed from Coolify, but may still exist in your Hetzner Cloud account.
+{{ __('mail.hetzner_deletion_failed.still_exists') }}
 
-Please check your Hetzner Cloud console and manually delete the server if needed to avoid ongoing charges.
+{{ __('mail.hetzner_deletion_failed.manual_delete') }}
 
 </x-emails.layout>

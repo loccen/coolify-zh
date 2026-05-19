@@ -5,13 +5,13 @@
 
 <div style="color:red">
 
-"{{ $database_name }}" backups: There were some failed backups. Please login and check the logs for more details.
+{{ __('mail.daily_backup.failed', ['database' => $database_name]) }}
 
 </div>
 
 @else
 
-"{{ $database_name }}" backups: All backups were successful.
+{{ __('mail.daily_backup.success', ['database' => $database_name]) }}
 
 @endif
 
