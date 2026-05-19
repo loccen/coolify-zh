@@ -18,7 +18,7 @@ class NavbarDeleteTeam extends Component
     public function delete($password, $selectedActions = [])
     {
         if (! verifyPasswordConfirmation($password, $this)) {
-            return 'The provided password is incorrect.';
+            return __('team.messages.password_incorrect');
         }
 
         $currentTeam = currentTeam();

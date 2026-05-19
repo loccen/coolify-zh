@@ -21,7 +21,7 @@ class Member extends Component
 
             if (Role::from(auth()->user()->role())->lt(Role::ADMIN)
                 || Role::from($this->getMemberRole())->gt(auth()->user()->role())) {
-                throw new \Exception('You are not authorized to perform this action.');
+                throw new \Exception(__('team.messages.manage_members_unauthorized'));
             }
             $this->member->teams()->updateExistingPivot(currentTeam()->id, ['role' => Role::ADMIN->value]);
             $this->dispatch('reloadWindow');
@@ -37,7 +37,7 @@ class Member extends Component
 
             if (Role::from(auth()->user()->role())->lt(Role::OWNER)
                 || Role::from($this->getMemberRole())->gt(auth()->user()->role())) {
-                throw new \Exception('You are not authorized to perform this action.');
+                throw new \Exception(__('team.messages.manage_members_unauthorized'));
             }
             $this->member->teams()->updateExistingPivot(currentTeam()->id, ['role' => Role::OWNER->value]);
             $this->dispatch('reloadWindow');
@@ -53,7 +53,7 @@ class Member extends Component
 
             if (Role::from(auth()->user()->role())->lt(Role::ADMIN)
                 || Role::from($this->getMemberRole())->gt(auth()->user()->role())) {
-                throw new \Exception('You are not authorized to perform this action.');
+                throw new \Exception(__('team.messages.manage_members_unauthorized'));
             }
             $this->member->teams()->updateExistingPivot(currentTeam()->id, ['role' => Role::MEMBER->value]);
             $this->dispatch('reloadWindow');
@@ -69,7 +69,7 @@ class Member extends Component
 
             if (Role::from(auth()->user()->role())->lt(Role::ADMIN)
                 || Role::from($this->getMemberRole())->gt(auth()->user()->role())) {
-                throw new \Exception('You are not authorized to perform this action.');
+                throw new \Exception(__('team.messages.manage_members_unauthorized'));
             }
             $teamId = currentTeam()->id;
             $this->member->teams()->detach(currentTeam());
