@@ -18,6 +18,6 @@ return [
     'toasts' => [
         'connection_error' => '终端连接错误：:reason',
         'inactivity_closed' => '终端因 30 分钟无操作已关闭。',
-        'reconnecting' => '终端 WebSocket 连接已断开，正在重连...',
+        'reconnecting' => '终端 WebSocket 连接已断开，正在重新连接...',
     ],
 ];
