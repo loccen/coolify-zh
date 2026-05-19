@@ -4,6 +4,7 @@ namespace App\Livewire\Security\PrivateKey;
 
 use App\Models\PrivateKey;
 use App\Support\ValidationPatterns;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 
@@ -39,9 +40,9 @@ class Show extends Component
         return array_merge(
             ValidationPatterns::combinedMessages(),
             [
-                'name.required' => 'The Name field is required.',
-                'privateKeyValue.required' => 'The Private Key field is required.',
-                'privateKeyValue.string' => 'The Private Key must be a valid string.',
+                'name.required' => __('The Name field is required.'),
+                'privateKeyValue.required' => __('The Private Key field is required.'),
+                'privateKeyValue.string' => __('The Private Key must be a valid string.'),
             ]
         );
     }
@@ -83,8 +84,9 @@ class Show extends Component
             $this->authorize('view', $this->private_key);
 
             $this->syncData(false);
-        } catch (\Illuminate\Auth\Access\AuthorizationException $e) {
-            abort(403, 'You do not have permission to view this private key.');
+            $this->public_key = __('Loading...');
+        } catch (AuthorizationException $e) {
+            abort(403, __('You do not have permission to view this private key.'));
         } catch (\Throwable) {
             abort(404);
         }
@@ -94,7 +96,7 @@ class Show extends Component
     {
         $this->public_key = $this->private_key->getPublicKey();
         if ($this->public_key === 'Error loading private key') {
-            $this->dispatch('error', 'Failed to load public key. The private key may be invalid.');
+            $this->dispatch('error', __('Failed to load public key. The private key may be invalid.'));
         }
     }
 
@@ -125,7 +127,7 @@ class Show extends Component
                 'private_key' => formatPrivateKey($this->private_key->private_key),
             ]);
             refresh_server_connection($this->private_key);
-            $this->dispatch('success', 'Private key updated.');
+            $this->dispatch('success', __('Private key updated.'));
         } catch (\Throwable $e) {
             return handleError($e, $this);
         }

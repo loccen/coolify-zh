@@ -4,6 +4,7 @@ namespace App\Livewire\Security;
 
 use App\Models\CloudProviderToken;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Http;
 use Livewire\Component;
 
 class CloudProviderTokens extends Component
@@ -39,19 +40,19 @@ class CloudProviderTokens extends Component
             if ($token->provider === 'hetzner') {
                 $isValid = $this->validateHetznerToken($token->token);
                 if ($isValid) {
-                    $this->dispatch('success', 'Hetzner token is valid.');
+                    $this->dispatch('success', __('Hetzner token is valid.'));
                 } else {
-                    $this->dispatch('error', 'Hetzner token validation failed. Please check the token.');
+                    $this->dispatch('error', __('Hetzner token validation failed. Please check the token.'));
                 }
             } elseif ($token->provider === 'digitalocean') {
                 $isValid = $this->validateDigitalOceanToken($token->token);
                 if ($isValid) {
-                    $this->dispatch('success', 'DigitalOcean token is valid.');
+                    $this->dispatch('success', __('DigitalOcean token is valid.'));
                 } else {
-                    $this->dispatch('error', 'DigitalOcean token validation failed. Please check the token.');
+                    $this->dispatch('error', __('DigitalOcean token validation failed. Please check the token.'));
                 }
             } else {
-                $this->dispatch('error', 'Unknown provider.');
+                $this->dispatch('error', __('Unknown provider.'));
             }
         } catch (\Throwable $e) {
             return handleError($e, $this);
@@ -61,7 +62,7 @@ class CloudProviderTokens extends Component
     private function validateHetznerToken(string $token): bool
     {
         try {
-            $response = \Illuminate\Support\Facades\Http::withToken($token)
+            $response = Http::withToken($token)
                 ->timeout(10)
                 ->get('https://api.hetzner.cloud/v1/servers?per_page=1');
 
@@ -74,7 +75,7 @@ class CloudProviderTokens extends Component
     private function validateDigitalOceanToken(string $token): bool
     {
         try {
-            $response = \Illuminate\Support\Facades\Http::withToken($token)
+            $response = Http::withToken($token)
                 ->timeout(10)
                 ->get('https://api.digitalocean.com/v2/account');
 
@@ -93,7 +94,7 @@ class CloudProviderTokens extends Component
             // Check if any servers are using this token
             if ($token->hasServers()) {
                 $serverCount = $token->servers()->count();
-                $this->dispatch('error', "Cannot delete this token. It is currently used by {$serverCount} server(s). Please reassign those servers to a different token first.");
+                $this->dispatch('error', __('Cannot delete this token. It is currently used by :count server(s). Please reassign those servers to a different token first.', ['count' => $serverCount]));
 
                 return;
             }
@@ -101,7 +102,7 @@ class CloudProviderTokens extends Component
             $token->delete();
             $this->loadTokens();
 
-            $this->dispatch('success', 'Cloud provider token deleted successfully.');
+            $this->dispatch('success', __('Cloud provider token deleted successfully.'));
         } catch (\Throwable $e) {
             return handleError($e, $this);
         }

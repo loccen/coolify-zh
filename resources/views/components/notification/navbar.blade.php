@@ -1,31 +1,31 @@
 <div class="pb-6">
-    <h1>Notifications</h1>
-    <div class="subtitle">Get notified about your infrastructure.</div>
+    <h1>{{ __('Notifications') }}</h1>
+    <div class="subtitle">{{ __('Get notified about your infrastructure.') }}</div>
     <div class="navbar-main">
         <nav class="flex items-center gap-3.5 min-h-10">
             <a class="{{ request()->routeIs('notifications.email') ? 'dark:text-white' : '' }}" {{ wireNavigate() }}
                 href="{{ route('notifications.email') }}">
-                <button>Email</button>
+                <button>{{ __('Email') }}</button>
             </a>
             <a class="{{ request()->routeIs('notifications.discord') ? 'dark:text-white' : '' }}" {{ wireNavigate() }}
                 href="{{ route('notifications.discord') }}">
-                <button>Discord</button>
+                <button>{{ __('Discord') }}</button>
             </a>
             <a class="{{ request()->routeIs('notifications.telegram') ? 'dark:text-white' : '' }}" {{ wireNavigate() }}
                 href="{{ route('notifications.telegram') }}">
-                <button>Telegram</button>
+                <button>{{ __('Telegram') }}</button>
             </a>
             <a class="{{ request()->routeIs('notifications.slack') ? 'dark:text-white' : '' }}" {{ wireNavigate() }}
                 href="{{ route('notifications.slack') }}">
-                <button>Slack</button>
+                <button>{{ __('Slack') }}</button>
             </a>
             <a class="{{ request()->routeIs('notifications.pushover') ? 'dark:text-white' : '' }}" {{ wireNavigate() }}
                 href="{{ route('notifications.pushover') }}">
-                <button>Pushover</button>
+                <button>{{ __('Pushover') }}</button>
             </a>
             <a class="{{ request()->routeIs('notifications.webhook') ? 'dark:text-white' : '' }}" {{ wireNavigate() }}
                 href="{{ route('notifications.webhook') }}">
-                <button>Webhook</button>
+                <button>{{ __('Webhook') }}</button>
             </a>
         </nav>
     </div>

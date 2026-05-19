@@ -1,11 +1,11 @@
 <div>
     <x-slot:title>
-        Server Variables | Coolify
+        {{ __('Server Variables') }} | Coolify
     </x-slot>
     <div class="flex gap-2">
-        <h1>Servers</h1>
+        <h1>{{ __('Servers') }}</h1>
     </div>
-    <div class="subtitle">List of your servers.</div>
+    <div class="subtitle">{{ __('List of your servers.') }}</div>
     <div class="flex flex-col gap-2">
         @forelse ($servers as $server)
             <a class="coolbox group"
@@ -18,7 +18,7 @@
             </a>
         @empty
             <div>
-                <div>No server found.</div>
+                <div>{{ __('No server found.') }}</div>
             </div>
         @endforelse
     </div>
