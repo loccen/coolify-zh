@@ -36,7 +36,7 @@ class Index extends Component
         return array_merge(
             ValidationPatterns::combinedMessages(),
             [
-                'name.required' => 'The Name field is required.',
+                'name.required' => __('team.validation.name_required'),
             ]
         );
     }
@@ -87,7 +87,7 @@ class Index extends Component
             $this->syncData(true);
             $this->team->save();
             refreshSession();
-            $this->dispatch('success', 'Team updated.');
+            $this->dispatch('success', __('team.updated'));
         } catch (\Throwable $e) {
             return handleError($e, $this);
         }

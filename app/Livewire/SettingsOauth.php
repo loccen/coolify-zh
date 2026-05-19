@@ -51,7 +51,7 @@ class SettingsOauth extends Component
             $oauth = OauthSetting::find($oauthData['id']);
 
             if (! $oauth) {
-                throw new \Exception('OAuth setting for '.$provider.' not found. It may have been deleted.');
+                throw new \Exception(__('settings.oauth_page.provider_not_found', ['provider' => $provider]));
             }
 
             $oauth->fill([
@@ -65,7 +65,7 @@ class SettingsOauth extends Component
 
             if (! $oauth->couldBeEnabled()) {
                 $oauth->update(['enabled' => false]);
-                throw new \Exception('OAuth settings are not complete for '.$oauth->provider.'.<br/>Please fill in all required fields.');
+                throw new \Exception(__('settings.oauth_page.provider_incomplete', ['provider' => $oauth->provider]));
             }
             $oauth->save();
 
@@ -81,14 +81,14 @@ class SettingsOauth extends Component
                 'base_url' => $oauth->base_url,
             ];
 
-            $this->dispatch('success', 'OAuth settings for '.$oauth->provider.' updated successfully!');
+            $this->dispatch('success', __('settings.oauth_page.provider_updated', ['provider' => $oauth->provider]));
         } else {
             $errors = [];
             foreach (array_values($this->oauth_settings_map) as $settingData) {
                 $oauth = OauthSetting::find($settingData['id']);
 
                 if (! $oauth) {
-                    $errors[] = "OAuth setting for provider '{$settingData['provider']}' not found. It may have been deleted.";
+                    $errors[] = __('settings.oauth_page.provider_not_found', ['provider' => $settingData['provider']]);
 
                     continue;
                 }
@@ -104,7 +104,7 @@ class SettingsOauth extends Component
 
                 if ($settingData['enabled'] && ! $oauth->couldBeEnabled()) {
                     $oauth->enabled = false;
-                    $errors[] = "OAuth settings are incomplete for '{$oauth->provider}'. Required fields are missing. The provider has been disabled.";
+                    $errors[] = __('settings.oauth_page.provider_incomplete_disabled', ['provider' => $oauth->provider]);
                 }
 
                 $oauth->save();
@@ -140,6 +140,6 @@ class SettingsOauth extends Component
     public function submit()
     {
         $this->updateOauthSettings();
-        $this->dispatch('success', 'Instance settings updated successfully!');
+        $this->dispatch('success', __('settings.instance_updated'));
     }
 }

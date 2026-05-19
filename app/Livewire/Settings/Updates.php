@@ -50,7 +50,7 @@ class Updates extends Component
             $this->settings->update_check_frequency = $this->update_check_frequency;
             $this->settings->is_auto_update_enabled = $this->is_auto_update_enabled;
             $this->settings->save();
-            $this->dispatch('success', 'Settings updated!');
+            $this->dispatch('success', __('settings.saved'));
         } catch (\Exception $e) {
             return handleError($e, $this);
         }
@@ -63,7 +63,7 @@ class Updates extends Component
             $this->validate();
 
             if ($this->is_auto_update_enabled && ! validate_cron_expression($this->auto_update_frequency)) {
-                $this->dispatch('error', 'Invalid Cron / Human expression for Auto Update Frequency.');
+                $this->dispatch('error', __('settings.updates_page.auto_update_frequency_invalid'));
                 if (empty($this->auto_update_frequency)) {
                     $this->auto_update_frequency = '0 0 * * *';
                 }
@@ -72,7 +72,7 @@ class Updates extends Component
             }
 
             if (! validate_cron_expression($this->update_check_frequency)) {
-                $this->dispatch('error', 'Invalid Cron / Human expression for Update Check Frequency.');
+                $this->dispatch('error', __('settings.updates_page.update_check_frequency_invalid'));
                 if (empty($this->update_check_frequency)) {
                     $this->update_check_frequency = '0 * * * *';
                 }
@@ -95,9 +95,9 @@ class Updates extends Component
         $this->dispatch('updateAvailable');
         $settings = instanceSettings();
         if ($settings->new_version_available) {
-            $this->dispatch('success', 'New version available!');
+            $this->dispatch('success', __('settings.updates_page.new_version_available'));
         } else {
-            $this->dispatch('success', 'No new version available.');
+            $this->dispatch('success', __('settings.updates_page.no_new_version_available'));
         }
     }
 

@@ -26,5 +26,7 @@ return [
     'subscription' => '订阅',
     'tags' => '标签',
     'teams' => '团队',
+    'team_current' => '团队：:name',
+    'team_switch' => '切换团队',
     'terminal' => '终端',
 ];

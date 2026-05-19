@@ -1,7 +1,7 @@
 @can('manageInvitations', currentTeam())
     <div>
         @if ($invitations->count() > 0)
-            <h2 class="pb-2">Pending Invitations</h2>
+            <h2 class="pb-2">{{ __('team.pending_invitations') }}</h2>
             <div class="flex flex-col">
                 <div class="flex flex-col">
                     <div class="overflow-x-auto">
@@ -10,32 +10,26 @@
                                 <table class="min-w-full">
                                     <thead>
                                         <tr>
-                                            <th class="px-5 py-3 text-xs font-medium text-left uppercase">Email
-                                            </th>
-                                            <th class="px-5 py-3 text-xs font-medium text-left uppercase">
-                                                Via</th>
-                                            <th class="px-5 py-3 text-xs font-medium text-left uppercase">Role</th>
-                                            <th class="px-5 py-3 text-xs font-medium text-left uppercase">Invitation Link
-                                            </th>
-                                            <th class="px-5 py-3 text-xs font-medium text-left uppercase">Actions
-                                            </th>
+                                            <th class="px-5 py-3 text-xs font-medium text-left uppercase">{{ __('team.table.email') }}</th>
+                                            <th class="px-5 py-3 text-xs font-medium text-left uppercase">{{ __('team.table.via') }}</th>
+                                            <th class="px-5 py-3 text-xs font-medium text-left uppercase">{{ __('team.table.role') }}</th>
+                                            <th class="px-5 py-3 text-xs font-medium text-left uppercase">{{ __('team.invitation_link') }}</th>
+                                            <th class="px-5 py-3 text-xs font-medium text-left uppercase">{{ __('team.table.actions') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($invitations as $invite)
                                             <tr>
                                                 <td class="px-5 py-4 text-sm whitespace-nowrap">{{ $invite->email }}</td>
-                                                <td class="px-5 py-4 text-sm whitespace-nowrap">{{ $invite->via }}</td>
-                                                <td class="px-5 py-4 text-sm whitespace-nowrap">{{ $invite->role }}</td>
+                                                <td class="px-5 py-4 text-sm whitespace-nowrap">{{ __('team.invite_via.' . $invite->via) }}</td>
+                                                <td class="px-5 py-4 text-sm whitespace-nowrap">{{ __('team.roles.' . $invite->role) }}</td>
                                                 <td class="px-5 py-4 text-sm whitespace-nowrap" x-data="checkProtocol">
                                                     <template x-if="isHttps">
                                                         <div class="flex gap-2">
                                                             <x-forms.input id="null" type="password"
                                                                 value="{{ $invite->link }}" />
                                                             <x-forms.button
-                                                                x-on:click="copyToClipboard('{{ $invite->link }}')">Copy
-                                                                Invitation
-                                                                Link</x-forms.button>
+                                                                x-on:click="copyToClipboard('{{ $invite->link }}')">{{ __('team.copy_invitation_link') }}</x-forms.button>
                                                         </div>
                                                     </template>
                                                     <template x-if="!isHttps">
@@ -45,9 +39,7 @@
                                                 </td>
                                                 <td class="px-5 py-4 text-sm whitespace-nowrap">
                                                     <x-forms.button
-                                                        wire:click.prevent='deleteInvitation({{ $invite->id }})'>Revoke
-                                                        Invitation
-                                                    </x-forms.button>
+                                                        wire:click.prevent='deleteInvitation({{ $invite->id }})'>{{ __('team.revoke_invitation') }}</x-forms.button>
                                                 </td>
                                             </tr>
                                         @endforeach

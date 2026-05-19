@@ -56,16 +56,16 @@ class AdminView extends Component
         }
 
         if (! verifyPasswordConfirmation($password, $this)) {
-            return 'The provided password is incorrect.';
+            return __('team.messages.password_incorrect');
         }
 
         if (! auth()->user()->isInstanceAdmin()) {
-            return $this->dispatch('error', 'You are not authorized to delete users');
+            return $this->dispatch('error', __('team.messages.delete_users_unauthorized'));
         }
 
         $user = User::find($id);
         if (! $user) {
-            return $this->dispatch('error', 'User not found');
+            return $this->dispatch('error', __('team.messages.user_not_found'));
         }
 
         try {

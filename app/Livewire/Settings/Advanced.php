@@ -121,13 +121,13 @@ class Advanced extends Component
                 })->filter()->values()->all();
 
                 if (! empty($invalidEntries)) {
-                    $this->dispatch('error', 'Invalid IP addresses or subnets: '.implode(', ', $invalidEntries));
+                    $this->dispatch('error', __('settings.advanced_page.invalid_ips', ['entries' => implode(', ', $invalidEntries)]));
 
                     return;
                 }
 
                 if (empty($validEntries)) {
-                    $this->dispatch('error', 'No valid IP addresses or subnets provided');
+                    $this->dispatch('error', __('settings.advanced_page.no_valid_ips'));
 
                     return;
                 }
@@ -157,7 +157,7 @@ class Advanced extends Component
             $this->settings->is_wire_navigate_enabled = $this->is_wire_navigate_enabled;
             $this->settings->is_mcp_server_enabled = $this->is_mcp_server_enabled;
             $this->settings->save();
-            $this->dispatch('success', 'Settings updated!');
+            $this->dispatch('success', __('settings.saved'));
         } catch (\Exception $e) {
             return handleError($e, $this);
         }
@@ -171,7 +171,7 @@ class Advanced extends Component
 
         $this->settings->is_registration_enabled = $this->is_registration_enabled = true;
         $this->settings->save();
-        $this->dispatch('success', 'Registration has been enabled.');
+        $this->dispatch('success', __('settings.advanced_page.registration_enabled'));
 
         return true;
     }
@@ -184,7 +184,7 @@ class Advanced extends Component
 
         $this->settings->disable_two_step_confirmation = $this->disable_two_step_confirmation = true;
         $this->settings->save();
-        $this->dispatch('success', 'Two step confirmation has been disabled.');
+        $this->dispatch('success', __('settings.advanced_page.two_step_disabled'));
 
         return true;
     }

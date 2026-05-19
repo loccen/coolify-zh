@@ -28,9 +28,9 @@ class Invitations extends Component
 
             $invitation->delete();
             $this->refreshInvitations();
-            $this->dispatch('success', 'Invitation revoked.');
+            $this->dispatch('success', __('team.messages.invitation_revoked'));
         } catch (\Exception) {
-            return $this->dispatch('error', 'Invitation not found.');
+            return $this->dispatch('error', __('team.messages.invitation_not_found'));
         }
     }
 

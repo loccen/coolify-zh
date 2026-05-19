@@ -49,17 +49,20 @@ class InviteLink extends Component
             // Prevent privilege escalation: users cannot invite someone with higher privileges
             $userRole = auth()->user()->role();
             if (is_null($userRole) || ($userRole === 'member' && in_array($this->role, ['admin', 'owner']))) {
-                throw new \Exception('Members cannot invite admins or owners.');
+                throw new \Exception(__('team.messages.members_cannot_invite_higher'));
             }
             if ($userRole === 'admin' && $this->role === 'owner') {
-                throw new \Exception('Admins cannot invite owners.');
+                throw new \Exception(__('team.messages.admins_cannot_invite_owner'));
             }
 
             $this->email = strtolower($this->email);
 
             $member_emails = currentTeam()->members()->get()->pluck('email');
             if ($member_emails->contains($this->email)) {
-                return handleError(livewire: $this, customErrorMessage: "$this->email is already a member of ".currentTeam()->name.'.');
+                return handleError(livewire: $this, customErrorMessage: __('team.messages.invitation_exists_member', [
+                    'email' => $this->email,
+                    'team' => currentTeam()->name,
+                ]));
             }
             $uuid = new Cuid2(32);
             $link = url('/').config('constants.invitation.link.base_url').$uuid;
@@ -80,7 +83,9 @@ class InviteLink extends Component
             if (! is_null($invitation)) {
                 $invitationValid = $invitation->isValid();
                 if ($invitationValid) {
-                    return handleError(livewire: $this, customErrorMessage: "Pending invitation already exists for $this->email.");
+                    return handleError(livewire: $this, customErrorMessage: __('team.messages.invitation_exists_pending', [
+                        'email' => $this->email,
+                    ]));
                 } else {
                     $invitation->delete();
                 }
@@ -102,18 +107,18 @@ class InviteLink extends Component
                 ]);
                 $mail->subject('You have been invited to '.currentTeam()->name.' on '.config('app.name').'.');
                 send_user_an_email($mail, $this->email);
-                $this->dispatch('success', 'Invitation sent via email.');
+                $this->dispatch('success', __('team.messages.invitation_sent_email'));
                 $this->dispatch('refreshInvitations');
 
                 return;
             } else {
-                $this->dispatch('success', 'Invitation link generated.');
+                $this->dispatch('success', __('team.messages.invitation_link_generated'));
                 $this->dispatch('refreshInvitations');
             }
         } catch (\Throwable $e) {
             $error_message = $e->getMessage();
             if ($e->getCode() === '23505') {
-                $error_message = 'Invitation already sent.';
+                $error_message = __('team.messages.invitation_already_sent');
             }
 
             return handleError(error: $e, livewire: $this, customErrorMessage: $error_message);

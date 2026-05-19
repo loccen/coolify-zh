@@ -105,7 +105,7 @@ class SettingsEmail extends Component
         try {
             $this->resetErrorBag();
             $this->syncData(true);
-            $this->dispatch('success', 'Transactional email settings updated.');
+            $this->dispatch('success', __('settings.email_page.transactional_updated'));
         } catch (\Throwable $e) {
             return handleError($e, $this);
         }
@@ -152,13 +152,13 @@ class SettingsEmail extends Component
                 'smtpPassword' => 'nullable|string',
                 'smtpTimeout' => 'nullable|numeric',
             ], [
-                'smtpFromAddress.required' => 'From Address is required.',
-                'smtpFromAddress.email' => 'Please enter a valid email address.',
-                'smtpFromName.required' => 'From Name is required.',
-                'smtpHost.required' => 'SMTP Host is required.',
-                'smtpPort.required' => 'SMTP Port is required.',
-                'smtpPort.numeric' => 'SMTP Port must be a number.',
-                'smtpEncryption.required' => 'Encryption type is required.',
+                'smtpFromAddress.required' => __('settings.email_page.validation.from_address_required'),
+                'smtpFromAddress.email' => __('settings.email_page.validation.from_address_email'),
+                'smtpFromName.required' => __('settings.email_page.validation.from_name_required'),
+                'smtpHost.required' => __('settings.email_page.validation.smtp_host_required'),
+                'smtpPort.required' => __('settings.email_page.validation.smtp_port_required'),
+                'smtpPort.numeric' => __('settings.email_page.validation.smtp_port_numeric'),
+                'smtpEncryption.required' => __('settings.email_page.validation.smtp_encryption_required'),
             ]);
 
             $this->settings->smtp_enabled = $this->smtpEnabled;
@@ -173,7 +173,7 @@ class SettingsEmail extends Component
 
             $this->settings->save();
 
-            $this->dispatch('success', 'SMTP settings updated.');
+            $this->dispatch('success', __('settings.email_page.smtp_updated'));
         } catch (\Throwable $e) {
             $this->smtpEnabled = false;
 
@@ -190,10 +190,10 @@ class SettingsEmail extends Component
                 'smtpFromAddress' => 'required|email',
                 'smtpFromName' => 'required|string',
             ], [
-                'resendApiKey.required' => 'Resend API Key is required.',
-                'smtpFromAddress.required' => 'From Address is required.',
-                'smtpFromAddress.email' => 'Please enter a valid email address.',
-                'smtpFromName.required' => 'From Name is required.',
+                'resendApiKey.required' => __('settings.email_page.validation.resend_api_key_required'),
+                'smtpFromAddress.required' => __('settings.email_page.validation.from_address_required'),
+                'smtpFromAddress.email' => __('settings.email_page.validation.from_address_email'),
+                'smtpFromName.required' => __('settings.email_page.validation.from_name_required'),
             ]);
 
             $this->settings->resend_enabled = $this->resendEnabled;
@@ -203,7 +203,7 @@ class SettingsEmail extends Component
 
             $this->settings->save();
 
-            $this->dispatch('success', 'Resend settings updated.');
+            $this->dispatch('success', __('settings.email_page.resend_updated'));
         } catch (\Throwable $e) {
             $this->resendEnabled = false;
 
@@ -217,8 +217,8 @@ class SettingsEmail extends Component
             $this->validate([
                 'testEmailAddress' => 'required|email',
             ], [
-                'testEmailAddress.required' => 'Test email address is required.',
-                'testEmailAddress.email' => 'Please enter a valid email address.',
+                'testEmailAddress.required' => __('settings.email_page.validation.test_email_required'),
+                'testEmailAddress.email' => __('settings.email_page.validation.test_email_email'),
             ]);
 
             $executed = RateLimiter::attempt(
@@ -226,13 +226,13 @@ class SettingsEmail extends Component
                 $perMinute = 0,
                 function () {
                     $this->team?->notifyNow(new Test($this->testEmailAddress));
-                    $this->dispatch('success', 'Test Email sent.');
+                    $this->dispatch('success', __('settings.email_page.test_email_sent'));
                 },
                 $decaySeconds = 10,
             );
 
             if (! $executed) {
-                throw new \Exception('Too many messages sent!');
+                throw new \Exception(__('settings.email_page.rate_limited'));
             }
         } catch (\Throwable $e) {
             return handleError($e, $this);

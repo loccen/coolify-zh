@@ -26,5 +26,7 @@ return [
     'subscription' => 'Subscription',
     'tags' => 'Tags',
     'teams' => 'Teams',
+    'team_current' => 'Team: :name',
+    'team_switch' => 'Switch team',
     'terminal' => 'Terminal',
 ];
