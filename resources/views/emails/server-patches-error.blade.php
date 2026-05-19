@@ -1,13 +1,13 @@
 <x-emails.layout>
-Failed to check for package updates on your server {{ $name }}.
+{{ __('mail.server_patches_error.body', ['name' => $name]) }}
 
-## Error Details
+## {{ __('mail.common.error_heading') }}
 
-- Operating System: {{ ucfirst($osId) }}
-- Package Manager: {{ $package_manager }}
-- Error: {{ $error }}
+- {{ __('mail.server_patches.operating_system', ['value' => ucfirst($osId)]) }}
+- {{ __('mail.server_patches.package_manager', ['value' => $package_manager]) }}
+- {{ __('notifications.common.error') }}: {{ $error }}
 
 ---
 
-You can manage your server and view more details in your [Coolify Dashboard]({{ $server_url }}).
+{{ __('mail.server_patches_error.dashboard', ['url' => $server_url]) }}
 </x-emails.layout>

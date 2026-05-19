@@ -23,6 +23,7 @@ class EmailChangeVerification extends CustomEmailNotification
         public bool $isTransactionalEmail = true
     ) {
         $this->onQueue('high');
+        $this->useLocale();
     }
 
     public function toMail(): MailMessage
@@ -30,14 +31,16 @@ class EmailChangeVerification extends CustomEmailNotification
         // Use the configured expiry minutes value
         $expiryMinutes = config('constants.email_change.verification_code_expiry_minutes', 10);
 
-        $mail = new MailMessage;
-        $mail->subject('Coolify: Verify Your New Email Address');
-        $mail->view('emails.email-change-verification', [
-            'newEmail' => $this->newEmail,
-            'verificationCode' => $this->verificationCode,
-            'expiryMinutes' => $expiryMinutes,
-        ]);
+        return $this->withUserVisibleLocale(function () use ($expiryMinutes) {
+            $mail = new MailMessage;
+            $mail->subject($this->trans('mail.email_change_verification.subject'));
+            $mail->view('emails.email-change-verification', [
+                'newEmail' => $this->newEmail,
+                'verificationCode' => $this->verificationCode,
+                'expiryMinutes' => $expiryMinutes,
+            ]);
 
-        return $mail;
+            return $mail;
+        });
     }
 }

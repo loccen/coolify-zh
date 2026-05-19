@@ -1,7 +1,7 @@
 <x-emails.layout>
-A password reset has been requested for this email address.
+{{ __('mail.reset_password.requested') }}
 
-Click [here]({{ $url }}) to reset your password.
+{{ __('mail.reset_password.cta', ['url' => $url]) }}
 
-This link will expire in {{ $count }} minutes.
+{{ __('mail.reset_password.expiry', ['minutes' => $count]) }}
 </x-emails.layout>

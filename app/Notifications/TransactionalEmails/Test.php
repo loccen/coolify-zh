@@ -13,6 +13,7 @@ class Test extends CustomEmailNotification
     public function __construct(public string $emails, public bool $isTransactionalEmail = true)
     {
         $this->onQueue('high');
+        $this->useLocale();
     }
 
     public function via(): array
@@ -22,10 +23,12 @@ class Test extends CustomEmailNotification
 
     public function toMail(): MailMessage
     {
-        $mail = new MailMessage;
-        $mail->subject('Coolify: Test Email');
-        $mail->view('emails.test');
+        return $this->withUserVisibleLocale(function () {
+            $mail = new MailMessage;
+            $mail->subject($this->trans('mail.test.subject'));
+            $mail->view('emails.test');
 
-        return $mail;
+            return $mail;
+        });
     }
 }

@@ -14,6 +14,7 @@ use App\Notifications\Application\StatusChanged;
 use App\Notifications\Database\BackupFailed;
 use App\Notifications\Database\BackupSuccess;
 use App\Notifications\Test;
+use App\Support\UserVisibleLocale;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Mail\Message;
@@ -47,23 +48,28 @@ class Emails extends Command
 
     private ?string $email = null;
 
+    private string $locale = 'en';
+
     public function handle()
     {
+        $this->locale = UserVisibleLocale::resolve();
+        $this->description = trans('console.emails.description', locale: $this->locale);
+
         $type = select(
-            'Which Email should be sent?',
+            trans('console.emails.select_prompt', locale: $this->locale),
             options: [
-                'updates' => 'Send Update Email to all users',
-                'emails-test' => 'Test',
-                'database-backup-statuses-daily' => 'Database - Backup Statuses (Daily)',
-                'application-deployment-success-daily' => 'Application - Deployment Success (Daily)',
-                'application-deployment-success' => 'Application - Deployment Success',
-                'application-deployment-failed' => 'Application - Deployment Failed',
-                'application-status-changed' => 'Application - Status Changed',
-                'backup-success' => 'Database - Backup Success',
-                'backup-failed' => 'Database - Backup Failed',
+                'updates' => trans('console.emails.types.updates', locale: $this->locale),
+                'emails-test' => trans('console.emails.types.emails_test', locale: $this->locale),
+                'database-backup-statuses-daily' => trans('console.emails.types.database_backup_statuses_daily', locale: $this->locale),
+                'application-deployment-success-daily' => trans('console.emails.types.application_deployment_success_daily', locale: $this->locale),
+                'application-deployment-success' => trans('console.emails.types.application_deployment_success', locale: $this->locale),
+                'application-deployment-failed' => trans('console.emails.types.application_deployment_failed', locale: $this->locale),
+                'application-status-changed' => trans('console.emails.types.application_status_changed', locale: $this->locale),
+                'backup-success' => trans('console.emails.types.backup_success', locale: $this->locale),
+                'backup-failed' => trans('console.emails.types.backup_failed', locale: $this->locale),
                 // 'invitation-link' => 'Invitation Link',
-                'realusers-before-trial' => 'REAL - Registered Users Before Trial without Subscription',
-                'realusers-server-lost-connection' => 'REAL - Server Lost Connection',
+                'realusers-before-trial' => trans('console.emails.types.realusers_before_trial', locale: $this->locale),
+                'realusers-server-lost-connection' => trans('console.emails.types.realusers_server_lost_connection', locale: $this->locale),
             ],
         );
         $emailsGathered = ['realusers-before-trial', 'realusers-server-lost-connection'];
@@ -71,18 +77,18 @@ class Emails extends Command
             $this->email = 'test@example.com';
         } else {
             if (! in_array($type, $emailsGathered)) {
-                $this->email = text('Email Address to send to:');
+                $this->email = text(trans('console.emails.email_prompt', locale: $this->locale));
             }
         }
         set_transanctional_email_settings();
 
         $this->mail = new MailMessage;
-        $this->mail->subject('Test Email');
+        $this->mail->subject(trans('console.emails.test_subject', locale: $this->locale));
         switch ($type) {
             case 'updates':
                 $teams = Team::all();
                 if (! $teams || $teams->isEmpty()) {
-                    echo 'No teams found.'.PHP_EOL;
+                    $this->line(trans('console.emails.no_teams', locale: $this->locale));
 
                     return;
                 }
@@ -95,15 +101,15 @@ class Emails extends Command
                     }
                 }
                 $emails = array_unique($emails);
-                $this->info('Sending to '.count($emails).' emails.');
+                $this->info(trans('console.emails.sending_emails', ['count' => count($emails)], $this->locale));
                 foreach ($emails as $email) {
                     $this->info($email);
                 }
-                $confirmed = confirm('Are you sure?');
+                $confirmed = confirm(trans('console.emails.confirm', locale: $this->locale));
                 if ($confirmed) {
                     foreach ($emails as $email) {
                         $this->mail = new MailMessage;
-                        $this->mail->subject('One-click Services, Docker Compose support');
+                        $this->mail->subject(trans('mail.updates.subject', locale: $this->locale));
                         $unsubscribeUrl = route('unsubscribe.marketing.emails', [
                             'token' => encrypt($email),
                         ]);
@@ -203,10 +209,10 @@ class Emails extends Command
             case 'realusers-before-trial':
                 $this->mail = new MailMessage;
                 $this->mail->view('emails.before-trial-conversion');
-                $this->mail->subject('Trial period has been added for all subscription plans.');
+                $this->mail->subject(trans('mail.before_trial_conversion.subject', locale: $this->locale));
                 $teams = Team::doesntHave('subscription')->where('id', '!=', 0)->get();
                 if (! $teams || $teams->isEmpty()) {
-                    echo 'No teams found.'.PHP_EOL;
+                    $this->line(trans('console.emails.no_teams', locale: $this->locale));
 
                     return;
                 }
@@ -219,11 +225,11 @@ class Emails extends Command
                     }
                 }
                 $emails = array_unique($emails);
-                $this->info('Sending to '.count($emails).' emails.');
+                $this->info(trans('console.emails.sending_emails', ['count' => count($emails)], $this->locale));
                 foreach ($emails as $email) {
                     $this->info($email);
                 }
-                $confirmed = confirm('Are you sure?');
+                $confirmed = confirm(trans('console.emails.confirm', locale: $this->locale));
                 if ($confirmed) {
                     foreach ($emails as $email) {
                         $this->sendEmail($email);
@@ -231,10 +237,10 @@ class Emails extends Command
                 }
                 break;
             case 'realusers-server-lost-connection':
-                $serverId = text('Server Id');
+                $serverId = text(trans('console.emails.server_id', locale: $this->locale));
                 $server = Server::find($serverId);
                 if (! $server) {
-                    throw new Exception('Server not found');
+                    throw new Exception(trans('console.emails.server_not_found', locale: $this->locale));
                 }
                 $admins = [];
                 $members = $server->team->members;
@@ -243,7 +249,7 @@ class Emails extends Command
                         $admins[] = $member->email;
                     }
                 }
-                $this->info('Sending to '.count($admins).' admins.');
+                $this->info(trans('console.emails.sending_admins', ['count' => count($admins)], $this->locale));
                 foreach ($admins as $admin) {
                     $this->info($admin);
                 }
@@ -251,7 +257,7 @@ class Emails extends Command
                 $this->mail->view('emails.server-lost-connection', [
                     'name' => $server->name,
                 ]);
-                $this->mail->subject('Action required: Server '.$server->name.' lost connection.');
+                $this->mail->subject(trans('mail.server_lost_connection.subject', ['name' => $server->name], $this->locale));
                 foreach ($admins as $email) {
                     $this->sendEmail($email);
                 }
@@ -264,14 +270,16 @@ class Emails extends Command
         if ($email) {
             $this->email = $email;
         }
-        Mail::send(
-            [],
-            [],
-            fn (Message $message) => $message
-                ->to($this->email)
-                ->subject($this->mail->subject)
-                ->html((string) $this->mail->render())
-        );
-        $this->info("Email sent to $this->email successfully. 📧");
+        UserVisibleLocale::withLocale($this->locale, function () {
+            Mail::send(
+                [],
+                [],
+                fn (Message $message) => $message
+                    ->to($this->email)
+                    ->subject($this->mail->subject)
+                    ->html((string) $this->mail->render())
+            );
+        });
+        $this->info(trans('console.emails.sent_successfully', ['email' => $this->email], $this->locale));
     }
 }

@@ -13,6 +13,7 @@ class HetznerDeletionFailed extends CustomEmailNotification
     public function __construct(public int $hetznerServerId, public int $teamId, public string $errorMessage)
     {
         $this->onQueue('high');
+        $this->useLocale();
     }
 
     public function via(object $notifiable): array
@@ -25,14 +26,16 @@ class HetznerDeletionFailed extends CustomEmailNotification
 
     public function toMail(): MailMessage
     {
-        $mail = new MailMessage;
-        $mail->subject("Coolify: [ACTION REQUIRED] Failed to delete Hetzner server #{$this->hetznerServerId}");
-        $mail->view('emails.hetzner-deletion-failed', [
-            'hetznerServerId' => $this->hetznerServerId,
-            'errorMessage' => $this->errorMessage,
-        ]);
+        return $this->withUserVisibleLocale(function () {
+            $mail = new MailMessage;
+            $mail->subject($this->trans('mail.hetzner_deletion_failed.subject', ['id' => $this->hetznerServerId]));
+            $mail->view('emails.hetzner-deletion-failed', [
+                'hetznerServerId' => $this->hetznerServerId,
+                'errorMessage' => $this->errorMessage,
+            ]);
 
-        return $mail;
+            return $mail;
+        });
     }
 
     public function toDiscord(): DiscordMessage

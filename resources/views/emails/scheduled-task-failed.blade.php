@@ -1,9 +1,9 @@
 <x-emails.layout>
-Scheduled task ({{ $task->name }}) was FAILED with the following error:
+{{ __('mail.scheduled_task_failed.body', ['name' => $task->name]) }}
 
 <pre>
 {{ $output }}
 </pre>
 
-Click [here]({{ $url }}) to view the task.
+{{ __('mail.scheduled_task_failed.cta', ['url' => $url]) }}
 </x-emails.layout>

@@ -1,3 +1,3 @@
 <x-emails.layout>
-Your server ({{ $name }}) is enabled again!
+{{ __('mail.server_force_enabled.body', ['name' => $name]) }}
 </x-emails.layout>

@@ -33,6 +33,7 @@ class DeploymentFailed extends CustomEmailNotification
     public function __construct(Application $application, string $deployment_uuid, ?ApplicationPreview $preview = null)
     {
         $this->onQueue('high');
+        $this->useLocale();
         $this->application = $application;
         $this->deployment_uuid = $deployment_uuid;
         $this->preview = $preview;
@@ -54,42 +55,49 @@ class DeploymentFailed extends CustomEmailNotification
 
     public function toMail(): MailMessage
     {
-        $mail = new MailMessage;
-        $pull_request_id = data_get($this->preview, 'pull_request_id', 0);
-        $fqdn = $this->fqdn;
-        if ($pull_request_id === 0) {
-            $mail->subject('Coolify: Deployment failed of '.$this->application_name.'.');
-        } else {
-            $fqdn = $this->preview->fqdn;
-            $mail->subject('Coolify: Deployment failed of pull request #'.$this->preview->pull_request_id.' of '.$this->application_name.'.');
-        }
-        $mail->view('emails.application-deployment-failed', [
-            'name' => $this->application_name,
-            'fqdn' => $fqdn,
-            'deployment_url' => $this->deployment_url,
-            'pull_request_id' => data_get($this->preview, 'pull_request_id', 0),
-        ]);
+        return $this->withUserVisibleLocale(function () {
+            $mail = new MailMessage;
+            $pullRequestId = data_get($this->preview, 'pull_request_id', 0);
+            $fqdn = $this->fqdn;
+            if ($pullRequestId === 0) {
+                $mail->subject($this->trans('mail.application_deployment_failed.subject', ['name' => $this->application_name]));
+            } else {
+                $fqdn = $this->preview->fqdn;
+                $mail->subject($this->trans('mail.application_deployment_failed.subject_preview', [
+                    'pullRequestId' => $pullRequestId,
+                    'name' => $this->application_name,
+                ]));
+            }
+            $mail->view('emails.application-deployment-failed', [
+                'name' => $this->application_name,
+                'fqdn' => $fqdn,
+                'deployment_url' => $this->deployment_url,
+                'pull_request_id' => $pullRequestId,
+            ]);
 
-        return $mail;
+            return $mail;
+        });
     }
 
     public function toDiscord(): DiscordMessage
     {
         if ($this->preview) {
             $message = new DiscordMessage(
-                title: ':cross_mark: Deployment failed',
-                description: 'Pull request: '.$this->preview->pull_request_id,
+                title: $this->trans('notifications.deployment_failed.discord_title'),
+                description: $this->trans('notifications.deployment_failed.discord_preview_description', [
+                    'pullRequestId' => $this->preview->pull_request_id,
+                ]),
                 color: DiscordMessage::errorColor(),
                 isCritical: true,
             );
 
-            $message->addField('Project', data_get($this->application, 'environment.project.name'), true);
-            $message->addField('Environment', $this->environment_name, true);
-            $message->addField('Name', $this->application_name, true);
+            $message->addField($this->trans('notifications.common.project'), data_get($this->application, 'environment.project.name'), true);
+            $message->addField($this->trans('notifications.common.environment'), $this->environment_name, true);
+            $message->addField($this->trans('notifications.common.name'), $this->application_name, true);
 
-            $message->addField('Deployment Logs', '[Link]('.$this->deployment_url.')');
+            $message->addField($this->trans('notifications.common.deployment_logs'), '[Link]('.$this->deployment_url.')');
             if ($this->fqdn) {
-                $message->addField('Domain', $this->fqdn, true);
+                $message->addField($this->trans('notifications.common.domain'), $this->fqdn, true);
             }
         } else {
             if ($this->fqdn) {
@@ -98,17 +106,17 @@ class DeploymentFailed extends CustomEmailNotification
                 $description = '';
             }
             $message = new DiscordMessage(
-                title: ':cross_mark: Deployment failed',
+                title: $this->trans('notifications.deployment_failed.discord_title'),
                 description: $description,
                 color: DiscordMessage::errorColor(),
                 isCritical: true,
             );
 
-            $message->addField('Project', data_get($this->application, 'environment.project.name'), true);
-            $message->addField('Environment', $this->environment_name, true);
-            $message->addField('Name', $this->application_name, true);
+            $message->addField($this->trans('notifications.common.project'), data_get($this->application, 'environment.project.name'), true);
+            $message->addField($this->trans('notifications.common.environment'), $this->environment_name, true);
+            $message->addField($this->trans('notifications.common.name'), $this->application_name, true);
 
-            $message->addField('Deployment Logs', '[Link]('.$this->deployment_url.')');
+            $message->addField($this->trans('notifications.common.deployment_logs'), '[Link]('.$this->deployment_url.')');
         }
 
         return $message;
@@ -117,12 +125,19 @@ class DeploymentFailed extends CustomEmailNotification
     public function toTelegram(): array
     {
         if ($this->preview) {
-            $message = 'Coolify: Pull request #'.$this->preview->pull_request_id.' of '.$this->application_name.' ('.$this->preview->fqdn.') deployment failed: ';
+            $message = $this->trans('notifications.deployment_failed.telegram_preview_message', [
+                'pullRequestId' => $this->preview->pull_request_id,
+                'name' => $this->application_name,
+                'fqdn' => $this->preview->fqdn,
+            ]);
         } else {
-            $message = 'Coolify: Deployment failed of '.$this->application_name.' ('.$this->fqdn.'): ';
+            $message = $this->trans('notifications.deployment_failed.telegram_message', [
+                'name' => $this->application_name,
+                'fqdn' => $this->fqdn,
+            ]);
         }
         $buttons[] = [
-            'text' => 'Deployment logs',
+            'text' => $this->trans('notifications.common.deployment_logs_button'),
             'url' => $this->deployment_url,
         ];
 
@@ -137,15 +152,15 @@ class DeploymentFailed extends CustomEmailNotification
     public function toPushover(): PushoverMessage
     {
         if ($this->preview) {
-            $title = "Pull request #{$this->preview->pull_request_id} deployment failed";
-            $message = "Pull request deployment failed for {$this->application_name}";
+            $title = $this->trans('notifications.deployment_failed.pushover_preview_title', ['pullRequestId' => $this->preview->pull_request_id]);
+            $message = $this->trans('notifications.deployment_failed.pushover_preview_message', ['name' => $this->application_name]);
         } else {
-            $title = 'Deployment failed';
-            $message = "Deployment failed for {$this->application_name}";
+            $title = $this->trans('notifications.deployment_failed.pushover_title');
+            $message = $this->trans('notifications.deployment_failed.pushover_message', ['name' => $this->application_name]);
         }
 
         $buttons[] = [
-            'text' => 'Deployment logs',
+            'text' => $this->trans('notifications.common.deployment_logs_button'),
             'url' => $this->deployment_url,
         ];
 
@@ -162,22 +177,22 @@ class DeploymentFailed extends CustomEmailNotification
     public function toSlack(): SlackMessage
     {
         if ($this->preview) {
-            $title = "Pull request #{$this->preview->pull_request_id} deployment failed";
-            $description = "Pull request deployment failed for {$this->application_name}";
+            $title = $this->trans('notifications.deployment_failed.slack_preview_title', ['pullRequestId' => $this->preview->pull_request_id]);
+            $description = $this->trans('notifications.deployment_failed.slack_description', ['name' => $this->application_name]);
             if ($this->preview->fqdn) {
-                $description .= "\nPreview URL: {$this->preview->fqdn}";
+                $description .= "\n".$this->trans('notifications.common.preview_url').": {$this->preview->fqdn}";
             }
         } else {
-            $title = 'Deployment failed';
-            $description = "Deployment failed for {$this->application_name}";
+            $title = $this->trans('notifications.deployment_failed.slack_title');
+            $description = $this->trans('notifications.deployment_failed.slack_description', ['name' => $this->application_name]);
             if ($this->fqdn) {
-                $description .= "\nApplication URL: {$this->fqdn}";
+                $description .= "\n".$this->trans('notifications.common.application_url').": {$this->fqdn}";
             }
         }
 
-        $description .= "\n\n*Project:* ".data_get($this->application, 'environment.project.name');
-        $description .= "\n*Environment:* {$this->environment_name}";
-        $description .= "\n*<{$this->deployment_url}|Deployment Logs>*";
+        $description .= "\n\n*".$this->trans('notifications.common.project').':* '.data_get($this->application, 'environment.project.name');
+        $description .= "\n*".$this->trans('notifications.common.environment').":* {$this->environment_name}";
+        $description .= "\n*<{$this->deployment_url}|".$this->trans('notifications.common.deployment_logs').'>*';
 
         return new SlackMessage(
             title: $title,

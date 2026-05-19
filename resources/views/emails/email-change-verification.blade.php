@@ -1,11 +1,11 @@
 <x-emails.layout>
-You have requested to change your email address to: {{ $newEmail }}
+{{ __('mail.email_change_verification.requested', ['email' => $newEmail]) }}
 
-Please use the following verification code to confirm this change:
+{{ __('mail.email_change_verification.code_prompt') }}
 
-Verification Code: {{ $verificationCode }}
+{{ __('mail.email_change_verification.code', ['code' => $verificationCode]) }}
 
-This code is valid for {{ $expiryMinutes }} minutes.
+{{ __('mail.email_change_verification.expiry', ['minutes' => $expiryMinutes]) }}
 
-If you did not request this change, please ignore this email and your email address will remain unchanged.
+{{ __('mail.email_change_verification.ignore') }}
 </x-emails.layout>

@@ -1,25 +1,25 @@
 <x-emails.layout>
-{{ $total_updates }} package updates are available for your server {{ $name }}.
+{{ __('mail.server_patches.body', ['count' => $total_updates, 'name' => $name]) }}
 
-## Summary
+## {{ __('mail.common.summary_heading') }}
 
-- Operating System: {{ ucfirst($osId) }}
-- Package Manager: {{ $package_manager }}
-- Total Updates: {{ $total_updates }}
+- {{ __('mail.server_patches.operating_system', ['value' => ucfirst($osId)]) }}
+- {{ __('mail.server_patches.package_manager', ['value' => $package_manager]) }}
+- {{ __('mail.server_patches.total_updates', ['count' => $total_updates]) }}
 
-## Available Updates
+## {{ __('mail.common.available_updates_heading') }}
 
 @if ($total_updates > 0)
 @foreach ($updates as $update)
 
-Package: {{ $update['package'] }} ({{ $update['architecture'] }}), from version {{ $update['current_version'] }} to {{ $update['new_version'] }} at repository {{ $update['repository'] ?? 'Unknown' }}
+{{ __('mail.server_patches.package_line', ['package' => $update['package'], 'architecture' => $update['architecture'], 'current' => $update['current_version'], 'new' => $update['new_version'], 'repository' => $update['repository'] ?? __('mail.server_patches.unknown_repository')]) }}
 @endforeach
 
-## Security Considerations
+## {{ __('mail.common.security_considerations_heading') }}
 
-Some of these updates may include important security patches. We recommend reviewing and applying these updates promptly.
+{{ __('mail.server_patches.security_warning') }}
 
-### Critical packages that may require container/server/service restarts:
+### {{ __('mail.server_patches.critical_heading') }}
 @php
 $criticalPackages = collect($updates)->filter(function ($update) {
                 return str_contains(strtolower($update['package']), 'docker') ||
@@ -34,20 +34,19 @@ $criticalPackages = collect($updates)->filter(function ($update) {
 - {{ $package['package'] }}: {{ $package['current_version'] }} → {{ $package['new_version'] }}
 @endforeach
 @else
-No critical packages requiring container restarts detected.
+{{ __('mail.server_patches.critical_none') }}
 @endif
 
-## Next Steps
+## {{ __('mail.common.next_steps_heading') }}
 
-1. Review the available updates
-2. Plan maintenance window if critical packages are involved
-3. Apply updates through the Coolify dashboard
-4. Monitor services after updates are applied
+@foreach (__('mail.server_patches.steps') as $index => $step)
+{{ $index + 1 }}. {{ $step }}
+@endforeach
 @else
-Your server is up to date! No packages require updating at this time.
+{{ __('mail.server_patches.up_to_date') }}
 @endif
 
 ---
 
-You can manage server patches in your [Coolify Dashboard]({{ $server_url }}).
+{{ __('mail.server_patches.dashboard', ['url' => $server_url]) }}
 </x-emails.layout>

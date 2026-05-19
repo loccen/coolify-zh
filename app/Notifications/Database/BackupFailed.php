@@ -18,6 +18,7 @@ class BackupFailed extends CustomEmailNotification
     public function __construct(ScheduledDatabaseBackup $backup, public $database, public $output, public $database_name)
     {
         $this->onQueue('high');
+        $this->useLocale();
         $this->name = $database->name;
         $this->frequency = $backup->frequency;
     }
@@ -29,16 +30,18 @@ class BackupFailed extends CustomEmailNotification
 
     public function toMail(): MailMessage
     {
-        $mail = new MailMessage;
-        $mail->subject("Coolify: [ACTION REQUIRED] Database Backup FAILED for {$this->database->name}");
-        $mail->view('emails.backup-failed', [
-            'name' => $this->name,
-            'database_name' => $this->database_name,
-            'frequency' => $this->frequency,
-            'output' => $this->output,
-        ]);
+        return $this->withUserVisibleLocale(function () {
+            $mail = new MailMessage;
+            $mail->subject($this->trans('mail.backup_failed.subject', ['name' => $this->database->name]));
+            $mail->view('emails.backup-failed', [
+                'name' => $this->name,
+                'database_name' => $this->database_name,
+                'frequency' => $this->frequency,
+                'output' => $this->output,
+            ]);
 
-        return $mail;
+            return $mail;
+        });
     }
 
     public function toDiscord(): DiscordMessage

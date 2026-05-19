@@ -20,6 +20,7 @@ class BackupSuccessWithS3Warning extends CustomEmailNotification
     public function __construct(ScheduledDatabaseBackup $backup, public $database, public $database_name, public $s3_error)
     {
         $this->onQueue('high');
+        $this->useLocale();
 
         $this->name = $database->name;
         $this->frequency = $backup->frequency;
@@ -36,17 +37,19 @@ class BackupSuccessWithS3Warning extends CustomEmailNotification
 
     public function toMail(): MailMessage
     {
-        $mail = new MailMessage;
-        $mail->subject("Coolify: Backup succeeded locally but S3 upload failed for {$this->database->name}");
-        $mail->view('emails.backup-success-with-s3-warning', [
-            'name' => $this->name,
-            'database_name' => $this->database_name,
-            'frequency' => $this->frequency,
-            's3_error' => $this->s3_error,
-            's3_storage_url' => $this->s3_storage_url,
-        ]);
+        return $this->withUserVisibleLocale(function () {
+            $mail = new MailMessage;
+            $mail->subject($this->trans('mail.backup_success_with_s3_warning.subject', ['name' => $this->database->name]));
+            $mail->view('emails.backup-success-with-s3-warning', [
+                'name' => $this->name,
+                'database_name' => $this->database_name,
+                'frequency' => $this->frequency,
+                's3_error' => $this->s3_error,
+                's3_storage_url' => $this->s3_storage_url,
+            ]);
 
-        return $mail;
+            return $mail;
+        });
     }
 
     public function toDiscord(): DiscordMessage

@@ -1,9 +1,9 @@
 <x-emails.layout>
-A resource ({{ $containerName }}) has been restarted automatically on {{ $serverName }}, because it was stopped unexpectedly.
+{{ __('mail.container_restarted.body', ['name' => $containerName, 'server' => $serverName]) }}
 
 @if ($containerName === 'coolify-proxy')
-Coolify Proxy should run on your server as you have FQDNs set up in one of your resources.
+{{ __('mail.container_restarted.proxy') }}
 
-If you don't want to use Coolify Proxy, please remove FQDN from your resources or set Proxy type to Custom(None).
+{{ __('mail.container_restarted.proxy_hint') }}
 @endif
 </x-emails.layout>

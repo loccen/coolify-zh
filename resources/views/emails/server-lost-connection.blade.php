@@ -1,9 +1,9 @@
 <x-emails.layout>
-Coolify cannot connect to your server ({{ $name }}). Please check your server and make sure it is running.
+{{ __('mail.server_lost_connection.body', ['name' => $name]) }}
 
-All automations & integrations are turned off!
+{{ __('mail.server_lost_connection.disabled') }}
 
-IMPORTANT: We automatically try to revive your server and turn on all automations & integrations.
+{{ __('mail.server_lost_connection.important') }}
 
-If you have any questions, please contact us.
+{{ __('mail.server_lost_connection.contact') }}
 </x-emails.layout>

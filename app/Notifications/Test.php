@@ -11,16 +11,11 @@ use App\Notifications\Channels\WebhookChannel;
 use App\Notifications\Dto\DiscordMessage;
 use App\Notifications\Dto\PushoverMessage;
 use App\Notifications\Dto\SlackMessage;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
 use Illuminate\Queue\Middleware\RateLimited;
 
-class Test extends Notification implements ShouldQueue
+class Test extends CustomEmailNotification
 {
-    use Queueable;
-
     public $tries = 5;
 
     public bool $isTestNotification = true;
@@ -28,6 +23,7 @@ class Test extends Notification implements ShouldQueue
     public function __construct(public ?string $emails = null, public ?string $channel = null, public ?bool $ping = false)
     {
         $this->onQueue('high');
+        $this->useLocale();
     }
 
     public function via(object $notifiable): array
@@ -59,23 +55,29 @@ class Test extends Notification implements ShouldQueue
 
     public function toMail(): MailMessage
     {
-        $mail = new MailMessage;
-        $mail->subject('Coolify: Test Email');
-        $mail->view('emails.test');
+        return $this->withUserVisibleLocale(function () {
+            $mail = new MailMessage;
+            $mail->subject($this->trans('mail.test.subject'));
+            $mail->view('emails.test');
 
-        return $mail;
+            return $mail;
+        });
     }
 
     public function toDiscord(): DiscordMessage
     {
         $message = new DiscordMessage(
-            title: ':white_check_mark: Test Success',
-            description: 'This is a test Discord notification from Coolify. :cross_mark: :warning: :information_source:',
+            title: $this->trans('notifications.test.discord_title'),
+            description: $this->trans('notifications.test.discord_description'),
             color: DiscordMessage::successColor(),
             isCritical: $this->ping,
         );
 
-        $message->addField(name: 'Dashboard', value: '[Link]('.base_url().')', inline: true);
+        $message->addField(
+            name: $this->trans('notifications.common.dashboard'),
+            value: '[Link]('.base_url().')',
+            inline: true
+        );
 
         return $message;
     }
@@ -83,10 +85,10 @@ class Test extends Notification implements ShouldQueue
     public function toTelegram(): array
     {
         return [
-            'message' => 'Coolify: This is a test Telegram notification from Coolify.',
+            'message' => $this->trans('notifications.test.telegram_message'),
             'buttons' => [
                 [
-                    'text' => 'Go to your dashboard',
+                    'text' => $this->trans('notifications.test.dashboard_button'),
                     'url' => isDev() ? 'https://staging-but-dev.coolify.io' : base_url(),
                 ],
             ],
@@ -96,11 +98,11 @@ class Test extends Notification implements ShouldQueue
     public function toPushover(): PushoverMessage
     {
         return new PushoverMessage(
-            title: 'Test Pushover Notification',
-            message: 'This is a test Pushover notification from Coolify.',
+            title: $this->trans('notifications.test.pushover_title'),
+            message: $this->trans('notifications.test.pushover_message'),
             buttons: [
                 [
-                    'text' => 'Go to your dashboard',
+                    'text' => $this->trans('notifications.test.dashboard_button'),
                     'url' => base_url(),
                 ],
             ],
@@ -110,8 +112,8 @@ class Test extends Notification implements ShouldQueue
     public function toSlack(): SlackMessage
     {
         return new SlackMessage(
-            title: 'Test Slack Notification',
-            description: 'This is a test Slack notification from Coolify.'
+            title: $this->trans('notifications.test.slack_title'),
+            description: $this->trans('notifications.test.slack_description')
         );
     }
 
@@ -119,7 +121,7 @@ class Test extends Notification implements ShouldQueue
     {
         return [
             'success' => true,
-            'message' => 'This is a test webhook notification from Coolify.',
+            'message' => $this->trans('notifications.test.webhook_message'),
             'event' => 'test',
             'url' => base_url(),
         ];

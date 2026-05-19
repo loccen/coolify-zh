@@ -14,6 +14,7 @@ class DockerCleanupFailed extends CustomEmailNotification
     public function __construct(public Server $server, public string $message)
     {
         $this->onQueue('high');
+        $this->useLocale();
     }
 
     public function via(object $notifiable): array
@@ -23,14 +24,16 @@ class DockerCleanupFailed extends CustomEmailNotification
 
     public function toMail(): MailMessage
     {
-        $mail = new MailMessage;
-        $mail->subject("Coolify: [ACTION REQUIRED] Docker cleanup job failed on {$this->server->name}");
-        $mail->view('emails.docker-cleanup-failed', [
-            'name' => $this->server->name,
-            'text' => $this->message,
-        ]);
+        return $this->withUserVisibleLocale(function () {
+            $mail = new MailMessage;
+            $mail->subject($this->trans('mail.docker_cleanup_failed.subject', ['server' => $this->server->name]));
+            $mail->view('emails.docker-cleanup-failed', [
+                'name' => $this->server->name,
+                'text' => $this->message,
+            ]);
 
-        return $mail;
+            return $mail;
+        });
     }
 
     public function toDiscord(): DiscordMessage

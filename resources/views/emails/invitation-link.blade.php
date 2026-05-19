@@ -1,9 +1,9 @@
 <x-emails.layout>
-You have been invited to "{{ $team }}" on "{{ config('app.name') }}".
+{{ __('mail.invitation_link.intro', ['team' => $team, 'app' => config('app.name')]) }}
 
-Please [click here]({{ $invitation_link }}) to accept the invitation.
+{{ __('mail.invitation_link.accept', ['url' => $invitation_link]) }}
 
-If you have any questions, please contact the team owner.<br><br>
+{{ __('mail.invitation_link.contact') }}<br><br>
 
-If it was not you who requested this invitation, please ignore this email.
+{{ __('mail.invitation_link.ignore') }}
 </x-emails.layout>
