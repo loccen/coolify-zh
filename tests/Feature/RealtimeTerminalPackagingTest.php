@@ -1,13 +1,18 @@
 <?php
 
+function projectPath(string $path): string
+{
+    return dirname(__DIR__, 2).'/'.$path;
+}
+
 it('copies the realtime terminal utilities into the container image', function () {
-    $dockerfile = file_get_contents(base_path('docker/coolify-realtime/Dockerfile'));
+    $dockerfile = file_get_contents(projectPath('docker/coolify-realtime/Dockerfile'));
 
     expect($dockerfile)->toContain('COPY docker/coolify-realtime/terminal-utils.js /terminal/terminal-utils.js');
 });
 
 it('mounts the realtime terminal utilities in local development compose files', function (string $composeFile) {
-    $composeContents = file_get_contents(base_path($composeFile));
+    $composeContents = file_get_contents(projectPath($composeFile));
 
     expect($composeContents)->toContain('./docker/coolify-realtime/terminal-utils.js:/terminal/terminal-utils.js');
 })->with([
@@ -16,7 +21,7 @@ it('mounts the realtime terminal utilities in local development compose files', 
 ]);
 
 it('keeps terminal browser logging restricted to Vite development mode', function () {
-    $terminalClient = file_get_contents(base_path('resources/js/terminal.js'));
+    $terminalClient = file_get_contents(projectPath('resources/js/terminal.js'));
 
     expect($terminalClient)
         ->toContain('const terminalDebugEnabled = import.meta.env.DEV;')
@@ -25,16 +30,16 @@ it('keeps terminal browser logging restricted to Vite development mode', functio
 });
 
 it('keeps realtime terminal server logging restricted to development environments', function () {
-    $terminalServer = file_get_contents(base_path('docker/coolify-realtime/terminal-server.js'));
+    $terminalServer = file_get_contents(projectPath('docker/coolify-realtime/terminal-server.js'));
 
     expect($terminalServer)
-        ->toContain("const terminalDebugEnabled = ['local', 'development'].includes(")
+        ->toContain("const terminalDebugEnabled = ['1', 'true', 'yes'].includes(")
         ->toContain('if (!terminalDebugEnabled) {')
         ->not->toContain("console.log('Coolify realtime terminal server listening on port 6002. Let the hacking begin!');");
 });
 
 it('configures a server-initiated WebSocket heartbeat to survive proxy idle timeouts', function () {
-    $terminalServer = file_get_contents(base_path('docker/coolify-realtime/terminal-server.js'));
+    $terminalServer = file_get_contents(projectPath('docker/coolify-realtime/terminal-server.js'));
 
     expect($terminalServer)
         ->toContain('ws.isAlive = true;')
@@ -45,21 +50,21 @@ it('configures a server-initiated WebSocket heartbeat to survive proxy idle time
 });
 
 it('removes the keepalive short-circuit that fired when the tab was hidden', function () {
-    $terminalClient = file_get_contents(base_path('resources/js/terminal.js'));
+    $terminalClient = file_get_contents(projectPath('resources/js/terminal.js'));
 
     expect($terminalClient)
         ->not->toContain('// Skip keepalive when document is hidden to prevent unnecessary disconnects');
 });
 
 it('uses a fast probe timeout when the tab regains visibility', function () {
-    $terminalClient = file_get_contents(base_path('resources/js/terminal.js'));
+    $terminalClient = file_get_contents(projectPath('resources/js/terminal.js'));
 
     expect($terminalClient)
         ->toContain("'Visibility-resume timeout'");
 });
 
 it('closes idle terminal sessions after 30 minutes on the server', function () {
-    $terminalServer = file_get_contents(base_path('docker/coolify-realtime/terminal-server.js'));
+    $terminalServer = file_get_contents(projectPath('docker/coolify-realtime/terminal-server.js'));
 
     expect($terminalServer)
         ->toContain('IDLE_TIMEOUT_MS = 30 * 60 * 1000')
@@ -69,15 +74,24 @@ it('closes idle terminal sessions after 30 minutes on the server', function () {
 });
 
 it('reacts to idle-timeout sentinel on the client and shows a user-facing error', function () {
-    $terminalClient = file_get_contents(base_path('resources/js/terminal.js'));
+    $terminalClient = file_get_contents(projectPath('resources/js/terminal.js'));
 
     expect($terminalClient)
         ->toContain("event.data === 'idle-timeout'")
         ->toContain('Terminal closed after 30 minutes of inactivity.');
 });
 
+it('reads terminal user-facing strings from the frontend i18n payload', function () {
+    $terminalClient = file_get_contents(projectPath('resources/js/terminal.js'));
+
+    expect($terminalClient)
+        ->toContain("getFrontendI18nSection('terminal', terminalI18nFallback)")
+        ->toContain('formatI18nMessage(this.i18n.toasts.connectionError, { reason })')
+        ->toContain('this.$wire.dispatch(\'error\', this.i18n.toasts.reconnecting);');
+});
+
 it('replays the last command on reconnect so the PTY respawns automatically', function () {
-    $terminalClient = file_get_contents(base_path('resources/js/terminal.js'));
+    $terminalClient = file_get_contents(projectPath('resources/js/terminal.js'));
 
     expect($terminalClient)
         ->toContain('lastSentCommand')
@@ -86,7 +100,7 @@ it('replays the last command on reconnect so the PTY respawns automatically', fu
 });
 
 it('buffers messages received before the realtime server finishes auth so the replay is not lost', function () {
-    $terminalServer = file_get_contents(base_path('docker/coolify-realtime/terminal-server.js'));
+    $terminalServer = file_get_contents(projectPath('docker/coolify-realtime/terminal-server.js'));
 
     expect($terminalServer)
         ->toContain('authReady: false')
@@ -96,11 +110,11 @@ it('buffers messages received before the realtime server finishes auth so the re
 });
 
 it('preserves terminal scrollback across transient reconnects', function () {
-    $terminalClient = file_get_contents(base_path('resources/js/terminal.js'));
+    $terminalClient = file_get_contents(projectPath('resources/js/terminal.js'));
 
     expect($terminalClient)
-        ->toContain('── Connection lost at')
-        ->toContain('── Reconnected at')
+        ->toContain('formatI18nMessage(this.i18n.separators.connectionLost')
+        ->toContain('formatI18nMessage(this.i18n.separators.reconnected')
         // resetTerminal must NOT call term.reset()/term.clear() any more — those wipe scrollback.
         ->not->toContain("this.term.reset();\n                    this.term.clear();");
 });

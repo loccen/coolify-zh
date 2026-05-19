@@ -9,6 +9,7 @@
         scrollDebounce: null,
         colorLogs: localStorage.getItem('coolify-color-logs') === 'true',
         logFilters: JSON.parse(localStorage.getItem('coolify-log-filters')) || {error: true, warning: true, debug: true, info: true},
+        i18n: window.coolifyI18n.logs,
         searchQuery: '',
         matchCount: 0,
         containerName: '{{ $container ?? "logs" }}',
@@ -219,6 +220,9 @@
             a.click();
             URL.revokeObjectURL(url);
         },
+        matchCountLabel() {
+            return this.matchCount + ' ' + this.i18n.matchesSuffix;
+        },
         init() {
             if (this.expanded) {
                 this.$wire.getLogs(true);
@@ -288,12 +292,12 @@
                     <div class="flex items-center gap-2">
                         <form wire:submit="getLogs(true)" class="relative flex items-center">
                             <span
-                                class="absolute left-2 top-1/2 -translate-y-1/2 text-xs text-gray-400 pointer-events-none">Lines:</span>
+                                class="absolute left-2 top-1/2 -translate-y-1/2 text-xs text-gray-400 pointer-events-none">{{ __('Lines:') }}</span>
                             <input type="number" wire:model="numberOfLines" placeholder="100" min="1" max="50000"
-                                title="Number of Lines (max 50,000)" {{ $streamLogs ? 'readonly' : '' }}
+                                title="{{ __('Number of Lines (max 50,000)') }}" {{ $streamLogs ? 'readonly' : '' }}
                                 class="input input-sm w-32 pl-11 dark:bg-coolgray-300" />
                         </form>
-                        <span x-show="searchQuery.trim()" x-text="matchCount + ' matches'"
+                        <span x-show="searchQuery.trim()" x-text="matchCountLabel()"
                             class="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap"></span>
                     </div>
                     <div class="flex flex-wrap items-center justify-end gap-2 flex-1">
@@ -304,7 +308,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                             </svg>
-                            <input type="text" x-model.debounce.300ms="searchQuery" placeholder="Find in logs"
+                            <input type="text" x-model.debounce.300ms="searchQuery" placeholder="{{ __('Find in logs') }}"
                                 class="input input-sm w-48 pl-8 pr-8 dark:bg-coolgray-300" />
                             <button x-show="searchQuery" x-on:click="searchQuery = ''" type="button"
                                 class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
@@ -315,7 +319,7 @@
                             </button>
                         </div>
                         <div class="flex flex-wrap items-center gap-1">
-                            <button wire:click="getLogs(true)" title="Refresh Logs" {{ $streamLogs ? 'disabled' : '' }}
+                            <button wire:click="getLogs(true)" title="{{ __('Refresh Logs') }}" {{ $streamLogs ? 'disabled' : '' }}
                             class="p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 disabled:opacity-50">
                             <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke-width="1.5" stroke="currentColor">
@@ -324,7 +328,7 @@
                             </svg>
                         </button>
                         <button wire:click="toggleStreamLogs"
-                            title="{{ $streamLogs ? 'Stop Streaming' : 'Stream Logs' }}"
+                            title="{{ $streamLogs ? __('Stop Streaming') : __('Stream Logs') }}"
                             class="p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 {{ $streamLogs ? '!text-warning' : '' }}">
                             @if ($streamLogs)
                                 {{-- Pause icon --}}
@@ -344,10 +348,10 @@
                             x-on:click="
                                 $wire.copyLogs().then(logs => {
                                     navigator.clipboard.writeText(logs);
-                                    Livewire.dispatch('success', ['Logs copied to clipboard.']);
+                                    Livewire.dispatch('success', [window.coolifyI18n.logs.logsCopiedToClipboard]);
                                 });
                             "
-                            title="Copy Logs"
+                            title="{{ __('Copy Logs') }}"
                             class="p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
                             <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke-width="1.5" stroke="currentColor">
@@ -356,7 +360,7 @@
                             </svg>
                         </button>
                         <div x-data="{ downloadMenuOpen: false, downloadingAllLogs: false }" class="relative">
-                            <button x-on:click="downloadMenuOpen = !downloadMenuOpen" title="Download Logs"
+                            <button x-on:click="downloadMenuOpen = !downloadMenuOpen" title="{{ __('Download Logs') }}"
                                 class="p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
                                 <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="1.5" stroke="currentColor">
@@ -375,7 +379,7 @@
                                 <div class="py-1">
                                     <button x-on:click="downloadLogs(); downloadMenuOpen = false"
                                         class="block w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-coolgray-300">
-                                        Download displayed logs
+                                        {{ __('Download displayed logs') }}
                                     </button>
                                     <button x-on:click="
                                         downloadingAllLogs = true;
@@ -389,7 +393,7 @@
                                             a.download = containerName + '-all-logs-' + timestamp + '.txt';
                                             a.click();
                                             URL.revokeObjectURL(url);
-                                            Livewire.dispatch('success', ['All logs downloaded.']);
+                                            Livewire.dispatch('success', [window.coolifyI18n.toast.messages.allLogsDownloaded]);
                                         }).finally(() => {
                                             downloadingAllLogs = false;
                                             downloadMenuOpen = false;
@@ -398,19 +402,19 @@
                                         :disabled="downloadingAllLogs"
                                         :class="{ 'opacity-50 cursor-not-allowed': downloadingAllLogs }"
                                         class="block w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-coolgray-300">
-                                        <span x-show="!downloadingAllLogs">Download all logs</span>
+                                        <span x-show="!downloadingAllLogs">{{ __('Download all logs') }}</span>
                                         <span x-show="downloadingAllLogs" class="flex items-center gap-2">
                                             <svg class="w-4 h-4 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                             </svg>
-                                            Downloading...
+                                            {{ __('Downloading...') }}
                                         </span>
                                     </button>
                                 </div>
                             </div>
                         </div>
-                        <button wire:click="toggleTimestamps" title="Toggle Timestamps"
+                        <button wire:click="toggleTimestamps" title="{{ __('Toggle Timestamps') }}"
                             class="p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 {{ $showTimeStamps ? '!text-warning' : '' }}">
                             <svg class="w-4 h-4" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"
                                 stroke="currentColor" stroke-width="2">
@@ -418,7 +422,7 @@
                                     d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                             </svg>
                         </button>
-                        <button title="Toggle Log Colors" x-on:click="toggleColorLogs"
+                        <button title="{{ __('Toggle Log Colors') }}" x-on:click="toggleColorLogs"
                             :class="colorLogs ? '!text-warning' : ''"
                             class="p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
                             <svg class="w-4 h-4" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -428,7 +432,7 @@
                             </svg>
                         </button>
                         <div x-data="{ filterOpen: false }" class="relative">
-                            <button x-on:click="filterOpen = !filterOpen" title="Filter Log Levels"
+                            <button x-on:click="filterOpen = !filterOpen" title="{{ __('Filter Log Levels') }}"
                                 :class="Object.values(logFilters).some(v => !v) ? '!text-warning' : ''"
                                 class="p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
                                 <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -450,30 +454,30 @@
                                         <input type="checkbox" :checked="logFilters.error" x-on:change="toggleLogFilter('error')"
                                             class="rounded border-gray-300 dark:border-gray-600 text-warning focus:ring-warning dark:bg-coolgray-300" />
                                         <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
-                                        Error
+                                        {{ __('Error') }}
                                     </label>
                                     <label class="flex items-center gap-2 px-4 py-1.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-coolgray-300 cursor-pointer select-none">
                                         <input type="checkbox" :checked="logFilters.warning" x-on:change="toggleLogFilter('warning')"
                                             class="rounded border-gray-300 dark:border-gray-600 text-warning focus:ring-warning dark:bg-coolgray-300" />
                                         <span class="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
-                                        Warning
+                                        {{ __('Warning') }}
                                     </label>
                                     <label class="flex items-center gap-2 px-4 py-1.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-coolgray-300 cursor-pointer select-none">
                                         <input type="checkbox" :checked="logFilters.debug" x-on:change="toggleLogFilter('debug')"
                                             class="rounded border-gray-300 dark:border-gray-600 text-warning focus:ring-warning dark:bg-coolgray-300" />
                                         <span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span>
-                                        Debug
+                                        {{ __('Debug') }}
                                     </label>
                                     <label class="flex items-center gap-2 px-4 py-1.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-coolgray-300 cursor-pointer select-none">
                                         <input type="checkbox" :checked="logFilters.info" x-on:change="toggleLogFilter('info')"
                                             class="rounded border-gray-300 dark:border-gray-600 text-warning focus:ring-warning dark:bg-coolgray-300" />
                                         <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
-                                        Info
+                                        {{ __('Info') }}
                                     </label>
                                 </div>
                             </div>
                         </div>
-                        <button title="Follow Logs" :class="alwaysScroll ? '!text-warning' : ''"
+                        <button title="{{ __('Follow Logs') }}" :class="alwaysScroll ? '!text-warning' : ''"
                             x-on:click="toggleScroll"
                             class="p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
                             <svg class="w-4 h-4" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -481,7 +485,7 @@
                                     stroke-width="2" d="M12 5v14m4-4l-4 4m-4-4l4 4" />
                             </svg>
                         </button>
-                        <button title="Fullscreen" x-show="!fullscreen" x-on:click="makeFullscreen"
+                        <button title="{{ __('Fullscreen') }}" x-show="!fullscreen" x-on:click="makeFullscreen"
                             class="p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
                             <svg class="w-4 h-4" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <g fill="none">
@@ -492,7 +496,7 @@
                                 </g>
                             </svg>
                         </button>
-                        <button title="Minimize" x-show="fullscreen" x-on:click="makeFullscreen"
+                        <button title="{{ __('Minimize') }}" x-show="fullscreen" x-on:click="makeFullscreen"
                             class="p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
                             <svg class="w-4 h-4" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -513,7 +517,7 @@
                         <div id="logs" class="font-logs max-w-full cursor-default">
                             <div x-show="searchQuery.trim() && matchCount === 0"
                                 class="text-gray-500 dark:text-gray-400 py-2">
-                                No matches found.
+                                {{ __('No matches found.') }}
                             </div>
                             @foreach ($displayLines as $index => $line)
                                 @php

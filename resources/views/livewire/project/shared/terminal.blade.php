@@ -23,13 +23,13 @@
         <div id="terminal" wire:ignore
             :class="fullscreen ? 'px-2 py-1 h-full bg-black' : 'px-2 py-1 rounded-sm bg-black'" x-show="terminalActive">
         </div>
-        <button title="Minimize" x-show="fullscreen" class="fixed bg-black/40 top-4 right-6 text-white"
+        <button title="{{ __('Minimize') }}" x-show="fullscreen" class="fixed bg-black/40 top-4 right-6 text-white"
             x-on:click="makeFullscreen"><svg class="w-5 h-5 text-gray-500 hover:text-white bg-black/80"
                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                     stroke-width="2" d="M6 14h4m0 0v4m0-4l-6 6m14-10h-4m0 0V6m0 4l6-6" />
             </svg></button>
-        <button title="Fullscreen" x-show="!fullscreen && terminalActive" class="absolute right-5 top-6 text-white "
+        <button title="{{ __('Fullscreen') }}" x-show="!fullscreen && terminalActive" class="absolute right-5 top-6 text-white "
             x-on:click="makeFullscreen"> <svg class="w-5 h-5 text-gray-500 hover:text-white bg-black/80"
                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <g fill="none">
