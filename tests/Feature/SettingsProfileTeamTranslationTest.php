@@ -1,9 +1,5 @@
 <?php
 
-use Tests\TestCase;
-
-uses(TestCase::class);
-
 function worktreePath(string $path = ''): string
 {
     $root = dirname(__DIR__, 2);
@@ -19,7 +15,7 @@ test('zh CN translation catalogs contain T5B labels', function () {
     $json = json_decode(file_get_contents(worktreePath('lang/zh_CN.json')), true, 512, JSON_THROW_ON_ERROR);
 
     expect(data_get($auth, 'already_registered'))->toBe('已有账号？')
-        ->and(data_get($auth, 'failed.email'))->toBe('如果该邮箱已注册，你很快会收到密码重置链接。')
+        ->and($auth['failed.email'])->toBe('如果该邮箱已注册，你很快会收到密码重置链接。')
         ->and(data_get($settings, 'title'))->toBe('设置')
         ->and(data_get($settings, 'transactional_email'))->toBe('事务邮件')
         ->and(data_get($settings, 'subtitle'))->toBe('管理整个 Coolify 实例的设置。')

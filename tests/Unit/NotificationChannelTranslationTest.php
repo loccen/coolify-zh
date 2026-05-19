@@ -80,7 +80,7 @@ it('renders server state and cleanup notifications in chinese', function () {
 
     $forceDisabled = new ForceDisabled($server);
     $forceDisabled->locale = 'zh_CN';
-    expect($forceDisabled->toTelegram()['message'])->toContain('因未付费已被禁用');
+    expect($forceDisabled->toTelegram()['message'])->toContain('因未付款已被禁用');
 });
 
 it('renders general notification titles in chinese', function () {

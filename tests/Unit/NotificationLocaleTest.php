@@ -76,3 +76,12 @@ it('falls back to english for non-queued transactional mail notifications outsid
     expect($notification->locale)->toBe('en');
 
 });
+
+it('renders transactional email subjects with the current request locale', function () {
+    bindRequestWithRoute();
+    App::setLocale('zh_CN');
+
+    $notification = new TransactionalEmailTest('test@example.com');
+
+    expect($notification->toMail()->subject)->toBe('Coolify: 测试邮件');
+});

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\InstanceSettings;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\File;
 
@@ -8,6 +9,7 @@ uses(RefreshDatabase::class);
 
 beforeEach(function () {
     InstanceSettings::forceCreate(['id' => 0]);
+    User::factory()->create(['email' => 'locale@example.com']);
     config()->set('cache.default', 'array');
     config()->set('cache.stores.array', [
         'driver' => 'array',
@@ -51,8 +53,10 @@ it('uses the accept language header when the cookie is missing', function () {
     $response->assertSee('lang="zh-CN"', false);
 });
 
-it('falls back to zh_CN when no locale preference is provided', function () {
-    $response = $this->get('/login');
+it('falls back to zh_CN when no supported locale preference is provided', function () {
+    $response = $this
+        ->withHeaders(['Accept-Language' => 'fr-FR,fr;q=0.9'])
+        ->get('/login');
 
     $response->assertOk();
     $response->assertSee('lang="zh-CN"', false);
@@ -65,7 +69,9 @@ it('rejects unsupported locales during switching', function () {
     ]);
 
     $response->assertNotFound();
-    expect($response->headers->getCookies())->toBeEmpty();
+    expect(collect($response->headers->getCookies())->contains(
+        fn ($cookie) => $cookie->getName() === 'coolify_locale'
+    ))->toBeFalse();
 });
 
 it('stores the selected locale in a long-lived cookie and redirects back', function () {
