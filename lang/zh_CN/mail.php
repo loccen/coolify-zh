@@ -20,18 +20,18 @@ return [
     'api_token_expiring' => [
         'subject' => "Coolify: API Token ':tokenName' 将在 24 小时后过期",
         'intro' => '你的 Coolify API Token（:tokenName）将于 :expiresAt 过期。',
-        'rotate' => '请在过期前轮换这个 Token。到达过期时间后，使用这个 Token 的 API 调用将开始失败。',
+        'rotate' => '请在过期前轮换此 Token。过期后，使用此 Token 的 API 调用将开始失败。',
     ],
     'application_deployment_failed' => [
-        'subject' => 'Coolify: :name 部署失败。',
-        'subject_preview' => 'Coolify: :name 的拉取请求 #:pullRequestId 部署失败。',
-        'body' => ':name 的新版本部署到 [:fqdn](:fqdn) 失败。',
-        'body_preview' => ':name 的拉取请求 #:pullRequestId 部署到 [:fqdn](:fqdn) 失败。',
+        'subject' => 'Coolify: :name 部署失败',
+        'subject_preview' => 'Coolify: :name 的拉取请求 #:pullRequestId 部署失败',
+        'body' => '无法将 :name 的新版本部署到 [:fqdn](:fqdn)。',
+        'body_preview' => '无法将 :name 的拉取请求 #:pullRequestId 部署到 [:fqdn](:fqdn)。',
     ],
     'application_deployment_success' => [
         'subject' => 'Coolify: :name 新版本已部署',
         'subject_preview' => 'Coolify: :name 的拉取请求 #:pullRequestId 已成功部署',
-        'body' => ':name 的新版本已可在 [:fqdn](:fqdn) 使用。',
+        'body' => ':name 的新版本现已发布到 [:fqdn](:fqdn)。',
         'body_preview' => ':name 的拉取请求 #:pullRequestId 已成功部署到 [:fqdn](:fqdn)。',
     ],
     'application_status_changed' => [
@@ -42,23 +42,23 @@ return [
     ],
     'backup_failed' => [
         'subject' => 'Coolify: [需要处理] :name 的数据库备份失败',
-        'body' => ':name:database 的数据库备份（频率：:frequency）失败。',
+        'body' => ':name:database 的数据库备份失败，频率为 :frequency。',
     ],
     'backup_success' => [
         'subject' => 'Coolify: :name 备份完成',
-        'body' => ':name:database 的数据库备份（频率：:frequency）已成功完成。',
+        'body' => ':name:database 的数据库备份已成功完成，频率为 :frequency。',
     ],
     'backup_success_with_s3_warning' => [
         'subject' => 'Coolify: :name 本地备份成功，但上传到 S3 失败',
-        'body' => ':name:database 的数据库备份（频率：:frequency）在本地已成功完成，但上传到 S3 失败。',
+        'body' => ':name:database 的数据库备份已在本地成功完成，但上传到 S3 失败，频率为 :frequency。',
         's3_error' => 'S3 错误：:error',
         'check_s3_configuration' => '检查 S3 配置：:url',
     ],
     'before_trial_conversion' => [
-        'subject' => '所有订阅方案都已加入试用期。',
-        'intro' => '我们想通知你，所有订阅方案都已加入 :days 天试用期。|我们想通知你，所有订阅方案都已加入 :days 天试用期。',
-        'description' => '你可以免费试用 Coolify，无需支付信息。如果觉得合适，随时可以升级到付费方案。',
-        'cta' => '[点击这里](https://app.coolify.io/subscription/new) 开始试用。',
+        'subject' => '所有订阅方案现已提供试用期',
+        'intro' => '所有订阅方案现已提供 :days 天试用期。|所有订阅方案现已提供 :days 天试用期。',
+        'description' => '你现在可以免费试用 Coolify，无需填写支付信息。合适的话，随时可以升级到付费方案。',
+        'cta' => '[点此](https://app.coolify.io/subscription/new)开始试用。',
     ],
     'container_restarted' => [
         'subject' => 'Coolify: 资源（:name）已在 :server 上自动重启',
@@ -72,8 +72,8 @@ return [
         'check' => '请在[这里](:url)查看发生了什么。',
     ],
     'daily_backup' => [
-        'failed' => '"::database" 备份：存在失败的备份，请登录后查看日志获取更多信息。',
-        'success' => '"::database" 备份：所有备份都已成功完成。',
+        'failed' => '"::database" 备份：有备份失败，请登录后查看日志了解详情。',
+        'success' => '"::database" 备份：所有备份均已成功完成。',
     ],
     'docker_cleanup_failed' => [
         'subject' => 'Coolify: [需要处理] :server 上的 Docker 清理任务失败',
@@ -88,12 +88,12 @@ return [
         'requested' => '你请求将邮箱地址改为 :email。',
         'code_prompt' => '请使用下面的验证码确认这次修改：',
         'code' => '验证码：:code',
-        'expiry' => '这个验证码将在 :minutes 分钟后失效。',
+        'expiry' => '该验证码在 :minutes 分钟内有效。',
         'ignore' => '如果这不是你的操作，请忽略这封邮件，你的邮箱地址不会变化。',
     ],
     'email_verification' => [
-        'subject' => 'Coolify: 验证你的邮箱。',
-        'body' => '请在[这里](:url)验证你的邮箱。',
+        'subject' => 'Coolify: 验证你的邮箱',
+        'body' => '请在[这里](:url)验证邮箱。',
     ],
     'feedback' => [
         'subject' => '[帮助]：:subject',
@@ -107,20 +107,20 @@ return [
     'high_disk_usage' => [
         'subject' => 'Coolify: 检测到服务器（:name）磁盘使用率过高',
         'body' => '你的服务器（:name）磁盘使用率过高，已使用 :usage%。阈值为 :threshold%。',
-        'cleanup' => '请清理磁盘空间以避免数据丢失。这里有一些[建议](https://coolify.io/docs/knowledge-base/server/automated-cleanup)。',
-        'threshold_hint' => '（你可以在 Server Settings 菜单中调整这个阈值。）',
+        'cleanup' => '请清理磁盘空间，避免数据丢失。可参考这些[建议](https://coolify.io/docs/knowledge-base/server/automated-cleanup)。',
+        'threshold_hint' => '（你可以在 Server Settings 中调整这个阈值。）',
     ],
     'invitation_link' => [
         'subject' => 'Coolify: :team 的邀请',
-        'direct_subject' => '你已被邀请加入 :app 上的 :team。',
+        'direct_subject' => '你已被邀请加入 :app 上的 :team',
         'intro' => '你已被邀请加入 ":app" 上的团队 ":team"。',
         'accept' => '请[点击这里](:url)接受邀请。',
         'contact' => '如果有任何问题，请联系团队所有者。',
-        'ignore' => '如果这不是你发起的邀请请求，请忽略这封邮件。',
+        'ignore' => '如果这不是你发起的请求，请忽略这封邮件。',
     ],
     'reset_password' => [
         'subject' => 'Coolify: 重置密码',
-        'requested' => '这个邮箱地址发起了密码重置请求。',
+        'requested' => '有人请求重置这个邮箱地址的密码。',
         'cta' => '请[点击这里](:url)重置密码。',
         'expiry' => '这个链接将在 :minutes 分钟后失效。',
     ],
@@ -129,18 +129,18 @@ return [
         'body' => '无法连接到你的某个 S3 存储（:name）。请在[这里](:url)修复。',
     ],
     'scheduled_task_failed' => [
-        'subject' => 'Coolify: [需要处理] 定时任务（:name）失败。',
+        'subject' => 'Coolify: [需要处理] 定时任务（:name）失败',
         'body' => '定时任务（:name）失败，错误如下：',
         'cta' => '请[点击这里](:url)查看任务。',
     ],
     'scheduled_task_success' => [
-        'subject' => 'Coolify: 定时任务（:name）已成功完成。',
+        'subject' => 'Coolify: 定时任务（:name）已成功完成',
         'body' => '定时任务（:name）已成功完成，输出如下：',
         'cta' => '请[点击这里](:url)查看任务。',
     ],
     'server_force_disabled' => [
         'subject' => 'Coolify: 服务器（:name）因未支付已被禁用',
-        'body' => '你的服务器（:name）因未支付已被禁用。所有自动化和集成都已停止。',
+        'body' => '你的服务器（:name）因未付款已被禁用。所有自动化和集成都已停止。',
         'cta' => '请在[这里](https://app.coolify.io/subscription)更新订阅，以重新启用服务器。',
     ],
     'server_force_enabled' => [
@@ -148,10 +148,10 @@ return [
         'body' => '你的服务器（:name）已重新启用！',
     ],
     'server_lost_connection' => [
-        'subject' => '需要处理：服务器 :name 已失去连接。',
+        'subject' => '需要处理：服务器 :name 已失去连接',
         'body' => 'Coolify 无法连接到你的服务器（:name）。请检查服务器，并确认它仍在运行。',
         'disabled' => '所有自动化和集成都已关闭。',
-        'important' => '重要：我们会自动尝试恢复你的服务器，并重新打开所有自动化和集成。',
+        'important' => '重要：我们会自动尝试恢复你的服务器，并重新启用所有自动化和集成。',
         'contact' => '如果你有任何问题，请联系我们。',
     ],
     'server_patches_error' => [
@@ -172,16 +172,16 @@ return [
         'steps' => [
             '审查可用更新',
             '如果涉及关键软件包，安排维护窗口',
-            '通过 Coolify dashboard 应用更新',
-            '更新应用后继续观察服务状态',
+            '通过 Coolify Dashboard 应用更新',
+            '更新后继续观察服务状态',
         ],
         'up_to_date' => '你的服务器已经是最新状态，目前没有需要更新的软件包。',
         'dashboard' => '你可以在 [Coolify Dashboard](:url) 中管理服务器补丁。',
         'unknown_repository' => '未知',
     ],
     'server_revived' => [
-        'subject' => 'Coolify: 服务器（:name）已恢复。',
-        'body' => '你的服务器（:name）离线了一段时间，但现在已经重新上线。所有自动化和集成都已重新开启。',
+        'subject' => 'Coolify: 服务器（:name）已恢复',
+        'body' => '你的服务器（:name）离线了一段时间，但现在已重新上线。所有自动化和集成都已重新启用。',
     ],
     'ssl_certificate_renewed' => [
         'subject' => 'Coolify: [需要处理] SSL 证书已续期，需要手动重新部署',
@@ -192,23 +192,23 @@ return [
         'redeploy_here' => '你可以在这里重新部署这些资源：',
     ],
     'subscription_invoice_failed' => [
-        'subject' => 'Coolify Cloud 最近一次付款失败。',
+        'subject' => 'Coolify Cloud 最近一次付款失败',
         'body' => 'Coolify Cloud 最近一笔账单付款失败。',
         'cta' => '请在[这里](:url)更新支付信息。',
     ],
     'test' => [
         'subject' => 'Coolify: 测试邮件',
-        'body' => '如果你看到了这封邮件，说明你的邮件设置是正确的。',
+        'body' => '如果你收到了这封邮件，说明邮件设置正确。',
     ],
     'traefik_version_outdated' => [
         'subject' => 'Coolify: :count 台服务器上的 Traefik 代理已过期',
-        'body' => ':count 台服务器正在运行过期的 Traefik 代理。出于安全和功能考虑，建议更新。',
+        'body' => ':count 台服务器正在运行过期的 Traefik 代理。出于安全和功能考虑，建议尽快更新。',
         'affected_servers' => '受影响的服务器',
         'line_patch_with_minor' => '[**:server**](:url)：:current → :target（可用补丁更新）| 另有可用版本：:newerTarget（最新补丁：:newerLatest）- 新的小版本',
         'line_patch' => '[**:server**](:url)：:current → :target（可用补丁更新）',
         'line_minor' => '[**:server**](:url)：:current（最新补丁：:latest）→ :target（有新的小版本可用）',
-        'recommendation' => '建议先在生产环境之外测试新的 Traefik 版本，再切换到正式环境。点击上面的任一服务器名称即可更新代理配置。',
-        'minor_warning' => '**小版本升级注意：** 升级到新的小版本之前，请先阅读 [Traefik changelog](https://github.com/traefik/traefik/releases)，确认其中的破坏性变更和新功能。',
+        'recommendation' => '建议先在非生产环境测试新的 Traefik 版本，再切换到生产环境。点击上面的任一服务器名称即可更新代理配置。',
+        'minor_warning' => '**小版本升级注意：** 升级前请先阅读 [Traefik changelog](https://github.com/traefik/traefik/releases)，确认其中的破坏性变更和新功能。',
         'steps' => [
             '查看 [Traefik release notes](https://github.com/traefik/traefik/releases) 了解变更',
             '先在非生产环境测试新版本',
@@ -219,7 +219,7 @@ return [
     ],
     'trial_ended' => [
         'body' => '你的试用期已经结束。你所有服务器上的自动化和集成都已停用。',
-        'cta' => '请在[这里](:url)或 [Coolify Cloud](https://app.coolify.io) 中更新支付信息，以继续使用我们的服务。',
+        'cta' => '请在[这里](:url)或 [Coolify Cloud](https://app.coolify.io) 中更新支付信息，以继续使用服务。',
     ],
     'trial_ends_soon' => [
         'body' => '你的试用期即将结束。请在[这里](:url)更新支付信息。',
@@ -227,6 +227,6 @@ return [
     ],
     'updates' => [
         'subject' => 'One-click Services、Docker Compose 支持',
-        'unsubscribe' => '如果你不想再收到这类邮件，可以在[这里](:url)退订。',
+        'unsubscribe' => '如果你不想再收到这类邮件，可以在[这里](:url)取消订阅。',
     ],
 ];
