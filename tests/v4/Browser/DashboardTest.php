@@ -41,7 +41,7 @@ uZx9iFkCELtxrh31QJ68AAAAEXNhaWxANzZmZjY2ZDJlMmRkAQIDBA==
         'id' => 0,
         'uuid' => 'localhost',
         'name' => 'localhost',
-        'description' => 'This is a test docker container in development mode',
+        'description' => '这是开发模式下的测试 Docker 容器',
         'ip' => 'coolify-testing-host',
         'team_id' => 0,
         'private_key_id' => 1,
@@ -79,8 +79,8 @@ uZx9iFkCELtxrh31QJ68AAAAEXNhaWxANzZmZjY2ZDJlMmRkAQIDBA==
 
     Project::create([
         'uuid' => 'project-1',
-        'name' => 'My first project',
-        'description' => 'This is a test project in development',
+        'name' => '我的第一个项目',
+        'description' => '这是开发环境中的测试项目',
         'team_id' => 0,
     ]);
 
@@ -139,8 +139,8 @@ it('shows all projects on dashboard', function () {
     $page = loginAndSkipOnboarding();
 
     $page->assertSee('Projects')
-        ->assertSee('My first project')
-        ->assertSee('This is a test project in development')
+        ->assertSee('我的第一个项目')
+        ->assertSee('这是开发环境中的测试项目')
         ->assertSee('Production API')
         ->assertSee('Backend services for production')
         ->assertSee('Staging Environment')
@@ -153,7 +153,7 @@ it('shows servers on dashboard', function () {
 
     $page->assertSee('Servers')
         ->assertSee('localhost')
-        ->assertSee('This is a test docker container in development mode')
+        ->assertSee('这是开发模式下的测试 Docker 容器')
         ->assertSee('production-web')
         ->assertSee('Production web server cluster')
         ->assertSee('staging-server')

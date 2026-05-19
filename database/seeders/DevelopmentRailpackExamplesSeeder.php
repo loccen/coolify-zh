@@ -57,28 +57,28 @@ class DevelopmentRailpackExamplesSeeder extends Seeder
         return [
             [
                 'uuid' => 'railpack-simple-webserver',
-                'name' => 'Railpack Simple Webserver Example',
+                'name' => 'Railpack 简单 Web 服务器示例',
                 'base_directory' => '/node/simple-webserver',
                 'ports_exposes' => '3000',
                 'start_command' => 'npm run start',
             ],
             [
                 'uuid' => 'railpack-expressjs',
-                'name' => 'Railpack Express.js Example',
+                'name' => 'Railpack Express.js 示例',
                 'base_directory' => '/node/expressjs',
                 'ports_exposes' => '3000',
                 'start_command' => 'npm run start',
             ],
             [
                 'uuid' => 'railpack-fastify',
-                'name' => 'Railpack Fastify Example',
+                'name' => 'Railpack Fastify 示例',
                 'base_directory' => '/node/fastify',
                 'ports_exposes' => '3000',
                 'start_command' => 'npm run start',
             ],
             [
                 'uuid' => 'railpack-nestjs',
-                'name' => 'Railpack NestJS Example',
+                'name' => 'Railpack NestJS 示例',
                 'base_directory' => '/node/nestjs',
                 'ports_exposes' => '3000',
                 'build_command' => 'npm run build',
@@ -86,7 +86,7 @@ class DevelopmentRailpackExamplesSeeder extends Seeder
             ],
             [
                 'uuid' => 'railpack-adonisjs',
-                'name' => 'Railpack AdonisJS Example',
+                'name' => 'Railpack AdonisJS 示例',
                 'base_directory' => '/node/adonisjs',
                 'ports_exposes' => '3333',
                 'build_command' => 'npm run build',
@@ -94,7 +94,7 @@ class DevelopmentRailpackExamplesSeeder extends Seeder
             ],
             [
                 'uuid' => 'railpack-hono',
-                'name' => 'Railpack Hono Example',
+                'name' => 'Railpack Hono 示例',
                 'base_directory' => '/node/hono',
                 'ports_exposes' => '3000',
                 'build_command' => 'npm run build',
@@ -102,14 +102,14 @@ class DevelopmentRailpackExamplesSeeder extends Seeder
             ],
             [
                 'uuid' => 'railpack-koa',
-                'name' => 'Railpack Koa Example',
+                'name' => 'Railpack Koa 示例',
                 'base_directory' => '/node/koa',
                 'ports_exposes' => '3000',
                 'start_command' => 'npm run start',
             ],
             [
                 'uuid' => 'railpack-nextjs-ssr',
-                'name' => 'Railpack Next.js SSR Example',
+                'name' => 'Railpack Next.js SSR 示例',
                 'base_directory' => '/node/nextjs/ssr',
                 'ports_exposes' => '3000',
                 'build_command' => 'npm run build',
@@ -117,7 +117,7 @@ class DevelopmentRailpackExamplesSeeder extends Seeder
             ],
             [
                 'uuid' => 'railpack-nuxtjs-ssr',
-                'name' => 'Railpack NuxtJS SSR Example',
+                'name' => 'Railpack NuxtJS SSR 示例',
                 'base_directory' => '/node/nuxtjs/ssr',
                 'ports_exposes' => '3000',
                 'build_command' => 'npm run build',
@@ -125,7 +125,7 @@ class DevelopmentRailpackExamplesSeeder extends Seeder
             ],
             [
                 'uuid' => 'railpack-astro-ssr',
-                'name' => 'Railpack Astro SSR Example',
+                'name' => 'Railpack Astro SSR 示例',
                 'base_directory' => '/node/astro/ssr',
                 'ports_exposes' => '4321',
                 'build_command' => 'npm run build',
@@ -133,7 +133,7 @@ class DevelopmentRailpackExamplesSeeder extends Seeder
             ],
             [
                 'uuid' => 'railpack-sveltekit-ssr',
-                'name' => 'Railpack SvelteKit SSR Example',
+                'name' => 'Railpack SvelteKit SSR 示例',
                 'base_directory' => '/node/sveltekit/ssr',
                 'ports_exposes' => '3000',
                 'build_command' => 'npm run build',
@@ -141,7 +141,7 @@ class DevelopmentRailpackExamplesSeeder extends Seeder
             ],
             [
                 'uuid' => 'railpack-tanstack-start-ssr',
-                'name' => 'Railpack TanStack Start SSR Example',
+                'name' => 'Railpack TanStack Start SSR 示例',
                 'base_directory' => '/node/tanstack-start/ssr',
                 'ports_exposes' => '3000',
                 'build_command' => 'npm run build',
@@ -149,7 +149,7 @@ class DevelopmentRailpackExamplesSeeder extends Seeder
             ],
             [
                 'uuid' => 'railpack-angular-ssr',
-                'name' => 'Railpack Angular SSR Example',
+                'name' => 'Railpack Angular SSR 示例',
                 'base_directory' => '/node/angular/ssr',
                 'ports_exposes' => '4000',
                 'build_command' => 'npm run build',
@@ -157,7 +157,7 @@ class DevelopmentRailpackExamplesSeeder extends Seeder
             ],
             [
                 'uuid' => 'railpack-vue-ssr',
-                'name' => 'Railpack Vue SSR Example',
+                'name' => 'Railpack Vue SSR 示例',
                 'base_directory' => '/node/vue/ssr',
                 'ports_exposes' => '3000',
                 'build_command' => 'npm run build',
@@ -165,7 +165,7 @@ class DevelopmentRailpackExamplesSeeder extends Seeder
             ],
             [
                 'uuid' => 'railpack-qwik-ssr',
-                'name' => 'Railpack Qwik SSR Example',
+                'name' => 'Railpack Qwik SSR 示例',
                 'base_directory' => '/node/qwik/ssr',
                 'ports_exposes' => '3000',
                 'build_command' => 'npm run build',
@@ -173,7 +173,7 @@ class DevelopmentRailpackExamplesSeeder extends Seeder
             ],
             [
                 'uuid' => 'railpack-react-static',
-                'name' => 'Railpack React Static Example',
+                'name' => 'Railpack React 静态示例',
                 'base_directory' => '/node/react',
                 'ports_exposes' => '80',
                 'build_command' => 'npm run build',
@@ -183,7 +183,7 @@ class DevelopmentRailpackExamplesSeeder extends Seeder
             ],
             [
                 'uuid' => 'railpack-vite-static',
-                'name' => 'Railpack Vite Static Example',
+                'name' => 'Railpack Vite 静态示例',
                 'base_directory' => '/node/vite',
                 'ports_exposes' => '80',
                 'build_command' => 'npm run build',
@@ -193,7 +193,7 @@ class DevelopmentRailpackExamplesSeeder extends Seeder
             ],
             [
                 'uuid' => 'railpack-eleventy-static',
-                'name' => 'Railpack Eleventy Static Example',
+                'name' => 'Railpack Eleventy 静态示例',
                 'base_directory' => '/node/eleventy',
                 'ports_exposes' => '80',
                 'build_command' => 'npm run build',
@@ -202,7 +202,7 @@ class DevelopmentRailpackExamplesSeeder extends Seeder
             ],
             [
                 'uuid' => 'railpack-gatsby-static',
-                'name' => 'Railpack Gatsby Static Example',
+                'name' => 'Railpack Gatsby 静态示例',
                 'base_directory' => '/node/gatsby',
                 'ports_exposes' => '80',
                 'build_command' => 'npm run build',
@@ -211,7 +211,7 @@ class DevelopmentRailpackExamplesSeeder extends Seeder
             ],
             [
                 'uuid' => 'railpack-nextjs-static',
-                'name' => 'Railpack Next.js Static Example',
+                'name' => 'Railpack Next.js 静态示例',
                 'base_directory' => '/node/nextjs/static',
                 'ports_exposes' => '80',
                 'build_command' => 'npm run build',
@@ -221,7 +221,7 @@ class DevelopmentRailpackExamplesSeeder extends Seeder
             ],
             [
                 'uuid' => 'railpack-nuxtjs-static',
-                'name' => 'Railpack NuxtJS Static Example',
+                'name' => 'Railpack NuxtJS 静态示例',
                 'base_directory' => '/node/nuxtjs/static',
                 'ports_exposes' => '80',
                 'build_command' => 'npm run build',
@@ -231,7 +231,7 @@ class DevelopmentRailpackExamplesSeeder extends Seeder
             ],
             [
                 'uuid' => 'railpack-astro-static',
-                'name' => 'Railpack Astro Static Example',
+                'name' => 'Railpack Astro 静态示例',
                 'base_directory' => '/node/astro/static',
                 'ports_exposes' => '80',
                 'build_command' => 'npm run build',
@@ -240,7 +240,7 @@ class DevelopmentRailpackExamplesSeeder extends Seeder
             ],
             [
                 'uuid' => 'railpack-sveltekit-static',
-                'name' => 'Railpack SvelteKit Static Example',
+                'name' => 'Railpack SvelteKit 静态示例',
                 'base_directory' => '/node/sveltekit/static',
                 'ports_exposes' => '80',
                 'build_command' => 'npm run build',
@@ -250,7 +250,7 @@ class DevelopmentRailpackExamplesSeeder extends Seeder
             ],
             [
                 'uuid' => 'railpack-tanstack-start-static',
-                'name' => 'Railpack TanStack Start Static Example',
+                'name' => 'Railpack TanStack Start 静态示例',
                 'base_directory' => '/node/tanstack-start/static',
                 'ports_exposes' => '80',
                 'build_command' => 'npm run build',
@@ -260,7 +260,7 @@ class DevelopmentRailpackExamplesSeeder extends Seeder
             ],
             [
                 'uuid' => 'railpack-angular-static',
-                'name' => 'Railpack Angular Static Example',
+                'name' => 'Railpack Angular 静态示例',
                 'base_directory' => '/node/angular/static',
                 'ports_exposes' => '80',
                 'build_command' => 'npm run build',
@@ -270,7 +270,7 @@ class DevelopmentRailpackExamplesSeeder extends Seeder
             ],
             [
                 'uuid' => 'railpack-vue-static',
-                'name' => 'Railpack Vue Static Example',
+                'name' => 'Railpack Vue 静态示例',
                 'base_directory' => '/node/vue/static',
                 'ports_exposes' => '80',
                 'build_command' => 'npm run build',
@@ -280,7 +280,7 @@ class DevelopmentRailpackExamplesSeeder extends Seeder
             ],
             [
                 'uuid' => 'railpack-qwik-static',
-                'name' => 'Railpack Qwik Static Example',
+                'name' => 'Railpack Qwik 静态示例',
                 'base_directory' => '/node/qwik/static',
                 'ports_exposes' => '80',
                 'build_command' => 'npm run build',
@@ -291,7 +291,7 @@ class DevelopmentRailpackExamplesSeeder extends Seeder
             // Multi-language examples (only available on v4.x branch).
             [
                 'uuid' => 'railpack-python-flask',
-                'name' => 'Railpack Python Flask Example',
+                'name' => 'Railpack Python Flask 示例',
                 'base_directory' => '/flask',
                 'ports_exposes' => '5000',
                 'git_branch' => 'v4.x',
@@ -299,63 +299,63 @@ class DevelopmentRailpackExamplesSeeder extends Seeder
             ],
             [
                 'uuid' => 'railpack-go-gin',
-                'name' => 'Railpack Go Gin Example',
+                'name' => 'Railpack Go Gin 示例',
                 'base_directory' => '/go/gin',
                 'ports_exposes' => '3000',
                 'git_branch' => 'v4.x',
             ],
             [
                 'uuid' => 'railpack-rust',
-                'name' => 'Railpack Rust Example',
+                'name' => 'Railpack Rust 示例',
                 'base_directory' => '/rust',
                 'ports_exposes' => '8000',
                 'git_branch' => 'v4.x',
             ],
             [
                 'uuid' => 'railpack-laravel',
-                'name' => 'Railpack Laravel Example',
+                'name' => 'Railpack Laravel 示例',
                 'base_directory' => '/laravel',
                 'ports_exposes' => '80',
                 'git_branch' => 'v4.x',
             ],
             [
                 'uuid' => 'railpack-laravel-pure',
-                'name' => 'Railpack Laravel Pure Example',
+                'name' => 'Railpack Laravel Pure 示例',
                 'base_directory' => '/laravel-pure',
                 'ports_exposes' => '80',
                 'git_branch' => 'v4.x',
             ],
             [
                 'uuid' => 'railpack-laravel-inertia',
-                'name' => 'Railpack Laravel Inertia Example',
+                'name' => 'Railpack Laravel Inertia 示例',
                 'base_directory' => '/laravel-inertia',
                 'ports_exposes' => '80',
                 'git_branch' => 'v4.x',
             ],
             [
                 'uuid' => 'railpack-symfony',
-                'name' => 'Railpack Symfony Example',
+                'name' => 'Railpack Symfony 示例',
                 'base_directory' => '/symfony',
                 'ports_exposes' => '80',
                 'git_branch' => 'v4.x',
             ],
             [
                 'uuid' => 'railpack-rails',
-                'name' => 'Railpack Ruby on Rails Example',
+                'name' => 'Railpack Ruby on Rails 示例',
                 'base_directory' => '/rails-example',
                 'ports_exposes' => '3000',
                 'git_branch' => 'v4.x',
             ],
             [
                 'uuid' => 'railpack-elixir-phoenix',
-                'name' => 'Railpack Elixir Phoenix Example',
+                'name' => 'Railpack Elixir Phoenix 示例',
                 'base_directory' => '/elixir-phoenix',
                 'ports_exposes' => '4000',
                 'git_branch' => 'v4.x',
             ],
             [
                 'uuid' => 'railpack-bun',
-                'name' => 'Railpack Bun Example',
+                'name' => 'Railpack Bun 示例',
                 'base_directory' => '/bun',
                 'ports_exposes' => '3000',
                 'git_branch' => 'v4.x',
@@ -398,7 +398,7 @@ KEY,
             [
                 'uuid' => 'localhost',
                 'name' => 'localhost',
-                'description' => 'This is a test docker container in development mode',
+                'description' => '这是开发模式下的测试 Docker 容器',
                 'ip' => 'coolify-testing-host',
                 'team_id' => 0,
                 'private_key_id' => 1,
@@ -446,8 +446,8 @@ KEY,
     {
         $project = Project::query()->firstOrNew(['uuid' => self::PROJECT_UUID]);
         $project->fill([
-            'name' => 'Railpack Examples',
-            'description' => 'Development-only Railpack examples from coollabsio/coolify-examples@next.',
+            'name' => 'Railpack 示例',
+            'description' => '仅用于开发环境的 Railpack 示例，来自 coollabsio/coolify-examples@next。',
             'team_id' => 0,
         ]);
         $project->save();

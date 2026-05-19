@@ -11,8 +11,8 @@ class ProjectSeeder extends Seeder
     {
         $project = Project::create([
             'uuid' => 'project',
-            'name' => 'My first project',
-            'description' => 'This is a test project in development',
+            'name' => '我的第一个项目',
+            'description' => '这是开发环境中的测试项目',
             'team_id' => 0,
         ]);
 
