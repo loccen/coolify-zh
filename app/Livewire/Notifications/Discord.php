@@ -153,7 +153,7 @@ class Discord extends Component
             $this->validate([
                 'discordWebhookUrl' => 'required',
             ], [
-                'discordWebhookUrl.required' => 'Discord Webhook URL is required.',
+                'discordWebhookUrl.required' => __('Discord Webhook URL is required.'),
             ]);
             $this->saveModel();
         } catch (\Throwable $e) {
@@ -187,7 +187,7 @@ class Discord extends Component
     {
         $this->syncData(true);
         refreshSession();
-        $this->dispatch('success', 'Settings saved.');
+        $this->dispatch('success', __('Settings saved.'));
     }
 
     public function sendTestNotification()
@@ -195,7 +195,7 @@ class Discord extends Component
         try {
             $this->authorize('sendTest', $this->settings);
             $this->team->notify(new Test(channel: 'discord'));
-            $this->dispatch('success', 'Test notification sent.');
+            $this->dispatch('success', __('Test notification sent.'));
         } catch (\Throwable $e) {
             return handleError($e, $this);
         }

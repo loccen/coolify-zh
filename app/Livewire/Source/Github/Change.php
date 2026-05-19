@@ -165,27 +165,27 @@ class Change extends Component
 
             if (! empty($missingFields)) {
                 $fieldsList = implode(', ', $missingFields);
-                $this->dispatch('error', "Cannot fetch permissions. Please set the following required fields first: {$fieldsList}");
+                $this->dispatch('error', __('Cannot fetch permissions. Please set the following required fields first: :fields', ['fields' => $fieldsList]));
 
                 return;
             }
 
             // Verify the private key exists and is accessible
             if (! $this->github_app->privateKey) {
-                $this->dispatch('error', 'Private Key not found. Please select a valid private key.');
+                $this->dispatch('error', __('Private Key not found. Please select a valid private key.'));
 
                 return;
             }
 
             GithubAppPermissionJob::dispatchSync($this->github_app);
             $this->github_app->refresh()->makeVisible('client_secret')->makeVisible('webhook_secret');
-            $this->dispatch('success', 'Github App permissions updated.');
+            $this->dispatch('success', __('GitHub App permissions updated.'));
         } catch (\Throwable $e) {
             // Provide better error message for unsupported key formats
             $errorMessage = $e->getMessage();
             if (str_contains($errorMessage, 'DECODER routines::unsupported') ||
                 str_contains($errorMessage, 'parse your key')) {
-                $this->dispatch('error', 'The selected private key format is not supported for GitHub Apps. <br><br>Please use an RSA private key in PEM format (BEGIN RSA PRIVATE KEY). <br><br>OpenSSH format keys (BEGIN OPENSSH PRIVATE KEY) are not supported.');
+                $this->dispatch('error', __('The selected private key format is not supported for GitHub Apps. <br><br>Please use an RSA private key in PEM format (BEGIN RSA PRIVATE KEY). <br><br>OpenSSH format keys (BEGIN OPENSSH PRIVATE KEY) are not supported.'));
 
                 return;
             }
@@ -288,7 +288,7 @@ class Change extends Component
             $privateKey = PrivateKey::ownedByCurrentTeam()->find($this->github_app->private_key_id);
 
             if (! $privateKey) {
-                $this->dispatch('error', 'No private key found for this GitHub App.');
+                $this->dispatch('error', __('No private key found for this GitHub App.'));
 
                 return;
             }
@@ -311,13 +311,13 @@ class Change extends Component
                     $privateKey->name = "github-app-{$app_slug}";
                     $privateKey->save();
                     $this->github_app->save();
-                    $this->dispatch('success', 'GitHub App name and SSH key name synchronized successfully.');
+                    $this->dispatch('success', __('GitHub App name and SSH key name synchronized successfully.'));
                 } else {
-                    $this->dispatch('info', 'Could not find App Name (slug) in GitHub response.');
+                    $this->dispatch('info', __('Could not find App Name (slug) in GitHub response.'));
                 }
             } else {
                 $error_message = $response->json()['message'] ?? 'Unknown error';
-                $this->dispatch('error', "Failed to fetch GitHub App information: {$error_message}");
+                $this->dispatch('error', __('Failed to fetch GitHub App information: :error', ['error' => $error_message]));
             }
         } catch (\Throwable $e) {
             return handleError($e, $this);
@@ -334,7 +334,7 @@ class Change extends Component
 
             $this->syncData(true);
             $this->github_app->save();
-            $this->dispatch('success', 'Github App updated.');
+            $this->dispatch('success', __('GitHub App updated.'));
         } catch (\Throwable $e) {
             return handleError($e, $this);
         }
@@ -351,7 +351,7 @@ class Change extends Component
 
         // Redirect to avoid Livewire morphing issues when view structure changes
         return redirect()->route('source.github.show', ['github_app_uuid' => $this->github_app->uuid])
-            ->with('success', 'Github App updated. You can now configure the details.');
+            ->with('success', __('GitHub App updated. You can now configure the details.'));
     }
 
     public function instantSave()
@@ -363,7 +363,7 @@ class Change extends Component
 
             $this->syncData(true);
             $this->github_app->save();
-            $this->dispatch('success', 'Github App updated.');
+            $this->dispatch('success', __('GitHub App updated.'));
         } catch (\Throwable $e) {
             return handleError($e, $this);
         }
@@ -375,7 +375,7 @@ class Change extends Component
             $this->authorize('delete', $this->github_app);
 
             if ($this->github_app->applications->isNotEmpty()) {
-                $this->dispatch('error', 'This source is being used by an application. Please delete all applications first.');
+                $this->dispatch('error', __('This source is being used by an application. Please delete all applications first.'));
                 $this->github_app->makeVisible('client_secret')->makeVisible('webhook_secret');
 
                 return;

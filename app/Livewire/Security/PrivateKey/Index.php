@@ -23,6 +23,6 @@ class Index extends Component
     {
         $this->authorize('create', PrivateKey::class);
         PrivateKey::cleanupUnusedKeys();
-        $this->dispatch('success', 'Unused keys have been cleaned up.');
+        $this->dispatch('success', __('Unused keys have been cleaned up.'));
     }
 }

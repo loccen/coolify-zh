@@ -39,7 +39,7 @@ class CloudInitScripts extends Component
             $script->delete();
             $this->loadScripts();
 
-            $this->dispatch('success', 'Cloud-init script deleted successfully.');
+            $this->dispatch('success', __('Cloud-init script deleted successfully.'));
         } catch (\Throwable $e) {
             return handleError($e, $this);
         }

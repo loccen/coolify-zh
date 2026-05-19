@@ -140,8 +140,8 @@ class Pushover extends Component
                 'pushoverUserKey' => 'required',
                 'pushoverApiToken' => 'required',
             ], [
-                'pushoverUserKey.required' => 'Pushover User Key is required.',
-                'pushoverApiToken.required' => 'Pushover API Token is required.',
+                'pushoverUserKey.required' => __('Pushover User Key is required.'),
+                'pushoverApiToken.required' => __('Pushover API Token is required.'),
             ]);
             $this->saveModel();
         } catch (\Throwable $e) {
@@ -179,7 +179,7 @@ class Pushover extends Component
     {
         $this->syncData(true);
         refreshSession();
-        $this->dispatch('success', 'Settings saved.');
+        $this->dispatch('success', __('Settings saved.'));
     }
 
     public function sendTestNotification()
@@ -187,7 +187,7 @@ class Pushover extends Component
         try {
             $this->authorize('sendTest', $this->settings);
             $this->team->notify(new Test(channel: 'pushover'));
-            $this->dispatch('success', 'Test notification sent.');
+            $this->dispatch('success', __('Test notification sent.'));
         } catch (\Throwable $e) {
             return handleError($e, $this);
         }

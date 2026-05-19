@@ -5,6 +5,7 @@ namespace App\Livewire\Subscription;
 use App\Models\InstanceSettings;
 use App\Providers\RouteServiceProvider;
 use Livewire\Component;
+use Stripe\StripeClient;
 
 class Index extends Component
 {
@@ -52,7 +53,7 @@ class Index extends Component
     {
         try {
             $subscription = currentTeam()->subscription;
-            $stripe = new \Stripe\StripeClient(config('subscription.stripe_api_key'));
+            $stripe = new StripeClient(config('subscription.stripe_api_key'));
             $customer = $stripe->customers->retrieve(currentTeam()->subscription->stripe_customer_id);
             if ($customer) {
                 $subscriptions = $stripe->subscriptions->all(['customer' => $customer->id]);
@@ -77,7 +78,7 @@ class Index extends Component
             // Log the error
             logger()->error('Stripe API error: '.$e->getMessage());
             // Set a flag to show an error message to the user
-            $this->addError('stripe', 'Could not retrieve subscription information. Please try again later.');
+            $this->addError('stripe', __('Could not retrieve subscription information. Please try again later.'));
         } finally {
             $this->loading = false;
         }

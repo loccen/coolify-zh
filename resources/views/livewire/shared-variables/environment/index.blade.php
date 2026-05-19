@@ -1,14 +1,14 @@
 <div>
     <x-slot:title>
-        Environment Variables | Coolify
+        {{ __('Environment Variables') }} | Coolify
     </x-slot>
     <div class="flex gap-2">
-        <h1>Environments</h1>
+        <h1>{{ __('Environments') }}</h1>
     </div>
-    <div class="subtitle">List of your environments by projects.</div>
+    <div class="subtitle">{{ __('List of your environments by projects.') }}</div>
     <div class="flex flex-col gap-2">
         @forelse ($projects as $project)
-            <h2>Project: {{ data_get($project, 'name') }}</h2>
+            <h2>{{ __('Project: :name', ['name' => data_get($project, 'name')]) }}</h2>
             <div class="pt-0 pb-3">{{ data_get($project, 'description') }}</div>
             @forelse ($project->environments as $environment)
                 <a class="coolbox group"
@@ -23,11 +23,11 @@
                     </div>
                 </a>
             @empty
-                <p class="pb-4">No environments found.</p>
+                <p class="pb-4">{{ __('No environments found.') }}</p>
             @endforelse
         @empty
             <div>
-                <div>No project found.</div>
+                <div>{{ __('No project found.') }}</div>
             </div>
         @endforelse
     </div>

@@ -1,11 +1,11 @@
 <div>
     <x-slot:title>
-        Project Variables | Coolify
+        {{ __('Project Variables') }} | Coolify
     </x-slot>
     <div class="flex gap-2">
-        <h1>Projects</h1>
+        <h1>{{ __('Projects') }}</h1>
     </div>
-    <div class="subtitle">List of your projects.</div>
+    <div class="subtitle">{{ __('List of your projects.') }}</div>
     <div class="flex flex-col gap-2">
         @forelse ($projects as $project)
             <a class="coolbox group"
@@ -18,7 +18,7 @@
             </a>
         @empty
             <div>
-                <div>No project found.</div>
+                <div>{{ __('No project found.') }}</div>
             </div>
         @endforelse
     </div>

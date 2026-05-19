@@ -3,6 +3,7 @@
 namespace App\Livewire\Security;
 
 use App\Models\CloudInitScript;
+use App\Rules\ValidCloudInitYaml;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 
@@ -36,16 +37,16 @@ class CloudInitScriptForm extends Component
     {
         return [
             'name' => 'required|string|max:255',
-            'script' => ['required', 'string', new \App\Rules\ValidCloudInitYaml],
+            'script' => ['required', 'string', new ValidCloudInitYaml],
         ];
     }
 
     protected function messages(): array
     {
         return [
-            'name.required' => 'Script name is required.',
-            'name.max' => 'Script name cannot exceed 255 characters.',
-            'script.required' => 'Cloud-init script content is required.',
+            'name.required' => __('Script name is required.'),
+            'name.max' => __('Script name cannot exceed 255 characters.'),
+            'script.required' => __('Cloud-init script content is required.'),
         ];
     }
 
@@ -64,7 +65,7 @@ class CloudInitScriptForm extends Component
                     'script' => $this->script,
                 ]);
 
-                $message = 'Cloud-init script updated successfully.';
+                $message = __('Cloud-init script updated successfully.');
             } else {
                 // Create new script
                 $this->authorize('create', CloudInitScript::class);
@@ -75,7 +76,7 @@ class CloudInitScriptForm extends Component
                     'script' => $this->script,
                 ]);
 
-                $message = 'Cloud-init script created successfully.';
+                $message = __('Cloud-init script created successfully.');
             }
 
             // Only reset fields if creating (not editing)
