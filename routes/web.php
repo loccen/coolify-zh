@@ -33,7 +33,6 @@ use App\Livewire\Project\Service\DatabaseBackups as ServiceDatabaseBackups;
 use App\Livewire\Project\Service\Index as ServiceIndex;
 use App\Livewire\Project\Shared\ExecuteContainerCommand;
 use App\Livewire\Project\Shared\Logs;
-use App\Livewire\Project\Shared\ScheduledTask\Show as ScheduledTaskShow;
 use App\Livewire\Project\Show as ProjectShow;
 use App\Livewire\Security\ApiTokens;
 use App\Livewire\Security\CloudInitScripts;
@@ -88,11 +87,20 @@ use App\Livewire\Terminal\Index as TerminalIndex;
 use App\Models\ScheduledDatabaseBackupExecution;
 use App\Models\ServiceDatabase;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 Route::post('/forgot-password', [Controller::class, 'forgot_password'])->name('password.forgot')->middleware('throttle:forgot-password');
+Route::get('/locale/{locale}', function (string $locale, Request $request) {
+    abort_unless(in_array($locale, ['en', 'zh-cn'], true), 404);
+
+    Cookie::queue(Cookie::make('coolify_locale', $locale, 60 * 24 * 365));
+
+    return redirect()->to($request->headers->get('referer') ?: '/');
+})->name('locale.switch');
 Route::get('/realtime', [Controller::class, 'realtime_test'])->middleware('auth');
 Route::get('/verify', [Controller::class, 'verify'])->middleware('auth')->name('verify.email');
 Route::get('/email/verify/{id}/{hash}', [Controller::class, 'email_verify'])->middleware(['auth'])->name('verify.verify');

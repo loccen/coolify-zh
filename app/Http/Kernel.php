@@ -4,6 +4,7 @@ namespace App\Http;
 
 use App\Http\Middleware\ApiAbility;
 use App\Http\Middleware\ApiSensitiveData;
+use App\Http\Middleware\ApplyLocale;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\CanAccessTerminal;
 use App\Http\Middleware\CanCreateResources;
@@ -67,6 +68,7 @@ class Kernel extends HttpKernel
             EncryptCookies::class,
             AddQueuedCookiesToResponse::class,
             StartSession::class,
+            ApplyLocale::class,
             ShareErrorsFromSession::class,
             VerifyCsrfToken::class,
             SubstituteBindings::class,

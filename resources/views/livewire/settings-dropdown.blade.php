@@ -162,6 +162,25 @@
                     <!-- Divider -->
                     <div class="border-b dark:border-coolgray-500 border-neutral-300"></div>
 
+                    <div class="font-bold border-b dark:border-coolgray-500 border-neutral-300 dark:text-white pb-1">
+                        Language</div>
+                    <a href="{{ route('locale.switch', ['locale' => 'en']) }}"
+                        class="px-1 dropdown-item-no-padding flex items-center justify-between gap-2">
+                        <span>English</span>
+                        @if (app()->getLocale() === 'en')
+                            <span class="text-xs dark:text-neutral-400">✓</span>
+                        @endif
+                    </a>
+                    <a href="{{ route('locale.switch', ['locale' => 'zh-cn']) }}"
+                        class="px-1 dropdown-item-no-padding flex items-center justify-between gap-2">
+                        <span>简体中文</span>
+                        @if (app()->getLocale() === 'zh-cn')
+                            <span class="text-xs dark:text-neutral-400">✓</span>
+                        @endif
+                    </a>
+
+                    <div class="border-b dark:border-coolgray-500 border-neutral-300"></div>
+
                     <!-- Theme Section -->
                     <div class="font-bold border-b dark:border-coolgray-500 border-neutral-300 dark:text-white pb-1">
                         Appearance</div>
