@@ -6,9 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\ViewErrorBag;
-use Tests\TestCase;
-
-uses(TestCase::class, RefreshDatabase::class);
+uses(RefreshDatabase::class);
 
 beforeEach(function () {
     $this->team = Team::create(['name' => '翻译团队']);

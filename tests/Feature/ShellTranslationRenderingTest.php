@@ -10,9 +10,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\ViewErrorBag;
 use Livewire\Livewire;
-use Tests\TestCase;
-
-uses(TestCase::class, RefreshDatabase::class);
+uses(RefreshDatabase::class);
 
 beforeEach(function () {
     InstanceSettings::create(['id' => 0]);
