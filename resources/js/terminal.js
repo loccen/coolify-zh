@@ -3,6 +3,27 @@ import '@xterm/xterm/css/xterm.css';
 import { FitAddon } from '@xterm/addon-fit';
 
 const terminalDebugEnabled = import.meta.env.DEV;
+const terminalI18nFallback = Object.freeze({
+    reasons: Object.freeze({
+        connectionTimeout: 'Connection timeout',
+        failedToCreateWebSocketConnection: 'Failed to create WebSocket connection: :message',
+        websocketErrorOccurred: 'WebSocket error occurred',
+    }),
+    separators: Object.freeze({
+        connectionLost: 'Connection lost at :time, reconnecting...',
+        reconnected: 'Reconnected at :time',
+    }),
+    status: Object.freeze({
+        connectionClosed: '(connection closed)',
+        connectionFailed: '(connection failed - max retries exceeded)',
+        unexpectedError: '(sorry, something went wrong, please try again)',
+    }),
+    toasts: Object.freeze({
+        connectionError: 'Terminal connection error: :reason',
+        inactivityClosed: 'Terminal closed after 30 minutes of inactivity.',
+        reconnecting: 'Terminal websocket connection lost. Reconnecting...',
+    }),
+});
 
 function logTerminal(level, message, ...context) {
     if (!terminalDebugEnabled) {
@@ -12,12 +33,31 @@ function logTerminal(level, message, ...context) {
     console[level](message, ...context);
 }
 
+function getFrontendI18nSection(section, fallback) {
+    const frontendI18n = window.coolifyI18n;
+
+    if (!frontendI18n || typeof frontendI18n !== 'object') {
+        return fallback;
+    }
+
+    return frontendI18n[section] ?? fallback;
+}
+
+function formatI18nMessage(template, replacements = {}) {
+    return Object.entries(replacements).reduce((message, [key, value]) => {
+        return message.replaceAll(`:${key}`, value);
+    }, template);
+}
+
 export function initializeTerminalComponent() {
     function terminalData() {
+        const terminalI18n = getFrontendI18nSection('terminal', terminalI18nFallback);
+
         return {
             fullscreen: false,
             terminalActive: false,
-            message: '(connection closed)',
+            i18n: terminalI18n,
+            message: terminalI18n.status.connectionClosed,
             term: null,
             fitAddon: null,
             socket: null,
@@ -166,14 +206,15 @@ export function initializeTerminalComponent() {
 
             resetTerminal() {
                 if (this.term) {
-                    this.$wire.dispatch('error', 'Terminal websocket connection lost. Reconnecting...');
+                    this.$wire.dispatch('error', this.i18n.toasts.reconnecting);
                     // Preserve scrollback so the user keeps the context of their previous
                     // session. Print a visible marker so they know where the disconnect
                     // happened. Old PTY shell state cannot be restored — this is purely
                     // a visual carry-over.
                     try {
                         const stamp = new Date().toLocaleTimeString();
-                        this.term.write(`\r\n\x1b[33m── Connection lost at ${stamp}, reconnecting... ──\x1b[0m\r\n`);
+                        const message = formatI18nMessage(this.i18n.separators.connectionLost, { time: stamp });
+                        this.term.write(`\r\n\x1b[33m── ${message} ──\x1b[0m\r\n`);
                     } catch (_) {
                         // ignore — terminal not ready to receive writes
                     }
@@ -261,7 +302,7 @@ export function initializeTerminalComponent() {
                         if (this.connectionState === 'connecting') {
                             logTerminal('error', `[Terminal] Connection timeout after ${timeoutMs}ms`);
                             this.socket.close();
-                            this.handleConnectionError('Connection timeout');
+                            this.handleConnectionError(this.i18n.reasons.connectionTimeout);
                         }
                     }, timeoutMs);
 
@@ -272,7 +313,9 @@ export function initializeTerminalComponent() {
 
                 } catch (error) {
                     logTerminal('error', '[Terminal] Failed to create WebSocket:', error);
-                    this.handleConnectionError(`Failed to create WebSocket connection: ${error.message}`);
+                    this.handleConnectionError(formatI18nMessage(this.i18n.reasons.failedToCreateWebSocketConnection, {
+                        message: error.message,
+                    }));
                 }
             },
 
@@ -318,7 +361,7 @@ export function initializeTerminalComponent() {
                 logTerminal('error', '[Terminal] WebSocket error:', error);
                 logTerminal('error', '[Terminal] WebSocket state:', this.socket ? this.socket.readyState : 'No socket');
                 logTerminal('error', '[Terminal] Connection attempt:', this.reconnectAttempts + 1);
-                this.handleConnectionError('WebSocket error occurred');
+                this.handleConnectionError(this.i18n.reasons.websocketErrorOccurred);
             },
 
             handleSocketClose(event) {
@@ -334,7 +377,7 @@ export function initializeTerminalComponent() {
                     // Don't show terminal reset message on first connection attempt
                     if (this.reconnectAttempts > 0) {
                         this.resetTerminal();
-                        this.message = '(connection closed)';
+                        this.message = this.i18n.status.connectionClosed;
                         this.terminalActive = false;
                     }
                     this.scheduleReconnect();
@@ -347,7 +390,7 @@ export function initializeTerminalComponent() {
 
                 // Only dispatch error to UI after a few failed attempts to avoid immediate error on page load
                 if (this.reconnectAttempts >= 2) {
-                    this.$wire.dispatch('error', `Terminal connection error: ${reason}`);
+                    this.$wire.dispatch('error', formatI18nMessage(this.i18n.toasts.connectionError, { reason }));
                 }
 
                 this.scheduleReconnect();
@@ -356,7 +399,7 @@ export function initializeTerminalComponent() {
             scheduleReconnect() {
                 if (this.reconnectAttempts >= this.maxReconnectAttempts) {
                     logTerminal('error', '[Terminal] Max reconnection attempts reached');
-                    this.message = '(connection failed - max retries exceeded)';
+                    this.message = this.i18n.status.connectionFailed;
                     return;
                 }
 
@@ -418,7 +461,8 @@ export function initializeTerminalComponent() {
                         // separator so the new shell prompt is easy to spot.
                         try {
                             const stamp = new Date().toLocaleTimeString();
-                            this.term.write(`\r\n\x1b[32m── Reconnected at ${stamp} ──\x1b[0m\r\n`);
+                            const message = formatI18nMessage(this.i18n.separators.reconnected, { time: stamp });
+                            this.term.write(`\r\n\x1b[32m── ${message} ──\x1b[0m\r\n`);
                         } catch (_) {
                             // ignore — fall through; xterm will render the new prompt anyway
                         }
@@ -450,7 +494,7 @@ export function initializeTerminalComponent() {
                     if (this.term) this.term.reset();
                     this.terminalActive = false;
                     this.lastSentCommand = null;
-                    this.message = '(sorry, something went wrong, please try again)';
+                    this.message = this.i18n.status.unexpectedError;
 
                     // Notify parent component that terminal connection failed
                     this.$wire.dispatch('terminalDisconnected');
@@ -463,7 +507,7 @@ export function initializeTerminalComponent() {
                     // Notify parent component that terminal disconnected
                     this.$wire.dispatch('terminalDisconnected');
                 } else if (event.data === 'idle-timeout') {
-                    this.$wire.dispatch('error', 'Terminal closed after 30 minutes of inactivity.');
+                    this.$wire.dispatch('error', this.i18n.toasts.inactivityClosed);
                     this.terminalActive = false;
                     if (this.term) {
                         this.term.reset();

@@ -78,6 +78,71 @@
 <body class="dark:text-inherit text-black">
     <x-toast />
     <script data-navigate-once>
+        window.coolifyI18n = Object.freeze({
+            toast: Object.freeze({
+                titles: Object.freeze({
+                    error: @js(__('toast.titles.error')),
+                    info: @js(__('toast.titles.info')),
+                    success: @js(__('toast.titles.success')),
+                    warning: @js(__('toast.titles.warning')),
+                }),
+                messages: Object.freeze({
+                    allLogsDownloaded: @js(__('toast.messages.all_logs_downloaded')),
+                    copiedToClipboard: @js(__('toast.messages.copied_to_clipboard')),
+                    logsCopiedToClipboard: @js(__('toast.messages.logs_copied_to_clipboard')),
+                }),
+            }),
+            logs: Object.freeze({
+                copyLogs: @js(__('Copy Logs')),
+                debug: @js(__('Debug')),
+                downloadDisplayedLogs: @js(__('Download displayed logs')),
+                downloadLogs: @js(__('Download Logs')),
+                downloading: @js(__('Downloading...')),
+                error: @js(__('Error')),
+                filterLogLevels: @js(__('Filter Log Levels')),
+                findInLogs: @js(__('Find in logs')),
+                followLogs: @js(__('Follow Logs')),
+                fullscreen: @js(__('Fullscreen')),
+                hideDebugLogs: @js(__('Hide Debug Logs')),
+                info: @js(__('Info')),
+                lines: @js(__('Lines:')),
+                logsCopiedToClipboard: @js(__('toast.messages.logs_copied_to_clipboard')),
+                matchesSuffix: @js(__('matches')),
+                minimize: @js(__('Minimize')),
+                noMatchesFound: @js(__('No matches found.')),
+                numberOfLines: @js(__('Number of Lines (max 50,000)')),
+                refreshLogs: @js(__('Refresh Logs')),
+                showDebugLogs: @js(__('Show Debug Logs')),
+                stopStreaming: @js(__('Stop Streaming')),
+                streamLogs: @js(__('Stream Logs')),
+                success: @js(__('Success')),
+                toggleLogColors: @js(__('Toggle Log Colors')),
+                toggleTimestamps: @js(__('Toggle Timestamps')),
+                warning: @js(__('Warning')),
+            }),
+            terminal: Object.freeze({
+                reasons: Object.freeze({
+                    connectionTimeout: @js(__('terminal.reasons.connection_timeout')),
+                    failedToCreateWebSocketConnection: @js(__('terminal.reasons.failed_to_create_websocket_connection', ['message' => ':message'])),
+                    websocketErrorOccurred: @js(__('terminal.reasons.websocket_error_occurred')),
+                }),
+                separators: Object.freeze({
+                    connectionLost: @js(__('terminal.separators.connection_lost', ['time' => ':time'])),
+                    reconnected: @js(__('terminal.separators.reconnected', ['time' => ':time'])),
+                }),
+                status: Object.freeze({
+                    connectionClosed: @js(__('terminal.status.connection_closed')),
+                    connectionFailed: @js(__('terminal.status.connection_failed')),
+                    unexpectedError: @js(__('terminal.status.unexpected_error')),
+                }),
+                toasts: Object.freeze({
+                    connectionError: @js(__('terminal.toasts.connection_error', ['reason' => ':reason'])),
+                    inactivityClosed: @js(__('terminal.toasts.inactivity_closed')),
+                    reconnecting: @js(__('terminal.toasts.reconnecting')),
+                }),
+            }),
+        });
+
         // Global HTML sanitization function using DOMPurify
         window.sanitizeHTML = function (html) {
             if (!html) return '';
@@ -204,7 +269,8 @@
         let checkIfIamDeadInterval = null;
 
         function copyToClipboard(text) {
-            navigator?.clipboard?.writeText(text) && window.Livewire.dispatch('success', 'Copied to clipboard.');
+            navigator?.clipboard?.writeText(text) &&
+                window.Livewire.dispatch('success', window.coolifyI18n.toast.messages.copiedToClipboard);
         }
         document.addEventListener('livewire:init', () => {
             window.Livewire.on('reloadWindow', (timeout) => {
@@ -219,14 +285,14 @@
             })
             window.Livewire.on('info', (message) => {
                 if (typeof message === 'string') {
-                    window.toast('Info', {
+                    window.toast(window.coolifyI18n.toast.titles.info, {
                         type: 'info',
                         description: message,
                     })
                     return;
                 }
                 if (message.length == 1) {
-                    window.toast('Info', {
+                    window.toast(window.coolifyI18n.toast.titles.info, {
                         type: 'info',
                         description: message[0],
                     })
@@ -239,14 +305,14 @@
             })
             window.Livewire.on('error', (message) => {
                 if (typeof message === 'string') {
-                    window.toast('Error', {
+                    window.toast(window.coolifyI18n.toast.titles.error, {
                         type: 'danger',
                         description: message,
                     })
                     return;
                 }
                 if (message.length == 1) {
-                    window.toast('Error', {
+                    window.toast(window.coolifyI18n.toast.titles.error, {
                         type: 'danger',
                         description: message[0],
                     })
@@ -259,14 +325,14 @@
             })
             window.Livewire.on('warning', (message) => {
                 if (typeof message === 'string') {
-                    window.toast('Warning', {
+                    window.toast(window.coolifyI18n.toast.titles.warning, {
                         type: 'warning',
                         description: message,
                     })
                     return;
                 }
                 if (message.length == 1) {
-                    window.toast('Warning', {
+                    window.toast(window.coolifyI18n.toast.titles.warning, {
                         type: 'warning',
                         description: message[0],
                     })
@@ -279,14 +345,14 @@
             })
             window.Livewire.on('success', (message) => {
                 if (typeof message === 'string') {
-                    window.toast('Success', {
+                    window.toast(window.coolifyI18n.toast.titles.success, {
                         type: 'success',
                         description: message,
                     })
                     return;
                 }
                 if (message.length == 1) {
-                    window.toast('Success', {
+                    window.toast(window.coolifyI18n.toast.titles.success, {
                         type: 'success',
                         description: message[0],
                     })

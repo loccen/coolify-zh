@@ -149,3 +149,14 @@ it('renders translated default toast title in component output', function () {
 
     expect($html)->toContain('Default Toast Notification');
 });
+
+it('defines the frontend i18n payload for toast, logs, and terminal prompts', function () {
+    $layout = file_get_contents(dirname(__DIR__, 2).'/resources/views/layouts/base.blade.php');
+
+    expect($layout)
+        ->toContain('window.coolifyI18n = Object.freeze({')
+        ->toContain("__('toast.titles.success')")
+        ->toContain('logsCopiedToClipboard')
+        ->toContain('matchesSuffix')
+        ->toContain("__('terminal.toasts.reconnecting')");
+});
