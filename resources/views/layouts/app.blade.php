@@ -31,8 +31,10 @@
                 <div class="fixed inset-y-0 right-0 h-full flex">
                     <div class="relative flex flex-1 w-full max-w-56 min-w-0">
                         <div class="absolute top-0 flex justify-center w-16 pt-5 right-full">
-                            <button type="button" class="-m-2.5 p-2.5" x-on:click="open = !open">
-                                <span class="sr-only">Close sidebar</span>
+                            <button type="button" class="-m-2.5 p-2.5" x-on:click="open = !open"
+                                title="{{ __('navigation.close_sidebar') }}"
+                                aria-label="{{ __('navigation.close_sidebar') }}">
+                                <span class="sr-only">{{ __('navigation.close_sidebar') }}</span>
                                 <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                     stroke="currentColor" aria-hidden="true">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -53,7 +55,8 @@
                     <x-navbar />
                 </div>
                 <button type="button" @click="toggleSidebar()"
-                    :title="collapsed ? 'Expand sidebar' : 'Collapse sidebar'"
+                    :title="collapsed ? @js(__('navigation.expand_sidebar')) : @js(__('navigation.collapse_sidebar'))"
+                    :aria-label="collapsed ? @js(__('navigation.expand_sidebar')) : @js(__('navigation.collapse_sidebar'))"
                     class="absolute top-8 -right-3 z-50 hidden lg:flex items-center justify-center w-6 h-6 rounded-full border bg-white dark:bg-coolgray-100 dark:border-coolgray-200 border-neutral-300 hover:bg-neutral-100 dark:hover:bg-coolgray-200 transition-colors shadow-sm">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-neutral-600 dark:text-neutral-300 transition-transform"
                         :class="collapsed ? '' : 'rotate-180'"
@@ -67,11 +70,13 @@
                 class="sticky top-0 z-40 flex items-center justify-between px-4 py-4 gap-x-6 sm:px-6 lg:hidden bg-white/95 dark:bg-base/95 backdrop-blur-sm border-b border-neutral-300/50 dark:border-coolgray-200/50">
                 <div class="flex items-center gap-3 flex-shrink-0">
                     <a href="/"
-                        class="text-xl font-bold tracking-wide dark:text-white hover:opacity-80 transition-opacity">Coolify</a>
+                        class="text-xl font-bold tracking-wide dark:text-white hover:opacity-80 transition-opacity">{{ __('navigation.brand') }}</a>
                     <livewire:switch-team />
                 </div>
-                <button type="button" class="-m-2.5 p-2.5 dark:text-warning" x-on:click="open = !open">
-                    <span class="sr-only">Open sidebar</span>
+                <button type="button" class="-m-2.5 p-2.5 dark:text-warning" x-on:click="open = !open"
+                    title="{{ __('navigation.open_sidebar') }}"
+                    aria-label="{{ __('navigation.open_sidebar') }}">
+                    <span class="sr-only">{{ __('navigation.open_sidebar') }}</span>
                     <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 24 24">
                         <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                             stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />

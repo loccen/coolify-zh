@@ -56,9 +56,9 @@ class SettingsDropdown extends Component
 
         try {
             PullChangelog::dispatch();
-            $this->dispatch('success', 'Changelog fetch initiated! Check back in a few moments.');
+            $this->dispatch('success', __('settings.fetch_latest_started'));
         } catch (\Throwable $e) {
-            $this->dispatch('error', 'Failed to fetch changelog: '.$e->getMessage());
+            $this->dispatch('error', __('settings.fetch_latest_failed', ['message' => $e->getMessage()]));
         }
     }
 
