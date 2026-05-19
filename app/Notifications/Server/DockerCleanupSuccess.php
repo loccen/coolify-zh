@@ -39,7 +39,7 @@ class DockerCleanupSuccess extends CustomEmailNotification
     public function toDiscord(): DiscordMessage
     {
         return new DiscordMessage(
-            title: ':white_check_mark: Coolify: Docker cleanup job succeeded on '.$this->server->name,
+            title: $this->trans('notifications.docker_cleanup_success.discord_title', ['server' => $this->server->name]),
             description: $this->message,
             color: DiscordMessage::successColor(),
         );
@@ -48,24 +48,33 @@ class DockerCleanupSuccess extends CustomEmailNotification
     public function toTelegram(): array
     {
         return [
-            'message' => "Coolify: Docker cleanup job succeeded on {$this->server->name}!\n\n{$this->message}",
+            'message' => $this->trans('notifications.docker_cleanup_success.telegram_message', [
+                'server' => $this->server->name,
+                'message' => $this->message,
+            ]),
         ];
     }
 
     public function toPushover(): PushoverMessage
     {
         return new PushoverMessage(
-            title: 'Docker cleanup job succeeded',
+            title: $this->trans('notifications.docker_cleanup_success.pushover_title'),
             level: 'success',
-            message: "Docker cleanup job succeeded on {$this->server->name}!\n\n{$this->message}",
+            message: $this->trans('notifications.docker_cleanup_success.pushover_message', [
+                'server' => $this->server->name,
+                'message' => $this->message,
+            ]),
         );
     }
 
     public function toSlack(): SlackMessage
     {
         return new SlackMessage(
-            title: 'Coolify: Docker cleanup job succeeded',
-            description: "Docker cleanup job succeeded on '{$this->server->name}'!\n\n{$this->message}",
+            title: $this->trans('notifications.docker_cleanup_success.slack_title'),
+            description: $this->trans('notifications.docker_cleanup_success.slack_description', [
+                'server' => $this->server->name,
+                'message' => $this->message,
+            ]),
             color: SlackMessage::successColor()
         );
     }
@@ -76,7 +85,7 @@ class DockerCleanupSuccess extends CustomEmailNotification
 
         return [
             'success' => true,
-            'message' => 'Docker cleanup job succeeded',
+            'message' => $this->trans('notifications.docker_cleanup_success.webhook_message'),
             'event' => 'docker_cleanup_success',
             'server_name' => $this->server->name,
             'server_uuid' => $this->server->uuid,

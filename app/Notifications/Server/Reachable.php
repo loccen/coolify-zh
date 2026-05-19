@@ -47,8 +47,8 @@ class Reachable extends CustomEmailNotification
     public function toDiscord(): DiscordMessage
     {
         return new DiscordMessage(
-            title: ":white_check_mark: Server '{$this->server->name}' revived",
-            description: 'All automations & integrations are turned on again!',
+            title: $this->trans('notifications.server_reachable.discord_title', ['name' => $this->server->name]),
+            description: $this->trans('notifications.server_reachable.discord_description'),
             color: DiscordMessage::successColor(),
         );
     }
@@ -56,8 +56,8 @@ class Reachable extends CustomEmailNotification
     public function toPushover(): PushoverMessage
     {
         return new PushoverMessage(
-            title: 'Server revived',
-            message: "Server '{$this->server->name}' revived. All automations & integrations are turned on again!",
+            title: $this->trans('notifications.server_reachable.pushover_title'),
+            message: $this->trans('notifications.server_reachable.pushover_message', ['name' => $this->server->name]),
             level: 'success',
         );
     }
@@ -65,15 +65,15 @@ class Reachable extends CustomEmailNotification
     public function toTelegram(): array
     {
         return [
-            'message' => "Coolify: Server '{$this->server->name}' revived. All automations & integrations are turned on again!",
+            'message' => $this->trans('notifications.server_reachable.telegram_message', ['name' => $this->server->name]),
         ];
     }
 
     public function toSlack(): SlackMessage
     {
         return new SlackMessage(
-            title: 'Server revived',
-            description: "Server '{$this->server->name}' revived.\nAll automations & integrations are turned on again!",
+            title: $this->trans('notifications.server_reachable.slack_title'),
+            description: $this->trans('notifications.server_reachable.slack_description', ['name' => $this->server->name]),
             color: SlackMessage::successColor()
         );
     }
@@ -84,7 +84,7 @@ class Reachable extends CustomEmailNotification
 
         return [
             'success' => true,
-            'message' => 'Server revived',
+            'message' => $this->trans('notifications.server_reachable.webhook_message'),
             'event' => 'server_reachable',
             'server_name' => $this->server->name,
             'server_uuid' => $this->server->uuid,

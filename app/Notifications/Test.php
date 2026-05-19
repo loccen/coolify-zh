@@ -75,7 +75,7 @@ class Test extends CustomEmailNotification
 
         $message->addField(
             name: $this->trans('notifications.common.dashboard'),
-            value: '[Link]('.base_url().')',
+            value: "[{$this->trans('notifications.common.link')}](".base_url().')',
             inline: true
         );
 

@@ -47,12 +47,12 @@ class Unreachable extends CustomEmailNotification
     public function toDiscord(): ?DiscordMessage
     {
         $message = new DiscordMessage(
-            title: ':cross_mark: Server unreachable',
-            description: "Your server '{$this->server->name}' is unreachable.",
+            title: $this->trans('notifications.server_unreachable.discord_title'),
+            description: $this->trans('notifications.server_unreachable.discord_description', ['name' => $this->server->name]),
             color: DiscordMessage::errorColor(),
         );
 
-        $message->addField('IMPORTANT', 'We automatically try to revive your server and turn on all automations & integrations.');
+        $message->addField($this->trans('notifications.common.important'), $this->trans('notifications.server_unreachable.discord_important_message'));
 
         return $message;
     }
@@ -60,28 +60,24 @@ class Unreachable extends CustomEmailNotification
     public function toTelegram(): ?array
     {
         return [
-            'message' => "Coolify: Your server '{$this->server->name}' is unreachable. All automations & integrations are turned off! Please check your server! IMPORTANT: We automatically try to revive your server and turn on all automations & integrations.",
+            'message' => $this->trans('notifications.server_unreachable.telegram_message', ['name' => $this->server->name]),
         ];
     }
 
     public function toPushover(): PushoverMessage
     {
         return new PushoverMessage(
-            title: 'Server unreachable',
+            title: $this->trans('notifications.server_unreachable.pushover_title'),
             level: 'error',
-            message: "Your server '{$this->server->name}' is unreachable.<br/>All automations & integrations are turned off!<br/><br/><b>IMPORTANT:</b> We automatically try to revive your server and turn on all automations & integrations.",
+            message: $this->trans('notifications.server_unreachable.pushover_message', ['name' => $this->server->name]),
         );
     }
 
     public function toSlack(): SlackMessage
     {
-        $description = "Your server '{$this->server->name}' is unreachable.\n";
-        $description .= "All automations & integrations are turned off!\n\n";
-        $description .= '*IMPORTANT:* We automatically try to revive your server and turn on all automations & integrations.';
-
         return new SlackMessage(
-            title: 'Server unreachable',
-            description: $description,
+            title: $this->trans('notifications.server_unreachable.slack_title'),
+            description: $this->trans('notifications.server_unreachable.slack_description', ['name' => $this->server->name]),
             color: SlackMessage::errorColor()
         );
     }
@@ -92,7 +88,7 @@ class Unreachable extends CustomEmailNotification
 
         return [
             'success' => false,
-            'message' => 'Server unreachable',
+            'message' => $this->trans('notifications.server_unreachable.webhook_message'),
             'event' => 'server_unreachable',
             'server_name' => $this->server->name,
             'server_uuid' => $this->server->uuid,

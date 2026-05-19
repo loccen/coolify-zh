@@ -91,16 +91,16 @@ class DeploymentSuccess extends CustomEmailNotification
             );
 
             if ($this->preview->fqdn) {
-                $message->addField($this->trans('notifications.common.application'), '[Link]('.$this->preview->fqdn.')');
+                $message->addField($this->trans('notifications.common.application'), "[{$this->trans('notifications.common.open_application')}]({$this->preview->fqdn})");
             }
 
             $message->addField($this->trans('notifications.common.project'), data_get($this->application, 'environment.project.name'), true);
             $message->addField($this->trans('notifications.common.environment'), $this->environment_name, true);
             $message->addField($this->trans('notifications.common.name'), $this->application_name, true);
-            $message->addField($this->trans('notifications.common.deployment_logs'), '[Link]('.$this->deployment_url.')');
+            $message->addField($this->trans('notifications.common.deployment_logs'), "[{$this->trans('notifications.common.link')}]({$this->deployment_url})");
         } else {
             if ($this->fqdn) {
-                $description = '[Open application]('.$this->fqdn.')';
+                $description = "[{$this->trans('notifications.common.open_application')}]({$this->fqdn})";
             } else {
                 $description = '';
             }
@@ -113,7 +113,7 @@ class DeploymentSuccess extends CustomEmailNotification
             $message->addField($this->trans('notifications.common.environment'), $this->environment_name, true);
             $message->addField($this->trans('notifications.common.name'), $this->application_name, true);
 
-            $message->addField($this->trans('notifications.common.deployment_logs'), '[Link]('.$this->deployment_url.')');
+            $message->addField($this->trans('notifications.common.deployment_logs'), "[{$this->trans('notifications.common.link')}]({$this->deployment_url})");
         }
 
         return $message;
@@ -224,7 +224,7 @@ class DeploymentSuccess extends CustomEmailNotification
     {
         $data = [
             'success' => true,
-            'message' => 'New version successfully deployed',
+            'message' => $this->trans('notifications.deployment_success.webhook_message'),
             'event' => 'deployment_success',
             'application_name' => $this->application_name,
             'application_uuid' => $this->application->uuid,

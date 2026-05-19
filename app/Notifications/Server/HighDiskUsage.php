@@ -40,16 +40,16 @@ class HighDiskUsage extends CustomEmailNotification
     public function toDiscord(): DiscordMessage
     {
         $message = new DiscordMessage(
-            title: ':cross_mark: High disk usage detected',
-            description: "Server '{$this->server->name}' high disk usage detected!",
+            title: $this->trans('notifications.server_high_disk_usage.discord_title'),
+            description: $this->trans('notifications.server_high_disk_usage.discord_description', ['name' => $this->server->name]),
             color: DiscordMessage::errorColor(),
             isCritical: true,
         );
 
-        $message->addField('Disk usage', "{$this->disk_usage}%", true);
-        $message->addField('Threshold', "{$this->server_disk_usage_notification_threshold}%", true);
-        $message->addField('What to do?', '[Link](https://coolify.io/docs/knowledge-base/server/automated-cleanup)', true);
-        $message->addField('Change Settings', '[Threshold]('.base_url().'/server/'.$this->server->uuid.'#advanced) | [Notification]('.base_url().'/notifications/discord)');
+        $message->addField($this->trans('notifications.common.disk_usage'), "{$this->disk_usage}%", true);
+        $message->addField($this->trans('notifications.common.threshold'), "{$this->server_disk_usage_notification_threshold}%", true);
+        $message->addField($this->trans('notifications.common.what_to_do'), "[{$this->trans('notifications.common.link')}](https://coolify.io/docs/knowledge-base/server/automated-cleanup)", true);
+        $message->addField($this->trans('notifications.common.change_settings'), "[{$this->trans('notifications.common.threshold')}](".base_url().'/server/'.$this->server->uuid."#advanced) | [{$this->trans('notifications.common.notifications')}](".base_url().'/notifications/discord)');
 
         return $message;
     }
@@ -57,36 +57,43 @@ class HighDiskUsage extends CustomEmailNotification
     public function toTelegram(): array
     {
         return [
-            'message' => "Coolify: Server '{$this->server->name}' high disk usage detected!\nDisk usage: {$this->disk_usage}%. Threshold: {$this->server_disk_usage_notification_threshold}%.\nPlease cleanup your disk to prevent data-loss.\nHere are some tips: https://coolify.io/docs/knowledge-base/server/automated-cleanup.",
+            'message' => $this->trans('notifications.server_high_disk_usage.telegram_message', [
+                'name' => $this->server->name,
+                'diskUsage' => $this->disk_usage,
+                'threshold' => $this->server_disk_usage_notification_threshold,
+            ]),
         ];
     }
 
     public function toPushover(): PushoverMessage
     {
         return new PushoverMessage(
-            title: 'High disk usage detected',
+            title: $this->trans('notifications.server_high_disk_usage.pushover_title'),
             level: 'warning',
-            message: "Server '{$this->server->name}' high disk usage detected!<br/><br/><b>Disk usage:</b> {$this->disk_usage}%.<br/><b>Threshold:</b> {$this->server_disk_usage_notification_threshold}%.<br/>Please cleanup your disk to prevent data-loss.",
+            message: $this->trans('notifications.server_high_disk_usage.pushover_message', [
+                'name' => $this->server->name,
+                'diskUsage' => $this->disk_usage,
+                'threshold' => $this->server_disk_usage_notification_threshold,
+            ]),
             buttons: [
-                'Change settings' => base_url().'/server/'.$this->server->uuid.'#advanced',
-                'Tips for cleanup' => 'https://coolify.io/docs/knowledge-base/server/automated-cleanup',
+                $this->trans('notifications.common.change_settings') => base_url().'/server/'.$this->server->uuid.'#advanced',
+                $this->trans('notifications.common.tips_for_cleanup') => 'https://coolify.io/docs/knowledge-base/server/automated-cleanup',
             ],
         );
     }
 
     public function toSlack(): SlackMessage
     {
-        $description = "Server '{$this->server->name}' high disk usage detected!\n";
-        $description .= "Disk usage: {$this->disk_usage}%\n";
-        $description .= "Threshold: {$this->server_disk_usage_notification_threshold}%\n\n";
-        $description .= "Please cleanup your disk to prevent data-loss.\n";
-        $description .= "Tips for cleanup: https://coolify.io/docs/knowledge-base/server/automated-cleanup\n";
-        $description .= "Change settings:\n";
-        $description .= '- Threshold: '.base_url().'/server/'.$this->server->uuid."#advanced\n";
-        $description .= '- Notifications: '.base_url().'/notifications/slack';
+        $description = $this->trans('notifications.server_high_disk_usage.slack_description', ['name' => $this->server->name])."\n";
+        $description .= $this->trans('notifications.common.disk_usage').": {$this->disk_usage}%\n";
+        $description .= $this->trans('notifications.common.threshold').": {$this->server_disk_usage_notification_threshold}%\n\n";
+        $description .= $this->trans('notifications.common.tips_for_cleanup').": https://coolify.io/docs/knowledge-base/server/automated-cleanup\n";
+        $description .= $this->trans('notifications.common.change_settings').":\n";
+        $description .= '- '.$this->trans('notifications.common.threshold').': '.base_url().'/server/'.$this->server->uuid."#advanced\n";
+        $description .= '- '.$this->trans('notifications.common.notifications').': '.base_url().'/notifications/slack';
 
         return new SlackMessage(
-            title: 'High disk usage detected',
+            title: $this->trans('notifications.server_high_disk_usage.slack_title'),
             description: $description,
             color: SlackMessage::errorColor()
         );
@@ -96,7 +103,7 @@ class HighDiskUsage extends CustomEmailNotification
     {
         return [
             'success' => false,
-            'message' => 'High disk usage detected',
+            'message' => $this->trans('notifications.server_high_disk_usage.webhook_message'),
             'event' => 'high_disk_usage',
             'server_name' => $this->server->name,
             'server_uuid' => $this->server->uuid,

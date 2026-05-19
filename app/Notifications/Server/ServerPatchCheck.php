@@ -63,21 +63,20 @@ class ServerPatchCheck extends CustomEmailNotification
 
     public function toDiscord(): DiscordMessage
     {
-        // Handle error case
         if (isset($this->patchData['error'])) {
             $osId = $this->patchData['osId'] ?? 'unknown';
             $packageManager = $this->patchData['package_manager'] ?? 'unknown';
             $error = $this->patchData['error'];
 
-            $description = "**Failed to check for updates** on server {$this->server->name}\n\n";
-            $description .= "**Error Details:**\n";
-            $description .= '• OS: '.ucfirst($osId)."\n";
-            $description .= "• Package Manager: {$packageManager}\n";
-            $description .= "• Error: {$error}\n\n";
-            $description .= "[Manage Server]($this->serverUrl)";
+            $description = $this->trans('notifications.server_patch_check.error.discord_description', ['server' => $this->server->name])."\n\n";
+            $description .= '**'.$this->trans('notifications.common.error_details').":**\n";
+            $description .= '• '.$this->trans('notifications.common.operating_system').': '.ucfirst($osId)."\n";
+            $description .= '• '.$this->trans('notifications.common.package_manager').": {$packageManager}\n";
+            $description .= '• '.$this->trans('notifications.common.error').": {$error}\n\n";
+            $description .= "[{$this->trans('notifications.common.manage_server')}]($this->serverUrl)";
 
             return new DiscordMessage(
-                title: ':x: Coolify: [ERROR] Failed to check patches on '.$this->server->name,
+                title: $this->trans('notifications.server_patch_check.error.discord_title', ['server' => $this->server->name]),
                 description: $description,
                 color: DiscordMessage::errorColor(),
             );
@@ -88,24 +87,25 @@ class ServerPatchCheck extends CustomEmailNotification
         $osId = $this->patchData['osId'] ?? 'unknown';
         $packageManager = $this->patchData['package_manager'] ?? 'unknown';
 
-        $description = "**{$totalUpdates} package updates** available for server {$this->server->name}\n\n";
-        $description .= "**Summary:**\n";
-        $description .= '• OS: '.ucfirst($osId)."\n";
-        $description .= "• Package Manager: {$packageManager}\n";
-        $description .= "• Total Updates: {$totalUpdates}\n\n";
+        $description = $this->trans('notifications.server_patch_check.available.discord_description', [
+            'count' => $totalUpdates,
+            'server' => $this->server->name,
+        ])."\n\n";
+        $description .= '**'.$this->trans('notifications.common.summary').":**\n";
+        $description .= '• '.$this->trans('notifications.common.operating_system').': '.ucfirst($osId)."\n";
+        $description .= '• '.$this->trans('notifications.common.package_manager').": {$packageManager}\n";
+        $description .= '• '.$this->trans('notifications.common.total_updates').": {$totalUpdates}\n\n";
 
-        // Show first few packages
         if (count($updates) > 0) {
-            $description .= "**Sample Updates:**\n";
+            $description .= '**'.$this->trans('notifications.common.sample_updates').":**\n";
             $sampleUpdates = array_slice($updates, 0, 5);
             foreach ($sampleUpdates as $update) {
                 $description .= "• {$update['package']}: {$update['current_version']} → {$update['new_version']}\n";
             }
             if (count($updates) > 5) {
-                $description .= '• ... and '.(count($updates) - 5)." more packages\n";
+                $description .= '• '.$this->trans('notifications.common.more_packages', ['count' => count($updates) - 5])."\n";
             }
 
-            // Check for critical packages
             $criticalPackages = collect($updates)->filter(function ($update) {
                 return str_contains(strtolower($update['package']), 'docker') ||
                     str_contains(strtolower($update['package']), 'kernel') ||
@@ -114,13 +114,15 @@ class ServerPatchCheck extends CustomEmailNotification
             });
 
             if ($criticalPackages->count() > 0) {
-                $description .= "\n **Critical packages detected** ({$criticalPackages->count()} packages may require restarts)";
+                $description .= "\n**".$this->trans('notifications.server_patch_check.available.critical_packages_detected').'** ';
+                $description .= '('.$this->trans('notifications.common.packages_may_require_restarts', ['count' => $criticalPackages->count()]).')';
             }
-            $description .= "\n [Manage Server Patches]($this->serverUrl)";
         }
 
+        $description .= "\n[{$this->trans('notifications.common.manage_server_patches')}]($this->serverUrl)";
+
         return new DiscordMessage(
-            title: ':warning: Coolify: [ACTION REQUIRED] Server patches available on '.$this->server->name,
+            title: $this->trans('notifications.server_patch_check.available.discord_title', ['server' => $this->server->name]),
             description: $description,
             color: DiscordMessage::errorColor(),
         );
@@ -129,23 +131,22 @@ class ServerPatchCheck extends CustomEmailNotification
 
     public function toTelegram(): array
     {
-        // Handle error case
         if (isset($this->patchData['error'])) {
             $osId = $this->patchData['osId'] ?? 'unknown';
             $packageManager = $this->patchData['package_manager'] ?? 'unknown';
             $error = $this->patchData['error'];
 
-            $message = "❌ Coolify: [ERROR] Failed to check patches on {$this->server->name}!\n\n";
-            $message .= "📊 Error Details:\n";
-            $message .= '• OS: '.ucfirst($osId)."\n";
-            $message .= "• Package Manager: {$packageManager}\n";
-            $message .= "• Error: {$error}\n\n";
+            $message = $this->trans('notifications.server_patch_check.error.telegram_message', ['server' => $this->server->name])."\n\n";
+            $message .= $this->trans('notifications.common.error_details').":\n";
+            $message .= '• '.$this->trans('notifications.common.operating_system').': '.ucfirst($osId)."\n";
+            $message .= '• '.$this->trans('notifications.common.package_manager').": {$packageManager}\n";
+            $message .= '• '.$this->trans('notifications.common.error').": {$error}\n\n";
 
             return [
                 'message' => $message,
                 'buttons' => [
                     [
-                        'text' => 'Manage Server',
+                        'text' => $this->trans('notifications.common.manage_server'),
                         'url' => $this->serverUrl,
                     ],
                 ],
@@ -157,23 +158,25 @@ class ServerPatchCheck extends CustomEmailNotification
         $osId = $this->patchData['osId'] ?? 'unknown';
         $packageManager = $this->patchData['package_manager'] ?? 'unknown';
 
-        $message = "🔧 Coolify: [ACTION REQUIRED] {$totalUpdates} server patches available on {$this->server->name}!\n\n";
-        $message .= "📊 Summary:\n";
-        $message .= '• OS: '.ucfirst($osId)."\n";
-        $message .= "• Package Manager: {$packageManager}\n";
-        $message .= "• Total Updates: {$totalUpdates}\n\n";
+        $message = $this->trans('notifications.server_patch_check.available.telegram_message', [
+            'count' => $totalUpdates,
+            'server' => $this->server->name,
+        ])."\n\n";
+        $message .= $this->trans('notifications.common.summary').":\n";
+        $message .= '• '.$this->trans('notifications.common.operating_system').': '.ucfirst($osId)."\n";
+        $message .= '• '.$this->trans('notifications.common.package_manager').": {$packageManager}\n";
+        $message .= '• '.$this->trans('notifications.common.total_updates').": {$totalUpdates}\n\n";
 
         if (count($updates) > 0) {
-            $message .= "📦 Sample Updates:\n";
+            $message .= $this->trans('notifications.common.sample_updates').":\n";
             $sampleUpdates = array_slice($updates, 0, 5);
             foreach ($sampleUpdates as $update) {
                 $message .= "• {$update['package']}: {$update['current_version']} → {$update['new_version']}\n";
             }
             if (count($updates) > 5) {
-                $message .= '• ... and '.(count($updates) - 5)." more packages\n";
+                $message .= '• '.$this->trans('notifications.common.more_packages', ['count' => count($updates) - 5])."\n";
             }
 
-            // Check for critical packages
             $criticalPackages = collect($updates)->filter(function ($update) {
                 return str_contains(strtolower($update['package']), 'docker') ||
                     str_contains(strtolower($update['package']), 'kernel') ||
@@ -182,12 +185,13 @@ class ServerPatchCheck extends CustomEmailNotification
             });
 
             if ($criticalPackages->count() > 0) {
-                $message .= "\n⚠️ Critical packages detected: {$criticalPackages->count()} packages may require restarts\n";
+                $message .= "\n⚠️ ".$this->trans('notifications.server_patch_check.available.critical_packages_detected').': ';
+                $message .= $this->trans('notifications.common.packages_may_require_restarts', ['count' => $criticalPackages->count()])."\n";
                 foreach ($criticalPackages->take(3) as $package) {
                     $message .= "• {$package['package']}: {$package['current_version']} → {$package['new_version']}\n";
                 }
                 if ($criticalPackages->count() > 3) {
-                    $message .= '• ... and '.($criticalPackages->count() - 3)." more critical packages\n";
+                    $message .= '• '.$this->trans('notifications.common.more_critical_packages', ['count' => $criticalPackages->count() - 3])."\n";
                 }
             }
         }
@@ -196,7 +200,7 @@ class ServerPatchCheck extends CustomEmailNotification
             'message' => $message,
             'buttons' => [
                 [
-                    'text' => 'Manage Server Patches',
+                    'text' => $this->trans('notifications.common.manage_server_patches'),
                     'url' => $this->serverUrl,
                 ],
             ],
@@ -205,25 +209,24 @@ class ServerPatchCheck extends CustomEmailNotification
 
     public function toPushover(): PushoverMessage
     {
-        // Handle error case
         if (isset($this->patchData['error'])) {
             $osId = $this->patchData['osId'] ?? 'unknown';
             $packageManager = $this->patchData['package_manager'] ?? 'unknown';
             $error = $this->patchData['error'];
 
-            $message = "[ERROR] Failed to check patches on {$this->server->name}!\n\n";
-            $message .= "Error Details:\n";
-            $message .= '• OS: '.ucfirst($osId)."\n";
-            $message .= "• Package Manager: {$packageManager}\n";
-            $message .= "• Error: {$error}\n\n";
+            $message = $this->trans('notifications.server_patch_check.error.pushover_message', ['server' => $this->server->name])."\n\n";
+            $message .= $this->trans('notifications.common.error_details').":\n";
+            $message .= '• '.$this->trans('notifications.common.operating_system').': '.ucfirst($osId)."\n";
+            $message .= '• '.$this->trans('notifications.common.package_manager').": {$packageManager}\n";
+            $message .= '• '.$this->trans('notifications.common.error').": {$error}\n\n";
 
             return new PushoverMessage(
-                title: 'Server patch check failed',
+                title: $this->trans('notifications.server_patch_check.error.pushover_title'),
                 level: 'error',
                 message: $message,
                 buttons: [
                     [
-                        'text' => 'Manage Server',
+                        'text' => $this->trans('notifications.common.manage_server'),
                         'url' => $this->serverUrl,
                     ],
                 ],
@@ -235,23 +238,25 @@ class ServerPatchCheck extends CustomEmailNotification
         $osId = $this->patchData['osId'] ?? 'unknown';
         $packageManager = $this->patchData['package_manager'] ?? 'unknown';
 
-        $message = "[ACTION REQUIRED] {$totalUpdates} server patches available on {$this->server->name}!\n\n";
-        $message .= "Summary:\n";
-        $message .= '• OS: '.ucfirst($osId)."\n";
-        $message .= "• Package Manager: {$packageManager}\n";
-        $message .= "• Total Updates: {$totalUpdates}\n\n";
+        $message = $this->trans('notifications.server_patch_check.available.pushover_message', [
+            'count' => $totalUpdates,
+            'server' => $this->server->name,
+        ])."\n\n";
+        $message .= $this->trans('notifications.common.summary').":\n";
+        $message .= '• '.$this->trans('notifications.common.operating_system').': '.ucfirst($osId)."\n";
+        $message .= '• '.$this->trans('notifications.common.package_manager').": {$packageManager}\n";
+        $message .= '• '.$this->trans('notifications.common.total_updates').": {$totalUpdates}\n\n";
 
         if (count($updates) > 0) {
-            $message .= "Sample Updates:\n";
+            $message .= $this->trans('notifications.common.sample_updates').":\n";
             $sampleUpdates = array_slice($updates, 0, 3);
             foreach ($sampleUpdates as $update) {
                 $message .= "• {$update['package']}: {$update['current_version']} → {$update['new_version']}\n";
             }
             if (count($updates) > 3) {
-                $message .= '• ... and '.(count($updates) - 3)." more packages\n";
+                $message .= '• '.$this->trans('notifications.common.more_packages', ['count' => count($updates) - 3])."\n";
             }
 
-            // Check for critical packages
             $criticalPackages = collect($updates)->filter(function ($update) {
                 return str_contains(strtolower($update['package']), 'docker') ||
                     str_contains(strtolower($update['package']), 'kernel') ||
@@ -260,17 +265,18 @@ class ServerPatchCheck extends CustomEmailNotification
             });
 
             if ($criticalPackages->count() > 0) {
-                $message .= "\nCritical packages detected: {$criticalPackages->count()} may require restarts";
+                $message .= "\n".$this->trans('notifications.server_patch_check.available.critical_packages_detected').': ';
+                $message .= $this->trans('notifications.common.packages_may_require_restarts', ['count' => $criticalPackages->count()]);
             }
         }
 
         return new PushoverMessage(
-            title: 'Server patches available',
+            title: $this->trans('notifications.server_patch_check.available.pushover_title'),
             level: 'error',
             message: $message,
             buttons: [
                 [
-                    'text' => 'Manage Server Patches',
+                    'text' => $this->trans('notifications.common.manage_server_patches'),
                     'url' => $this->serverUrl,
                 ],
             ],
@@ -279,21 +285,20 @@ class ServerPatchCheck extends CustomEmailNotification
 
     public function toSlack(): SlackMessage
     {
-        // Handle error case
         if (isset($this->patchData['error'])) {
             $osId = $this->patchData['osId'] ?? 'unknown';
             $packageManager = $this->patchData['package_manager'] ?? 'unknown';
             $error = $this->patchData['error'];
 
-            $description = "Failed to check patches on '{$this->server->name}'!\n\n";
-            $description .= "*Error Details:*\n";
-            $description .= '• OS: '.ucfirst($osId)."\n";
-            $description .= "• Package Manager: {$packageManager}\n";
-            $description .= "• Error: `{$error}`\n\n";
-            $description .= "\n:link: <{$this->serverUrl}|Manage Server>";
+            $description = $this->trans('notifications.server_patch_check.error.slack_description', ['server' => $this->server->name])."\n\n";
+            $description .= '*'.$this->trans('notifications.common.error_details').":*\n";
+            $description .= '• '.$this->trans('notifications.common.operating_system').': '.ucfirst($osId)."\n";
+            $description .= '• '.$this->trans('notifications.common.package_manager').": {$packageManager}\n";
+            $description .= '• '.$this->trans('notifications.common.error').": `{$error}`\n\n";
+            $description .= "\n:link: <{$this->serverUrl}|".$this->trans('notifications.common.manage_server').'>';
 
             return new SlackMessage(
-                title: 'Coolify: [ERROR] Server patch check failed',
+                title: $this->trans('notifications.server_patch_check.error.slack_title'),
                 description: $description,
                 color: SlackMessage::errorColor()
             );
@@ -304,23 +309,25 @@ class ServerPatchCheck extends CustomEmailNotification
         $osId = $this->patchData['osId'] ?? 'unknown';
         $packageManager = $this->patchData['package_manager'] ?? 'unknown';
 
-        $description = "{$totalUpdates} server patches available on '{$this->server->name}'!\n\n";
-        $description .= "*Summary:*\n";
-        $description .= '• OS: '.ucfirst($osId)."\n";
-        $description .= "• Package Manager: {$packageManager}\n";
-        $description .= "• Total Updates: {$totalUpdates}\n\n";
+        $description = $this->trans('notifications.server_patch_check.available.slack_description', [
+            'count' => $totalUpdates,
+            'server' => $this->server->name,
+        ])."\n\n";
+        $description .= '*'.$this->trans('notifications.common.summary').":*\n";
+        $description .= '• '.$this->trans('notifications.common.operating_system').': '.ucfirst($osId)."\n";
+        $description .= '• '.$this->trans('notifications.common.package_manager').": {$packageManager}\n";
+        $description .= '• '.$this->trans('notifications.common.total_updates').": {$totalUpdates}\n\n";
 
         if (count($updates) > 0) {
-            $description .= "*Sample Updates:*\n";
+            $description .= '*'.$this->trans('notifications.common.sample_updates').":*\n";
             $sampleUpdates = array_slice($updates, 0, 5);
             foreach ($sampleUpdates as $update) {
                 $description .= "• `{$update['package']}`: {$update['current_version']} → {$update['new_version']}\n";
             }
             if (count($updates) > 5) {
-                $description .= '• ... and '.(count($updates) - 5)." more packages\n";
+                $description .= '• '.$this->trans('notifications.common.more_packages', ['count' => count($updates) - 5])."\n";
             }
 
-            // Check for critical packages
             $criticalPackages = collect($updates)->filter(function ($update) {
                 return str_contains(strtolower($update['package']), 'docker') ||
                     str_contains(strtolower($update['package']), 'kernel') ||
@@ -329,20 +336,21 @@ class ServerPatchCheck extends CustomEmailNotification
             });
 
             if ($criticalPackages->count() > 0) {
-                $description .= "\n:warning: *Critical packages detected:* {$criticalPackages->count()} packages may require restarts\n";
+                $description .= "\n:warning: *".$this->trans('notifications.server_patch_check.available.critical_packages_detected').':* ';
+                $description .= $this->trans('notifications.common.packages_may_require_restarts', ['count' => $criticalPackages->count()])."\n";
                 foreach ($criticalPackages->take(3) as $package) {
                     $description .= "• `{$package['package']}`: {$package['current_version']} → {$package['new_version']}\n";
                 }
                 if ($criticalPackages->count() > 3) {
-                    $description .= '• ... and '.($criticalPackages->count() - 3)." more critical packages\n";
+                    $description .= '• '.$this->trans('notifications.common.more_critical_packages', ['count' => $criticalPackages->count() - 3])."\n";
                 }
             }
         }
 
-        $description .= "\n:link: <{$this->serverUrl}|Manage Server Patches>";
+        $description .= "\n:link: <{$this->serverUrl}|".$this->trans('notifications.common.manage_server_patches').'>';
 
         return new SlackMessage(
-            title: 'Coolify: [ACTION REQUIRED] Server patches available',
+            title: $this->trans('notifications.server_patch_check.available.slack_title'),
             description: $description,
             color: SlackMessage::errorColor()
         );
@@ -354,7 +362,7 @@ class ServerPatchCheck extends CustomEmailNotification
         if (isset($this->patchData['error'])) {
             return [
                 'success' => false,
-                'message' => 'Failed to check patches',
+                'message' => $this->trans('notifications.server_patch_check.error.webhook_message'),
                 'event' => 'server_patch_check_error',
                 'server_name' => $this->server->name,
                 'server_uuid' => $this->server->uuid,
@@ -368,7 +376,6 @@ class ServerPatchCheck extends CustomEmailNotification
         $totalUpdates = $this->patchData['total_updates'] ?? 0;
         $updates = $this->patchData['updates'] ?? [];
 
-        // Check for critical packages
         $criticalPackages = collect($updates)->filter(function ($update) {
             return str_contains(strtolower($update['package']), 'docker') ||
                 str_contains(strtolower($update['package']), 'kernel') ||
@@ -378,7 +385,7 @@ class ServerPatchCheck extends CustomEmailNotification
 
         return [
             'success' => false,
-            'message' => 'Server patches available',
+            'message' => $this->trans('notifications.server_patch_check.available.webhook_message'),
             'event' => 'server_patch_check',
             'server_name' => $this->server->name,
             'server_uuid' => $this->server->uuid,

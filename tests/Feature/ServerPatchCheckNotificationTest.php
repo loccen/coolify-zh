@@ -4,6 +4,8 @@ use App\Models\InstanceSettings;
 use App\Models\Server;
 use App\Notifications\Server\ServerPatchCheck;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Once;
 
 uses(RefreshDatabase::class);
 
@@ -11,13 +13,14 @@ beforeEach(function () {
     // Create a real InstanceSettings record in the test database
     // This avoids Mockery alias/overload issues that pollute global state
     $this->setInstanceSettings = function ($fqdn = null, $publicIpv4 = null, $publicIpv6 = null) {
-        InstanceSettings::query()->delete();
-        InstanceSettings::create([
+        DB::table('instance_settings')->delete();
+        DB::table('instance_settings')->insert([
             'id' => 0,
             'fqdn' => $fqdn,
             'public_ipv4' => $publicIpv4,
             'public_ipv6' => $publicIpv6,
         ]);
+        Once::flush();
     };
 
     $this->createMockServer = function ($uuid, $name = 'Test Server') {
@@ -143,4 +146,40 @@ it('uses correct url in error notifications', function () {
     $webhook = $notification->toWebhook();
     expect($webhook['url'])->toBe('https://coolify.production.com/server/error-server-uuid/security/patches')
         ->and($webhook['event'])->toBe('server_patch_check_error');
+});
+
+it('renders translated channel text for patch notifications', function () {
+    ($this->setInstanceSettings)('https://coolify.zh.test');
+
+    $mockServer = ($this->createMockServer)('zh-server-uuid', '中文服务器');
+
+    $notification = new ServerPatchCheck($mockServer, [
+        'total_updates' => 4,
+        'updates' => [
+            [
+                'package' => 'docker-ce',
+                'current_version' => '27.0',
+                'new_version' => '27.1',
+                'architecture' => 'amd64',
+                'repository' => 'stable',
+            ],
+        ],
+        'osId' => 'ubuntu',
+        'package_manager' => 'apt',
+    ]);
+    $notification->locale = 'zh_CN';
+
+    expect($notification->toSlack()->title)->toBe('Coolify: [需要处理] 服务器补丁可用')
+        ->and($notification->toTelegram()['buttons'][0]['text'])->toBe('管理服务器补丁')
+        ->and($notification->toWebhook()['message'])->toBe('服务器补丁可用');
+
+    $errorNotification = new ServerPatchCheck($mockServer, [
+        'error' => '无法连接软件源',
+        'osId' => 'ubuntu',
+        'package_manager' => 'apt',
+    ]);
+    $errorNotification->locale = 'zh_CN';
+
+    expect($errorNotification->toDiscord()->title)->toBe(':x: Coolify: [错误] 中文服务器 的补丁检查失败')
+        ->and($errorNotification->toWebhook()['message'])->toBe('补丁检查失败');
 });

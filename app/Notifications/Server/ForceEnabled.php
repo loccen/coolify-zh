@@ -38,8 +38,8 @@ class ForceEnabled extends CustomEmailNotification
     public function toDiscord(): DiscordMessage
     {
         return new DiscordMessage(
-            title: ':white_check_mark: Server enabled',
-            description: "Server '{$this->server->name}' enabled again!",
+            title: $this->trans('notifications.server_force_enabled.discord_title'),
+            description: $this->trans('notifications.server_force_enabled.discord_description', ['name' => $this->server->name]),
             color: DiscordMessage::successColor(),
         );
     }
@@ -47,24 +47,24 @@ class ForceEnabled extends CustomEmailNotification
     public function toTelegram(): array
     {
         return [
-            'message' => "Coolify: Server ({$this->server->name}) enabled again!",
+            'message' => $this->trans('notifications.server_force_enabled.telegram_message', ['name' => $this->server->name]),
         ];
     }
 
     public function toPushover(): PushoverMessage
     {
         return new PushoverMessage(
-            title: 'Server enabled',
+            title: $this->trans('notifications.server_force_enabled.pushover_title'),
             level: 'success',
-            message: "Server ({$this->server->name}) enabled again!",
+            message: $this->trans('notifications.server_force_enabled.pushover_message', ['name' => $this->server->name]),
         );
     }
 
     public function toSlack(): SlackMessage
     {
         return new SlackMessage(
-            title: 'Server enabled',
-            description: "Server '{$this->server->name}' enabled again!",
+            title: $this->trans('notifications.server_force_enabled.slack_title'),
+            description: $this->trans('notifications.server_force_enabled.slack_description', ['name' => $this->server->name]),
             color: SlackMessage::successColor()
         );
     }
