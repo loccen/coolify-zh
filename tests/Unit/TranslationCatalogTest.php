@@ -23,6 +23,9 @@ it('keeps json translations working beside migrated php files', function () {
 
     expect(__('auth.login'))->toBe('登录')
         ->and(__('auth.login.github'))->toBe('使用 GitHub 登录')
+        ->and(__('Authentication'))->toBe('认证')
+        ->and(__('Two-Factor Authentication'))->toBe('双重验证')
+        ->and(__('Close sidebar'))->toBe('关闭侧边栏')
         ->and(__('repository.url'))->toContain('https://github.com/coollabsio/coolify-examples')
         ->and(__('warning.sslipdomain'))->toContain('sslip');
 });

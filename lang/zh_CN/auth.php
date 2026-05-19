@@ -1,15 +1,15 @@
 <?php
 
 return [
-    'already_registered' => '已经注册？',
+    'already_registered' => '已有账号？',
     'confirm_password' => '确认密码',
-    'failed' => '这些凭据与我们的记录不符',
-    'failed.callback' => '处理第三方登录的回调时出错',
-    'failed.email' => '该账户未注册',
-    'failed.password' => '密码错误',
-    'forgot_password_heading' => '密码找回',
+    'failed' => '账号信息不正确。',
+    'failed.callback' => '处理登录回调失败。',
+    'failed.email' => '如果该邮箱已注册，你很快会收到密码重置链接。',
+    'failed.password' => '密码不正确。',
+    'forgot_password_heading' => '找回密码',
     'forgot_password_link' => '忘记密码？',
-    'forgot_password_send_email' => '发送密码重置邮件',
+    'forgot_password_send_email' => '发送重置邮件',
     'login' => '登录',
     'login.authentik' => '使用 Authentik 登录',
     'login.azure' => '使用 Microsoft 登录',
@@ -23,8 +23,8 @@ return [
     'login.zitadel' => '使用 Zitadel 登录',
     'logout' => '退出登录',
     'register' => '注册',
-    'register_now' => '注册',
+    'register_now' => '立即注册',
     'registration_disabled' => '注册已禁用，请联系管理员',
     'reset_password' => '重置密码',
-    'throttle' => '登录次数过多，请在 :seconds 秒后重试',
+    'throttle' => '登录次数过多，请在 :seconds 秒后重试。',
 ];
