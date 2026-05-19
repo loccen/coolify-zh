@@ -56,3 +56,10 @@ it('renders translated slack notification settings copy', function () {
         ->and($catalog['Select events for which you would like to receive Slack notifications.'])
         ->toBe('选择你希望接收 Slack 通知的事件。');
 });
+
+it('keeps Docker terminology untranslated in zh_CN catalog', function () {
+    $catalog = json_decode(file_get_contents(__DIR__.'/../../lang/zh_CN.json'), true, 512, JSON_THROW_ON_ERROR);
+
+    expect($catalog['Docker Network'])->toBe('Docker 网络')
+        ->and($catalog['Docker Tag'])->toBe('Docker 标签');
+});

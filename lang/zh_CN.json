@@ -470,7 +470,7 @@
     "Docker Network": "Docker 网络",
     "Docker Registry": "Docker 注册表",
     "Docker Swarm requires the image to be available in a registry. More info": "Docker Swarm 要求镜像可从镜像仓库拉取。更多信息",
-    "Docker Tag": "泊坞窗标签",
+    "Docker Tag": "Docker 标签",
     "Docker Volumes mounted to the container.": "Docker Volume 安装到容器。",
     "Docker cleanup frequency": "Docker 清理频率",
     "Docker cleanup threshold (%)": "Docker清理阈值(%)",

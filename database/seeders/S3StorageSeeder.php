@@ -14,8 +14,8 @@ class S3StorageSeeder extends Seeder
     {
         S3Storage::create([
             'uuid' => 'minio',
-            'name' => 'Local MinIO',
-            'description' => 'Local MinIO S3 Storage',
+            'name' => '本地 MinIO',
+            'description' => '本地 MinIO S3 存储',
             'key' => 'minioadmin',
             'secret' => 'minioadmin',
             'bucket' => 'local',

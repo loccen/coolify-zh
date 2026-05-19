@@ -58,7 +58,8 @@ it('seeds the railpack examples in development mode', function () {
 
     expect($project)
         ->not->toBeNull()
-        ->and($project->name)->toBe('Railpack Examples')
+        ->and($project->name)->toBe('Railpack 示例')
+        ->and($project->description)->toBe('仅用于开发环境的 Railpack 示例，来自 coollabsio/coolify-examples@next。')
         ->and($project->environments)->toHaveCount(1)
         ->and($project->environments->first()->uuid)->toBe(DevelopmentRailpackExamplesSeeder::ENVIRONMENT_UUID);
 
@@ -69,6 +70,9 @@ it('seeds the railpack examples in development mode', function () {
     expect($applications->every(fn (Application $application) => $application->git_repository === DevelopmentRailpackExamplesSeeder::GIT_REPOSITORY))->toBeTrue();
 
     $examples = collect(DevelopmentRailpackExamplesSeeder::examples())->keyBy('uuid');
+    expect($applications->every(
+        fn (Application $application) => $application->name === ($examples->get($application->uuid)['name'] ?? null)
+    ))->toBeTrue();
     expect($applications->every(
         fn (Application $application) => $application->git_branch === ($examples->get($application->uuid)['git_branch'] ?? DevelopmentRailpackExamplesSeeder::GIT_BRANCH)
     ))->toBeTrue();
