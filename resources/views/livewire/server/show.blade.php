@@ -1,4 +1,7 @@
 <div x-data x-init="@if ($server->hetzner_server_id && $server->cloudProviderToken && !$hetznerServerStatus) $wire.checkHetznerServerStatus() @endif">
+    @php
+        $wildcardDomainHelper = __('A wildcard domain allows you to receive a randomly generated domain for your new applications. <br><br>For instance, if you set "https://example.com" as your wildcard domain, your applications will receive domains like "https://randomId.example.com".');
+    @endphp
     <x-slot:title>
         {{ data_get_str($server, 'name')->limit(10) }} > {{ __('General') }} | Coolify
     </x-slot>
@@ -173,7 +176,7 @@
                         @if (!$isSwarmWorker && !$isBuildServer)
                             <x-forms.input canGate="update" :canResource="$server" placeholder="https://example.com"
                                 id="wildcardDomain" :label="__('Wildcard Domain')"
-                                :helper="__('A wildcard domain allows you to receive a randomly generated domain for your new applications. <br><br>For instance, if you set \"https://example.com\" as your wildcard domain, your applications will receive domains like \"https://randomId.example.com\".')"
+                                :helper="$wildcardDomainHelper"
                                 :disabled="$isValidating" />
                         @endif
 

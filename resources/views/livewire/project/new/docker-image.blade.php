@@ -1,4 +1,9 @@
 <div x-data x-init="$nextTick(() => { if ($refs.autofocusInput) $refs.autofocusInput.focus(); })">
+    @php
+        $imageNameHelper = __("Enter the Docker image name with optional registry. You can also paste a complete reference like 'nginx:stable@sha256:abc123...' and the fields below will be auto-filled.");
+        $imageTagHelper = __("Enter a tag like 'latest' or 'v1.2.3'. Leave empty if using SHA256.");
+        $imageShaHelper = __("Enter only the 64-character hex digest (without 'sha256:' prefix)");
+    @endphp
     <h1>{{ __('Create a new Application') }}</h1>
     <div class="pb-4">{{ __('You can deploy an existing Docker Image from any Registry.') }}</div>
     <form wire:submit="submit">
@@ -8,11 +13,11 @@
         </div>
         <div class="space-y-4">
             <x-forms.input id="imageName" :label="__('Image Name')" placeholder="nginx, docker.io/nginx:latest, ghcr.io/user/app:v1.2.3, or nginx:stable@sha256:abc123..."
-                :helper="__('Enter the Docker image name with optional registry. You can also paste a complete reference like \\'nginx:stable@sha256:abc123...\\' and the fields below will be auto-filled.')"
+                :helper="$imageNameHelper"
                 required autofocus />
             <div class="relative grid grid-cols-1 gap-4 md:grid-cols-2">
                 <x-forms.input id="imageTag" :label="__('Tag (optional)')" placeholder="latest"
-                    :helper="__('Enter a tag like \\'latest\\' or \\'v1.2.3\\'. Leave empty if using SHA256.')" />
+                    :helper="$imageTagHelper" />
                 <div
                     class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 hidden md:flex items-center justify-center z-10">
                     <div
@@ -22,7 +27,7 @@
                 </div>
                 <x-forms.input id="imageSha256" :label="__('SHA256 Digest (optional)')"
                     placeholder="59e02939b1bf39f16c93138a28727aec520bb916da021180ae502c61626b3cf0"
-                    :helper="__('Enter only the 64-character hex digest (without \\'sha256:\\' prefix)')" />
+                    :helper="$imageShaHelper" />
             </div>
         </div>
     </form>

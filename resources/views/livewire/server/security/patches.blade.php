@@ -1,4 +1,14 @@
 <div>
+    @php
+        $serverPatchingHelper = __('Only available for apt, dnf and zypper package managers atm, more coming soon.')
+            . '<br/>'
+            . __('Status notifications sent every week.')
+            . '<br/>'
+            . __('You can disable notifications in the')
+            . ' <a class=\'dark:text-white underline\' href=\'' . route('notifications.email') . '\' ' . wireNavigate() . '>'
+            . __('notification settings')
+            . '</a>.';
+    @endphp
     <x-slot:title>
         {{ data_get_str($server, 'name')->limit(10) }} > {{ __('Security') }} | Coolify
     </x-slot>
@@ -17,8 +27,7 @@
                 <div class="flex items-center gap-2 flex-row">
                     <h2>{{ __('Server Patching') }}</h2>
                     <span class="text-xs text-neutral-500">{{ __('(experimental)') }}</span>
-                    <x-helper
-                        :helper="__('Only available for apt, dnf and zypper package managers atm, more coming soon.') . '<br/>' . __('Status notifications sent every week.') . '<br/>' . __('You can disable notifications in the') . ' <a class=\'dark:text-white underline\' href=\'' . route('notifications.email') . '\' ' . wireNavigate() . '>' . __('notification settings') . '</a>.'" />
+                    <x-helper :helper="$serverPatchingHelper" />
                     @if (isDev())
                         <x-forms.button type="button" wire:click="sendTestEmail">
                             {{ __('Send Test Email (dev only)') }}</x-forms.button>

@@ -1,5 +1,8 @@
 @php use App\Enums\ProxyTypes; @endphp
 <div>
+    @php
+        $proxySwitchWarningMessage = __("This operation may cause issues. Please refer to the guide <a href='https://coolify.io/docs/knowledge-base/server/proxies#switch-between-proxies' target='_blank' class='underline text-white'>switching between proxies</a> before proceeding!");
+    @endphp
     @if ($server->proxyType())
         <div>
             @if ($selectedProxy !== 'NONE')
@@ -10,7 +13,7 @@
                             @can('update', $server)
                                 <x-modal-confirmation :title="__('Confirm Proxy Switching?')" :buttonTitle="__('Switch Proxy')"
                                     submitAction="changeProxy" :actions="[__('Custom proxy configurations may be reset to their default settings.')]"
-                                    :warningMessage="__('This operation may cause issues. Please refer to the guide <a href=\\'https://coolify.io/docs/knowledge-base/server/proxies#switch-between-proxies\\' target=\\'_blank\\' class=\\'underline text-white\\'>switching between proxies</a> before proceeding!')"
+                                    :warningMessage="$proxySwitchWarningMessage"
                                     :step2ButtonText="__('Switch Proxy')" :confirmWithText="false" :confirmWithPassword="false">
                                 </x-modal-confirmation>
                             @endcan

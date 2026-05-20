@@ -1,4 +1,7 @@
 <div>
+    @php
+        $sentinelSubtitle = __("Sentinel reports your server's & container's health and collects metrics.");
+    @endphp
     <x-slot:title>
         {{ data_get_str($server, 'name')->limit(10) }} > {{ __('Sentinel') }} | Coolify
     </x-slot>
@@ -9,7 +12,7 @@
             <form wire:submit.prevent='submit'>
                 <div class="flex gap-2 items-center pb-2">
                     <h2>{{ __('Sentinel') }}</h2>
-                    <x-helper :helper="__('Sentinel reports your server\\'s & container\\'s health and collects metrics.')" />
+                    <x-helper :helper="$sentinelSubtitle" />
                     @if ($server->isSentinelEnabled())
                         <div class="flex gap-2 items-center">
                             @if ($server->isSentinelLive())

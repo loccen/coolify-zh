@@ -1,4 +1,8 @@
 <div>
+    @php
+        $cloudflareTunnelHelper = __("If you are using Cloudflare Tunnel, enable this. It will proxy all SSH requests to your server through Cloudflare.<br> You then can close your server's SSH port in the firewall of your hosting provider.<br><span class='dark:text-warning'>If you choose manual configuration, Coolify does not install or set up Cloudflare (cloudflared) on your server.</span>");
+        $sshDomainHelper = __("The SSH domain you configured in Cloudflare. Make sure there is no protocol like http(s):// so you provide a FQDN not a URL. <a class='underline dark:text-white' href='https://coolify.io/docs/knowledge-base/cloudflare/tunnels/server-ssh' target='_blank'>Documentation</a>");
+    @endphp
     <x-slot:title>
         {{ data_get_str($server, 'name')->limit(10) }} > {{ __('Cloudflare Tunnel') }} | Coolify
     </x-slot>
@@ -10,7 +14,7 @@
                 <div class="flex gap-2 items-center">
                     <h2>{{ __('Cloudflare Tunnel') }}</h2>
                     <x-helper class="inline-flex"
-                        :helper="__('If you are using Cloudflare Tunnel, enable this. It will proxy all SSH requests to your server through Cloudflare.<br> You then can close your server\\'s SSH port in the firewall of your hosting provider.<br><span class=\\'dark:text-warning\\'>If you choose manual configuration, Coolify does not install or set up Cloudflare (cloudflared) on your server.</span>')" />
+                        :helper="$cloudflareTunnelHelper" />
                     @if ($isCloudflareTunnelsEnabled)
                         <span
                             class="px-2 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded dark:text-green-100 dark:bg-green-800">
@@ -83,7 +87,7 @@
                                 class="flex flex-col gap-2 w-full">
                                 <x-forms.input id="cloudflare_token" required :label="__('Cloudflare Token')" type="password" />
                                 <x-forms.input id="ssh_domain" :label="__('Configured SSH Domain')" required
-                                    :helper="__('The SSH domain you configured in Cloudflare. Make sure there is no protocol like http(s):// so you provide a FQDN not a URL. <a class=\\'underline dark:text-white\\' href=\\'https://coolify.io/docs/knowledge-base/cloudflare/tunnels/server-ssh\\' target=\\'_blank\\'>Documentation</a>')" />
+                                    :helper="$sshDomainHelper" />
                                 <x-forms.button type="submit" isHighlighted>{{ __('Continue') }}</x-forms.button>
                             </form>
                         @else
