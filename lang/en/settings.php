@@ -24,6 +24,7 @@ return [
     'oauth' => 'OAuth',
     'preferences' => 'Preferences',
     'saved' => 'Settings updated!',
+    'instance_updated' => 'Settings updated!',
     'scheduled_jobs' => 'Scheduled Jobs',
     'search_updates' => 'Search updates...',
     'stay_up_to_date' => 'Stay up to date with the latest features and improvements.',

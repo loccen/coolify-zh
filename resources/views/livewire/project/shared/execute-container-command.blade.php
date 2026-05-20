@@ -1,24 +1,24 @@
 <div>
     <x-slot:title>
-        {{ data_get_str($resource, 'name')->limit(10) }} > Commands | Coolify
+        {{ data_get_str($resource, 'name')->limit(10) }} > {{ __('Commands') }} | Coolify
     </x-slot>
     @if ($type === 'application')
         <livewire:project.shared.configuration-checker :resource="$resource" />
-        <h1>Terminal</h1>
+        <h1>{{ __('Terminal') }}</h1>
         <livewire:project.application.heading :application="$resource" />
     @elseif ($type === 'database')
         <livewire:project.shared.configuration-checker :resource="$resource" />
-        <h1>Terminal</h1>
+        <h1>{{ __('Terminal') }}</h1>
         <livewire:project.database.heading :database="$resource" />
     @elseif ($type === 'service')
         <livewire:project.shared.configuration-checker :resource="$resource" />
-        <livewire:project.service.heading :service="$resource" :parameters="$parameters" title="Terminal" />
+        <livewire:project.service.heading :service="$resource" :parameters="$parameters" :title="__('Terminal')" />
     @endif
 
     @if ($type === 'application' || $type === 'database' || $type === 'service')
-        <h2 class="pb-4">Terminal</h2>
+        <h2 class="pb-4">{{ __('Terminal') }}</h2>
         @if (count($containers) === 0)
-            <div>No containers are running or terminal access is disabled on this server.</div>
+            <div>{{ __('No containers are running or terminal access is disabled on this server.') }}</div>
         @else
             <form class="w-96 min-w-fit flex gap-2 items-end" wire:submit="$dispatchSelf('connectToContainer')"
                 x-data="{ autoConnected: false }"
@@ -26,10 +26,10 @@
                     autoConnected = true;
                     $nextTick(() => $wire.dispatchSelf('connectToContainer'));
                 }">
-                <x-forms.select label="Container" id="container" required wire:model.live="selected_container">
+                <x-forms.select :label="__('Container')" id="container" required wire:model.live="selected_container">
                     @foreach ($containers as $container)
                         @if ($loop->first)
-                            <option disabled value="default">Select a container</option>
+                            <option disabled value="default">{{ __('Select a container') }}</option>
                         @endif
                         <option value="{{ data_get($container, 'container.Names') }}">
                             {{ data_get($container, 'container.Names') }}
@@ -38,7 +38,7 @@
                     @endforeach
                 </x-forms.select>
                 <x-forms.button :disabled="$isConnecting"
-                    type="submit">{{ $isConnecting ? 'Connecting...' : 'Connect' }}</x-forms.button>
+                    type="submit">{{ $isConnecting ? __('Connecting...') : __('Connect') }}</x-forms.button>
             </form>
             <div class="mx-auto w-full">
                 <livewire:project.shared.terminal />
@@ -52,15 +52,15 @@
             <form class="w-full flex gap-2 items-start" wire:submit="$dispatchSelf('connectToServer')"
                 x-data="{ autoConnected: false }"
                 x-on:terminal-websocket-ready.window="if (!autoConnected) { autoConnected = true; $wire.dispatchSelf('connectToServer'); }">
-                <h2 class="pb-4">Terminal</h2>
+                <h2 class="pb-4">{{ __('Terminal') }}</h2>
                 <x-forms.button :disabled="$isConnecting"
-                    type="submit">{{ $isConnecting ? 'Connecting...' : 'Connect' }}</x-forms.button>
+                    type="submit">{{ $isConnecting ? __('Connecting...') : __('Connect') }}</x-forms.button>
             </form>
             <div class="mx-auto w-full">
                 <livewire:project.shared.terminal />
             </div>
         @else
-            <div>Server is not functional or terminal access is disabled.</div>
+            <div>{{ __('Server is not functional or terminal access is disabled.') }}</div>
         @endif
     @endif
 </div>

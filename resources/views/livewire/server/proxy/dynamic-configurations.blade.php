@@ -1,6 +1,6 @@
 <div>
     <x-slot:title>
-        Proxy Dynamic Configuration | Coolify
+        {{ __('Proxy Dynamic Configuration') }} | Coolify
     </x-slot>
     <livewire:server.navbar :server="$server" />
     <div class="flex flex-col h-full gap-8 sm:flex-row">
@@ -10,19 +10,19 @@
                 <div class="flex gap-2">
                     <div>
                         <div class="flex gap-2">
-                            <h2>Dynamic Configurations</h2>
-                            <x-forms.button wire:click="loadDynamicConfigurations">Reload</x-forms.button>
+                            <h2>{{ __('Dynamic Configurations') }}</h2>
+                            <x-forms.button wire:click="loadDynamicConfigurations">{{ __('Reload') }}</x-forms.button>
                             @can('update', $server)
-                                <x-modal-input buttonTitle="+ Add" title="New Dynamic Configuration">
+                                <x-modal-input :buttonTitle="__('+ Add')" :title="__('New Dynamic Configuration')">
                                     <livewire:server.proxy.new-dynamic-configuration :server_id="$server->id" />
                                 </x-modal-input>
                             @endcan
                         </div>
-                        <div class='pb-4'>You can add dynamic proxy configurations here.</div>
+                        <div class='pb-4'>{{ __('You can add dynamic proxy configurations here.') }}</div>
                     </div>
                 </div>
                 <div wire:loading wire:target="initLoadDynamicConfigurations">
-                    <x-loading text="Loading dynamic configurations..." />
+                    <x-loading :text="__('Loading dynamic configurations...')" />
                 </div>
                 <div x-init="$wire.initLoadDynamicConfigurations" class="flex flex-col gap-4">
                     @if ($contents?->isNotEmpty())
@@ -34,7 +34,7 @@
                                         str_replace('|', '.', $fileName) === 'default_redirect_503.yaml' ||
                                         str_replace('|', '.', $fileName) === 'default_redirect_503.caddy')
                                     <div>
-                                        <h3 class="dark:text-white">File: {{ str_replace('|', '.', $fileName) }}</h3>
+                                        <h3 class="dark:text-white">{{ __('File:') }} {{ str_replace('|', '.', $fileName) }}</h3>
                                     </div>
                                     <x-forms.textarea disabled name="proxy_settings"
                                         wire:model="contents.{{ $fileName }}" rows="5" />
@@ -48,7 +48,7 @@
                             </div>
                         @endforeach
                     @else
-                        <div wire:loading.remove> No dynamic configurations found.</div>
+                        <div wire:loading.remove>{{ __('No dynamic configurations found.') }}</div>
                     @endif
                 </div>
             </div>

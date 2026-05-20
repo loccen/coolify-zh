@@ -24,6 +24,7 @@ return [
     'oauth' => 'OAuth',
     'preferences' => '偏好设置',
     'saved' => '设置已更新。',
+    'instance_updated' => '设置已更新。',
     'scheduled_jobs' => '计划任务',
     'search_updates' => '搜索更新...',
     'stay_up_to_date' => '随时了解最新功能和改进。',

@@ -5,43 +5,41 @@
             @if ($selectedProxy !== 'NONE')
                 <form wire:submit='submit'>
                     <div class="flex items-center gap-2">
-                        <h2>Configuration</h2>
+                        <h2>{{ __('Configuration') }}</h2>
                         @if ($server->proxy->status === 'exited' || $server->proxy->status === 'removing')
                             @can('update', $server)
-                                <x-modal-confirmation title="Confirm Proxy Switching?" buttonTitle="Switch Proxy"
-                                    submitAction="changeProxy" :actions="['Custom proxy configurations may be reset to their default settings.']"
-                                    warningMessage="This operation may cause issues. Please refer to the guide <a href='https://coolify.io/docs/knowledge-base/server/proxies#switch-between-proxies' target='_blank' class='underline text-white'>switching between proxies</a> before proceeding!"
-                                    step2ButtonText="Switch Proxy" :confirmWithText="false" :confirmWithPassword="false">
+                                <x-modal-confirmation :title="__('Confirm Proxy Switching?')" :buttonTitle="__('Switch Proxy')"
+                                    submitAction="changeProxy" :actions="[__('Custom proxy configurations may be reset to their default settings.')]"
+                                    :warningMessage="__('This operation may cause issues. Please refer to the guide <a href=\\'https://coolify.io/docs/knowledge-base/server/proxies#switch-between-proxies\\' target=\\'_blank\\' class=\\'underline text-white\\'>switching between proxies</a> before proceeding!')"
+                                    :step2ButtonText="__('Switch Proxy')" :confirmWithText="false" :confirmWithPassword="false">
                                 </x-modal-confirmation>
                             @endcan
                         @else
                             <x-forms.button canGate="update" :canResource="$server"
-                                wire:click="$dispatch('error', 'Currently running proxy must be stopped before switching proxy')">Switch
-                                Proxy</x-forms.button>
+                                wire:click="$dispatch('error', @js(__('Currently running proxy must be stopped before switching proxy')))">{{ __('Switch Proxy') }}</x-forms.button>
                         @endif
-                        <x-forms.button canGate="update" :canResource="$server" type="submit">Save</x-forms.button>
+                        <x-forms.button canGate="update" :canResource="$server" type="submit">{{ __('Save') }}</x-forms.button>
                     </div>
-                    <div class="pb-4">Configure your proxy settings and advanced options.</div>
+                    <div class="pb-4">{{ __('Configure your proxy settings and advanced options.') }}</div>
                     @if (
                         $server->proxy->last_applied_settings &&
                             $server->proxy->last_saved_settings !== $server->proxy->last_applied_settings)
-                        <x-callout type="warning" title="Configuration Out of Sync" class="my-4">
-                            The saved proxy configuration differs from the currently running configuration. Restart the
-                            proxy to apply your changes.
+                        <x-callout type="warning" :title="__('Configuration Out of Sync')" class="my-4">
+                            {{ __('The saved proxy configuration differs from the currently running configuration. Restart the proxy to apply your changes.') }}
                         </x-callout>
                     @endif
-                    <h3>Advanced</h3>
+                    <h3>{{ __('Advanced') }}</h3>
                     <div class="pb-6 w-full sm:w-96">
                         <x-forms.checkbox canGate="update" :canResource="$server"
-                            helper="If set, all resources will only have docker container labels for {{ str($server->proxyType())->title() }}.<br>For applications, labels needs to be regenerated manually. <br>Resources needs to be restarted."
+                            :helper="__('If set, all resources will only have docker container labels for :proxy.<br>For applications, labels needs to be regenerated manually. <br>Resources needs to be restarted.', ['proxy' => str($server->proxyType())->title()])"
                             id="generateExactLabels"
-                            label="Generate labels only for {{ str($server->proxyType())->title() }}" instantSave />
+                            :label="__('Generate labels only for :proxy', ['proxy' => str($server->proxyType())->title()])" instantSave />
                         <x-forms.checkbox canGate="update" :canResource="$server" instantSave="instantSaveRedirect"
-                            id="redirectEnabled" label="Override default request handler"
-                            helper="Requests to unknown hosts or stopped services will receive a 503 response or be redirected to the URL you set below (need to enable this first)." />
+                            id="redirectEnabled" :label="__('Override default request handler')"
+                            :helper="__('Requests to unknown hosts or stopped services will receive a 503 response or be redirected to the URL you set below (need to enable this first).')" />
                         @if ($redirectEnabled)
                             <x-forms.input canGate="update" :canResource="$server" placeholder="https://app.coolify.io"
-                                id="redirectUrl" label="Redirect to (optional)" />
+                                id="redirectUrl" :label="__('Redirect to (optional)')" />
                         @endif
                     </div>
                     @php
@@ -56,15 +54,15 @@
                                 <h3>{{ $proxyTitle }}</h3>
                                 @can('update', $server)
                                     @if ($proxySettings)
-                                        <x-modal-confirmation title="Reset Proxy Configuration?"
-                                            buttonTitle="Reset Configuration" submitAction="resetProxyConfiguration"
+                                        <x-modal-confirmation :title="__('Reset Proxy Configuration?')"
+                                            :buttonTitle="__('Reset Configuration')" submitAction="resetProxyConfiguration"
                                             :actions="[
-                                                'Reset proxy configuration to default settings',
-                                                'All custom configurations will be lost',
-                                                'Custom ports and entrypoints will be removed',
+                                                __('Reset proxy configuration to default settings'),
+                                                __('All custom configurations will be lost'),
+                                                __('Custom ports and entrypoints will be removed'),
                                             ]" confirmationText="{{ $server->name }}"
-                                            confirmationLabel="Please confirm by entering the server name below"
-                                            shortConfirmationLabel="Server Name" step2ButtonText="Reset Configuration"
+                                            :confirmationLabel="__('Please confirm by entering the server name below')"
+                                            :shortConfirmationLabel="__('Server Name')" :step2ButtonText="__('Reset Configuration')"
                                             :confirmWithPassword="false" :confirmWithText="true">
                                         </x-modal-confirmation>
                                     @endif
@@ -73,7 +71,7 @@
                                     <button type="button" x-show="traefikWarningsDismissed"
                                             @click="traefikWarningsDismissed = false; localStorage.removeItem('callout-dismissed-traefik-warnings-{{ $server->id }}')"
                                             class="p-1.5 rounded hover:bg-warning-100 dark:hover:bg-warning-900/30 transition-colors"
-                                            title="Show Traefik warnings">
+                                            title="{{ __('Show Traefik warnings') }}">
                                         <svg class="w-4 h-4 text-warning-600 dark:text-warning-400" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
                                             <path fill="currentColor" d="M240.26 186.1L152.81 34.23a28.74 28.74 0 0 0-49.62 0L15.74 186.1a27.45 27.45 0 0 0 0 27.71A28.31 28.31 0 0 0 40.55 228h174.9a28.31 28.31 0 0 0 24.79-14.19a27.45 27.45 0 0 0 .02-27.71m-20.8 15.7a4.46 4.46 0 0 1-4 2.2H40.55a4.46 4.46 0 0 1-4-2.2a3.56 3.56 0 0 1 0-3.73L124 46.2a4.77 4.77 0 0 1 8 0l87.44 151.87a3.56 3.56 0 0 1 .02 3.73M116 136v-32a12 12 0 0 1 24 0v32a12 12 0 0 1-24 0m28 40a16 16 0 1 1-16-16a16 16 0 0 1 16 16"></path>
                                         </svg>
@@ -133,35 +131,35 @@
                         <div class="flex flex-col gap-2 pt-2">
                             <x-forms.textarea canGate="update" :canResource="$server" useMonacoEditor
                                 monacoEditorLanguage="yaml"
-                                label="Configuration file ( {{ $this->configurationFilePath }} )"
+                                :label="__('Configuration file ( :path )', ['path' => $this->configurationFilePath])"
                                 name="proxySettings" id="proxySettings" rows="30" />
                         </div>
                     @endif
                 </form>
             @elseif($selectedProxy === 'NONE')
                 <div class="flex items-center gap-2">
-                    <h2>Configuration</h2>
+                    <h2>{{ __('Configuration') }}</h2>
                     @can('update', $server)
-                        <x-forms.button wire:click.prevent="changeProxy">Switch Proxy</x-forms.button>
+                        <x-forms.button wire:click.prevent="changeProxy">{{ __('Switch Proxy') }}</x-forms.button>
                     @endcan
                 </div>
-                <div class="pt-2 pb-4">Custom (None) Proxy Selected</div>
+                <div class="pt-2 pb-4">{{ __('Custom (None) Proxy Selected') }}</div>
             @else
                 <div class="flex items-center gap-2">
-                    <h2>Configuration</h2>
+                    <h2>{{ __('Configuration') }}</h2>
                     @can('update', $server)
-                        <x-forms.button wire:click.prevent="changeProxy">Switch Proxy</x-forms.button>
+                        <x-forms.button wire:click.prevent="changeProxy">{{ __('Switch Proxy') }}</x-forms.button>
                     @endcan
                 </div>
             @endif
         @else
             <div>
-                <h2>Configuration</h2>
-                <div class="subtitle">Select a proxy you would like to use on this server.</div>
+                <h2>{{ __('Configuration') }}</h2>
+                <div class="subtitle">{{ __('Select a proxy you would like to use on this server.') }}</div>
                 @can('update', $server)
                     <div class="grid gap-4">
                         <x-forms.button class="coolbox" wire:click="selectProxy('NONE')">
-                            Custom (None)
+                            {{ __('Custom (None)') }}
                         </x-forms.button>
                         <x-forms.button class="coolbox" wire:click="selectProxy('TRAEFIK')">
                             Traefik
@@ -174,8 +172,8 @@
                         </x-forms.button> --}}
                     </div>
                 @else
-                    <x-callout type="warning" title="Permission Required" class="mb-4">
-                        You don't have permission to configure proxy settings for this server.
+                    <x-callout type="warning" :title="__('Permission Required')" class="mb-4">
+                        {{ __("You don't have permission to configure proxy settings for this server.") }}
                     </x-callout>
                 @endcan
             </div>
