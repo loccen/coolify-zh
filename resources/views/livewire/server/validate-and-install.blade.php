@@ -1,12 +1,10 @@
 <div class="flex flex-col gap-2">
     @if ($ask)
-        This will revalidate the server, install / update Docker Engine, Docker Compose and all related
-        configuration. It will also restart Docker Engine, so your running containers will be unreachable
-        for the time being.
-        <x-forms.button isHighlighted wire:click='startValidatingAfterAsking'>Continue</x-forms.button>
+        {{ __('This will revalidate the server, install / update Docker Engine, Docker Compose and all related configuration. It will also restart Docker Engine, so your running containers will be unreachable for the time being.') }}
+        <x-forms.button isHighlighted wire:click='startValidatingAfterAsking'>{{ __('Continue') }}</x-forms.button>
     @else
         @if ($uptime)
-            <div class="flex w-64 gap-2">Server is reachable: <svg class="w-5 h-5 text-success" viewBox="0 0 256 256"
+            <div class="flex w-64 gap-2">{{ __('Server is reachable:') }} <svg class="w-5 h-5 text-success" viewBox="0 0 256 256"
                     xmlns="http://www.w3.org/2000/svg">
                     <g fill="currentColor">
                         <path
@@ -18,18 +16,18 @@
                 </svg></div>
         @else
             @if ($error)
-                <div class="flex w-64 gap-2">Server is reachable: <svg class="w-5 h-5 text-error" viewBox="0 0 256 256"
+                <div class="flex w-64 gap-2">{{ __('Server is reachable:') }} <svg class="w-5 h-5 text-error" viewBox="0 0 256 256"
                         xmlns="http://www.w3.org/2000/svg">
                         <path fill="currentColor"
                             d="M208.49 191.51a12 12 0 0 1-17 17L128 145l-63.51 63.49a12 12 0 0 1-17-17L111 128L47.51 64.49a12 12 0 0 1 17-17L128 111l63.51-63.52a12 12 0 0 1 17 17L145 128Z" />
                     </svg></div>
             @else
-                <div class="w-64"><x-loading text="Server is reachable: " /></div>
+                    <div class="w-64"><x-loading :text="__('Server is reachable: ')" /></div>
             @endif
         @endif
         @if ($uptime)
             @if ($supported_os_type)
-                <div class="flex w-64 gap-2">Supported OS type: <svg class="w-5 h-5 text-success" viewBox="0 0 256 256"
+                <div class="flex w-64 gap-2">{{ __('Supported OS type:') }} <svg class="w-5 h-5 text-success" viewBox="0 0 256 256"
                         xmlns="http://www.w3.org/2000/svg">
                         <g fill="currentColor">
                             <path
@@ -41,19 +39,19 @@
                     </svg></div>
             @else
                 @if ($error)
-                    <div class="flex w-64 gap-2">Supported OS type: <svg class="w-5 h-5 text-error"
+                    <div class="flex w-64 gap-2">{{ __('Supported OS type:') }} <svg class="w-5 h-5 text-error"
                             viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
                             <path fill="currentColor"
                                 d="M208.49 191.51a12 12 0 0 1-17 17L128 145l-63.51 63.49a12 12 0 0 1-17-17L111 128L47.51 64.49a12 12 0 0 1 17-17L128 111l63.51-63.52a12 12 0 0 1 17 17L145 128Z" />
                         </svg></div>
                 @else
-                    <div class="w-64"><x-loading text="Supported OS type:" /></div>
+                    <div class="w-64"><x-loading :text="__('Supported OS type:')" /></div>
                 @endif
             @endif
         @endif
         @if ($uptime && $supported_os_type)
             @if ($prerequisites_installed)
-                <div class="flex w-64 gap-2">Prerequisites are installed: <svg class="w-5 h-5 text-success"
+                <div class="flex w-64 gap-2">{{ __('Prerequisites are installed:') }} <svg class="w-5 h-5 text-success"
                         viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
                         <g fill="currentColor">
                             <path
@@ -65,19 +63,19 @@
                     </svg></div>
             @else
                 @if ($error)
-                    <div class="flex w-64 gap-2">Prerequisites are installed: <svg class="w-5 h-5 text-error"
+                    <div class="flex w-64 gap-2">{{ __('Prerequisites are installed:') }} <svg class="w-5 h-5 text-error"
                             viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
                             <path fill="currentColor"
                                 d="M208.49 191.51a12 12 0 0 1-17 17L128 145l-63.51 63.49a12 12 0 0 1-17-17L111 128L47.51 64.49a12 12 0 0 1 17-17L128 111l63.51-63.52a12 12 0 0 1 17 17L145 128Z" />
                         </svg></div>
                 @else
-                    <div class="w-64"><x-loading text="Prerequisites are installed:" /></div>
+                    <div class="w-64"><x-loading :text="__('Prerequisites are installed:')" /></div>
                 @endif
             @endif
         @endif
         @if ($uptime && $supported_os_type && $prerequisites_installed)
             @if ($docker_installed)
-                <div class="flex w-64 gap-2">Docker is installed: <svg class="w-5 h-5 text-success"
+                <div class="flex w-64 gap-2">{{ __('Docker is installed:') }} <svg class="w-5 h-5 text-success"
                         viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
                         <g fill="currentColor">
                             <path
@@ -89,17 +87,17 @@
                     </svg></div>
             @else
                 @if ($error)
-                    <div class="flex w-64 gap-2">Docker is installed: <svg class="w-5 h-5 text-error"
+                    <div class="flex w-64 gap-2">{{ __('Docker is installed:') }} <svg class="w-5 h-5 text-error"
                             viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
                             <path fill="currentColor"
                                 d="M208.49 191.51a12 12 0 0 1-17 17L128 145l-63.51 63.49a12 12 0 0 1-17-17L111 128L47.51 64.49a12 12 0 0 1 17-17L128 111l63.51-63.52a12 12 0 0 1 17 17L145 128Z" />
                         </svg></div>
                 @else
-                    <div class="w-64"><x-loading text="Docker is installed:" /></div>
+                    <div class="w-64"><x-loading :text="__('Docker is installed:')" /></div>
                 @endif
             @endif
             @if ($docker_compose_installed)
-                <div class="flex w-64 gap-2">Docker Compose is installed: <svg class="w-5 h-5 text-success"
+                <div class="flex w-64 gap-2">{{ __('Docker Compose is installed:') }} <svg class="w-5 h-5 text-success"
                         viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
                         <g fill="currentColor">
                             <path
@@ -111,7 +109,7 @@
                     </svg></div>
                 @isset($docker_version)
                     @if ($docker_version)
-                        <div class="flex w-64 gap-2">Minimum Docker version: <svg class="w-5 h-5 text-success"
+                        <div class="flex w-64 gap-2">{{ __('Minimum Docker version:') }} <svg class="w-5 h-5 text-success"
                                 viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
                                 <g fill="currentColor">
                                     <path
@@ -122,33 +120,33 @@
                                 </g>
                             </svg></div>
                     @else
-                        <div class="flex w-64 gap-2">Minimum Docker version: <svg class="w-5 h-5 text-error"
+                        <div class="flex w-64 gap-2">{{ __('Minimum Docker version:') }} <svg class="w-5 h-5 text-error"
                                 viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
                                 <path fill="currentColor"
                                     d="M208.49 191.51a12 12 0 0 1-17 17L128 145l-63.51 63.49a12 12 0 0 1-17-17L111 128L47.51 64.49a12 12 0 0 1 17-17L128 111l63.51-63.52a12 12 0 0 1 17 17L145 128Z" />
                             </svg></div>
                     @endif
                 @else
-                    <div class="w-64"><x-loading text="Minimum Docker version:" /></div>
+                    <div class="w-64"><x-loading :text="__('Minimum Docker version:')" /></div>
                 @endisset
             @else
                 @if ($error)
-                    <div class="flex w-64 gap-2">Docker Compose is installed: <svg class="w-5 h-5 text-error"
+                    <div class="flex w-64 gap-2">{{ __('Docker Compose is installed:') }} <svg class="w-5 h-5 text-error"
                             viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
                             <path fill="currentColor"
                                 d="M208.49 191.51a12 12 0 0 1-17 17L128 145l-63.51 63.49a12 12 0 0 1-17-17L111 128L47.51 64.49a12 12 0 0 1 17-17L128 111l63.51-63.52a12 12 0 0 1 17 17L145 128Z" />
                         </svg></div>
                 @else
-                    <div class="w-64"><x-loading text="Docker Compose is installed:" /></div>
+                    <div class="w-64"><x-loading :text="__('Docker Compose is installed:')" /></div>
                 @endif
             @endif
 
         @endif
-        <livewire:activity-monitor header="{{ $installationStep }} Installation Logs" :showWaiting="false" />
+        <livewire:activity-monitor :header="$installationStep . ' ' . __('Installation Logs')" :showWaiting="false" />
         @isset($error)
             <pre class="font-bold whitespace-pre-line text-error">{!! $error !!}</pre>
             <x-forms.button canGate="update" :canResource="$server" wire:click="retry" class="mt-4">
-                Retry Validation
+                {{ __('Retry Validation') }}
             </x-forms.button>
         @endisset
     @endif

@@ -1,22 +1,22 @@
 <div>
     <x-slot:title>
-        {{ data_get_str($server, 'name')->limit(10) }} > Server Resources | Coolify
+        {{ data_get_str($server, 'name')->limit(10) }} > {{ __('Server Resources') }} | Coolify
     </x-slot>
     <livewire:server.navbar :server="$server" />
     <div x-data="{ activeTab: 'managed' }" class="flex flex-col h-full gap-8 md:flex-row">
         <div class="w-full">
             <div class="flex flex-col">
                 <div class="flex gap-2">
-                    <h2>Resources</h2>
-                    <x-forms.button wire:click="refreshStatus">Refresh</x-forms.button>
+                    <h2>{{ __('Resources') }}</h2>
+                    <x-forms.button wire:click="refreshStatus">{{ __('Refresh') }}</x-forms.button>
                 </div>
-                <div>Here you can find all resources that are managed by Coolify.</div>
+                <div>{{ __('Here you can find all resources that are managed by Coolify.') }}</div>
                 <div class="flex flex-row gap-4 py-10">
                     <div @class([
                         'box-without-bg cursor-pointer dark:bg-coolgray-100 dark:text-white w-full text-center items-center justify-center',
                         'dark:bg-coollabs bg-coollabs text-white' => $activeTab === 'managed',
                     ]) wire:click="loadManagedContainers">
-                        Managed
+                        {{ __('Managed') }}
                         <div class="flex flex-col items-center justify-center">
                             <x-loading wire:loading wire:target="loadManagedContainers" />
                         </div>
@@ -25,7 +25,7 @@
                         'box-without-bg cursor-pointer dark:bg-coolgray-100 dark:text-white w-full text-center items-center justify-center',
                         'dark:bg-coollabs bg-coollabs text-white' => $activeTab === 'unmanaged',
                     ]) wire:click="loadUnmanagedContainers">
-                        Unmanaged
+                        {{ __('Unmanaged') }}
                         <div class="flex flex-col items-center justify-center">
                             <x-loading wire:loading wire:target="loadUnmanagedContainers" />
                         </div>
@@ -46,18 +46,18 @@
                                             <thead>
                                                 <tr>
                                                     <th class="px-5 py-3 text-xs font-medium text-left uppercase">
-                                                        Project
+                                                        {{ __('Project') }}
                                                     </th>
                                                     <th class="px-5 py-3 text-xs font-medium text-left uppercase">
-                                                        Environment</th>
+                                                        {{ __('Environment') }}</th>
                                                     <th class="px-5 py-3 text-xs font-medium text-left uppercase">
-                                                        Name
+                                                        {{ __('Name') }}
                                                     </th>
                                                     <th class="px-5 py-3 text-xs font-medium text-left uppercase">
-                                                        Type
+                                                        {{ __('Type') }}
                                                     </th>
                                                     <th class="px-5 py-3 text-xs font-medium text-left uppercase">
-                                                        Status
+                                                        {{ __('Status') }}
                                                     </th>
                                                 </tr>
                                             </thead>
@@ -95,7 +95,7 @@
                         </div>
                     </div>
                 @else
-                    <div>No managed resources found.</div>
+                    <div>{{ __('No managed resources found.') }}</div>
                 @endif
             @elseif ($activeTab === 'unmanaged')
                 @if (count($unmanagedContainers) > 0)
@@ -108,16 +108,16 @@
                                             <thead>
                                                 <tr>
                                                     <th class="px-5 py-3 text-xs font-medium text-left uppercase">
-                                                        Name
+                                                        {{ __('Name') }}
                                                     </th>
                                                     <th class="px-5 py-3 text-xs font-medium text-left uppercase">
-                                                        Image
+                                                        {{ __('Image') }}
                                                     </th>
                                                     <th class="px-5 py-3 text-xs font-medium text-left uppercase">
-                                                        Status
+                                                        {{ __('Status') }}
                                                     </th>
                                                     <th class="px-5 py-3 text-xs font-medium text-left uppercase">
-                                                        Action
+                                                        {{ __('Action') }}
                                                     </th>
                                                 </tr>
                                             </thead>
@@ -137,18 +137,18 @@
                                                             @if (data_get($resource, 'State') === 'running')
                                                                 <x-forms.button
                                                                     wire:click="restartUnmanaged('{{ data_get($resource, 'ID') }}')"
-                                                                    wire:key="{{ data_get($resource, 'ID') }}">Restart</x-forms.button>
+                                                                    wire:key="{{ data_get($resource, 'ID') }}">{{ __('Restart') }}</x-forms.button>
                                                                 <x-forms.button isError
                                                                     wire:click="stopUnmanaged('{{ data_get($resource, 'ID') }}')"
-                                                                    wire:key="{{ data_get($resource, 'ID') }}">Stop</x-forms.button>
+                                                                    wire:key="{{ data_get($resource, 'ID') }}">{{ __('Stop') }}</x-forms.button>
                                                             @elseif (data_get($resource, 'State') === 'exited')
                                                                 <x-forms.button
                                                                     wire:click="startUnmanaged('{{ data_get($resource, 'ID') }}')"
-                                                                    wire:key="{{ data_get($resource, 'ID') }}">Start</x-forms.button>
+                                                                    wire:key="{{ data_get($resource, 'ID') }}">{{ __('Start') }}</x-forms.button>
                                                             @elseif (data_get($resource, 'State') === 'restarting')
                                                                 <x-forms.button
                                                                     wire:click="stopUnmanaged('{{ data_get($resource, 'ID') }}')"
-                                                                    wire:key="{{ data_get($resource, 'ID') }}">Stop</x-forms.button>
+                                                                    wire:key="{{ data_get($resource, 'ID') }}">{{ __('Stop') }}</x-forms.button>
                                                             @endif
                                                         </td>
                                                     </tr>
@@ -161,7 +161,7 @@
                         </div>
                     </div>
                 @else
-                    <div>No unmanaged resources found.</div>
+                    <div>{{ __('No unmanaged resources found.') }}</div>
                 @endif
             @endif
         </div>

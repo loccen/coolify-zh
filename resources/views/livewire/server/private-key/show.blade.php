@@ -1,23 +1,23 @@
 <div>
     <x-slot:title>
-        {{ data_get_str($server, 'name')->limit(10) }} > Private Key | Coolify
+        {{ data_get_str($server, 'name')->limit(10) }} > {{ __('Private Key') }} | Coolify
     </x-slot>
     <livewire:server.navbar :server="$server" />
     <div class="flex flex-col h-full gap-8 sm:flex-row">
         <x-server.sidebar :server="$server" activeMenu="private-key" />
         <div class="w-full">
             <div class="flex items-end gap-2">
-                <h2>Private Key</h2>
+                <h2>{{ __('Private Key') }}</h2>
                 @can('createAnyResource')
-                    <x-modal-input buttonTitle="+ Add" title="New Private Key">
+                    <x-modal-input :buttonTitle="__('+ Add')" :title="__('New Private Key')">
                         <livewire:security.private-key.create />
                     </x-modal-input>
                 @endcan
                 <x-forms.button canGate="update" :canResource="$server" isHighlighted wire:click.prevent='checkConnection'>
-                    Check connection
+                    {{ __('Check connection') }}
                 </x-forms.button>
             </div>
-            <div class="pb-4">Change your server's private key.</div>
+            <div class="pb-4">{{ __("Change your server's private key.") }}</div>
             <div class="grid xl:grid-cols-2 grid-cols-1 gap-2">
                 @forelse ($privateKeys as $private_key)
                     <div
@@ -28,16 +28,16 @@
                         </div>
                         @if (data_get($server, 'privateKey.uuid') !== $private_key->uuid)
                             <x-forms.button canGate="update" :canResource="$server" class="w-full" wire:click='setPrivateKey({{ $private_key->id }})'>
-                                Use this key
+                                {{ __('Use this key') }}
                             </x-forms.button>
                         @else
                             <x-forms.button class="w-full" disabled>
-                                Currently used
+                                {{ __('Currently used') }}
                             </x-forms.button>
                         @endif
                     </div>
                 @empty
-                    <div>No private keys found. </div>
+                    <div>{{ __('No private keys found.') }}</div>
                 @endforelse
             </div>
         </div>

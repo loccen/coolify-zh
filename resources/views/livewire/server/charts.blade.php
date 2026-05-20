@@ -1,25 +1,25 @@
 <div>
     <x-slot:title>
-        {{ data_get_str($server, 'name')->limit(10) }} > Metrics | Coolify
+        {{ data_get_str($server, 'name')->limit(10) }} > {{ __('Metrics') }} | Coolify
     </x-slot>
     <livewire:server.navbar :server="$server" />
     <div class="flex flex-col h-full gap-8 sm:flex-row">
         <x-server.sidebar :server="$server" activeMenu="metrics" />
         <div class="w-full">
-            <h2>Metrics</h2>
-            <div class="pb-4">Basic metrics for your server.</div>
+            <h2>{{ __('Metrics') }}</h2>
+            <div class="pb-4">{{ __('Basic metrics for your server.') }}</div>
             @if ($server->isMetricsEnabled())
                 <div @if ($poll) wire:poll.5000ms='pollData' @endif x-init="$wire.loadData()">
-                    <x-forms.select label="Interval" wire:change="setInterval" id="interval">
-                        <option value="5">5 minutes (live)</option>
-                        <option value="10">10 minutes (live)</option>
-                        <option value="30">30 minutes</option>
-                        <option value="60">1 hour</option>
-                        <option value="720">12 hours</option>
-                        <option value="10080">1 week</option>
-                        <option value="43200">30 days</option>
+                    <x-forms.select :label="__('Interval')" wire:change="setInterval" id="interval">
+                        <option value="5">{{ __('5 minutes (live)') }}</option>
+                        <option value="10">{{ __('10 minutes (live)') }}</option>
+                        <option value="30">{{ __('30 minutes') }}</option>
+                        <option value="60">{{ __('1 hour') }}</option>
+                        <option value="720">{{ __('12 hours') }}</option>
+                        <option value="10080">{{ __('1 week') }}</option>
+                        <option value="43200">{{ __('30 days') }}</option>
                     </x-forms.select>
-                    <h4 class="pt-4">CPU Usage</h4>
+                    <h4 class="pt-4">{{ __('CPU Usage') }}</h4>
                     <div wire:ignore id="{!! $chartId !!}-cpu"></div>
 
                     <script>
@@ -76,7 +76,7 @@
                                     data: []
                                 }],
                                 noData: {
-                                    text: 'Loading...',
+                                    text: @js(__('Loading...')),
                                     style: {
                                         color: textColor,
                                     }
@@ -97,7 +97,7 @@
                                              String(date.getUTCMonth() + 1).padStart(2, '0') + '-' +
                                              String(date.getUTCDate()).padStart(2, '0');
                                          return '<div class="apexcharts-tooltip-custom">' +
-                                             '<div class="apexcharts-tooltip-custom-value">CPU: <span class="apexcharts-tooltip-value-bold">' + value + '%</span></div>' +
+                                             '<div class="apexcharts-tooltip-custom-value">{{ __('CPU') }}: <span class="apexcharts-tooltip-value-bold">' + value + '%</span></div>' +
                                              '<div class="apexcharts-tooltip-custom-title">' + timeString + '</div>' +
                                              '</div>';
                                      }
@@ -138,7 +138,7 @@
                                              }
                                          },
                                         noData: {
-                                            text: 'Loading...',
+                                            text: @js(__('Loading...')),
                                             style: {
                                                 color: textColor,
                                             }
@@ -149,7 +149,7 @@
                     </script>
 
                     <div>
-                        <h4>Memory Usage</h4>
+                        <h4>{{ __('Memory Usage') }}</h4>
                         <div wire:ignore id="{!! $chartId !!}-memory"></div>
 
                         <script>
@@ -208,11 +208,11 @@
                                         }
                                     },
                                     series: [{
-                                        name: "Memory (%)",
+                                        name: @js(__('Memory (%)')),
                                         data: []
                                     }],
                                     noData: {
-                                        text: 'Loading...',
+                                        text: @js(__('Loading...')),
                                         style: {
                                             color: textColor,
                                         }
@@ -233,7 +233,7 @@
                                                  String(date.getUTCMonth() + 1).padStart(2, '0') + '-' +
                                                  String(date.getUTCDate()).padStart(2, '0');
                                              return '<div class="apexcharts-tooltip-custom">' +
-                                                 '<div class="apexcharts-tooltip-custom-value">Memory: <span class="apexcharts-tooltip-value-bold">' + value + '%</span></div>' +
+                                                 '<div class="apexcharts-tooltip-custom-value">{{ __('Memory') }}: <span class="apexcharts-tooltip-value-bold">' + value + '%</span></div>' +
                                                  '<div class="apexcharts-tooltip-custom-title">' + timeString + '</div>' +
                                                  '</div>';
                                          }
@@ -288,8 +288,8 @@
                     </div>
                 </div>
             @else
-                <div>Metrics are disabled for this server. Enable them in <a class="underline dark:text-white"
-                        href="{{ route('server.show', ['server_uuid' => $server->uuid]) }}/sentinel" {{ wireNavigate() }}>Sentinel</a> settings.</div>
+                <div>{{ __('Metrics are disabled for this server. Enable them in') }} <a class="underline dark:text-white"
+                        href="{{ route('server.show', ['server_uuid' => $server->uuid]) }}/sentinel" {{ wireNavigate() }}>{{ __('Sentinel') }}</a> {{ __('settings.') }}</div>
             @endif
         </div>
     </div>
