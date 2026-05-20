@@ -18,6 +18,8 @@ it('uses explicit translation lookups in follow-up i18n views', function () {
     $backupNow = file_get_contents($viewsRoot.'/livewire/project/database/backup-now.blade.php');
     $dockerImage = file_get_contents($viewsRoot.'/livewire/project/new/docker-image.blade.php');
     $simpleDockerfile = file_get_contents($viewsRoot.'/livewire/project/new/simple-dockerfile.blade.php');
+    $applicationAdvanced = file_get_contents($viewsRoot.'/livewire/project/application/advanced.blade.php');
+    $environmentVariableShow = file_get_contents($viewsRoot.'/livewire/project/shared/environment-variable/show.blade.php');
 
     expect($sentinel)
         ->toContain("{{ __('Sentinel') }}")
@@ -61,7 +63,15 @@ it('uses explicit translation lookups in follow-up i18n views', function () {
         ->toContain("__('SHA256 Digest (optional)')")
         ->and($simpleDockerfile)
         ->toContain("{{ __('Create a new Application') }}")
-        ->toContain("{{ __('Dockerfile') }}");
+        ->toContain("{{ __('Dockerfile') }}")
+        ->and($applicationAdvanced)
+        ->toContain("{{ __('Advanced') }}")
+        ->toContain("__('Disable Build Cache')")
+        ->toContain("__('Operations')")
+        ->and($environmentVariableShow)
+        ->toContain("__('Comment')")
+        ->toContain("__('Environment Variable Name')")
+        ->toContain("__('Is Literal?')");
 });
 
 it('resolves representative follow-up translations in zh_CN', function () {
@@ -76,6 +86,9 @@ it('resolves representative follow-up translations in zh_CN', function () {
         ->and(__('File:'))->toBe('文件：')
         ->and(__('In sync'))->toBe('已同步')
         ->and(__('Out of sync'))->toBe('未同步')
+        ->and(__('Build'))->toBe('构建')
+        ->and(__('Operations'))->toBe('操作')
+        ->and(__('Environment Variable Name'))->toBe('环境变量名称')
         ->and(__('settings.instance_updated'))->toBe('设置已更新。')
         ->and(trans('settings.instance_updated'))->toBe('设置已更新。');
 });
