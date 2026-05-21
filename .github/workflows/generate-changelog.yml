@@ -1,18 +1,17 @@
 name: Generate Changelog
 
 on:
-  push:
-    branches: [ v4.x ]
-    paths-ignore:
-      - .github/workflows/coolify-helper.yml
-      - .github/workflows/coolify-helper-next.yml
-      - .github/workflows/coolify-realtime.yml
-      - .github/workflows/coolify-realtime-next.yml
-      - .github/workflows/pr-quality.yaml
   workflow_dispatch:
+    inputs:
+      target_branch:
+        description: 目标分支
+        required: false
+        type: string
+        default: v4.x
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   changelog:
@@ -22,6 +21,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          ref: ${{ inputs.target_branch }}
           fetch-depth: 0
 
       - name: Generate changelog
@@ -33,10 +33,16 @@ jobs:
           OUTPUT: CHANGELOG.md
           GITHUB_REPO: ${{ github.repository }}
 
-      - name: Commit
-        run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email 'github-actions[bot]@users.noreply.github.com'
-          git add CHANGELOG.md
-          git commit -m "docs: update changelog"
-          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git v4.x
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: ${{ inputs.target_branch }}
+          branch: automation/update-changelog
+          delete-branch: true
+          commit-message: "docs: 更新更新日志"
+          title: "docs: 更新更新日志"
+          body: |
+            该 PR 由 `Generate Changelog` workflow 自动生成。
+          add-paths: |
+            CHANGELOG.md

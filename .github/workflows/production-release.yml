@@ -1,0 +1,104 @@
+name: Production Release
+
+on:
+  release:
+    types:
+      - published
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: production-release
+  cancel-in-progress: false
+
+jobs:
+  resolve-release:
+    runs-on: ubuntu-24.04
+    outputs:
+      ref: ${{ steps.versions.outputs.ref }}
+      release_tag: ${{ steps.versions.outputs.release_tag }}
+      app_version: ${{ steps.versions.outputs.app_version }}
+      helper_version: ${{ steps.versions.outputs.helper_version }}
+      realtime_version: ${{ steps.versions.outputs.realtime_version }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.release.tag_name }}
+          persist-credentials: false
+
+      - name: Resolve and validate release versions
+        id: versions
+        run: |
+          APP_VERSION="$(docker run --rm -v "$(pwd):/app" -w /app php:8.2-alpine3.16 php bootstrap/getVersion.php)"
+          HELPER_VERSION="$(docker run --rm -v "$(pwd):/app" -w /app php:8.2-alpine3.16 php bootstrap/getHelperVersion.php)"
+          REALTIME_VERSION="$(docker run --rm -v "$(pwd):/app" -w /app php:8.2-alpine3.16 php bootstrap/getRealtimeVersion.php)"
+
+          JSON_APP_VERSION="$(jq -r '.coolify.v4.version' versions.json)"
+          JSON_HELPER_VERSION="$(jq -r '.coolify.helper.version' versions.json)"
+          JSON_REALTIME_VERSION="$(jq -r '.coolify.realtime.version' versions.json)"
+
+          EXPECTED_TAG="v${APP_VERSION}"
+          if [ "${{ github.event.release.tag_name }}" != "$EXPECTED_TAG" ]; then
+            echo "Release tag ${GITHUB_REF_NAME} does not match app version ${APP_VERSION}."
+            exit 1
+          fi
+
+          if [ "$JSON_APP_VERSION" != "$APP_VERSION" ]; then
+            echo "versions.json coolify.v4.version (${JSON_APP_VERSION}) does not match config/constants.php (${APP_VERSION})."
+            exit 1
+          fi
+
+          if [ "$JSON_HELPER_VERSION" != "$HELPER_VERSION" ]; then
+            echo "versions.json coolify.helper.version (${JSON_HELPER_VERSION}) does not match config/constants.php (${HELPER_VERSION})."
+            exit 1
+          fi
+
+          if [ "$JSON_REALTIME_VERSION" != "$REALTIME_VERSION" ]; then
+            echo "versions.json coolify.realtime.version (${JSON_REALTIME_VERSION}) does not match config/constants.php (${REALTIME_VERSION})."
+            exit 1
+          fi
+
+          {
+            echo "ref=${{ github.event.release.tag_name }}"
+            echo "release_tag=${{ github.event.release.tag_name }}"
+            echo "app_version=${APP_VERSION}"
+            echo "helper_version=${HELPER_VERSION}"
+            echo "realtime_version=${REALTIME_VERSION}"
+          } >> "$GITHUB_OUTPUT"
+
+  build-coolify:
+    needs: resolve-release
+    uses: ./.github/workflows/coolify-production-build.yml
+    with:
+      ref: ${{ needs.resolve-release.outputs.ref }}
+    secrets: inherit
+
+  build-helper:
+    needs: resolve-release
+    uses: ./.github/workflows/coolify-helper.yml
+    with:
+      ref: ${{ needs.resolve-release.outputs.ref }}
+    secrets: inherit
+
+  build-realtime:
+    needs: resolve-release
+    uses: ./.github/workflows/coolify-realtime.yml
+    with:
+      ref: ${{ needs.resolve-release.outputs.ref }}
+    secrets: inherit
+
+  publish-artifacts:
+    needs:
+      - resolve-release
+      - build-coolify
+      - build-helper
+      - build-realtime
+    uses: ./.github/workflows/publish-production-artifacts.yml
+    with:
+      ref: ${{ needs.resolve-release.outputs.ref }}
+      app_version: ${{ needs.resolve-release.outputs.app_version }}
+      helper_version: ${{ needs.resolve-release.outputs.helper_version }}
+      realtime_version: ${{ needs.resolve-release.outputs.realtime_version }}
+    secrets: inherit

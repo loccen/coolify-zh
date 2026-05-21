@@ -1,19 +1,17 @@
 name: Production Image Build (v4)
 
 on:
-  push:
-    branches: ["v4.x"]
-    paths-ignore:
-      - .github/workflows/coolify-helper.yml
-      - .github/workflows/coolify-helper-next.yml
-      - .github/workflows/coolify-realtime.yml
-      - .github/workflows/coolify-realtime-next.yml
-      - .github/workflows/pr-quality.yaml
-      - docker/coolify-helper/Dockerfile
-      - docker/coolify-realtime/Dockerfile
-      - docker/testing-host/Dockerfile
-      - templates/**
-      - CHANGELOG.md
+  workflow_call:
+    inputs:
+      ref:
+        description: Git ref to build.
+        required: false
+        type: string
+        default: v4.x
+    outputs:
+      version:
+        description: Coolify app image version.
+        value: ${{ jobs.resolve.outputs.version }}
 
 permissions:
   contents: read
@@ -25,7 +23,23 @@ env:
   DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_PROD_RELEASE_CHANNEL }}
 
 jobs:
+  resolve:
+    runs-on: ubuntu-24.04
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.ref }}
+          persist-credentials: false
+
+      - name: Get Version
+        id: version
+        run: |
+          echo "version=$(docker run --rm -v "$(pwd):/app" -w /app php:8.2-alpine3.16 php bootstrap/getVersion.php)" >> "$GITHUB_OUTPUT"
+
   build-push:
+    needs: resolve
     strategy:
       matrix:
         include:
@@ -39,6 +53,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
         with:
+          ref: ${{ inputs.ref }}
           persist-credentials: false
 
       - name: Login to ${{ env.GITHUB_REGISTRY }}
@@ -47,11 +62,6 @@ jobs:
           registry: ${{ env.GITHUB_REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN  }}
-
-      - name: Get Version
-        id: version
-        run: |
-          echo "VERSION=$(docker run --rm -v "$(pwd):/app" -w /app php:8.2-alpine3.16 php bootstrap/getVersion.php)"|xargs >> $GITHUB_OUTPUT
 
       - name: Build and Push Image (${{ matrix.arch }})
         uses: docker/build-push-action@v6
@@ -61,16 +71,14 @@ jobs:
           platforms: ${{ matrix.platform }}
           push: true
           tags: |
-            ${{ env.GITHUB_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.VERSION }}-${{ matrix.arch }}
+            ${{ env.GITHUB_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.resolve.outputs.version }}-${{ matrix.arch }}
 
   merge-manifest:
     runs-on: ubuntu-24.04
-    needs: build-push
+    needs:
+      - resolve
+      - build-push
     steps:
-      - uses: actions/checkout@v5
-        with:
-          persist-credentials: false
-
       - uses: docker/setup-buildx-action@v3
 
       - name: Login to ${{ env.GITHUB_REGISTRY }}
@@ -80,17 +88,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN  }}
 
-      - name: Get Version
-        id: version
-        run: |
-          echo "VERSION=$(docker run --rm -v "$(pwd):/app" -w /app php:8.2-alpine3.16 php bootstrap/getVersion.php)"|xargs >> $GITHUB_OUTPUT
-
       - name: Create & publish manifest on ${{ env.GITHUB_REGISTRY }}
         run: |
           docker buildx imagetools create \
-          ${{ env.GITHUB_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.VERSION }}-amd64 \
-          ${{ env.GITHUB_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.VERSION }}-aarch64 \
-          --tag ${{ env.GITHUB_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.VERSION }} \
+          ${{ env.GITHUB_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.resolve.outputs.version }}-amd64 \
+          ${{ env.GITHUB_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.resolve.outputs.version }}-aarch64 \
+          --tag ${{ env.GITHUB_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.resolve.outputs.version }} \
           --tag ${{ env.GITHUB_REGISTRY }}/${{ env.IMAGE_NAME }}:latest
 
       - uses: sarisia/actions-status-discord@v1

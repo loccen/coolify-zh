@@ -12,6 +12,14 @@ it('uses fork-owned release infrastructure defaults', function () {
     expect(config('constants.services.official'))->toBe('https://loccen.github.io/coolify-zh-artifacts/coolify/service-templates-latest.json');
 });
 
+it('keeps production version metadata in sync', function () {
+    $versions = json_decode(file_get_contents(base_path('versions.json')), true, flags: JSON_THROW_ON_ERROR);
+
+    expect(data_get($versions, 'coolify.v4.version'))->toBe(config('constants.coolify.version'));
+    expect(data_get($versions, 'coolify.helper.version'))->toBe(config('constants.coolify.helper_version'));
+    expect(data_get($versions, 'coolify.realtime.version'))->toBe(config('constants.coolify.realtime_version'));
+});
+
 it('points install and upgrade scripts at the artifact repository', function () {
     $productionInstall = file_get_contents(base_path('scripts/install.sh'));
     $nightlyInstall = file_get_contents(base_path('other/nightly/install.sh'));
@@ -42,11 +50,45 @@ it('publishes artifacts to the dedicated pages repository', function () {
     expect($productionWorkflow)->toContain('artifacts-repo/coolify/restore-coolify-instance.sh');
     expect($productionWorkflow)->toContain('artifacts-repo/coolify/service-templates-latest.json');
     expect($productionWorkflow)->toContain('artifacts-repo/json/releases.json');
+    expect($productionWorkflow)->toContain('docker buildx imagetools inspect');
+    expect($productionWorkflow)->toContain('jq');
 
     expect($nightlyWorkflow)->toContain('repository: loccen/coolify-zh-artifacts');
     expect($nightlyWorkflow)->toContain('artifacts-repo/coolify-nightly/install.sh');
     expect($nightlyWorkflow)->toContain('artifacts-repo/coolify-nightly/restore-coolify-instance.sh');
     expect($nightlyWorkflow)->toContain('artifacts-repo/coolify-nightly/versions.json');
+});
+
+it('only releases production artifacts from an explicit release workflow', function () {
+    $releaseWorkflow = file_get_contents(base_path('.github/workflows/production-release.yml'));
+    $productionBuildWorkflow = file_get_contents(base_path('.github/workflows/coolify-production-build.yml'));
+    $helperWorkflow = file_get_contents(base_path('.github/workflows/coolify-helper.yml'));
+    $realtimeWorkflow = file_get_contents(base_path('.github/workflows/coolify-realtime.yml'));
+    $artifactsWorkflow = file_get_contents(base_path('.github/workflows/publish-production-artifacts.yml'));
+    $changelogWorkflow = file_get_contents(base_path('.github/workflows/generate-changelog.yml'));
+
+    expect($releaseWorkflow)->toContain('release:');
+    expect($releaseWorkflow)->toContain('published');
+    expect($releaseWorkflow)->toContain('./.github/workflows/coolify-production-build.yml');
+    expect($releaseWorkflow)->toContain('./.github/workflows/publish-production-artifacts.yml');
+    expect($releaseWorkflow)->toContain('v${APP_VERSION}');
+
+    expect($productionBuildWorkflow)->toContain('workflow_call:');
+    expect($productionBuildWorkflow)->not->toContain('branches: ["v4.x"]');
+
+    expect($helperWorkflow)->toContain('workflow_call:');
+    expect($helperWorkflow)->not->toContain('branches: [ "v4.x" ]');
+
+    expect($realtimeWorkflow)->toContain('workflow_call:');
+    expect($realtimeWorkflow)->not->toContain('branches: [ "v4.x" ]');
+
+    expect($artifactsWorkflow)->toContain('workflow_call:');
+    expect($artifactsWorkflow)->not->toContain('workflow_dispatch:');
+    expect($artifactsWorkflow)->toContain('coolify-helper:${{ inputs.helper_version }}');
+    expect($artifactsWorkflow)->toContain('coolify-realtime:${{ inputs.realtime_version }}');
+
+    expect($changelogWorkflow)->toContain('create-pull-request@v7');
+    expect($changelogWorkflow)->not->toContain('git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git v4.x');
 });
 
 it('does not keep upstream release infrastructure references in p0 files', function () {
@@ -67,6 +109,7 @@ it('does not keep upstream release infrastructure references in p0 files', funct
         '.github/workflows/coolify-realtime.yml',
         '.github/workflows/coolify-realtime-next.yml',
         '.github/workflows/coolify-testing-host.yml',
+        '.github/workflows/production-release.yml',
         '.github/workflows/publish-production-artifacts.yml',
         '.github/workflows/publish-nightly-artifacts.yml',
         'app/Console/Commands/SyncBunny.php',
