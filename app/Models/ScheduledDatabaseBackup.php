@@ -11,6 +11,11 @@ class ScheduledDatabaseBackup extends BaseModel
     protected function casts(): array
     {
         return [
+            'enabled' => 'boolean',
+            'save_s3' => 'boolean',
+            'dump_all' => 'boolean',
+            'disable_local_backup' => 'boolean',
+            'include_app_key' => 'boolean',
             'database_backup_retention_max_storage_locally' => 'float',
             'database_backup_retention_max_storage_s3' => 'float',
         ];
@@ -36,6 +41,7 @@ class ScheduledDatabaseBackup extends BaseModel
         'database_backup_retention_max_storage_s3',
         'timeout',
         'disable_local_backup',
+        'include_app_key',
     ];
 
     public static function ownedByCurrentTeam()

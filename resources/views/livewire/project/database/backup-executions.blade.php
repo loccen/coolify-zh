@@ -159,6 +159,32 @@
                             <x-forms.button class="dark:hover:bg-coolgray-400"
                                 x-on:click="download_file('{{ data_get($execution, 'id') }}')">Download</x-forms.button>
                         @endif
+                        @if ($backup->database_id === 0 && data_get($execution, 'is_instance_restore_package'))
+                            @php
+                                $restoreActions = [__('settings.backup_page.restore_warning')];
+                                if (!data_get($execution, 'includes_app_key')) {
+                                    $restoreActions[] = __('settings.backup_page.restore_without_app_key_warning');
+                                }
+                            @endphp
+                            @if (!data_get($execution, 'local_storage_deleted', false))
+                                <x-modal-confirmation :title="__('settings.backup_page.restore_local_title')"
+                                    :buttonTitle="__('settings.backup_page.restore_local')" isErrorButton
+                                    submitAction="restoreLocalBackup({{ data_get($execution, 'id') }})"
+                                    :actions="$restoreActions"
+                                    confirmationText="{{ data_get($execution, 'filename') }}"
+                                    :confirmationLabel="__('settings.backup_page.restore_local_description')"
+                                    :shortConfirmationLabel="__('settings.backup_page.restore_confirmation_short')" />
+                            @endif
+                            @if (data_get($execution, 's3_uploaded') === true && !data_get($execution, 's3_storage_deleted', false))
+                                <x-modal-confirmation :title="__('settings.backup_page.restore_s3_title')"
+                                    :buttonTitle="__('settings.backup_page.restore_s3')" isErrorButton
+                                    submitAction="restoreS3Backup({{ data_get($execution, 'id') }})"
+                                    :actions="$restoreActions"
+                                    confirmationText="{{ ltrim((string) data_get($execution, 'filename'), '/') }}"
+                                    :confirmationLabel="__('settings.backup_page.restore_s3_description')"
+                                    :shortConfirmationLabel="__('settings.backup_page.restore_confirmation_short')" />
+                            @endif
+                        @endif
                         @php
                             $executionCheckboxes = [];
                             $deleteActions = [];

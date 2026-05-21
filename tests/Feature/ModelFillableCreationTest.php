@@ -946,6 +946,7 @@ it('creates ScheduledDatabaseBackup with all fillable attributes', function () {
         'database_backup_retention_max_storage_s3' => 10000,
         'timeout' => 600,
         'disable_local_backup' => false,
+        'include_app_key' => true,
     ]);
 
     expect($backup->exists)->toBeTrue();
@@ -954,6 +955,7 @@ it('creates ScheduledDatabaseBackup with all fillable attributes', function () {
     expect($backup->database_backup_retention_amount_locally)->toBe(10);
     expect($backup->databases_to_backup)->toBe('testdb');
     expect($backup->timeout)->toBe(600);
+    expect($backup->include_app_key)->toBeTrue();
 });
 
 it('creates ScheduledDatabaseBackupExecution with all fillable attributes', function () {
@@ -985,9 +987,13 @@ it('creates ScheduledDatabaseBackupExecution with all fillable attributes', func
         'local_storage_deleted' => false,
         's3_storage_deleted' => false,
         's3_uploaded' => false,
+        'is_instance_restore_package' => true,
+        'includes_app_key' => true,
     ]);
 
     expect($execution->exists)->toBeTrue();
+    expect($execution->is_instance_restore_package)->toBeTrue();
+    expect($execution->includes_app_key)->toBeTrue();
     expect($execution->uuid)->toBe('custom-exec-uuid');
     expect($execution->status)->toBe('success');
     expect($execution->filename)->toBe('backup-2026-03-31.sql.gz');

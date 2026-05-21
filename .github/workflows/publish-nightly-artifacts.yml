@@ -9,6 +9,7 @@ on:
       - other/nightly/docker-compose.prod.yml
       - other/nightly/install.sh
       - other/nightly/upgrade.sh
+      - scripts/restore-coolify-instance.sh
       - other/nightly/versions.json
       - .github/workflows/publish-nightly-artifacts.yml
   workflow_dispatch:
@@ -41,6 +42,7 @@ jobs:
           cp other/nightly/docker-compose.prod.yml artifacts-repo/coolify-nightly/docker-compose.prod.yml
           cp other/nightly/.env.production artifacts-repo/coolify-nightly/.env.production
           cp other/nightly/install.sh artifacts-repo/coolify-nightly/install.sh
+          cp scripts/restore-coolify-instance.sh artifacts-repo/coolify-nightly/restore-coolify-instance.sh
           cp other/nightly/upgrade.sh artifacts-repo/coolify-nightly/upgrade.sh
           cp other/nightly/versions.json artifacts-repo/coolify-nightly/versions.json
           touch artifacts-repo/.nojekyll

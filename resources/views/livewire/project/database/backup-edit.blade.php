@@ -79,6 +79,12 @@
                         id="databasesToBackup" />
                 @endif
             @endif
+            @if ($backup->database_id === 0)
+                <div class="w-80">
+                    <x-forms.checkbox :label="__('settings.backup_page.include_app_key')" id="includeAppKey" instantSave
+                        :helper="__('settings.backup_page.include_app_key_helper')" />
+                </div>
+            @endif
         </div>
         <div class="flex gap-2">
             <x-forms.input :label="__('Frequency')" id="frequency" required />

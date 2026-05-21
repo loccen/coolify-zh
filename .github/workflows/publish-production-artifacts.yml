@@ -8,6 +8,7 @@ on:
       - docker-compose.yml
       - docker-compose.prod.yml
       - scripts/install.sh
+      - scripts/restore-coolify-instance.sh
       - scripts/upgrade.sh
       - templates/service-templates-latest.json
       - versions.json
@@ -44,6 +45,7 @@ jobs:
           cp docker-compose.prod.yml artifacts-repo/coolify/docker-compose.prod.yml
           cp .env.production artifacts-repo/coolify/.env.production
           cp scripts/install.sh artifacts-repo/coolify/install.sh
+          cp scripts/restore-coolify-instance.sh artifacts-repo/coolify/restore-coolify-instance.sh
           cp scripts/upgrade.sh artifacts-repo/coolify/upgrade.sh
           cp versions.json artifacts-repo/coolify/versions.json
           cp templates/service-templates-latest.json artifacts-repo/coolify/service-templates-latest.json

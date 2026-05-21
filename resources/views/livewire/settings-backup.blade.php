@@ -31,6 +31,14 @@
                     <div class="py-4">
                         <livewire:project.database.backup-executions :backup="$backup" />
                     </div>
+                    <x-slide-over @instancerestore.window="slideOverOpen = true" closeWithX fullScreen>
+                        <x-slot:title>{{ __('settings.backup_page.restore_logs') }}</x-slot:title>
+                        <x-slot:content>
+                            <div wire:ignore>
+                                <livewire:activity-monitor wire:key="instance-restore-activity-monitor" header="Logs" fullHeight />
+                            </div>
+                        </x-slot:content>
+                    </x-slide-over>
                 @else
                     {{ __('settings.backup_page.configure_backup_intro') }}
                     <x-forms.button class="mt-2" wire:click="addCoolifyDatabase">{{ __('settings.backup_page.configure_backup') }}</x-forms.button>

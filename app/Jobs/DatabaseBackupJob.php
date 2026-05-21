@@ -51,9 +51,13 @@ class DatabaseBackupJob implements ShouldBeEncrypted, ShouldQueue
 
     public ?string $backup_location = null;
 
+    public ?string $raw_backup_location = null;
+
     public string $backup_dir;
 
     public string $backup_file;
+
+    public ?string $raw_backup_file = null;
 
     public int $size = 0;
 
@@ -305,6 +309,7 @@ class DatabaseBackupJob implements ShouldBeEncrypted, ShouldQueue
                 $ip = Str::slug($this->server->ip);
                 $this->backup_dir = backup_dir().'/coolify'."/coolify-db-$ip";
             }
+            $isInstanceBackup = $this->isCoolifyInstanceBackup();
             foreach ($databasesToBackup as $database) {
                 // Generate unique UUID for each database backup execution
                 $attempts = 0;
@@ -324,8 +329,16 @@ class DatabaseBackupJob implements ShouldBeEncrypted, ShouldQueue
                 // Step 1: Create local backup
                 try {
                     if (str($databaseType)->contains('postgres')) {
-                        $this->backup_file = "/pg-dump-$database-".Carbon::now()->timestamp.'.dmp';
-                        if ($this->backup->dump_all) {
+                        $timestamp = Carbon::now()->timestamp;
+                        $this->raw_backup_location = null;
+                        $this->raw_backup_file = null;
+
+                        $this->backup_file = "/pg-dump-$database-$timestamp.dmp";
+                        if ($isInstanceBackup) {
+                            $this->backup_file = "/coolify-instance-backup-$timestamp.tar.gz";
+                            $this->raw_backup_file = "/coolify-instance-backup-$timestamp.dmp";
+                            $this->raw_backup_location = $this->backup_dir.$this->raw_backup_file;
+                        } elseif ($this->backup->dump_all) {
                             $this->backup_file = '/pg-dump-all-'.Carbon::now()->timestamp.'.gz';
                         }
                         $this->backup_location = $this->backup_dir.$this->backup_file;
@@ -335,6 +348,8 @@ class DatabaseBackupJob implements ShouldBeEncrypted, ShouldQueue
                             'filename' => $this->backup_location,
                             'scheduled_database_backup_id' => $this->backup->id,
                             'local_storage_deleted' => false,
+                            'is_instance_restore_package' => $isInstanceBackup,
+                            'includes_app_key' => $isInstanceBackup && ($this->backup->include_app_key ?? false),
                         ]);
                         $this->backup_standalone_postgresql($database);
                     } elseif (str($databaseType)->contains('mongo')) {
@@ -390,7 +405,12 @@ class DatabaseBackupJob implements ShouldBeEncrypted, ShouldQueue
                         throw new \Exception('Unsupported database type');
                     }
 
-                    $size = $this->calculate_size();
+                    $size = (int) $this->calculate_size($this->raw_backup_location ?? $this->backup_location);
+
+                    if ($isInstanceBackup) {
+                        $this->packageCoolifyInstanceBackup();
+                        $size = (int) $this->calculate_size();
+                    }
 
                     // Verify local backup succeeded
                     if ($size > 0) {
@@ -579,7 +599,8 @@ class DatabaseBackupJob implements ShouldBeEncrypted, ShouldQueue
                 // Validate and escape database name to prevent command injection
                 validateShellSafePath($database, 'database name');
                 $escapedDatabase = escapeshellarg($database);
-                $backupCommand .= " $this->container_name pg_dump --format=custom --no-acl --no-owner --username $escapedUsername $escapedDatabase > $this->backup_location";
+                $targetLocation = $this->raw_backup_location ?? $this->backup_location;
+                $backupCommand .= " $this->container_name pg_dump --format=custom --no-acl --no-owner --username $escapedUsername $escapedDatabase > $targetLocation";
             }
 
             $commands[] = $backupCommand;
@@ -660,9 +681,65 @@ class DatabaseBackupJob implements ShouldBeEncrypted, ShouldQueue
         }
     }
 
-    private function calculate_size()
+    private function calculate_size(?string $path = null)
     {
-        return instant_remote_process(["du -b $this->backup_location | cut -f1"], $this->server, false, false, null, disableMultiplexing: true);
+        $targetPath = $path ?? $this->backup_location;
+
+        return instant_remote_process(["du -b $targetPath | cut -f1"], $this->server, false, false, null, disableMultiplexing: true);
+    }
+
+    private function isCoolifyInstanceBackup(): bool
+    {
+        return $this->database->name === 'coolify-db';
+    }
+
+    private function packageCoolifyInstanceBackup(): void
+    {
+        if (blank($this->raw_backup_location) || blank($this->backup_location)) {
+            throw new \RuntimeException('Raw backup location is missing for Coolify instance package.');
+        }
+
+        $manifest = [
+            'type' => 'coolify-instance-backup',
+            'format_version' => 1,
+            'coolify_version' => config('constants.coolify.version'),
+            'created_at' => now()->toIso8601String(),
+            'source_server_ip' => $this->server->ip,
+            'database' => 'coolify',
+            'dump_filename' => 'database/coolify.dmp',
+            'dump_format' => 'postgres-custom',
+            'includes_app_key' => (bool) ($this->backup->include_app_key ?? false),
+            'backup_execution_uuid' => $this->backup_log_uuid,
+        ];
+
+        $manifestBase64 = base64_encode(json_encode($manifest, JSON_THROW_ON_ERROR));
+        $commands = [
+            'tmp_dir=$(mktemp -d /tmp/coolify-instance-backup.XXXXXX)',
+            'mkdir -p "$tmp_dir/database"',
+            'cp '.escapeshellarg($this->raw_backup_location).' "$tmp_dir/database/coolify.dmp"',
+            'echo '.escapeshellarg($manifestBase64).' | base64 -d > "$tmp_dir/manifest.json"',
+        ];
+
+        if ($this->backup->include_app_key) {
+            $appKey = config('app.key');
+            if (blank($appKey)) {
+                throw new \RuntimeException('APP_KEY is empty, cannot include it in the backup package.');
+            }
+
+            $appKeyBase64 = base64_encode($appKey."\n");
+            $commands[] = 'mkdir -p "$tmp_dir/secrets"';
+            $commands[] = 'echo '.escapeshellarg($appKeyBase64).' | base64 -d > "$tmp_dir/secrets/app_key.txt"';
+        }
+
+        $commands[] = 'tar -czf '.escapeshellarg($this->backup_location).' -C "$tmp_dir" .';
+        $commands[] = 'rm -rf "$tmp_dir" '.escapeshellarg($this->raw_backup_location);
+
+        $packageOutput = instant_remote_process($commands, $this->server, true, false, $this->timeout, disableMultiplexing: true);
+        $packageOutput = trim($packageOutput);
+
+        if ($packageOutput !== '') {
+            $this->add_to_backup_output($packageOutput);
+        }
     }
 
     private function upload_to_s3(): void

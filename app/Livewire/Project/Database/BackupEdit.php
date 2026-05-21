@@ -3,6 +3,7 @@
 namespace App\Livewire\Project\Database;
 
 use App\Models\ScheduledDatabaseBackup;
+use App\Models\ServiceDatabase;
 use Exception;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Attributes\Locked;
@@ -75,6 +76,9 @@ class BackupEdit extends Component
     #[Validate(['required', 'boolean'])]
     public bool $dumpAll = false;
 
+    #[Validate(['required', 'boolean'])]
+    public bool $includeAppKey = false;
+
     #[Validate(['required', 'int', 'min:60', 'max:36000'])]
     public int|string $timeout = 3600;
 
@@ -112,6 +116,7 @@ class BackupEdit extends Component
 
             $this->backup->databases_to_backup = $this->databasesToBackup;
             $this->backup->dump_all = $this->dumpAll;
+            $this->backup->include_app_key = $this->includeAppKey;
             $this->backup->timeout = $this->timeout;
             $this->customValidate();
             $this->backup->save();
@@ -130,6 +135,7 @@ class BackupEdit extends Component
             $this->s3StorageId = $this->backup->s3_storage_id;
             $this->databasesToBackup = $this->backup->databases_to_backup;
             $this->dumpAll = $this->backup->dump_all;
+            $this->includeAppKey = $this->backup->include_app_key ?? false;
             $this->timeout = $this->backup->timeout;
         }
     }
@@ -144,7 +150,7 @@ class BackupEdit extends Component
 
         try {
             $server = null;
-            if ($this->backup->database instanceof \App\Models\ServiceDatabase) {
+            if ($this->backup->database instanceof ServiceDatabase) {
                 $server = $this->backup->database->service->destination->server;
             } elseif ($this->backup->database->destination && $this->backup->database->destination->server) {
                 $server = $this->backup->database->destination->server;
@@ -170,7 +176,7 @@ class BackupEdit extends Component
 
             $this->backup->delete();
 
-            if ($this->backup->database->getMorphClass() === \App\Models\ServiceDatabase::class) {
+            if ($this->backup->database->getMorphClass() === ServiceDatabase::class) {
                 $serviceDatabase = $this->backup->database;
 
                 return redirect()->route('project.service.database.backups', [
@@ -182,7 +188,7 @@ class BackupEdit extends Component
             } else {
                 return redirect()->route('project.database.backup.index', $this->parameters);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->dispatch('error', 'Failed to delete backup: '.$e->getMessage());
 
             return handleError($e, $this);
@@ -214,7 +220,7 @@ class BackupEdit extends Component
 
         $isValid = validate_cron_expression($this->backup->frequency);
         if (! $isValid) {
-            throw new \Exception('Invalid Cron / Human expression');
+            throw new Exception('Invalid Cron / Human expression');
         }
         $this->validate();
     }

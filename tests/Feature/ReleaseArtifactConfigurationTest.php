@@ -27,6 +27,10 @@ it('points install and upgrade scripts at the artifact repository', function () 
     expect($nightlyInstall)->toContain('$ARTIFACT_BASE_URL/upgrade.sh');
     expect($productionUpgrade)->toContain('${IMAGE_NAMESPACE}/coolify-helper:${LATEST_HELPER_VERSION}');
     expect($nightlyUpgrade)->toContain('${IMAGE_NAMESPACE}/coolify-helper:${LATEST_HELPER_VERSION}');
+    expect($productionUpgrade)->toContain('$ARTIFACT_BASE_URL/restore-coolify-instance.sh');
+    expect($nightlyUpgrade)->toContain('$ARTIFACT_BASE_URL/restore-coolify-instance.sh');
+    expect($productionUpgrade)->toContain('/data/coolify/bin/restore-coolify-instance.sh');
+    expect($nightlyUpgrade)->toContain('/data/coolify/bin/restore-coolify-instance.sh');
 });
 
 it('publishes artifacts to the dedicated pages repository', function () {
@@ -35,11 +39,13 @@ it('publishes artifacts to the dedicated pages repository', function () {
 
     expect($productionWorkflow)->toContain('repository: loccen/coolify-zh-artifacts');
     expect($productionWorkflow)->toContain('artifacts-repo/coolify/install.sh');
+    expect($productionWorkflow)->toContain('artifacts-repo/coolify/restore-coolify-instance.sh');
     expect($productionWorkflow)->toContain('artifacts-repo/coolify/service-templates-latest.json');
     expect($productionWorkflow)->toContain('artifacts-repo/json/releases.json');
 
     expect($nightlyWorkflow)->toContain('repository: loccen/coolify-zh-artifacts');
     expect($nightlyWorkflow)->toContain('artifacts-repo/coolify-nightly/install.sh');
+    expect($nightlyWorkflow)->toContain('artifacts-repo/coolify-nightly/restore-coolify-instance.sh');
     expect($nightlyWorkflow)->toContain('artifacts-repo/coolify-nightly/versions.json');
 });
 

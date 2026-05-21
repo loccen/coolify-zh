@@ -101,6 +101,7 @@ class SettingsBackup extends Component
                 'enabled' => true,
                 'save_s3' => false,
                 'frequency' => '0 0 * * *',
+                'include_app_key' => false,
                 'database_id' => $this->database->id,
                 'database_type' => StandalonePostgresql::class,
                 'team_id' => currentTeam()->id,

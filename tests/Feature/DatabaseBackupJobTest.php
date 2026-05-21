@@ -40,6 +40,33 @@ test('scheduled database backup execution model casts storage deletion fields co
     expect($casts['s3_storage_deleted'])->toBe('boolean');
 });
 
+test('instance restore backup metadata columns exist', function () {
+    expect(Schema::hasColumn('scheduled_database_backups', 'include_app_key'))->toBeTrue();
+    expect(Schema::hasColumn('scheduled_database_backup_executions', 'is_instance_restore_package'))->toBeTrue();
+    expect(Schema::hasColumn('scheduled_database_backup_executions', 'includes_app_key'))->toBeTrue();
+});
+
+test('instance restore backup models cast new metadata flags correctly', function () {
+    $backupCasts = (new ScheduledDatabaseBackup)->getCasts();
+    $executionCasts = (new ScheduledDatabaseBackupExecution)->getCasts();
+
+    expect($backupCasts)->toHaveKey('include_app_key');
+    expect($backupCasts['include_app_key'])->toBe('boolean');
+    expect($executionCasts)->toHaveKey('is_instance_restore_package');
+    expect($executionCasts['is_instance_restore_package'])->toBe('boolean');
+    expect($executionCasts)->toHaveKey('includes_app_key');
+    expect($executionCasts['includes_app_key'])->toBe('boolean');
+});
+
+test('database backup job contains coolify instance package generation logic', function () {
+    $source = file_get_contents(app_path('Jobs/DatabaseBackupJob.php'));
+
+    expect($source)->toContain('coolify-instance-backup-');
+    expect($source)->toContain('manifest.json');
+    expect($source)->toContain('secrets/app_key.txt');
+    expect($source)->toContain('is_instance_restore_package');
+});
+
 test('upload_to_s3 throws exception and disables s3 when storage is null', function () {
     $backup = ScheduledDatabaseBackup::create([
         'frequency' => '0 0 * * *',

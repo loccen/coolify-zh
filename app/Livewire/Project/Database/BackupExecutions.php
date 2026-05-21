@@ -3,6 +3,8 @@
 namespace App\Livewire\Project\Database;
 
 use App\Models\ScheduledDatabaseBackup;
+use App\Models\ScheduledDatabaseBackupExecution;
+use App\Models\ServiceDatabase;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -78,7 +80,7 @@ class BackupExecutions extends Component
             return;
         }
 
-        $server = $execution->scheduledDatabaseBackup->database->getMorphClass() === \App\Models\ServiceDatabase::class
+        $server = $execution->scheduledDatabaseBackup->database->getMorphClass() === ServiceDatabase::class
             ? $execution->scheduledDatabaseBackup->database->service->destination->server
             : $execution->scheduledDatabaseBackup->database->destination->server;
 
@@ -98,6 +100,91 @@ class BackupExecutions extends Component
             $this->dispatch('error', 'Failed to delete backup: '.$e->getMessage());
 
             return true;
+        }
+
+        return true;
+    }
+
+    public function restoreLocalBackup($executionId, $password)
+    {
+        if (! verifyPasswordConfirmation($password, $this)) {
+            return 'The provided password is incorrect.';
+        }
+
+        try {
+            $execution = $this->resolveInstanceRestoreExecution($executionId);
+            if (data_get($execution, 'local_storage_deleted', false) || blank($execution->filename)) {
+                $this->dispatch('error', __('settings.backup_page.restore_not_available'));
+
+                return true;
+            }
+
+            $server = $this->server();
+            if (! $server) {
+                $this->dispatch('error', __('settings.backup_page.restore_server_missing'));
+
+                return true;
+            }
+
+            $this->ensureRestoreScriptExists($server);
+            $scriptPath = escapeshellarg($this->restoreScriptPath());
+            $packagePath = escapeshellarg($execution->filename);
+            $activity = remote_process(["bash {$scriptPath} --package {$packagePath}"], $server, ignore_errors: true);
+
+            $this->dispatch('activityMonitor', $activity->id);
+            $this->dispatch('instancerestore');
+            $this->dispatch('info', __('settings.backup_page.restore_started_local'));
+        } catch (\Throwable $e) {
+            $this->dispatch('error', $e->getMessage());
+        }
+
+        return true;
+    }
+
+    public function restoreS3Backup($executionId, $password)
+    {
+        if (! verifyPasswordConfirmation($password, $this)) {
+            return 'The provided password is incorrect.';
+        }
+
+        try {
+            $execution = $this->resolveInstanceRestoreExecution($executionId);
+            if (data_get($execution, 's3_uploaded') !== true || data_get($execution, 's3_storage_deleted', false)) {
+                $this->dispatch('error', __('settings.backup_page.restore_s3_not_available'));
+
+                return true;
+            }
+
+            $server = $this->server();
+            if (! $server) {
+                $this->dispatch('error', __('settings.backup_page.restore_server_missing'));
+
+                return true;
+            }
+
+            $storage = $execution->scheduledDatabaseBackup->s3;
+            if (! $storage) {
+                $this->dispatch('error', __('settings.backup_page.restore_s3_storage_missing'));
+
+                return true;
+            }
+
+            $this->ensureRestoreScriptExists($server);
+            $envFile = $this->writeS3RestoreEnvFile($server, $storage, $execution);
+            $objectKey = escapeshellarg($this->restoreObjectKey($execution));
+            $helperImage = escapeshellarg(config('constants.coolify.helper_image').':'.getHelperVersion());
+            $scriptPath = escapeshellarg($this->restoreScriptPath());
+            $envFileArg = escapeshellarg($envFile);
+
+            $activity = remote_process([
+                "bash {$scriptPath} --s3-env-file {$envFileArg} --s3-object-key {$objectKey} --helper-image {$helperImage}",
+            ], $server, ignore_errors: true);
+
+            $this->dispatch('activityMonitor', $activity->id);
+            $this->dispatch('instancerestore');
+            $this->dispatch('info', __('settings.backup_page.restore_started_s3'));
+        } catch (\Throwable $e) {
+            $this->dispatch('error', $e->getMessage());
         }
 
         return true;
@@ -185,7 +272,7 @@ class BackupExecutions extends Component
         if ($this->database) {
             $server = null;
 
-            if ($this->database instanceof \App\Models\ServiceDatabase) {
+            if ($this->database instanceof ServiceDatabase) {
                 $server = $this->database->service->destination->server;
             } elseif ($this->database->destination && $this->database->destination->server) {
                 $server = $this->database->destination->server;
@@ -196,6 +283,79 @@ class BackupExecutions extends Component
         }
 
         return null;
+    }
+
+    private function resolveInstanceRestoreExecution(int $executionId): ScheduledDatabaseBackupExecution
+    {
+        if (! isInstanceAdmin()) {
+            throw new \RuntimeException(__('settings.backup_page.restore_requires_instance_admin'));
+        }
+
+        if (! $this->backup || $this->backup->database_id !== 0) {
+            throw new \RuntimeException(__('settings.backup_page.restore_not_supported'));
+        }
+
+        $execution = $this->backup->executions()->where('id', $executionId)->first();
+        if (! $execution) {
+            throw new \RuntimeException(__('settings.backup_page.restore_execution_missing'));
+        }
+
+        if (! $execution->is_instance_restore_package) {
+            throw new \RuntimeException(__('settings.backup_page.restore_not_supported'));
+        }
+
+        if ($execution->status !== 'success') {
+            throw new \RuntimeException(__('settings.backup_page.restore_not_available'));
+        }
+
+        return $execution;
+    }
+
+    private function restoreScriptPath(): string
+    {
+        return '/data/coolify/bin/restore-coolify-instance.sh';
+    }
+
+    private function ensureRestoreScriptExists($server): void
+    {
+        $script = escapeshellarg($this->restoreScriptPath());
+        $exists = instant_remote_process(["test -x {$script} && echo OK || echo NOK"], $server, throwError: false);
+
+        if (trim((string) $exists) !== 'OK') {
+            throw new \RuntimeException(__('settings.backup_page.restore_script_missing'));
+        }
+    }
+
+    private function restoreObjectKey(ScheduledDatabaseBackupExecution $execution): string
+    {
+        $filename = ltrim((string) $execution->filename, '/');
+        if ($filename === '' || preg_match('/^[a-zA-Z0-9._\\/-]+$/', $filename) !== 1) {
+            throw new \RuntimeException(__('settings.backup_page.restore_s3_key_invalid'));
+        }
+
+        return $filename;
+    }
+
+    private function writeS3RestoreEnvFile($server, $storage, ScheduledDatabaseBackupExecution $execution): string
+    {
+        $envPath = "/tmp/coolify-instance-restore-{$execution->id}.env";
+        $envPayload = implode("\n", [
+            'S3_ENDPOINT='.$storage->endpoint,
+            'S3_ACCESS_KEY='.$storage->key,
+            'S3_SECRET_KEY='.$storage->secret,
+            'S3_BUCKET='.$storage->bucket,
+            '',
+        ]);
+        $encodedPayload = base64_encode($envPayload);
+        $escapedPath = escapeshellarg($envPath);
+        $escapedPayload = escapeshellarg($encodedPayload);
+
+        instant_remote_process([
+            "echo {$escapedPayload} | base64 -d > {$escapedPath}",
+            "chmod 600 {$escapedPath}",
+        ], $server);
+
+        return $envPath;
     }
 
     public function render()
