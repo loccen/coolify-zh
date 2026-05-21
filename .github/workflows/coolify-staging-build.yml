@@ -106,6 +106,6 @@ jobs:
          --tag ${{ env.GITHUB_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.sanitize.outputs.tag }}
 
       - uses: sarisia/actions-status-discord@v1
-        if: always()
+        if: ${{ always() && secrets.DISCORD_WEBHOOK_DEV_RELEASE_CHANNEL != '' }}
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK_DEV_RELEASE_CHANNEL  }}
