@@ -1,5 +1,14 @@
 <?php
 
+$defaultRegistryUrl = 'ghcr.io';
+$defaultImageNamespace = 'loccen';
+$defaultImageBase = $defaultRegistryUrl.'/'.$defaultImageNamespace;
+$defaultArtifactsRepositoryUrl = 'https://loccen.github.io/coolify-zh-artifacts';
+$defaultArtifactBaseUrl = $defaultArtifactsRepositoryUrl.'/coolify';
+$defaultNightlyArtifactBaseUrl = $defaultArtifactsRepositoryUrl.'/coolify-nightly';
+$defaultReleasesUrl = $defaultArtifactsRepositoryUrl.'/json/releases.json';
+$defaultRepositoryUrl = 'https://github.com/loccen/coolify-zh';
+
 return [
     'coolify' => [
         'version' => '4.1.0',
@@ -9,14 +18,22 @@ return [
         'self_hosted' => env('SELF_HOSTED', true),
         'autoupdate' => env('AUTOUPDATE'),
         'base_config_path' => env('BASE_CONFIG_PATH', '/data/coolify'),
-        'registry_url' => env('REGISTRY_URL', 'ghcr.io'),
-        'helper_image' => env('HELPER_IMAGE', env('REGISTRY_URL', 'ghcr.io').'/coollabsio/coolify-helper'),
-        'realtime_image' => env('REALTIME_IMAGE', env('REGISTRY_URL', 'ghcr.io').'/coollabsio/coolify-realtime'),
+        'registry_url' => env('REGISTRY_URL', $defaultRegistryUrl),
+        'image_namespace' => env('IMAGE_NAMESPACE', $defaultImageNamespace),
+        'image_base' => env('IMAGE_BASE', env('REGISTRY_URL', $defaultRegistryUrl).'/'.env('IMAGE_NAMESPACE', $defaultImageNamespace)),
+        'app_image' => env('APP_IMAGE', env('IMAGE_BASE', $defaultImageBase).'/coolify'),
+        'helper_image' => env('HELPER_IMAGE', env('IMAGE_BASE', $defaultImageBase).'/coolify-helper'),
+        'realtime_image' => env('REALTIME_IMAGE', env('IMAGE_BASE', $defaultImageBase).'/coolify-realtime'),
+        'testing_host_image' => env('TESTING_HOST_IMAGE', env('IMAGE_BASE', $defaultImageBase).'/coolify-testing-host'),
         'is_windows_docker_desktop' => env('IS_WINDOWS_DOCKER_DESKTOP', false),
-        'cdn_url' => env('CDN_URL', 'https://cdn.coollabs.io'),
-        'versions_url' => env('VERSIONS_URL', env('CDN_URL', 'https://cdn.coollabs.io').'/coolify/versions.json'),
-        'upgrade_script_url' => env('UPGRADE_SCRIPT_URL', env('CDN_URL', 'https://cdn.coollabs.io').'/coolify/upgrade.sh'),
-        'releases_url' => 'https://cdn.coolify.io/releases.json',
+        'artifact_base_url' => env('ARTIFACT_BASE_URL', $defaultArtifactBaseUrl),
+        'nightly_artifact_base_url' => env('NIGHTLY_ARTIFACT_BASE_URL', $defaultNightlyArtifactBaseUrl),
+        'versions_url' => env('VERSIONS_URL', env('ARTIFACT_BASE_URL', $defaultArtifactBaseUrl).'/versions.json'),
+        'upgrade_script_url' => env('UPGRADE_SCRIPT_URL', env('ARTIFACT_BASE_URL', $defaultArtifactBaseUrl).'/upgrade.sh'),
+        'releases_url' => env('RELEASES_URL', $defaultReleasesUrl),
+        'repository_url' => env('REPOSITORY_URL', $defaultRepositoryUrl),
+        'releases_page_url' => env('REPOSITORY_RELEASES_URL', env('REPOSITORY_URL', $defaultRepositoryUrl).'/releases'),
+        'upgrade_guide_url' => env('UPGRADE_GUIDE_URL', env('REPOSITORY_URL', $defaultRepositoryUrl).'/blob/v4.x/README.md'),
     ],
 
     'urls' => [
@@ -25,9 +42,7 @@ return [
     ],
 
     'services' => [
-        // Temporary disabled until cache is implemented
-        // 'official' => 'https://cdn.coollabs.io/coolify/service-templates.json',
-        'official' => 'https://raw.githubusercontent.com/coollabsio/coolify/v4.x/templates/service-templates-latest.json',
+        'official' => env('SERVICE_TEMPLATES_URL', env('ARTIFACT_BASE_URL', $defaultArtifactBaseUrl).'/service-templates-latest.json'),
         'file_name' => 'service-templates-latest.json',
     ],
 

@@ -1,0 +1,59 @@
+name: Publish Nightly Artifacts
+
+on:
+  push:
+    branches: [ "next" ]
+    paths:
+      - other/nightly/.env.production
+      - other/nightly/docker-compose.yml
+      - other/nightly/docker-compose.prod.yml
+      - other/nightly/install.sh
+      - other/nightly/upgrade.sh
+      - other/nightly/versions.json
+      - .github/workflows/publish-nightly-artifacts.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source repository
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Checkout artifacts repository
+        uses: actions/checkout@v5
+        with:
+          repository: loccen/coolify-zh-artifacts
+          ref: main
+          token: ${{ secrets.ARTIFACTS_REPO_TOKEN }}
+          path: artifacts-repo
+          persist-credentials: false
+
+      - name: Prepare nightly artifacts
+        run: |
+          mkdir -p artifacts-repo/coolify-nightly
+          cp other/nightly/docker-compose.yml artifacts-repo/coolify-nightly/docker-compose.yml
+          cp other/nightly/docker-compose.prod.yml artifacts-repo/coolify-nightly/docker-compose.prod.yml
+          cp other/nightly/.env.production artifacts-repo/coolify-nightly/.env.production
+          cp other/nightly/install.sh artifacts-repo/coolify-nightly/install.sh
+          cp other/nightly/upgrade.sh artifacts-repo/coolify-nightly/upgrade.sh
+          cp other/nightly/versions.json artifacts-repo/coolify-nightly/versions.json
+          touch artifacts-repo/.nojekyll
+
+      - name: Commit and push nightly artifacts
+        run: |
+          cd artifacts-repo
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          if git status --short | grep . >/dev/null; then
+            git add coolify-nightly .nojekyll
+            git commit -m "chore: 同步 nightly artifacts"
+            git push https://x-access-token:${{ secrets.ARTIFACTS_REPO_TOKEN }}@github.com/loccen/coolify-zh-artifacts.git HEAD:main
+          else
+            echo "No nightly artifact changes detected."
+          fi

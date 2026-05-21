@@ -1,9 +1,9 @@
 <?php
 
 // To prevent github actions from failing
-function env()
+function env($key = null, $default = null)
 {
-    return null;
+    return $default;
 }
 
 $version = include 'config/constants.php';

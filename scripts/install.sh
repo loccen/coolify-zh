@@ -10,12 +10,15 @@
 ## DOCKER_POOL_FORCE_OVERRIDE - Force override Docker address pool configuration (default: false)
 ## AUTOUPDATE - Set to "false" to disable auto-updates
 ## REGISTRY_URL - Custom registry URL for Docker images (default: ghcr.io)
+## IMAGE_NAMESPACE - Custom image namespace (default: loccen)
+## ARTIFACT_BASE_URL - Base URL for installation artifacts
+## RELEASES_URL - URL for release metadata used by the UI
 
 set -e # Exit immediately if a command exits with a non-zero status
 ## $1 could be empty, so we need to disable this check
 #set -u # Treat unset variables as an error and exit
 set -o pipefail # Cause a pipeline to return the status of the last command that exited with a non-zero status
-CDN="https://cdn.coollabs.io/coolify"
+DEFAULT_ARTIFACT_BASE_URL="https://loccen.github.io/coolify-zh-artifacts/coolify"
 DATE=$(date +"%Y%m%d-%H%M%S")
 
 OS_TYPE=$(grep -w "ID" /etc/os-release | cut -d "=" -f 2 | tr -d '"')
@@ -36,7 +39,7 @@ echo "=========================================="
 echo ""
 echo "Welcome to Coolify Installer!"
 echo "This script will install everything for you. Sit back and relax."
-echo "Source code: https://github.com/coollabsio/coolify/blob/v4.x/scripts/install.sh"
+echo "Source code: https://github.com/loccen/coolify-zh/blob/v4.x/scripts/install.sh"
 
 # Predefined root user
 ROOT_USERNAME=${ROOT_USERNAME:-}
@@ -52,6 +55,30 @@ else
     else
         REGISTRY_URL="ghcr.io"
         echo "Using default registry URL: $REGISTRY_URL"
+    fi
+fi
+
+if [ -n "${IMAGE_NAMESPACE+x}" ]; then
+    echo "Using image namespace from environment variable: $IMAGE_NAMESPACE"
+else
+    if [ -f "$ENV_FILE" ] && grep -q "^IMAGE_NAMESPACE=" "$ENV_FILE"; then
+        IMAGE_NAMESPACE=$(grep "^IMAGE_NAMESPACE=" "$ENV_FILE" | cut -d '=' -f2)
+        echo "Using image namespace from .env: $IMAGE_NAMESPACE"
+    else
+        IMAGE_NAMESPACE="loccen"
+        echo "Using default image namespace: $IMAGE_NAMESPACE"
+    fi
+fi
+
+if [ -n "${ARTIFACT_BASE_URL+x}" ]; then
+    echo "Using artifact base URL from environment variable: $ARTIFACT_BASE_URL"
+else
+    if [ -f "$ENV_FILE" ] && grep -q "^ARTIFACT_BASE_URL=" "$ENV_FILE"; then
+        ARTIFACT_BASE_URL=$(grep "^ARTIFACT_BASE_URL=" "$ENV_FILE" | cut -d '=' -f2)
+        echo "Using artifact base URL from .env: $ARTIFACT_BASE_URL"
+    else
+        ARTIFACT_BASE_URL="$DEFAULT_ARTIFACT_BASE_URL"
+        echo "Using default artifact base URL: $ARTIFACT_BASE_URL"
     fi
 fi
 
@@ -317,7 +344,7 @@ if [ "$OS_TYPE" = 'amzn' ]; then
 fi
 
 # Fetch versions.json once and parse all values from it
-VERSIONS_JSON=$(curl -L --silent $CDN/versions.json)
+VERSIONS_JSON=$(curl -L --silent $ARTIFACT_BASE_URL/versions.json)
 LATEST_VERSION=$(echo "$VERSIONS_JSON" | grep -i version | xargs | awk '{print $2}' | tr -d ',')
 LATEST_HELPER_VERSION=$(echo "$VERSIONS_JSON" | grep -i version | xargs | awk '{print $6}' | tr -d ',')
 LATEST_REALTIME_VERSION=$(echo "$VERSIONS_JSON" | grep -i version | xargs | awk '{print $8}' | tr -d ',')
@@ -353,6 +380,8 @@ echo "| Helper            | $LATEST_HELPER_VERSION"
 echo "| Realtime          | $LATEST_REALTIME_VERSION"
 echo "| Docker Pool       | $DOCKER_ADDRESS_POOL_BASE (size $DOCKER_ADDRESS_POOL_SIZE)"
 echo "| Registry URL      | $REGISTRY_URL"
+echo "| Image Namespace   | $IMAGE_NAMESPACE"
+echo "| Artifact Base URL | $ARTIFACT_BASE_URL"
 echo "---------------------------------------------"
 echo ""
 
@@ -768,18 +797,18 @@ else
     fi
 fi
 
-log_section "Step 5/9: Downloading required files from CDN"
-echo "5/9 Downloading required files from CDN..."
-log "Downloading configuration files in parallel..."
+log_section "Step 5/9: Downloading required files from artifact repository"
+echo "5/9 Downloading required files from artifact repository..."
+log "Downloading configuration files in parallel from ${ARTIFACT_BASE_URL}..."
 
 # Download files in parallel for faster installation
-curl -fsSL -L $CDN/docker-compose.yml -o /data/coolify/source/docker-compose.yml &
+curl -fsSL -L $ARTIFACT_BASE_URL/docker-compose.yml -o /data/coolify/source/docker-compose.yml &
 PID1=$!
-curl -fsSL -L $CDN/docker-compose.prod.yml -o /data/coolify/source/docker-compose.prod.yml &
+curl -fsSL -L $ARTIFACT_BASE_URL/docker-compose.prod.yml -o /data/coolify/source/docker-compose.prod.yml &
 PID2=$!
-curl -fsSL -L $CDN/.env.production -o /data/coolify/source/.env.production &
+curl -fsSL -L $ARTIFACT_BASE_URL/.env.production -o /data/coolify/source/.env.production &
 PID3=$!
-curl -fsSL -L $CDN/upgrade.sh -o /data/coolify/source/upgrade.sh &
+curl -fsSL -L $ARTIFACT_BASE_URL/upgrade.sh -o /data/coolify/source/upgrade.sh &
 PID4=$!
 
 # Wait for all downloads to complete and check for errors
@@ -855,6 +884,22 @@ fi
 if [ -n "${REGISTRY_URL+x}" ]; then
     # Only update if REGISTRY_URL was explicitly provided
     update_env_var "REGISTRY_URL" "$REGISTRY_URL"
+fi
+
+if [ -n "${IMAGE_NAMESPACE+x}" ]; then
+    update_env_var "IMAGE_NAMESPACE" "$IMAGE_NAMESPACE"
+fi
+
+if [ -n "${ARTIFACT_BASE_URL+x}" ]; then
+    update_env_var "ARTIFACT_BASE_URL" "$ARTIFACT_BASE_URL"
+fi
+
+if [ -n "${NIGHTLY_ARTIFACT_BASE_URL+x}" ]; then
+    update_env_var "NIGHTLY_ARTIFACT_BASE_URL" "$NIGHTLY_ARTIFACT_BASE_URL"
+fi
+
+if [ -n "${RELEASES_URL+x}" ]; then
+    update_env_var "RELEASES_URL" "$RELEASES_URL"
 fi
 
 if [ "$AUTOUPDATE" = "false" ]; then

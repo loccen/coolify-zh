@@ -1,13 +1,27 @@
 #!/bin/bash
 ## Do not modify this file. You will lose the ability to autoupdate!
 
-CDN="https://cdn.coollabs.io/coolify-nightly"
+DEFAULT_ARTIFACT_BASE_URL="https://loccen.github.io/coolify-zh-artifacts/coolify-nightly"
 LATEST_IMAGE=${1:-latest}
 LATEST_HELPER_VERSION=${2:-latest}
 REGISTRY_URL=${3:-ghcr.io}
 SKIP_BACKUP=${4:-false}
 ENV_FILE="/data/coolify/source/.env"
 STATUS_FILE="/data/coolify/source/.upgrade-status"
+
+IMAGE_NAMESPACE=${IMAGE_NAMESPACE:-}
+ARTIFACT_BASE_URL=${ARTIFACT_BASE_URL:-}
+
+if [ -z "$IMAGE_NAMESPACE" ] && [ -f "$ENV_FILE" ] && grep -q "^IMAGE_NAMESPACE=" "$ENV_FILE"; then
+    IMAGE_NAMESPACE=$(grep "^IMAGE_NAMESPACE=" "$ENV_FILE" | cut -d '=' -f2)
+fi
+
+if [ -z "$ARTIFACT_BASE_URL" ] && [ -f "$ENV_FILE" ] && grep -q "^ARTIFACT_BASE_URL=" "$ENV_FILE"; then
+    ARTIFACT_BASE_URL=$(grep "^ARTIFACT_BASE_URL=" "$ENV_FILE" | cut -d '=' -f2)
+fi
+
+IMAGE_NAMESPACE=${IMAGE_NAMESPACE:-loccen}
+ARTIFACT_BASE_URL=${ARTIFACT_BASE_URL:-$DEFAULT_ARTIFACT_BASE_URL}
 
 DATE=$(date +%Y-%m-%d-%H-%M-%S)
 LOGFILE="/data/coolify/source/upgrade-${DATE}.log"
@@ -50,12 +64,12 @@ echo "============================================================" >>"$LOGFILE"
 log_section "Step 1/6: Downloading configuration files"
 write_status "1" "Downloading configuration files"
 echo "1/6 Downloading latest configuration files..."
-log "Downloading docker-compose.yml from ${CDN}/docker-compose.yml"
-curl -fsSL -L $CDN/docker-compose.yml -o /data/coolify/source/docker-compose.yml
-log "Downloading docker-compose.prod.yml from ${CDN}/docker-compose.prod.yml"
-curl -fsSL -L $CDN/docker-compose.prod.yml -o /data/coolify/source/docker-compose.prod.yml
-log "Downloading .env.production from ${CDN}/.env.production"
-curl -fsSL -L $CDN/.env.production -o /data/coolify/source/.env.production
+log "Downloading docker-compose.yml from ${ARTIFACT_BASE_URL}/docker-compose.yml"
+curl -fsSL -L $ARTIFACT_BASE_URL/docker-compose.yml -o /data/coolify/source/docker-compose.yml
+log "Downloading docker-compose.prod.yml from ${ARTIFACT_BASE_URL}/docker-compose.prod.yml"
+curl -fsSL -L $ARTIFACT_BASE_URL/docker-compose.prod.yml -o /data/coolify/source/docker-compose.prod.yml
+log "Downloading .env.production from ${ARTIFACT_BASE_URL}/.env.production"
+curl -fsSL -L $ARTIFACT_BASE_URL/.env.production -o /data/coolify/source/.env.production
 log "Configuration files downloaded successfully"
 echo "     Done."
 
@@ -155,7 +169,7 @@ echo "3/6 Pulling Docker images..."
 echo "     This may take a few minutes depending on your connection."
 
 # Also pull the helper image (not in compose files but needed for upgrade)
-HELPER_IMAGE="${REGISTRY_URL:-ghcr.io}/coollabsio/coolify-helper:${LATEST_HELPER_VERSION}"
+HELPER_IMAGE="${REGISTRY_URL:-ghcr.io}/${IMAGE_NAMESPACE}/coolify-helper:${LATEST_HELPER_VERSION}"
 echo "     - Pulling $HELPER_IMAGE..."
 log "Pulling image: $HELPER_IMAGE"
 if docker pull "$HELPER_IMAGE" >>"$LOGFILE" 2>&1; then
@@ -204,6 +218,7 @@ nohup bash -c "
     STATUS_FILE='$STATUS_FILE'
     DOCKER_CONFIG_MOUNT='$DOCKER_CONFIG_MOUNT'
     REGISTRY_URL='$REGISTRY_URL'
+    IMAGE_NAMESPACE='$IMAGE_NAMESPACE'
     LATEST_HELPER_VERSION='$LATEST_HELPER_VERSION'
     LATEST_IMAGE='$LATEST_IMAGE'
 
@@ -239,11 +254,11 @@ nohup bash -c "
     if [ -f /data/coolify/source/docker-compose.custom.yml ]; then
         log 'Using custom docker-compose.yml'
         log 'Running docker compose up with custom configuration...'
-        docker run -v /data/coolify/source:/data/coolify/source -v /var/run/docker.sock:/var/run/docker.sock \${DOCKER_CONFIG_MOUNT} --rm \${REGISTRY_URL:-ghcr.io}/coollabsio/coolify-helper:\${LATEST_HELPER_VERSION} bash -c \"LATEST_IMAGE=\${LATEST_IMAGE} docker compose --env-file /data/coolify/source/.env -f /data/coolify/source/docker-compose.yml -f /data/coolify/source/docker-compose.prod.yml -f /data/coolify/source/docker-compose.custom.yml up -d --remove-orphans --wait --wait-timeout 60\" >>\"\$LOGFILE\" 2>&1
+        docker run -v /data/coolify/source:/data/coolify/source -v /var/run/docker.sock:/var/run/docker.sock \${DOCKER_CONFIG_MOUNT} --rm \${REGISTRY_URL:-ghcr.io}/\${IMAGE_NAMESPACE}/coolify-helper:\${LATEST_HELPER_VERSION} bash -c \"LATEST_IMAGE=\${LATEST_IMAGE} docker compose --env-file /data/coolify/source/.env -f /data/coolify/source/docker-compose.yml -f /data/coolify/source/docker-compose.prod.yml -f /data/coolify/source/docker-compose.custom.yml up -d --remove-orphans --wait --wait-timeout 60\" >>\"\$LOGFILE\" 2>&1
     else
         log 'Using standard docker-compose configuration'
         log 'Running docker compose up...'
-        docker run -v /data/coolify/source:/data/coolify/source -v /var/run/docker.sock:/var/run/docker.sock \${DOCKER_CONFIG_MOUNT} --rm \${REGISTRY_URL:-ghcr.io}/coollabsio/coolify-helper:\${LATEST_HELPER_VERSION} bash -c \"LATEST_IMAGE=\${LATEST_IMAGE} docker compose --env-file /data/coolify/source/.env -f /data/coolify/source/docker-compose.yml -f /data/coolify/source/docker-compose.prod.yml up -d --remove-orphans --wait --wait-timeout 60\" >>\"\$LOGFILE\" 2>&1
+        docker run -v /data/coolify/source:/data/coolify/source -v /var/run/docker.sock:/var/run/docker.sock \${DOCKER_CONFIG_MOUNT} --rm \${REGISTRY_URL:-ghcr.io}/\${IMAGE_NAMESPACE}/coolify-helper:\${LATEST_HELPER_VERSION} bash -c \"LATEST_IMAGE=\${LATEST_IMAGE} docker compose --env-file /data/coolify/source/.env -f /data/coolify/source/docker-compose.yml -f /data/coolify/source/docker-compose.prod.yml up -d --remove-orphans --wait --wait-timeout 60\" >>\"\$LOGFILE\" 2>&1
     fi
     log 'Docker compose up completed'
 

@@ -151,7 +151,7 @@
                                     <p class="text-sm text-neutral-600 dark:text-neutral-400">
                                         If something goes wrong, check the
                                         <a class="font-medium underline dark:text-white hover:text-neutral-800 dark:hover:text-neutral-300"
-                                            href="https://coolify.io/docs/upgrade" target="_blank">upgrade guide</a> or the
+                                            href="{{ config('constants.coolify.upgrade_guide_url') }}" target="_blank">upgrade guide</a> or the
                                         logs on the server at /data/coolify/source/upgrade*.
                                     </p>
                                 </div>

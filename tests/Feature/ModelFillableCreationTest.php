@@ -149,11 +149,11 @@ it('creates Application with all fillable attributes', function () {
         'name' => 'Full Fillable App',
         'description' => 'App with every fillable attr set',
         'fqdn' => 'https://app.example.com',
-        'git_repository' => 'https://github.com/coollabsio/coolify',
+        'git_repository' => 'https://github.com/loccen/coolify-zh',
         'git_branch' => 'main',
         'git_commit_sha' => 'abc123def456',
-        'git_full_url' => 'https://github.com/coollabsio/coolify.git',
-        'docker_registry_image_name' => 'ghcr.io/coollabsio/coolify',
+        'git_full_url' => 'https://github.com/loccen/coolify-zh.git',
+        'docker_registry_image_name' => 'ghcr.io/loccen/coolify',
         'docker_registry_image_tag' => 'latest',
         'build_pack' => 'nixpacks',
         'static_image' => 'nginx:alpine',
@@ -237,7 +237,7 @@ it('creates Application with all fillable attributes', function () {
     expect($application->exists)->toBeTrue();
     expect($application->uuid)->toBe('custom-app-uuid');
     expect($application->name)->toBe('Full Fillable App');
-    expect((string) $application->git_repository)->toBe('https://github.com/coollabsio/coolify');
+    expect((string) $application->git_repository)->toBe('https://github.com/loccen/coolify-zh');
     expect($application->build_pack)->toBe('nixpacks');
     expect($application->ports_exposes)->toBe('3000');
     expect($application->environment_id)->toBe($this->environment->id);

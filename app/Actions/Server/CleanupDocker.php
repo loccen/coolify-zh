@@ -16,14 +16,14 @@ class CleanupDocker
         $realtimeImage = config('constants.coolify.realtime_image');
         $realtimeImageVersion = config('constants.coolify.realtime_version');
         $realtimeImageWithVersion = "$realtimeImage:$realtimeImageVersion";
-        $realtimeImageWithoutPrefix = 'coollabsio/coolify-realtime';
-        $realtimeImageWithoutPrefixVersion = "coollabsio/coolify-realtime:$realtimeImageVersion";
+        $realtimeImageWithoutPrefix = $this->stripRegistryPrefix($realtimeImage);
+        $realtimeImageWithoutPrefixVersion = "{$realtimeImageWithoutPrefix}:{$realtimeImageVersion}";
 
         $helperImageVersion = getHelperVersion();
         $helperImage = config('constants.coolify.helper_image');
         $helperImageWithVersion = "$helperImage:$helperImageVersion";
-        $helperImageWithoutPrefix = 'coollabsio/coolify-helper';
-        $helperImageWithoutPrefixVersion = "coollabsio/coolify-helper:$helperImageVersion";
+        $helperImageWithoutPrefix = $this->stripRegistryPrefix($helperImage);
+        $helperImageWithoutPrefixVersion = "{$helperImageWithoutPrefix}:{$helperImageVersion}";
 
         $cleanupLog = [];
 
@@ -102,13 +102,15 @@ class CleanupDocker
 
         // Build grep pattern to exclude Coolify infrastructure images (current version only)
         // This pattern matches the image name regardless of registry prefix:
-        // - ghcr.io/coollabsio/coolify-helper:1.0.12
-        // - docker.io/coollabsio/coolify-helper:1.0.12
-        // - coollabsio/coolify-helper:1.0.12
-        // Pattern: (^|/)coollabsio/coolify-(helper|realtime):VERSION$
+        // - ghcr.io/loccen/coolify-helper:1.0.12
+        // - docker.io/loccen/coolify-helper:1.0.12
+        // - loccen/coolify-helper:1.0.12
+        // Pattern: (^|/)<namespace>/coolify-(helper|realtime):VERSION$
         $escapedHelperVersion = preg_replace('/([.\\\\+*?\[\]^$(){}|])/', '\\\\$1', $helperImageVersion);
         $escapedRealtimeVersion = preg_replace('/([.\\\\+*?\[\]^$(){}|])/', '\\\\$1', $realtimeImageVersion);
-        $infraExcludePattern = "(^|/)coollabsio/coolify-helper:{$escapedHelperVersion}$|(^|/)coollabsio/coolify-realtime:{$escapedRealtimeVersion}$";
+        $escapedHelperImage = preg_replace('/([.\\\\+*?\[\]^$(){}|\/])/', '\\\\$1', $this->stripRegistryPrefix(config('constants.coolify.helper_image')));
+        $escapedRealtimeImage = preg_replace('/([.\\\\+*?\[\]^$(){}|\/])/', '\\\\$1', $this->stripRegistryPrefix(config('constants.coolify.realtime_image')));
+        $infraExcludePattern = "(^|/){$escapedHelperImage}:{$escapedHelperVersion}$|(^|/){$escapedRealtimeImage}:{$escapedRealtimeVersion}$";
 
         // Delete unused images that:
         // - Are not application images (don't match app repos)
@@ -131,6 +133,17 @@ class CleanupDocker
             "xargs -r -I {} sh -c 'docker inspect --format \"{{{{index .Config.Labels \\\"coolify.managed\\\"}}}}\" \"{}\" 2>/dev/null | grep -q true || docker rmi \"{}\" 2>/dev/null' || true";
 
         return implode(' && ', $commands);
+    }
+
+    private function stripRegistryPrefix(string $image): string
+    {
+        $segments = explode('/', $image);
+
+        if (count($segments) > 1 && (str_contains($segments[0], '.') || str_contains($segments[0], ':') || $segments[0] === 'localhost')) {
+            array_shift($segments);
+        }
+
+        return implode('/', $segments);
     }
 
     private function cleanupApplicationImages(Server $server, $applications = null): array

@@ -1,0 +1,64 @@
+name: Publish Production Artifacts
+
+on:
+  push:
+    branches: [ "v4.x" ]
+    paths:
+      - .env.production
+      - docker-compose.yml
+      - docker-compose.prod.yml
+      - scripts/install.sh
+      - scripts/upgrade.sh
+      - templates/service-templates-latest.json
+      - versions.json
+      - .github/workflows/publish-production-artifacts.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source repository
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Checkout artifacts repository
+        uses: actions/checkout@v5
+        with:
+          repository: loccen/coolify-zh-artifacts
+          ref: main
+          token: ${{ secrets.ARTIFACTS_REPO_TOKEN }}
+          path: artifacts-repo
+          persist-credentials: false
+
+      - name: Prepare production artifacts
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p artifacts-repo/coolify artifacts-repo/json
+          cp docker-compose.yml artifacts-repo/coolify/docker-compose.yml
+          cp docker-compose.prod.yml artifacts-repo/coolify/docker-compose.prod.yml
+          cp .env.production artifacts-repo/coolify/.env.production
+          cp scripts/install.sh artifacts-repo/coolify/install.sh
+          cp scripts/upgrade.sh artifacts-repo/coolify/upgrade.sh
+          cp versions.json artifacts-repo/coolify/versions.json
+          cp templates/service-templates-latest.json artifacts-repo/coolify/service-templates-latest.json
+          gh api repos/${{ github.repository }}/releases?per_page=30 > artifacts-repo/json/releases.json
+          touch artifacts-repo/.nojekyll
+
+      - name: Commit and push production artifacts
+        run: |
+          cd artifacts-repo
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          if git status --short | grep . >/dev/null; then
+            git add coolify json .nojekyll
+            git commit -m "chore: 同步 production artifacts"
+            git push https://x-access-token:${{ secrets.ARTIFACTS_REPO_TOKEN }}@github.com/loccen/coolify-zh-artifacts.git HEAD:main
+          else
+            echo "No production artifact changes detected."
+          fi
