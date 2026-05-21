@@ -4,6 +4,13 @@
 
 - 当前源码版本值是 `4.1.2`，但最新 GitHub Release 仍是 `v4.1.1`。
 - 自动更新检测逻辑只看 artifacts 仓库 `versions.json`，不看 GHCR tag 是否存在。
+- 自动更新已在真实实例上验证过一次：
+  - 验证实例：`172.233.75.42`
+  - SSH：`root@172.233.75.42`（免密）
+  - 访问入口：`http://172.233.75.42:8000`
+  - 健康检查：`http://172.233.75.42:8000/api/health`
+  - 当前是 IP 直连 HTTP，未配置域名/HTTPS
+  - 已验证版本切换：`4.1.1 -> 4.1.2`
 - 最近一轮成功的 production 证据：
   - `Production Image Build (v4)`：`26239985977`
   - `Publish Production Artifacts`：`26239986201`
@@ -30,6 +37,7 @@
 - `.agent-handoff/ACTIVE.md`
 - `.agent-handoff/tasks/202605220105-release-pipeline-hardening/task.md`
 - `.agent-handoff/tasks/202605220105-release-pipeline-hardening/evidence/20260522-current-release-state.md`
+- `.agent-handoff/tasks/202605220105-release-pipeline-hardening/evidence/20260522-instance-verification.md`
 - `.github/workflows/coolify-production-build.yml`
 - `.github/workflows/publish-production-artifacts.yml`
 - `.github/workflows/generate-changelog.yml`

@@ -41,6 +41,7 @@
 - config/constants.php
 - versions.json
 - .agent-handoff/tasks/202605220105-release-pipeline-hardening/evidence/20260522-current-release-state.md
+- .agent-handoff/tasks/202605220105-release-pipeline-hardening/evidence/20260522-instance-verification.md
 
 ## 关键决策
 
@@ -80,6 +81,13 @@
   - 当前源码树中的 `config/constants.php` 与 `versions.json` 已是 `4.1.2`。
   - `CheckForUpdatesJob` / `UpdateCoolifyJob` / `UpdateCoolify` 的现状已确认：检测更新只看 artifacts `versions.json`，升级时才真正去执行 `upgrade.sh` 与 `docker pull`。
   - `v4.x` 当前未保护，GitHub API 返回 `protected=false`。
+  - 自动更新真实验证实例已确认：
+    - 服务器：`172.233.75.42`
+    - SSH：`root@172.233.75.42`（免密）
+    - 当前访问入口：`http://172.233.75.42:8000`
+    - 健康检查：`http://172.233.75.42:8000/api/health`
+    - 当前仍是 IP 直连 HTTP，未配置域名和 HTTPS
+    - 最近一次已验证自动更新：`4.1.1 -> 4.1.2`
   - 最近一轮生产发布成功证据已收集：
     - `Production Image Build (v4)`：`26239985977`
     - `Publish Production Artifacts`：`26239986201`
@@ -101,4 +109,4 @@
   3. 设计并落地 production release orchestrator，让 artifacts 发布显式依赖镜像 build 与 manifest verify。
   4. 让 artifacts 中的 `versions.json` 由 workflow 基于已验证版本生成，而不是直接复制仓库文件。
   5. 在 GitHub 上为 `v4.x` 打开保护分支，只允许 PR 合入。
-  6. 用一次真实补丁版演练重新验证自动更新链路。
+  6. 用真实验证实例 `172.233.75.42` 再做一次补丁版演练，确认“检测到更新时镜像已就绪、自动更新成功、访问入口仍可用”。
