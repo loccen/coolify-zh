@@ -22,6 +22,7 @@ class S3Storage extends BaseModel
         'secret',
         'bucket',
         'endpoint',
+        'team_id',
         'is_usable',
         'unusable_email_sent',
     ];
