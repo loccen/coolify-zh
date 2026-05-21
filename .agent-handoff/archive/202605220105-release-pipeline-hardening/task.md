@@ -2,8 +2,8 @@
 
 - Task ID: `202605220105-release-pipeline-hardening`
 - Created At: `2026-05-22T01:25:35+08:00`
-- Updated At: `2026-05-22T02:03:58+08:00`
-- Status: `active`
+- Updated At: `2026-05-22T02:34:10+08:00`
+- Status: `archived`
 
 ## 目标
 
@@ -102,19 +102,24 @@
     - `actionlint` 已通过 6 个相关 workflow 文件。
     - `vendor/bin/pint --dirty --format agent` 已在容器内通过。
     - `tests/Feature/ReleaseArtifactConfigurationTest.php` 已在补装 `sockets` 扩展的容器内通过。
+  - PR `#1` 已合入 `v4.x`，merge commit 为 `1a11b8a`。
+  - `v4.x` 已启用保护分支：
+    - 仅允许通过 PR 合入
+    - 禁止 force push
+    - 禁止删除分支
+  - `v4.1.3` GitHub Release 已发布，`Production Release` workflow `26244657759` 成功完成。
+  - artifacts `versions.json` 已对外发布 `4.1.3`，`releases.json` 头条已更新为 `v4.1.3`。
+  - `ghcr.io/loccen/coolify:4.1.3`、`ghcr.io/loccen/coolify-helper:1.0.14`、`ghcr.io/loccen/coolify-realtime:1.0.15` 均已验证为可解析 manifest。
+  - 验证实例 `172.233.75.42` 已自动从 `4.1.2` 更新到 `4.1.3`，`/api/health` 返回 `OK`，容器状态恢复健康。
+  - 为了加速验证，实例的 `update_check_frequency` 与 `auto_update_frequency` 曾临时改成每分钟；升级完成后已恢复为原值 `0 * * * *` / `0 0 * * *`，并重启应用容器让 scheduler 重新加载。
 - 未完成：
-  - 当前分支改动尚未推送、开 PR、合入 `v4.x`。
-  - `v4.x` 保护分支尚未启用。
-  - 真实 `v4.1.3` release 还未创建，GHCR manifest 与实例自动更新还未做最终演练。
+  - 无。
 - 阻塞：
-  - 暂无硬阻塞；后续主要是 GitHub 侧合入、保护分支与真实 release 演练。
+  - 无。
 
 ## 下一步
 
-- 按这个顺序继续：
-  1. 推送 `codex/release-pipeline-hardening` 并创建 PR，目标分支为 `v4.x`。
-  2. 合入 PR 后，确认普通 merge 没有再触发生产 release workflow。
-  3. 在 GitHub 上为 `v4.x` 打开保护分支，只允许 PR 合入，禁止 direct push / force push / delete。
-  4. 创建正式 release `v4.1.3`，触发新的 `Production Release` workflow。
-  5. 等 release workflow 完成后，核对 `ghcr.io/loccen/coolify:4.1.3`、`coolify-helper:1.0.14`、`coolify-realtime:1.0.15` 都能 `docker buildx imagetools inspect`。
-  6. 在实例 `172.233.75.42` 上确认 `new_version_available=true` 后自动更新成功，再复查 `/api/health` 和容器镜像 tag。
+- 任务已完成并归档。
+- 如需复核，优先查看：
+  - `.agent-handoff/archive/202605220105-release-pipeline-hardening/evidence/20260522-release-rehearsal.md`
+  - `.agent-handoff/archive/202605220105-release-pipeline-hardening/evidence/20260522-local-release-hardening.md`
