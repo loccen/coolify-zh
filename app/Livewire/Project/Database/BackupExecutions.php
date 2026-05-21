@@ -129,11 +129,14 @@ class BackupExecutions extends Component
             $this->ensureRestoreScriptExists($server);
             $scriptPath = escapeshellarg($this->restoreScriptPath());
             $packagePath = escapeshellarg($execution->filename);
-            $activity = remote_process(["bash {$scriptPath} --package {$packagePath}"], $server, ignore_errors: true);
+            $logPath = $this->restoreLogPath($execution->id);
+            $activity = remote_process([
+                $this->buildDetachedRestoreCommand("{$scriptPath} --package {$packagePath}", $logPath),
+            ], $server, ignore_errors: true);
 
             $this->dispatch('activityMonitor', $activity->id);
             $this->dispatch('instancerestore');
-            $this->dispatch('info', __('settings.backup_page.restore_started_local'));
+            $this->dispatch('info', __('settings.backup_page.restore_started_local').' Log: '.$logPath);
         } catch (\Throwable $e) {
             $this->dispatch('error', $e->getMessage());
         }
@@ -175,14 +178,18 @@ class BackupExecutions extends Component
             $helperImage = escapeshellarg(config('constants.coolify.helper_image').':'.getHelperVersion());
             $scriptPath = escapeshellarg($this->restoreScriptPath());
             $envFileArg = escapeshellarg($envFile);
+            $logPath = $this->restoreLogPath($execution->id);
 
             $activity = remote_process([
-                "bash {$scriptPath} --s3-env-file {$envFileArg} --s3-object-key {$objectKey} --helper-image {$helperImage}",
+                $this->buildDetachedRestoreCommand(
+                    "{$scriptPath} --s3-env-file {$envFileArg} --s3-object-key {$objectKey} --helper-image {$helperImage}",
+                    $logPath
+                ),
             ], $server, ignore_errors: true);
 
             $this->dispatch('activityMonitor', $activity->id);
             $this->dispatch('instancerestore');
-            $this->dispatch('info', __('settings.backup_page.restore_started_s3'));
+            $this->dispatch('info', __('settings.backup_page.restore_started_s3').' Log: '.$logPath);
         } catch (\Throwable $e) {
             $this->dispatch('error', $e->getMessage());
         }
@@ -314,6 +321,19 @@ class BackupExecutions extends Component
     private function restoreScriptPath(): string
     {
         return '/data/coolify/bin/restore-coolify-instance.sh';
+    }
+
+    private function restoreLogPath(int $executionId): string
+    {
+        return "/data/coolify/source/restore-instance-{$executionId}.log";
+    }
+
+    private function buildDetachedRestoreCommand(string $restoreCommand, string $logPath): string
+    {
+        $escapedLogPath = escapeshellarg($logPath);
+        $escapedRestoreCommand = escapeshellarg($restoreCommand);
+
+        return "nohup sh -lc {$escapedRestoreCommand} > {$escapedLogPath} 2>&1 < /dev/null & echo \$!";
     }
 
     private function ensureRestoreScriptExists($server): void

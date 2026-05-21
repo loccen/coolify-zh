@@ -18,9 +18,12 @@ test('instance backup executions component wires local and s3 restore through ho
 
     expect($reflection->hasMethod('restoreLocalBackup'))->toBeTrue();
     expect($reflection->hasMethod('restoreS3Backup'))->toBeTrue();
+    expect($reflection->hasMethod('buildDetachedRestoreCommand'))->toBeTrue();
     expect($source)->toContain('/data/coolify/bin/restore-coolify-instance.sh');
     expect($source)->toContain('--s3-env-file');
     expect($source)->toContain('--helper-image');
+    expect($source)->toContain('nohup sh -lc');
+    expect($source)->toContain('/data/coolify/source/restore-instance-');
     expect($source)->toContain("dispatch('instancerestore')");
 });
 
