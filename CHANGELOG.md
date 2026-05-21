@@ -6416,6 +6416,7 @@ All notable changes to this project will be documented in this file.
 - Add design reference to AGENTS.md and CLAUDE.md
 - *(readme)* Remove CubePath sponsor entry
 - *(readme)* Fix PrivateAlps sponsor wording
+- Update changelog
 
 ### ⚡ Performance
 
