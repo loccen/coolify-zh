@@ -17,3 +17,9 @@
 - 动作：将生产发布链从 `push v4.x` 改为 `release.published` 编排，新增 `production-release.yml`，把 app/helper/realtime build workflow 改为 `workflow_call`，把 changelog 改为 PR 模式，并把版本升到 `4.1.3`
 - 结果：当前分支已具备“先镜像、再 manifest 校验、最后发布 artifacts”的实现；`actionlint`、容器内 `pint`、容器内 `tests/Feature/ReleaseArtifactConfigurationTest.php` 全部通过
 - 遗留：推送分支、合入 `v4.x`、启用保护分支、创建 `v4.1.3` release、验证实例自动更新
+
+## 2026-05-22T02:34:10+08:00 完成真实 release 演练并归档准备
+
+- 动作：创建并合入 PR `#1`，启用 `v4.x` 保护分支，发布 `v4.1.3` release，验证 GHCR manifest、artifacts 元数据和实例自动更新
+- 结果：`Production Release` workflow `26244657759` 成功；artifacts `versions.json` 已更新到 `4.1.3`；验证实例自动升级到 `4.1.3` 且健康检查通过；临时改成每分钟的调度频率已恢复为原值
+- 遗留：无，任务可归档

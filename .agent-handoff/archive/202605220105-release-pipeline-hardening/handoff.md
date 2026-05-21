@@ -26,21 +26,22 @@
   - `actionlint`
   - `vendor/bin/pint --dirty --format agent`
   - `tests/Feature/ReleaseArtifactConfigurationTest.php`
+- 最终结果：
+  - PR `#1` 已合入 `v4.x`
+  - `v4.x` 已保护
+  - `v4.1.3` release 与 `Production Release` workflow 已成功
+  - 验证实例已自动升级到 `4.1.3`
 
 ## 未完成
 
-- 推送当前分支、开 PR、合入 `v4.x`。
-- 给 `v4.x` 打开保护分支，只允许 PR 合入。
-- 创建正式 release `v4.1.3`，触发新的生产发布链。
-- 在真实实例上完成一次 `4.1.2 -> 4.1.3` 自动更新演练。
+- 无，任务已完成。
 
 ## 第一步该做什么
 
-- 直接在当前分支继续：
-  - `git push -u fork codex/release-pipeline-hardening`
-  - 创建到 `v4.x` 的 PR
-  - 合入后再启用 `v4.x` 保护分支
-  - 最后创建 `v4.1.3` release 做真实演练
+- 不需要继续执行。
+- 若要复核结果，先看：
+  - `.agent-handoff/archive/202605220105-release-pipeline-hardening/evidence/20260522-release-rehearsal.md`
+  - `.agent-handoff/archive/202605220105-release-pipeline-hardening/evidence/20260522-local-release-hardening.md`
 
 ## 先看哪些文件/命令
 
@@ -60,6 +61,4 @@
 
 ## 风险
 
-- 如果先开 `v4.x` 保护分支，再改 changelog workflow，现有 workflow 会直接失败。
-- 这次 release tag 必须创建成 `v4.1.3`，否则新的 `production-release.yml` 会因为 tag 与 `config/constants.php` 不一致而失败。
-- `publish-production-artifacts.yml` 现在依赖三个 tag 都能在 GHCR 上解析；如果某个 manifest 合并失败，artifacts 会被故意阻断，不会继续发布 `versions.json`。
+- 无待处理风险；保留历史证据供复盘。
