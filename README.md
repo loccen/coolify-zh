@@ -1,192 +1,69 @@
 <div align="center">
 
-# Coolify
-An open-source & self-hostable Heroku / Netlify / Vercel alternative. 
+# Coolify-Zh
 
-![Latest Release Version](https://img.shields.io/badge/dynamic/json?labelColor=grey&color=6366f1&label=Latest%20released%20version&url=https%3A%2F%2Fcdn.coollabs.io%2Fcoolify%2Fversions.json&query=coolify.v4.version&style=for-the-badge
-)
+Coolify 的中文长期维护版，面向个人运维与功能增强。
+
+[简体中文](./README.md) | [English](./README.en.md)
+
 </div>
 
-## About the Project
+## 项目说明
 
-Coolify is an open-source & self-hostable alternative to Heroku / Netlify / Vercel / etc.
+Coolify-Zh 基于 [coollabsio/coolify](https://github.com/coollabsio/coolify) 维护，是一个面向中文使用者的长期 fork。
 
-It helps you manage your servers, applications, and databases on your own hardware; you only need an SSH connection. You can manage VPS, Bare Metal, Raspberry PIs, and anything else.
+Coolify 本身是一个开源、可自托管的平台，可以把它理解为 Heroku / Netlify / Vercel 一类平台的自建替代。你可以用自己的服务器管理应用、数据库和相关资源，只需要可用的 SSH 连接。
 
-Imagine having the ease of a cloud but with your own servers. That is **Coolify**.
+这个 fork 当前的重点有两类：
 
-No vendor lock-in, which means that all the configurations for your applications/databases/etc are saved to your server. So, if you decide to stop using Coolify (oh nooo), you could still manage your running resources. You lose the automations and all the magic. 🪄️
+- 持续推进中文化，包括 README、界面文案与后续体验细节。
+- 增加更适合个人日常运维和发布流程的能力。
 
-For more information, take a look at our landing page at [coolify.io](https://coolify.io).
+## 与上游的关系
 
-## Installation
+- 上游仓库：[`coollabsio/coolify`](https://github.com/coollabsio/coolify)
+- 本仓库：[`loccen/coolify-zh`](https://github.com/loccen/coolify-zh)
+
+本仓库不会回推上游，但会定期审视上游更新，挑选对个人长期运维有价值的内容同步进来。
+
+当前仓库名已经调整为 `coolify-zh`，但应用内部品牌、镜像命名空间、安装脚本和在线升级链仍主要沿用上游 `Coolify` / `coollabsio` 命名。这是刻意保留的兼容状态，便于继续跟踪上游版本线。
+
+## 安装
+
+当前默认安装方式仍沿用上游脚本：
 
 ```bash
 curl -fsSL https://cdn.coollabs.io/coolify/install.sh | bash
 ```
-You can find the installation script source [here](./scripts/install.sh).
+
+安装脚本源码仍在本仓库的 [scripts/install.sh](./scripts/install.sh)。
 
 > [!NOTE]
-> Please refer to the [docs](https://coolify.io/docs/installation) for more information about the installation.
+> 目前 README 已切到中文默认，但运行时安装与升级链还没有整体换成 `coolify-zh` 命名。后续如果要做个人版一键安装与自升级，需要连同镜像、脚本和应用内升级入口一起调整。
 
-## Support
+## 文档与支持
 
-Contact us at [coolify.io/docs/contact](https://coolify.io/docs/contact).
+- 安装文档：[coolify.io/docs/installation](https://coolify.io/docs/installation)
+- 联系方式：[coolify.io/docs/contact](https://coolify.io/docs/contact)
 
-## Cloud
+如果你需要查看更接近上游原始表述的英文说明，可以直接阅读 [README.en.md](./README.en.md)。
 
-If you do not want to self-host Coolify, there is a paid cloud version available: [app.coolify.io](https://app.coolify.io)
+## Cloud 版本
 
-For more information & pricing, take a look at our landing page [coolify.io](https://coolify.io).
+如果你不打算自托管，仍可以了解官方 Cloud 版本：
 
-## Why should I use the Cloud version?
-The recommended way to use Coolify is to have one server for Coolify and one (or more) for the resources you are deploying. A server is around 4-5$/month.
+- Cloud 入口：[app.coolify.io](https://app.coolify.io)
+- 官网与定价：[coolify.io](https://coolify.io)
 
-By subscribing to the cloud version, you get the Coolify server for the same price, but with:
-- High-availability
-- Free email notifications
-- Better support
-- Less maintenance for you
+## 这个 fork 的维护方向
 
-## Donations
-To stay completely free and open-source, with no feature behind the paywall and evolve the project, we need your help. If you like Coolify, please consider donating to help us fund the project's future development.
+- 中文优先：仓库文档默认中文，后续逐步补齐中英切换与界面汉化。
+- 个人运维优先：优先保留对实际部署、升级、镜像发布有帮助的流程。
+- 跟踪上游：定期评估上游 `v4.x` 更新，再决定是否吸收。
+- 渐进替换：在不破坏兼容性的前提下，逐步把仓库层、安装层、升级层调整到更适合个人维护的状态。
 
-[coolify.io/sponsorships](https://coolify.io/sponsorships)
+## 更多信息
 
-Thank you so much!
-
-### Huge Sponsors
-
-* [MVPS](https://www.mvps.net?ref=coolify.io) - Cheap VPS servers at the highest possible quality
-* [SerpAPI](https://serpapi.com?ref=coolify.io) - Google Search API — Scrape Google and other search engines from our fast, easy, and complete API
-* [ScreenshotOne](https://screenshotone.com?ref=coolify.io) - Screenshot API for devs
-* [PrivateAlps](https://privatealps.net?ref=coolify.io) - Cloud Services Provider, VPS, servers infrastructure for people who care about privacy and control
-
-### Big Sponsors
-
-* [23M](https://23m.com?ref=coolify.io) - Your experts for high-availability hosting solutions!
-* [American Cloud](https://americancloud.com?ref=coolify.io) - US-based cloud infrastructure services
-* [Arcjet](https://arcjet.com?ref=coolify.io) - Advanced web security and performance solutions
-* [BC Direct](https://bc.direct?ref=coolify.io) - Your trusted technology consulting partner
-* [Blacksmith](https://blacksmith.sh?ref=coolify.io) - Infrastructure automation platform
-* [Capture.page](https://capture.page/?ref=coolify.io) - Fast & Reliable Screenshot API for Developers
-* [Context.dev](https://context.dev?ref=coolify.io) - API to personalize your product with logos, colors, and company info from any domain
-* [ByteBase](https://www.bytebase.com?ref=coolify.io) - Database CI/CD and Security at Scale
-* [CodeRabbit](https://coderabbit.ai?ref=coolify.io) - Cut Code Review Time & Bugs in Half
-* [COMIT](https://comit.international?ref=coolify.io) - New York Times award–winning contractor
-* [CompAI](https://www.trycomp.ai?ref=coolify.io) - Open source compliance automation platform
-* [Convex](https://convex.link/coolify.io) - Open-source reactive database for web app developers
-* [Darweb](https://darweb.nl/?ref=coolify.io) - 3D CPQ solutions for ecommerce design
-* [Dataforest Cloud](https://cloud.dataforest.net/en?ref=coolify.io) - Deploy cloud servers as seeds independently in seconds. Enterprise hardware, premium network, 100% made in Germany.
-* [Formbricks](https://formbricks.com?ref=coolify.io) - The open source feedback platform
-* [GoldenVM](https://billing.goldenvm.com?ref=coolify.io) - Premium virtual machine hosting solutions
-* [Greptile](https://www.greptile.com?ref=coolify.io) - The AI Code Reviewer
-* [Hetzner](http://htznr.li/CoolifyXHetzner) - Server, cloud, hosting, and data center solutions
-* [Hostinger](https://www.hostinger.com/vps/coolify-hosting?ref=coolify.io) - Web hosting and VPS solutions
-* [JobsCollider](https://jobscollider.com/remote-jobs?ref=coolify.io) - 30,000+ remote jobs for developers
-* [Juxtdigital](https://juxtdigital.com?ref=coolify.io) - Digital PR & AI Authority Building Agency
-* [LiquidWeb](https://liquidweb.com?ref=coolify.io) - Premium managed hosting solutions
-* [Logto](https://logto.io?ref=coolify.io) - The better identity infrastructure for developers
-* [LumaDock](https://lumadock.com/vps-hosting/coolify?utm_source=coolify&utm_medium=sponsorship&utm_campaign=coolify_oss_sponsor_2026&utm_content=github_readme) - Fast and reliable virtual server hosting
-* [Macarne](https://macarne.com?ref=coolify.io) - Best IP Transit & Carrier Ethernet Solutions for Simplified Network Connectivity
-* [Mobb](https://vibe.mobb.ai/?ref=coolify.io) - Secure Your AI-Generated Code to Unlock Dev Productivity
-* [PetroSky Cloud](https://petrosky.io?ref=coolify.io) - Open source cloud deployment solutions
-* [PFGLabs](https://pfglabs.com?ref=coolify.io) - Build Real Projects with Golang
-* [Ramnode](https://ramnode.com/?ref=coolify.io) - High Performance Cloud VPS Hosting
-* [SaasyKit](https://saasykit.com?ref=coolify.io) - Complete SaaS starter kit for developers
-* [SupaGuide](https://supa.guide?ref=coolify.io) - Your comprehensive guide to Supabase
-* [Supadata AI](https://supadata.ai/?ref=coolify.io) - Scrape YouTube, web, and files. Get AI-ready, clean data
-* [Syntax.fm](https://syntax.fm?ref=coolify.io) - Podcast for web developers
-* [Tigris](https://www.tigrisdata.com?ref=coolify.io) - Modern developer data platform
-* [Tolgee](https://tolgee.io?ref=coolify.io) - The open source localization platform
-* [Ubicloud](https://www.ubicloud.com?ref=coolify.io) - Open source cloud infrastructure platform
-* [VPSDime](https://vpsdime.com?ref=coolify.io) - Affordable high-performance VPS hosting solutions
-
-
-### Small Sponsors
-
-<a href="https://open-elements.com/?utm_source=coolify.io"><img width="60px" alt="OpenElements" src="https://github.com/OpenElements.png"/></a>
-<a href="https://xaman.app/?utm_source=coolify.io"><img width="60px" alt="XamanApp" src="https://github.com/XamanApp.png"/></a>
-<a href="https://www.uxwizz.com/?utm_source=coolify.io"><img width="60px" alt="UXWizz" src="https://github.com/UXWizz.png"/></a>
-<a href="https://evercam.io/?utm_source=coolify.io"><img width="60px" alt="Evercam" src="https://github.com/evercam.png"/></a>
-<a href="https://github.com/iujlaki"><img width="60px" alt="Imre Ujlaki" src="https://github.com/iujlaki.png"/></a>
-<a href="https://bsky.app/profile/jyc.dev"><img width="60px" alt="jyc.dev" src="https://github.com/jycouet.png"/></a>
-<a href="https://github.com/therealjp?utm_source=coolify.io"><img width="60px" alt="TheRealJP" src="https://github.com/therealjp.png"/></a>
-<a href="https://360creators.com/?utm_source=coolify.io"><img width="60px" alt="360Creators" src="https://opencollective-production.s3.us-west-1.amazonaws.com/account-avatar/503e0953-bff7-4296-b4cc-5e36d40eecc0/icon-360creators.png"/></a>
-<a href="https://github.com/aniftyco"><img width="60px" alt="NiftyCo" src="https://github.com/aniftyco.png"/></a>
-<a href="https://dry.software/?utm_source=coolify.io"><img width="60px" alt="Dry Software" src="https://github.com/dry-software.png"/></a>
-<a href="https://lightspeed.run/?utm_source=coolify.io"><img width="60px" alt="Lightspeed.run" src="https://github.com/lightspeedrun.png"/></a>
-<a href="https://linkdr.com?utm_source=coolify.io"><img width="60px" alt="LinkDr" src="https://github.com/LLM-Inc.png"/></a>
-<a href="http://gravitywiz.com/?utm_source=coolify.io"><img width="60px" alt="Gravity Wiz" src="https://github.com/gravitywiz.png"/></a>
-<a href="https://bitlaunch.io/?utm_source=coolify.io"><img width="60px" alt="BitLaunch" src="https://github.com/bitlaunchio.png"/></a>
-<a href="https://bestforandroid.com/?utm_source=coolify.io"><img width="60px" alt="Best for Android" src="https://github.com/bestforandroid.png"/></a>
-<a href="https://il.ly/?utm_source=coolify.io"><img width="60px" alt="Ilias Ism" src="https://github.com/Illyism.png"/></a>
-<a href="https://formbricks.com/?utm_source=coolify.io"><img width="60px" alt="Formbricks" src="https://github.com/formbricks.png"/></a>
-<a href="https://www.serversearcher.com/"><img width="60px" alt="Server Searcher" src="https://github.com/serversearcher.png"/></a>
-<a href="https://www.reshot.ai/?utm_source=coolify.io"><img width="60px" alt="Reshot" src="https://coolify.io/images/reshotai.png"/></a>
-<a href="https://cirun.io/?utm_source=coolify.io"><img width="60px" alt="Cirun" src="https://coolify.io/images/cirun-logo.png"/></a>
-<a href="https://typebot.io/?utm_source=coolify.io"><img width="60px" alt="Typebot" src="https://cdn.bsky.app/img/avatar/plain/did:plc:gwxcta3pccyim4z5vuultdqx/bafkreig23hci7e2qpdxicsshnuzujbcbcgmydxhbybkewszdezhdodv42m@jpeg"/></a>
-<a href="https://cccareers.org/?utm_source=coolify.io"><img width="60px" alt="Creating Coding Careers" src="https://github.com/cccareers.png"/></a>
-<a href="https://internetgarden.co/?utm_source=coolify.io"><img width="60px" alt="Internet Garden" src="https://coolify.io/images/internetgarden.ico"/></a>
-<a href="https://web3.career/?utm_source=coolify.io"><img width="60px" alt="Web3 Jobs" src="https://coolify.io/images/web3jobs.png"/></a>
-<a href="https://codext.link/coolify-io?utm_source=coolify.io"><img width="60px" alt="Codext" src="https://coolify.io/images/codext.jpg"/></a>
-<a href="https://github.com/monocursive"><img width="60px" alt="Michael Mazurczak" src="https://github.com/monocursive.png"/></a>
-<a href="https://fider.io/?utm_source=coolify.io"><img width="60px" alt="Fider" src="https://github.com/getfider.png"/></a>
-<a href="https://www.flint.sh/en/home?utm_source=coolify.io"><img width="60px" alt="Flint" src="https://github.com/Flint-company.png"/></a>
-<a href="https://github.com/urtho"><img width="60px" alt="Paweł Pierścionek" src="https://github.com/urtho.png"/></a>
-<a href="https://www.runpod.io/?utm_source=coolify.io"><img width="60px" alt="RunPod" src="https://coolify.io/images/runpod.svg"/></a>
-<a href="https://dartnode.com/?utm_source=coolify.io"><img width="60px" alt="DartNode" src="https://github.com/dartnode.png"/></a>
-<a href="https://github.com/whitesidest"><img width="60px" alt="Tyler Whitesides" src="https://avatars.githubusercontent.com/u/12365916?s=52&v=4"/></a>
-<a href="https://aquarela.io"><img width="60px" alt="Aquarela" src="https://github.com/aquarela-io.png"/></a>
-<a href="https://cryptojobslist.com/?utm_source=coolify.io"><img width="60px" alt="Crypto Jobs List" src="https://github.com/cryptojobslist.png"/></a>
-<a href="https://www.youtube.com/@AlfredNutile?utm_source=coolify.io"><img width="60px" alt="Alfred Nutile" src="https://github.com/alnutile.png"/></a>
-<a href="https://startupfa.me?utm_source=coolify.io"><img width="60px" alt="Startup Fame" src="https://github.com/startupfame.png"/></a>
-<a href="https://barrad.me/?utm_source=coolify.io"><img width="60px" alt="Younes Barrad" src="https://github.com/Flowko.png"/></a>
-<a href="https://jonasjaeger.com?utm_source=coolify.io"><img width="60px" alt="Jonas Jaeger" src="https://github.com/toxin20.png"/></a>
-<a href="https://pixel.ao/?utm_source=coolify.io"><img width="60px" alt="Pixel Infinito" src="https://github.com/pixelinfinito.png"/></a>
-<a href="https://github.com/corentinclichy"><img width="60px" alt="Corentin Clichy" src="https://github.com/corentinclichy.png"/></a>
-<a href="https://x.com/mrsmith9ja?utm_source=coolify.io"><img width="60px" alt="Thompson Edolo" src="https://github.com/verygreenboi.png"/></a>
-<a href="https://devhuset.no?utm_source=coolify.io"><img width="60px" alt="Devhuset" src="https://github.com/devhuset.png"/></a>
-<a href="https://arvensis.systems/?utm_source=coolify.io"><img width="60px" alt="Arvensis Systems" src="https://coolify.io/images/arvensis.png"/></a>
-<a href="https://github.com/Niki2k1"><img width="60px" alt="Niklas Lausch" src="https://github.com/Niki2k1.png"/></a>
-<a href="https://capgo.app/?utm_source=coolify.io"><img width="60px" alt="Cap-go" src="https://github.com/cap-go.png"/></a>
-<a href="https://interviewpal.com/?utm_source=coolify.io"><img width="60px" alt="InterviewPal" src="/public/svgs/interviewpal.svg"/></a>
-<a href="https://transcript.lol/?utm_source=coolify.io"><img width="60px" alt="Transcript LOL" src="https://transcript.lol/logo.png"/></a>
-<a href="https://youstable.com/?utm_source=coolify.io"><img width="60px" alt="YouStable" src="https://github.com/youstable.png"/></a>
-<a href="https://github.com/mindedtech?utm_source=coolify.io"><img width="60px" alt="MindedTech" src="https://github.com/mindedtech.png"/></a>
-<a href="https://netrouting.com/?utm_source=coolify.io"><img width="60px" alt="NetRouting" src="https://github.com/netroutingcom.png"/></a>
-<a href="https://github.com/parsecph?utm_source=coolify.io"><img width="60px" alt="ParsecPH" src="https://github.com/parsecph.png"/></a>
-
-
-...and many more at [GitHub Sponsors](https://github.com/sponsors/coollabsio)
-
-## Recognitions
-
-<p>
-<a href="https://news.ycombinator.com/item?id=26624341">
-  <img
-    style="width: 250px; height: 54px;" width="250" height="54"
-    alt="Featured on Hacker News"
-    src="https://hackernews-badge.vercel.app/api?id=26624341"
-  />
-</a>
-</p>
-
-<a href="https://www.producthunt.com/posts/coolify?ref=badge-featured&utm_medium=badge&utm_souce=badge-coolify" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=338273&theme=light" alt="Coolify - An&#0032;open&#0045;source&#0032;&#0038;&#0032;self&#0045;hostable&#0032;Heroku&#0044;&#0032;Netlify&#0032;alternative | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
-
-<a href="https://trendshift.io/repositories/634" target="_blank"><img src="https://trendshift.io/api/badge/repositories/634" alt="coollabsio%2Fcoolify | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
-
-## Core Maintainers
-
-| Andras Bacsai | 🏔️ Peak |
-|------------|------------|
-| <img src="https://github.com/andrasbacsai.png" width="200px" alt="Andras Bacsai" /> | <img src="https://github.com/peaklabs-dev.png" width="200px" alt="peaklabs-dev" /> |
-| <a href="https://github.com/andrasbacsai"><img src="https://api.iconify.design/devicon:github.svg" width="25px"></a> <a href="https://x.com/heyandras"><img src="https://api.iconify.design/devicon:twitter.svg" width="25px"></a> <a href="https://bsky.app/profile/heyandras.dev"><img src="https://api.iconify.design/simple-icons:bluesky.svg" width="25px"></a> | <a href="https://github.com/peaklabs-dev"><img src="https://api.iconify.design/devicon:github.svg" width="25px"></a> <a href="https://x.com/peaklabs_dev"><img src="https://api.iconify.design/devicon:twitter.svg" width="25px"></a> <a href="https://bsky.app/profile/peaklabs.dev"><img src="https://api.iconify.design/simple-icons:bluesky.svg" width="25px"></a> |
-
-## Repo Activity
-
-![Alt](https://repobeats.axiom.co/api/embed/eab1c8066f9c59d0ad37b76c23ebb5ccac4278ae.svg "Repobeats analytics image")
-
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=coollabsio/coolify&type=Date)](https://star-history.com/#coollabsio/coolify&Date)
+- 英文说明：[README.en.md](./README.en.md)
+- 上游仓库：[coollabsio/coolify](https://github.com/coollabsio/coolify)
+- 上游完整 README（含赞助、社区与活动信息）：[coollabsio/coolify/README.md](https://github.com/coollabsio/coolify/blob/v4.x/README.md)
