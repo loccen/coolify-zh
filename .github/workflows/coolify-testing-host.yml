@@ -14,6 +14,7 @@ permissions:
 env:
   GITHUB_REGISTRY: ghcr.io
   IMAGE_NAME: "loccen/coolify-testing-host"
+  DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_DEV_RELEASE_CHANNEL }}
 
 jobs:
   build-push:
@@ -76,6 +77,6 @@ jobs:
           --tag ${{ env.GITHUB_REGISTRY }}/${{ env.IMAGE_NAME }}:latest
 
       - uses: sarisia/actions-status-discord@v1
-        if: ${{ always() && secrets.DISCORD_WEBHOOK_DEV_RELEASE_CHANNEL != '' }}
+        if: ${{ always() && env.DISCORD_WEBHOOK != '' }}
         with:
-          webhook: ${{ secrets.DISCORD_WEBHOOK_DEV_RELEASE_CHANNEL  }}
+          webhook: ${{ env.DISCORD_WEBHOOK }}
