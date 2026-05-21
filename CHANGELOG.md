@@ -6417,6 +6417,7 @@ All notable changes to this project will be documented in this file.
 - *(readme)* Remove CubePath sponsor entry
 - *(readme)* Fix PrivateAlps sponsor wording
 - Update changelog
+- Update changelog
 
 ### ⚡ Performance
 
