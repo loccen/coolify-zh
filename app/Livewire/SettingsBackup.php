@@ -20,7 +20,7 @@ class SettingsBackup extends Component
 
     public ?StandalonePostgresql $database = null;
 
-    public ScheduledDatabaseBackup|null|array $backup = [];
+    public ?ScheduledDatabaseBackup $backup = null;
 
     #[Locked]
     public $s3s;
@@ -68,7 +68,7 @@ class SettingsBackup extends Component
                 $this->backup->enabled = false;
                 $this->backup->save();
             }
-            $this->executions = $this->backup->executions;
+            $this->executions = $this->backup?->executions ?? [];
         }
         $this->settings = $settings;
         $this->s3s = $s3s;
