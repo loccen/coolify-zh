@@ -15,8 +15,8 @@ class PrivateKeySeeder extends Seeder
         PrivateKey::create([
             'uuid' => 'ssh',
             'team_id' => 0,
-            'name' => 'Testing Host Key',
-            'description' => 'This is a test docker container',
+            'name' => '测试主机密钥',
+            'description' => '这是测试 Docker 容器使用的私钥',
             'private_key' => '-----BEGIN OPENSSH PRIVATE KEY-----
 b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
 QyNTUxOQAAACBbhpqHhqv6aI67Mj9abM3DVbmcfYhZAhC7ca4d9UCevAAAAJi/QySHv0Mk
@@ -30,8 +30,8 @@ uZx9iFkCELtxrh31QJ68AAAAEXNhaWxANzZmZjY2ZDJlMmRkAQIDBA==
         PrivateKey::create([
             'uuid' => 'github-key',
             'team_id' => 0,
-            'name' => 'development-github-app',
-            'description' => 'This is the key for using the development GitHub app',
+            'name' => '开发环境 GitHub App',
+            'description' => '这是开发环境 GitHub App 使用的私钥',
             'private_key' => '-----BEGIN RSA PRIVATE KEY-----
 MIIEpAIBAAKCAQEAstJo/SfYh3tquc2BA29a1X3pdPpXazRgtKsb5fHOwQs1rE04
 VyJYW6QCToSH4WS1oKt6iI4ma4uivn8rnkZFdw3mpcLp2ofcoeV3YPKX6pN/RiJC

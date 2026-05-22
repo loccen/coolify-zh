@@ -379,8 +379,8 @@ class DevelopmentRailpackExamplesSeeder extends Seeder
             [
                 'uuid' => 'ssh',
                 'team_id' => 0,
-                'name' => 'Testing Host Key',
-                'description' => 'This is a test docker container',
+                'name' => '测试主机密钥',
+                'description' => '这是测试 Docker 容器使用的私钥',
                 'private_key' => <<<'KEY'
 -----BEGIN OPENSSH PRIVATE KEY-----
 b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW

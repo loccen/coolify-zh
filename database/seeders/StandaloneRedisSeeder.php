@@ -11,8 +11,8 @@ class StandaloneRedisSeeder extends Seeder
     public function run(): void
     {
         StandaloneRedis::create([
-            'name' => 'Local PostgreSQL',
-            'description' => 'Local PostgreSQL for testing',
+            'name' => '本地 Redis',
+            'description' => '用于测试的本地 Redis',
             'redis_password' => 'redis',
             'environment_id' => 1,
             'destination_id' => 0,
