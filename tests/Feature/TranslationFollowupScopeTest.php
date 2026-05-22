@@ -19,6 +19,13 @@ it('uses explicit translation lookups in follow-up i18n views', function () {
     $backupNow = file_get_contents($viewsRoot.'/livewire/project/database/backup-now.blade.php');
     $dockerImage = file_get_contents($viewsRoot.'/livewire/project/new/docker-image.blade.php');
     $simpleDockerfile = file_get_contents($viewsRoot.'/livewire/project/new/simple-dockerfile.blade.php');
+    $publicGitRepository = file_get_contents($viewsRoot.'/livewire/project/new/public-git-repository.blade.php');
+    $githubPrivateRepository = file_get_contents($viewsRoot.'/livewire/project/new/github-private-repository.blade.php');
+    $deployKeyRepository = file_get_contents($viewsRoot.'/livewire/project/new/github-private-repository-deploy-key.blade.php');
+    $dockerCompose = file_get_contents($viewsRoot.'/livewire/project/new/docker-compose.blade.php');
+    $newResourceSelect = file_get_contents($viewsRoot.'/livewire/project/new/select.blade.php');
+    $projectAddEmpty = file_get_contents($viewsRoot.'/livewire/project/add-empty.blade.php');
+    $deleteEnvironment = file_get_contents($viewsRoot.'/livewire/project/delete-environment.blade.php');
     $applicationAdvanced = file_get_contents($viewsRoot.'/livewire/project/application/advanced.blade.php');
     $environmentVariableShow = file_get_contents($viewsRoot.'/livewire/project/shared/environment-variable/show.blade.php');
     $environmentVariableShowHardcoded = file_get_contents($viewsRoot.'/livewire/project/shared/environment-variable/show-hardcoded.blade.php');
@@ -72,6 +79,27 @@ it('uses explicit translation lookups in follow-up i18n views', function () {
         ->and($simpleDockerfile)
         ->toContain("{{ __('Create a new Application') }}")
         ->toContain("{{ __('Dockerfile') }}")
+        ->and($publicGitRepository)
+        ->toContain("{{ __('Deploy any public Git repositories.') }}")
+        ->toContain("{{ __('Check repository') }}")
+        ->and($githubPrivateRepository)
+        ->toContain("{{ __('Deploy any public or private Git repositories through a GitHub App.') }}")
+        ->toContain("{{ __('Refresh Repository List') }}")
+        ->and($deployKeyRepository)
+        ->toContain("{{ __('Deploy any public or private Git repositories through a Deploy Key.') }}")
+        ->toContain("{{ __('Create a new private key') }}")
+        ->and($dockerCompose)
+        ->toContain("{{ __('Create a new Service') }}")
+        ->toContain("label=\"{{ __('Docker Compose file') }}\"")
+        ->and($newResourceSelect)
+        ->toContain("{{ __('Select a server') }}")
+        ->toContain("{{ __('Select a destination') }}")
+        ->and($projectAddEmpty)
+        ->toContain("{{ __('Continue') }}")
+        ->toContain("__('New project will have a default :environment environment.'")
+        ->and($deleteEnvironment)
+        ->toContain("title=\"{{ __('Confirm Environment Deletion?') }}\"")
+        ->toContain("buttonTitle=\"{{ __('Delete Environment') }}\"")
         ->and($applicationAdvanced)
         ->toContain("{{ __('Advanced') }}")
         ->toContain("__('Disable Build Cache')")
@@ -91,6 +119,14 @@ it('resolves representative follow-up translations in zh_CN', function () {
 
     expect(__('Comment'))->toBe('备注')
         ->and(__('Image Name'))->toBe('镜像名称')
+        ->and(__('Public Repository'))->toBe('公开仓库')
+        ->and(__('Private Repository (with GitHub App)'))->toBe('私有仓库（使用 GitHub App）')
+        ->and(__('Private Repository (with Deploy Key)'))->toBe('私有仓库（使用 Deploy Key）')
+        ->and(__('Docker Compose Empty'))->toBe('空白 Docker Compose')
+        ->and(__('Check repository'))->toBe('检查仓库')
+        ->and(__('Refresh Repository List'))->toBe('刷新仓库列表')
+        ->and(__('Delete Environment'))->toBe('删除环境')
+        ->and(__('Permanently Delete'))->toBe('永久删除')
         ->and(__('Is Multiline?'))->toBe('多行值？')
         ->and(__('Tip: Type'))->toBe('提示：输入')
         ->and(__('to reference a shared environment variable'))->toBe('可引用共享环境变量')

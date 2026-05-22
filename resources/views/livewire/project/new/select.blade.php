@@ -405,14 +405,15 @@
         @endif
     </div>
     @if ($current_step === 'servers')
-        <h2>Select a server</h2>
+        <h2>{{ __('Select a server') }}</h2>
         <div class="pb-5"></div>
         <div class="flex flex-col justify-center gap-4 text-left xl:flex-row xl:flex-wrap">
             @if ($onlyBuildServerAvailable)
-                <div> Only build servers are available, you need at least one server that is not set as build
-                    server. <a class="underline dark:text-white" href="/servers" {{ wireNavigate() }}>
-                        Go to servers page
-                    </a> </div>
+                <div>{{ __('Only build servers are available. You need at least one server that is not configured as a build server.') }}
+                    <a class="underline dark:text-white" href="/servers" {{ wireNavigate() }}>
+                        {{ __('Go to servers page') }}
+                    </a>
+                </div>
             @else
                 @forelse($servers as $server)
                     <div class="w-full coolbox group" wire:click="setServer({{ $server }})">
@@ -428,9 +429,9 @@
                 @empty
                     <div>
 
-                        <div>No validated & reachable servers found. <a class="underline dark:text-white"
+                        <div>{{ __('No validated and reachable servers found.') }} <a class="underline dark:text-white"
                                 href="/servers" {{ wireNavigate() }}>
-                                Go to servers page
+                                {{ __('Go to servers page') }}
                             </a></div>
                     </div>
                 @endforelse
@@ -438,17 +439,15 @@
         </div>
     @endif
     @if ($current_step === 'destinations')
-        <h2>Select a destination</h2>
-        <div class="pb-4">Destinations are used to segregate resources by network. If you are unsure, select the
-            default
-            Standalone Docker (coolify).</div>
+        <h2>{{ __('Select a destination') }}</h2>
+        <div class="pb-4">{{ __('Destinations are used to separate resources by network. If you are unsure, select the default Standalone Docker (coolify).') }}</div>
         <div class="flex flex-col justify-center gap-4 text-left xl:flex-row xl:flex-wrap">
             @if ($server->isSwarm())
                 @foreach ($swarmDockers as $swarmDocker)
                     <div class="w-full coolbox group" wire:click="setDestination('{{ $swarmDocker->uuid }}')">
                         <div class="flex flex-col mx-6">
                             <div class="font-bold dark:group-hover:text-white">
-                                Swarm Docker <span class="text-xs">({{ $swarmDocker->name }})</span>
+                                {{ __('Swarm Docker') }} <span class="text-xs">({{ $swarmDocker->name }})</span>
                                 <x-deprecated-badge />
                             </div>
                         </div>
@@ -459,10 +458,10 @@
                     <div class="w-full coolbox group" wire:click="setDestination('{{ $standaloneDocker->uuid }}')">
                         <div class="flex flex-col mx-6">
                             <div class="box-title">
-                                Standalone Docker <span class="text-xs">({{ $standaloneDocker->name }})</span>
+                                {{ __('Standalone Docker') }} <span class="text-xs">({{ $standaloneDocker->name }})</span>
                             </div>
                             <div class="box-description">
-                                Network: {{ $standaloneDocker->network }}</div>
+                                {{ __('Network: :name', ['name' => $standaloneDocker->network]) }}</div>
                         </div>
                     </div>
                 @endforeach
@@ -471,25 +470,23 @@
     @endif
     @if ($current_step === 'select-postgresql-type')
         <div x-data="{ selecting: false }">
-            <h2>Select a Postgresql type</h2>
-            <div>If you need extra extensions, you can select Supabase PostgreSQL (or others), otherwise select
-                PostgreSQL
-                18 (default).</div>
+            <h2>{{ __('Select a Postgresql type') }}</h2>
+            <div>{{ __('If you need extra extensions, you can select Supabase PostgreSQL (or others). Otherwise, select PostgreSQL 18 (default).') }}</div>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-8">
                 <div class="gap-2 coolbox group flex relative"
                     :class="{ 'cursor-pointer': !selecting, 'cursor-not-allowed opacity-50': selecting }"
                     x-on:click="!selecting && (selecting = true, $wire.setPostgresqlType('postgres:18-alpine'))"
                     :disabled="selecting">
                     <div class="flex flex-col">
-                        <div class="box-title">PostgreSQL 18 (default)</div>
+                        <div class="box-title">{{ __('PostgreSQL 18 (default)') }}</div>
                         <div class="box-description">
-                            PostgreSQL is a powerful, open-source object-relational database system (no extensions).
+                            {{ __('PostgreSQL is a powerful open-source object-relational database system (without extensions).') }}
                         </div>
                     </div>
                     <a href="https://hub.docker.com/_/postgres/" target="_blank"
                         @click.stop
                         class="absolute top-2 right-2 p-1.5 rounded hover:bg-neutral-200 dark:hover:bg-coolgray-300 transition-colors"
-                        title="View documentation">
+                        title="{{ __('View documentation') }}">
                         <svg class="w-4 h-4 text-neutral-600 dark:text-neutral-400" fill="none"
                             stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -504,13 +501,13 @@
                     <div class="flex flex-col">
                         <div class="box-title">PostgreSQL 17</div>
                         <div class="box-description">
-                            PostgreSQL is a powerful, open-source object-relational database system (no extensions).
+                            {{ __('PostgreSQL is a powerful open-source object-relational database system (without extensions).') }}
                         </div>
                     </div>
                     <a href="https://hub.docker.com/_/postgres/" target="_blank"
                         @click.stop
                         class="absolute top-2 right-2 p-1.5 rounded hover:bg-neutral-200 dark:hover:bg-coolgray-300 transition-colors"
-                        title="View documentation">
+                        title="{{ __('View documentation') }}">
                         <svg class="w-4 h-4 text-neutral-600 dark:text-neutral-400" fill="none"
                             stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -525,13 +522,13 @@
                     <div class="flex flex-col">
                         <div class="box-title">PostgreSQL 16</div>
                         <div class="box-description">
-                            PostgreSQL is a powerful, open-source object-relational database system (no extensions).
+                            {{ __('PostgreSQL is a powerful open-source object-relational database system (without extensions).') }}
                         </div>
                     </div>
                     <a href="https://hub.docker.com/_/postgres/" target="_blank"
                         @click.stop
                         class="absolute top-2 right-2 p-1.5 rounded hover:bg-neutral-200 dark:hover:bg-coolgray-300 transition-colors"
-                        title="View documentation">
+                        title="{{ __('View documentation') }}">
                         <svg class="w-4 h-4 text-neutral-600 dark:text-neutral-400" fill="none"
                             stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -544,15 +541,15 @@
                     x-on:click="!selecting && (selecting = true, $wire.setPostgresqlType('supabase/postgres:17.4.1.032'))"
                     :disabled="selecting">
                     <div class="flex flex-col">
-                        <div class="box-title">Supabase PostgreSQL (with extensions)</div>
+                        <div class="box-title">{{ __('Supabase PostgreSQL (with extensions)') }}</div>
                         <div class="box-description">
-                            Supabase is a modern, open-source alternative to PostgreSQL with lots of extensions.
+                            {{ __('Supabase is a modern open-source PostgreSQL alternative with many extensions.') }}
                         </div>
                     </div>
                     <a href="https://github.com/supabase/postgres" target="_blank"
                         @click.stop
                         class="absolute top-2 right-2 p-1.5 rounded hover:bg-neutral-200 dark:hover:bg-coolgray-300 transition-colors"
-                        title="View documentation">
+                        title="{{ __('View documentation') }}">
                         <svg class="w-4 h-4 text-neutral-600 dark:text-neutral-400" fill="none"
                             stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -565,15 +562,15 @@
                     x-on:click="!selecting && (selecting = true, $wire.setPostgresqlType('postgis/postgis:17-3.5-alpine'))"
                     :disabled="selecting">
                     <div class="flex flex-col">
-                        <div class="box-title">PostGIS (AMD only)</div>
+                        <div class="box-title">{{ __('PostGIS (AMD only)') }}</div>
                         <div class="box-description">
-                            PostGIS is a PostgreSQL extension for geographic objects.
+                            {{ __('PostGIS is a PostgreSQL extension for geographic objects.') }}
                         </div>
                     </div>
                     <a href="https://github.com/postgis/docker-postgis" target="_blank"
                         @click.stop
                         class="absolute top-2 right-2 p-1.5 rounded hover:bg-neutral-200 dark:hover:bg-coolgray-300 transition-colors"
-                        title="View documentation">
+                        title="{{ __('View documentation') }}">
                         <svg class="w-4 h-4 text-neutral-600 dark:text-neutral-400" fill="none"
                             stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -588,13 +585,13 @@
                     <div class="flex flex-col">
                         <div class="box-title">PGVector (18)</div>
                         <div class="box-description">
-                            PGVector is a PostgreSQL extension for vector data types.
+                            {{ __('PGVector is a PostgreSQL extension for vector data types.') }}
                         </div>
                     </div>
                     <a href="https://github.com/pgvector/pgvector" target="_blank"
                         @click.stop
                         class="absolute top-2 right-2 p-1.5 rounded hover:bg-neutral-200 dark:hover:bg-coolgray-300 transition-colors"
-                        title="View documentation">
+                        title="{{ __('View documentation') }}">
                         <svg class="w-4 h-4 text-neutral-600 dark:text-neutral-400" fill="none"
                             stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -609,13 +606,13 @@
                     <div class="flex flex-col">
                         <div class="box-title">PGVector (17)</div>
                         <div class="box-description">
-                            PGVector is a PostgreSQL extension for vector data types.
+                            {{ __('PGVector is a PostgreSQL extension for vector data types.') }}
                         </div>
                     </div>
                     <a href="https://github.com/pgvector/pgvector" target="_blank"
                         @click.stop
                         class="absolute top-2 right-2 p-1.5 rounded hover:bg-neutral-200 dark:hover:bg-coolgray-300 transition-colors"
-                        title="View documentation">
+                        title="{{ __('View documentation') }}">
                         <svg class="w-4 h-4 text-neutral-600 dark:text-neutral-400" fill="none"
                             stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -628,9 +625,9 @@
     @endif
     @if ($current_step === 'existing-postgresql')
         <form wire:submit='addExistingPostgresql' class="flex items-end gap-4">
-            <x-forms.input placeholder="postgres://username:password@database:5432" label="Database URL"
+            <x-forms.input placeholder="postgres://username:password@database:5432" label="{{ __('Database URL') }}"
                 id="existingPostgresqlUrl" />
-            <x-forms.button type="submit">Add Database</x-forms.button>
+            <x-forms.button type="submit">{{ __('Add Database') }}</x-forms.button>
         </form>
     @endif
 </div>

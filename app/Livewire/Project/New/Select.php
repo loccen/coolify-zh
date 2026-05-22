@@ -151,20 +151,20 @@ class Select extends Component
         $gitBasedApplications = [
             [
                 'id' => 'public',
-                'name' => 'Public Repository',
-                'description' => 'You can deploy any kind of public repositories from the supported git providers.',
+                'name' => __('Public Repository'),
+                'description' => __('Deploy public repositories from supported Git providers.'),
                 'logo' => asset('svgs/git.svg'),
             ],
             [
                 'id' => 'private-gh-app',
-                'name' => 'Private Repository (with GitHub App)',
-                'description' => 'You can deploy public & private repositories through your GitHub Apps.',
+                'name' => __('Private Repository (with GitHub App)'),
+                'description' => __('Deploy public and private repositories through your GitHub App.'),
                 'logo' => asset('svgs/github.svg'),
             ],
             [
                 'id' => 'private-deploy-key',
-                'name' => 'Private Repository (with Deploy Key)',
-                'description' => 'You can deploy private repositories with a deploy key.',
+                'name' => __('Private Repository (with Deploy Key)'),
+                'description' => __('Deploy private repositories with a deploy key.'),
                 'logo' => asset('svgs/git.svg'),
             ],
         ];
@@ -177,8 +177,8 @@ class Select extends Component
             ],
             [
                 'id' => 'docker-compose-empty',
-                'name' => 'Docker Compose Empty',
-                'description' => 'You can deploy complex application easily with Docker Compose, without Git.',
+                'name' => __('Docker Compose Empty'),
+                'description' => __('Deploy complex applications with Docker Compose, without Git.'),
                 'logo' => asset('svgs/docker.svg'),
             ],
             [

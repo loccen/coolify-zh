@@ -24,7 +24,9 @@ it('uses explicit translation lookups in representative core business views', fu
         ->toContain("{{ __('Search resources, paths, everything (type new for create)...') }}")
         ->and($boarding)
         ->toContain("{{ __('Welcome to Coolify') }}")
-        ->toContain("title=\"{{ __('Project Setup') }}\"");
+        ->toContain("title=\"{{ __('Project Setup') }}\"")
+        ->toContain("{{ __('Connect your first server and start deploying in minutes') }}")
+        ->toContain("{{ __('Let\\'s go!') }}");
 });
 
 it('resolves representative T5C translations in zh_CN', function () {
@@ -41,6 +43,9 @@ it('resolves representative T5C translations in zh_CN', function () {
         ->and(__('Swarm'))->toBe('Swarm')
         ->and(__('Webhook'))->toBe('Webhook')
         ->and(__('Welcome to Coolify'))->toBe('欢迎使用 Coolify')
+        ->and(__('Connect your first server and start deploying in minutes'))->toBe('连接你的第一台服务器，几分钟内就能开始部署。')
+        ->and(__('What You\'ll Set Up'))->toBe('你将要完成的设置')
+        ->and(__('Let\'s go!'))->toBe('开始吧！')
         ->and(__('Search resources, paths, everything (type new for create)...'))->toBe('搜索资源、路径等内容（输入 new 可创建）...')
         ->and(__('No resource found with the search term'))->toBe('没有找到与搜索词匹配的资源');
 });

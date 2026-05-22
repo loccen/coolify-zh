@@ -1,12 +1,12 @@
 <div>
-    <h1>Create a new Service</h1>
-    <div class="pb-4">You can deploy complex services easily with Docker Compose.</div>
+    <h1>{{ __('Create a new Service') }}</h1>
+    <div class="pb-4">{{ __('You can deploy complex services easily with Docker Compose.') }}</div>
     <form wire:submit="submit">
         <div class="flex gap-2 pb-1">
-            <h2>Docker Compose</h2>
-            <x-forms.button type="submit">Save</x-forms.button>
+            <h2>{{ __('Docker Compose') }}</h2>
+            <x-forms.button type="submit">{{ __('Save') }}</x-forms.button>
         </div>
-        <x-forms.textarea useMonacoEditor monacoEditorLanguage="yaml" label="Docker Compose file" rows="20"
+        <x-forms.textarea useMonacoEditor monacoEditorLanguage="yaml" label="{{ __('Docker Compose file') }}" rows="20"
             id="dockerComposeRaw" autofocus
             placeholder='services:
   ghost:
