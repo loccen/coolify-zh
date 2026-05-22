@@ -1821,5 +1821,11 @@
     "• 1g (gigabyte)": "• 1g (gigabyte)",
     "• 420k (kilobyte)": "• 420k (kilobyte)",
     "• 69b (byte)": "• 69b (byte)",
-    "⚠️ Action Required:": "⚠️ Action Required:"
+    "⚠️ Action Required:": "⚠️ Action Required:",
+    "Tip: Type": "Tip: Type",
+    "to reference a shared environment variable": "to reference a shared environment variable",
+    "Inline comments with space before # (e.g., <code class=\"font-mono\">KEY=value #comment</code>) are stripped.": "Inline comments with space before # (e.g., <code class=\"font-mono\">KEY=value #comment</code>) are stripped.",
+    "Hardcoded env": "Hardcoded env",
+    "Service:": "Service:",
+    "(inherited from host)": "(inherited from host)"
 }

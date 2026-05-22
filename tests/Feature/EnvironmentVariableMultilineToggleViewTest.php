@@ -8,9 +8,10 @@ it('uses Alpine entangle to switch add value field immediately when multiline is
         ->toContain('<template x-if="isMultiline">')
         ->toContain('<template x-if="!isMultiline">')
         ->toContain('x-model="isMultiline"')
-        ->toContain('<x-forms.textarea id="value" label="Value" required class="font-sans" spellcheck />')
+        ->toContain('<x-forms.textarea id="value" :label="__(\'Value\')" required class="font-sans" spellcheck />')
         ->toContain('wire:key="env-value-textarea"')
-        ->toContain('wire:key="env-value-input"');
+        ->toContain('wire:key="env-value-input"')
+        ->toContain('&#123;&#123;</span>');
 });
 
 it('uses distinct keyed branches for the edit value field modes', function () {
@@ -26,6 +27,8 @@ it('uses sans font for the developer bulk environment variable editor', function
 
     expect($view)
         ->toContain('class="whitespace-pre-wrap font-sans"')
+        ->toContain(":label=\"__('Production Environment Variables')\"")
+        ->toContain(":label=\"__('Preview Deployments Environment Variables')\"")
         ->not->toContain('wire:model="variables" monospace')
         ->not->toContain('wire:model="variablesPreview" monospace');
 });

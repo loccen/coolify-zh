@@ -14,12 +14,14 @@ it('uses explicit translation lookups in follow-up i18n views', function () {
     $proxyNewDynamicConfiguration = file_get_contents($viewsRoot.'/livewire/server/proxy/new-dynamic-configuration.blade.php');
     $executeContainerCommand = file_get_contents($viewsRoot.'/livewire/project/shared/execute-container-command.blade.php');
     $environmentVariableAdd = file_get_contents($viewsRoot.'/livewire/project/shared/environment-variable/add.blade.php');
+    $environmentVariableAll = file_get_contents($viewsRoot.'/livewire/project/shared/environment-variable/all.blade.php');
     $backupEdit = file_get_contents($viewsRoot.'/livewire/project/database/backup-edit.blade.php');
     $backupNow = file_get_contents($viewsRoot.'/livewire/project/database/backup-now.blade.php');
     $dockerImage = file_get_contents($viewsRoot.'/livewire/project/new/docker-image.blade.php');
     $simpleDockerfile = file_get_contents($viewsRoot.'/livewire/project/new/simple-dockerfile.blade.php');
     $applicationAdvanced = file_get_contents($viewsRoot.'/livewire/project/application/advanced.blade.php');
     $environmentVariableShow = file_get_contents($viewsRoot.'/livewire/project/shared/environment-variable/show.blade.php');
+    $environmentVariableShowHardcoded = file_get_contents($viewsRoot.'/livewire/project/shared/environment-variable/show-hardcoded.blade.php');
 
     expect($sentinel)
         ->toContain("{{ __('Sentinel') }}")
@@ -51,6 +53,12 @@ it('uses explicit translation lookups in follow-up i18n views', function () {
         ->and($environmentVariableAdd)
         ->toContain("__('Comment')")
         ->toContain("__('Is Multiline?')")
+        ->toContain("__('Tip: Type')")
+        ->toContain('&#123;&#123;')
+        ->and($environmentVariableAll)
+        ->toContain("__('Environment Variables')")
+        ->toContain("__('Production Environment Variables')")
+        ->toContain("__('Save All Environment Variables')")
         ->and($backupEdit)
         ->toContain("{{ __('Scheduled Backup') }}")
         ->toContain("__('Backup Retention Settings')")
@@ -71,7 +79,11 @@ it('uses explicit translation lookups in follow-up i18n views', function () {
         ->and($environmentVariableShow)
         ->toContain("__('Comment')")
         ->toContain("__('Environment Variable Name')")
-        ->toContain("__('Is Literal?')");
+        ->toContain("__('Is Literal?')")
+        ->and($environmentVariableShowHardcoded)
+        ->toContain("__('Hardcoded env')")
+        ->toContain("__('Service:')")
+        ->toContain("__('Documentation for this environment variable.')");
 });
 
 it('resolves representative follow-up translations in zh_CN', function () {
@@ -80,6 +92,8 @@ it('resolves representative follow-up translations in zh_CN', function () {
     expect(__('Comment'))->toBe('备注')
         ->and(__('Image Name'))->toBe('镜像名称')
         ->and(__('Is Multiline?'))->toBe('多行值？')
+        ->and(__('Tip: Type'))->toBe('提示：输入')
+        ->and(__('to reference a shared environment variable'))->toBe('可引用共享环境变量')
         ->and(__('Commands'))->toBe('命令')
         ->and(__('Backup Now'))->toBe('立即备份')
         ->and(__('Proxy Dynamic Configuration'))->toBe('代理动态配置')
@@ -89,6 +103,14 @@ it('resolves representative follow-up translations in zh_CN', function () {
         ->and(__('Build'))->toBe('构建')
         ->and(__('Operations'))->toBe('操作')
         ->and(__('Environment Variable Name'))->toBe('环境变量名称')
+        ->and(__('Environment Variables'))->toBe('环境变量')
+        ->and(__('Preview Deployments Environment Variables'))->toBe('Preview Deployments 环境变量')
+        ->and(__('Production Environment Variables'))->toBe('生产环境变量')
+        ->and(__('Save All Environment Variables'))->toBe('保存所有环境变量')
+        ->and(__('Hardcoded env'))->toBe('硬编码环境变量')
+        ->and(__('Service:'))->toBe('服务：')
+        ->and(__('(inherited from host)'))->toBe('（继承自主机）')
+        ->and(__('Documentation for this environment variable.'))->toBe('这个环境变量的说明。')
         ->and(__('settings.instance_updated'))->toBe('设置已更新。')
         ->and(trans('settings.instance_updated'))->toBe('设置已更新。');
 });
