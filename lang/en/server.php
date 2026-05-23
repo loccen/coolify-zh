@@ -35,5 +35,9 @@ return [
         'cloudflare_tunnel_disabled_ip_restored' => 'Cloudflare Tunnel disabled.<br><br>Manually updated the server IP address to its previous IP address.',
         'cloudflare_tunnel_disabled_update_ip_required' => 'Cloudflare Tunnel disabled. Action required: Update the server IP address to its real IP address in the Advanced settings.',
         'cloudflare_tunnel_enabled' => 'Cloudflare Tunnel enabled.',
+        'check_for_updates_first' => 'Run "Check for updates" first.',
+        'test_email_development_only' => 'Test email functionality is only available in development mode.',
+        'test_email_sent_successfully' => 'Test email sent successfully! Check your email inbox.',
+        'test_email_failed' => 'Failed to send test email: :error',
     ],
 ];
