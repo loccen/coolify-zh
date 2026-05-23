@@ -10,7 +10,7 @@
             <x-forms.input :label="__('Name')" id="name" canGate="update" :canResource="$database" />
             <x-forms.input :label="__('Description')" id="description" canGate="update" :canResource="$database" />
             <x-forms.input :label="__('Image')" id="image" required canGate="update" :canResource="$database"
-                :helper="__('For all available images, check here:<br><br><a target=\'_blank\' href=https://hub.docker.com/r/eqalpha/keydb\'>https://hub.docker.com/r/eqalpha/keydb</a>')" />
+                :helper="__('For all available images, check here:<br><br><a target=\'_blank\' href=\'https://hub.docker.com/r/eqalpha/keydb\'>https://hub.docker.com/r/eqalpha/keydb</a>')" />
         </div>
 
         @if ($database->started_at)

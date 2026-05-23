@@ -158,7 +158,7 @@
                 :label="__('Proxy Timeout (seconds)')" :helper="__('Timeout for the public TCP proxy connection in seconds. Default: 3600 (1 hour).')" canGate="update" :canResource="$database" />
             </div>
         </div>
-        <x-forms.textarea :label="__('Custom Mysql Configuration')" rows="10" id="mysqlConf" canGate="update" :canResource="$database" />
+        <x-forms.textarea :label="__('Custom MySQL Configuration')" rows="10" id="mysqlConf" canGate="update" :canResource="$database" />
         <h3 class="pt-4">{{ __('Advanced') }}</h3>
         <div class="flex flex-col">
             <x-forms.checkbox :helper="__('Drain logs to your configured log drain endpoint in your Server settings.')"

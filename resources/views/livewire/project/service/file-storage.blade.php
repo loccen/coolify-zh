@@ -24,7 +24,7 @@
                 <div class="w-full sm:w-96">
                     <x-forms.checkbox instantSave canGate="update" :canResource="$resource" :label="__('Add suffix for PR deployments')"
                         id="isPreviewSuffixEnabled"
-                        :helper="__('When enabled, a -pr-N suffix is added to this volume\\'s path for preview deployments (e.g. ./scripts becomes ./scripts-pr-1). Disable this for volumes that contain shared config or scripts from your repository.')"></x-forms.checkbox>
+                        :helper="__('When enabled, a -pr-N suffix is added to this volume\'s path for preview deployments (e.g. ./scripts becomes ./scripts-pr-1). Disable this for volumes that contain shared config or scripts from your repository.')"></x-forms.checkbox>
                 </div>
             @endcan
         @endif

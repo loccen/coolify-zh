@@ -31,11 +31,11 @@
                 <div class="flex gap-2">
                     @if (version_compare($redisVersion, '6.0', '>='))
                         <x-forms.input :label="__('Username')" id="redisUsername" required
-                            :helper="__('You can change the Redis Username in the input field below or by editing the value of the REDIS_USERNAME environment variable.<br><br>If you change the Redis Username in the database, please sync it here, otherwise automations (like backups) won\\'t work.<br><br>Note: If the environment variable REDIS_USERNAME is set as a shared variable (environment, project, or team-based), this input field will become read-only.')"
+                            :helper="__('You can change the Redis Username in the input field below or by editing the value of the REDIS_USERNAME environment variable.<br><br>If you change the Redis Username in the database, please sync it here, otherwise automations (like backups) won\'t work.<br><br>Note: If the environment variable REDIS_USERNAME is set as a shared variable (environment, project, or team-based), this input field will become read-only.')"
                             :disabled="$this->isSharedVariable('REDIS_USERNAME')" canGate="update" :canResource="$database" />
                     @endif
                     <x-forms.input :label="__('Password')" id="redisPassword" type="password" required
-                        :helper="__('You can change the Redis Password in the input field below or by editing the value of the REDIS_PASSWORD environment variable.<br><br>If you change the Redis Password in the database, please sync it here, otherwise automations (like backups) won\\'t work.<br><br>Note: If the environment variable REDIS_PASSWORD is set as a shared variable (environment, project, or team-based), this input field will become read-only.')"
+                        :helper="__('You can change the Redis Password in the input field below or by editing the value of the REDIS_PASSWORD environment variable.<br><br>If you change the Redis Password in the database, please sync it here, otherwise automations (like backups) won\'t work.<br><br>Note: If the environment variable REDIS_PASSWORD is set as a shared variable (environment, project, or team-based), this input field will become read-only.')"
                         :disabled="$this->isSharedVariable('REDIS_PASSWORD')" canGate="update" :canResource="$database" />
                 </div>
             @endif

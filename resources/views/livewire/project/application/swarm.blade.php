@@ -9,7 +9,7 @@
                 </x-forms.button>
             @else
                 <x-forms.button type="submit" disabled
-                    :title="__('You don\\'t have permission to update this application. Contact your team administrator for access.')">
+                    :title="__('You don\'t have permission to update this application. Contact your team administrator for access.')">
                     {{ __('Save') }}
                 </x-forms.button>
             @endcan
