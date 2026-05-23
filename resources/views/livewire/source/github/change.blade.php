@@ -1,4 +1,7 @@
 <div>
+    <x-slot:title>
+        {{ __('GitHub App') }} | Coolify
+    </x-slot:title>
     @if (data_get($github_app, 'app_id'))
         <form wire:submit='submit'>
             <div class="flex flex-col sm:flex-row sm:items-center gap-2">
