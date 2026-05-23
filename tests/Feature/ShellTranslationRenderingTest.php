@@ -1,5 +1,6 @@
 <?php
 
+use App\Console\Commands\Emails;
 use App\Livewire\Help;
 use App\Livewire\SettingsDropdown;
 use App\Models\InstanceSettings;
@@ -8,6 +9,7 @@ use App\Services\ChangelogService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\ViewErrorBag;
 use Livewire\Livewire;
@@ -34,6 +36,16 @@ function setEnLocale(): void
     ]);
 
     app()->setLocale('en');
+}
+
+function setZhLocale(): void
+{
+    config([
+        'app.locale' => 'zh_CN',
+        'app.fallback_locale' => 'en',
+    ]);
+
+    App::setLocale('zh_CN');
 }
 
 function fakeChangelogService(Collection $entries, int $unreadCount): ChangelogService
@@ -169,6 +181,21 @@ it('defines the frontend i18n payload for toast, logs, and terminal prompts', fu
         ->toContain('logsCopiedToClipboard')
         ->toContain('matchesSuffix')
         ->toContain("__('terminal.toasts.reconnecting')");
+});
+
+it('localizes the emails command description and terminal search copy', function () {
+    setZhLocale();
+
+    $globalSearch = file_get_contents(app_path('Livewire/GlobalSearch.php'));
+    $command = app(Emails::class);
+
+    expect($command->getDescription())
+        ->toBe('发送测试邮件或正式邮件')
+        ->and(__('terminal.navigation.access_server'))
+        ->toBe('访问服务器终端')
+        ->and($globalSearch)
+        ->toContain("__('Terminal')")
+        ->toContain("__('terminal.navigation.access_server')");
 });
 
 it('wires shell popup translations and renders help form copy', function () {

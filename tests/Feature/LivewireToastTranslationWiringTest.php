@@ -107,6 +107,77 @@ it('resolves representative livewire toast translations in zh_CN', function () {
         ->and(__('Invalid container name.'))->toBe('容器名称无效。');
 });
 
+it('uses explicit translation lookups in second-round livewire toast dispatches', function () {
+    $globalSearch = file_get_contents(app_path('Livewire/GlobalSearch.php'));
+    $boarding = file_get_contents(app_path('Livewire/Boarding/Index.php'));
+    $serverPrivateKey = file_get_contents(app_path('Livewire/Server/PrivateKey/Show.php'));
+    $help = file_get_contents(app_path('Livewire/Help.php'));
+    $storageForm = file_get_contents(app_path('Livewire/Storage/Form.php'));
+    $storageResources = file_get_contents(app_path('Livewire/Storage/Resources.php'));
+
+    expect($globalSearch)
+        ->toContain("trans('toast.livewire.global_search.server_not_found')")
+        ->toContain("trans('toast.livewire.global_search.no_destinations_found')")
+        ->toContain("trans('toast.livewire.global_search.create_project_first')")
+        ->toContain("trans('toast.livewire.global_search.no_environments_found')")
+        ->and($boarding)
+        ->toContain("trans('toast.livewire.boarding.localhost_server_not_found')")
+        ->toContain("trans('toast.livewire.boarding.select_private_key')")
+        ->toContain("trans('toast.livewire.boarding.server_exists_in_team')")
+        ->toContain("trans('toast.livewire.boarding.server_exists_in_other_team')")
+        ->toContain("trans('toast.livewire.boarding.project_not_found')")
+        ->and($serverPrivateKey)
+        ->toContain("trans('toast.livewire.server_private_key.forbidden')")
+        ->toContain("trans('toast.livewire.server_private_key.updated')")
+        ->toContain("trans('toast.livewire.server_private_key.server_reachable')")
+        ->toContain("trans('toast.livewire.server_private_key.server_not_reachable'")
+        ->and($help)
+        ->toContain("trans('toast.livewire.help.feedback_sent')")
+        ->toContain("trans('toast.livewire.help.feedback_follow_up')")
+        ->and($storageForm)
+        ->toContain("trans('toast.livewire.storage.connection_working')")
+        ->toContain("trans('toast.livewire.storage.tested_with_list_objects_v2')")
+        ->toContain("trans('toast.livewire.storage.failed_to_test_connection')")
+        ->toContain("trans('toast.livewire.storage.storage_settings_updated_and_verified')")
+        ->and($storageResources)
+        ->toContain("trans('toast.livewire.storage.s3_disabled')")
+        ->toContain("trans('toast.livewire.storage.s3_backup_disabled')")
+        ->toContain("trans('toast.livewire.storage.no_change')")
+        ->toContain("trans('toast.livewire.storage.backup_already_using_storage')")
+        ->toContain("trans('toast.livewire.storage.storage_not_found')")
+        ->toContain("trans('toast.livewire.storage.backup_moved')")
+        ->toContain("trans('toast.livewire.storage.moved_to', ['name' => \$newStorage->name])");
+});
+
+it('resolves second-round livewire toast translations in zh_CN', function () {
+    App::setLocale('zh_CN');
+
+    expect(trans('toast.livewire.boarding.localhost_server_not_found'))
+        ->toBe('未找到 Localhost 服务器。安装过程中出了问题。请重新安装或联系支持。')
+        ->and(trans('toast.livewire.boarding.select_private_key'))
+        ->toBe('请选择一个私钥。')
+        ->and(trans('toast.livewire.global_search.server_not_found'))
+        ->toBe('未找到服务器。')
+        ->and(trans('toast.livewire.global_search.no_destinations_found'))
+        ->toBe('此服务器上未找到目标位置。')
+        ->and(trans('toast.livewire.help.feedback_sent'))
+        ->toBe('反馈已发送。')
+        ->and(trans('toast.livewire.help.feedback_follow_up'))
+        ->toBe('我们会尽快与你联系。')
+        ->and(trans('toast.livewire.server_private_key.updated'))
+        ->toBe('私钥已更新。')
+        ->and(trans('toast.livewire.server_private_key.server_reachable'))
+        ->toBe('服务器可访问。')
+        ->and(trans('toast.livewire.storage.connection_working'))
+        ->toBe('连接正常。')
+        ->and(trans('toast.livewire.storage.tested_with_list_objects_v2'))
+        ->toBe('已使用 “ListObjectsV2” 操作测试。')
+        ->and(trans('toast.livewire.storage.storage_settings_updated_and_verified'))
+        ->toBe('存储设置已更新，且连接已验证。')
+        ->and(trans('toast.livewire.storage.moved_to', ['name' => 'MinIO']))
+        ->toBe('已迁移到 MinIO。');
+});
+
 it('uses explicit translation lookups in follow-up livewire toast dispatches', function () {
     $applicationAdvanced = file_get_contents(app_path('Livewire/Project/Application/Advanced.php'));
     $applicationDeploymentIndex = file_get_contents(app_path('Livewire/Project/Application/Deployment/Index.php'));

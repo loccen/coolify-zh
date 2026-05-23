@@ -5,6 +5,9 @@ return [
     'loading_containers' => '正在加载服务器和容器...',
     'select_target' => '选择服务器或容器',
     'no_servers' => '未找到具有终端访问权限的服务器。',
+    'navigation' => [
+        'access_server' => '访问服务器终端',
+    ],
     'help' => [
         'connection' => '如果连接服务器遇到问题，请确认端口已开放。<br><br><a class=\'underline\' href=\':url\' target=\'_blank\'>文档</a>',
     ],

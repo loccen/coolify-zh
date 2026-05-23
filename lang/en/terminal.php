@@ -5,6 +5,9 @@ return [
     'loading_containers' => 'Loading servers and containers...',
     'select_target' => 'Select a server or container',
     'no_servers' => 'No servers with terminal access found.',
+    'navigation' => [
+        'access_server' => 'Access server terminal',
+    ],
     'help' => [
         'connection' => 'If you\'re having trouble connecting to your server, make sure that the port is open.<br><br><a class=\'underline\' href=\':url\' target=\'_blank\'>Documentation</a>',
     ],
