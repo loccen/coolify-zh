@@ -9,7 +9,12 @@ class CleanupApplicationDeploymentQueue extends Command
 {
     protected $signature = 'cleanup:deployment-queue {--team-id=}';
 
-    protected $description = 'Cleanup application deployment queue.';
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->setDescription(trans('console.cleanup_application_deployment_queue.description', locale: app()->getLocale()));
+    }
 
     public function handle()
     {
