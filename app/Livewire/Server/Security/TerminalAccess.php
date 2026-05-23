@@ -38,7 +38,7 @@ class TerminalAccess extends Component
 
             // Check if user is admin or owner
             if (! auth()->user()->isAdmin()) {
-                throw new \Exception('Only team administrators and owners can modify terminal access.');
+                throw new \Exception(__('server.toasts.terminal_access_admin_only'));
             }
 
             // Verify password

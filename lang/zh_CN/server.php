@@ -41,6 +41,7 @@ return [
         'settings_saved' => '设置已保存。',
         'terminal_access_enabled' => '终端访问已启用。',
         'terminal_access_disabled' => '终端访问已禁用。',
+        'terminal_access_admin_only' => '只有团队管理员和拥有者可以修改终端访问。',
         'proxy_configuration_saved' => '代理配置已保存。',
         'proxy_configuration_reset_to_default' => '代理配置已重置为默认值。',
         'network_already_added' => '网络已添加到此服务器。',

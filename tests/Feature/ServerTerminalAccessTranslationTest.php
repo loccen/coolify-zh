@@ -8,7 +8,8 @@ it('uses explicit translation lookups in the server terminal access component', 
     expect($component)
         ->toContain("__('auth.failed.password')")
         ->toContain("__('server.toasts.terminal_access_enabled')")
-        ->toContain("__('server.toasts.terminal_access_disabled')");
+        ->toContain("__('server.toasts.terminal_access_disabled')")
+        ->toContain("__('server.toasts.terminal_access_admin_only')");
 });
 
 it('resolves server terminal access translations in en and zh_CN', function () {
@@ -19,7 +20,9 @@ it('resolves server terminal access translations in en and zh_CN', function () {
         ->and(__('server.toasts.terminal_access_enabled'))
         ->toBe('Terminal access is enabled.')
         ->and(__('server.toasts.terminal_access_disabled'))
-        ->toBe('Terminal access is disabled.');
+        ->toBe('Terminal access is disabled.')
+        ->and(__('server.toasts.terminal_access_admin_only'))
+        ->toBe('Only team administrators and owners can modify terminal access.');
 
     App::setLocale('zh_CN');
 
@@ -28,5 +31,7 @@ it('resolves server terminal access translations in en and zh_CN', function () {
         ->and(__('server.toasts.terminal_access_enabled'))
         ->toBe('终端访问已启用。')
         ->and(__('server.toasts.terminal_access_disabled'))
-        ->toBe('终端访问已禁用。');
+        ->toBe('终端访问已禁用。')
+        ->and(__('server.toasts.terminal_access_admin_only'))
+        ->toBe('只有团队管理员和拥有者可以修改终端访问。');
 });
