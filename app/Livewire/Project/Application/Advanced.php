@@ -273,7 +273,7 @@ class Advanced extends Component
                 ['stopGracePeriod' => $this->stopGracePeriod === '' ? null : $this->stopGracePeriod],
                 ['stopGracePeriod' => ['nullable', 'integer', 'min:'.MIN_STOP_GRACE_PERIOD_SECONDS, 'max:'.MAX_STOP_GRACE_PERIOD_SECONDS]],
                 [],
-                ['stopGracePeriod' => __('Stop Grace Period')]
+                ['stopGracePeriod' => '停止宽限期']
             )->validate();
 
             $this->application->settings->stop_grace_period = $validated['stopGracePeriod'] === null

@@ -388,7 +388,7 @@ it('uses explicit translation lookups in project validation message sources', fu
         ->and($serviceStackForm)
         ->toContain("__('The Docker Compose Raw field is required.')")
         ->and($resourceLimits)
-        ->toContain("__('Maximum Memory Limit must be a number followed by a unit (b, k, m, g). Example: 256m, 1g. Use 0 for unlimited.')")
+        ->toContain("'limitsMemory.regex' => '最大内存限制必须是带单位的数字（b、k、m、g）。例如 256m、1g。填 0 表示不限制。'")
         ->and($storagesShow)
         ->toContain("__('Mount path must start with / and only contain safe path characters.')")
         ->and($postgresqlGeneral)
@@ -513,4 +513,26 @@ it('resolves project runtime error translations in zh_CN', function () {
         ->and(__('Invalid container identifier format'))->toBe('容器标识符格式无效')
         ->and(__('The selected directory and all its contents will be permanently deleted from the server.'))->toBe('所选目录及其全部内容都会从服务器中永久删除。')
         ->and(__('The selected file will be permanently deleted from the server.'))->toBe('所选文件会从服务器中永久删除。');
+});
+
+it('resolves targeted project helper translations in zh_CN', function () {
+    App::setLocale('zh_CN');
+
+    expect(__('0 means use all CPUs. Floating point number, like 0.002 or 1.5. More info <a class=\'underline dark:text-white\' target=\'_blank\' href=\'https://docs.docker.com/engine/reference/run/#cpu-share-constraint\'>here</a>.'))
+        ->toBe('0 表示使用全部 CPU。支持小数，例如 0.002 或 1.5。更多信息请查看<a class=\'underline dark:text-white\' target=\'_blank\' href=\'https://docs.docker.com/engine/reference/run/#cpu-share-constraint\'>这里</a>。')
+        ->and(__('If the health check fails, your application will become inaccessible. Please review the <a href=\'https://coolify.io/docs/knowledge-base/health-checks\' target=\'_blank\' class=\'underline text-white\'>Health Checks</a> guide before proceeding!'))
+        ->toBe('如果健康检查失败，你的应用将无法访问。继续之前，请先阅读<a href=\'https://coolify.io/docs/knowledge-base/health-checks\' target=\'_blank\' class=\'underline text-white\'>健康检查</a>指南！')
+        ->and(__('For more details goto our <a class=\'underline dark:text-white\' href=\'https://coolify.io/docs/api-reference/api/operations/deploy-by-tag-or-uuid\' target=\'_blank\'>docs</a>.'))
+        ->toBe('更多详情请查看我们的<a class=\'underline dark:text-white\' href=\'https://coolify.io/docs/api-reference/api/operations/deploy-by-tag-or-uuid\' target=\'_blank\'>文档</a>。')
+        ->and(__('See details in our <a target=\'_blank\' class=\'underline dark:text-white\' href=\'https://coolify.io/docs/api-reference/api/operations/deploy-by-tag-or-uuid\'>documentation</a>.'))
+        ->toBe('详情请查看我们的<a target=\'_blank\' class=\'underline dark:text-white\' href=\'https://coolify.io/docs/api-reference/api/operations/deploy-by-tag-or-uuid\'>文档</a>。')
+        ->and(__('You can specify one domain with path or more with comma. You can specify a port to bind the domain to.<br><br><span class=\'text-helper\'>Example</span><br>- https://app.coolify.io,https://cloud.coolify.io/dashboard<br>- https://app.coolify.io/api/v3<br>- https://app.coolify.io:3000 -> app.coolify.io will point to port 3000 inside the container.<br>- https://app.coolify.io:8080/api -> app.coolify.io/api will point to port 8080 inside the container.'))
+        ->toBe('你可以填写一个带路径的域名，或用逗号分隔多个域名。也可以指定端口，将域名绑定到对应端口。<br><br><span class=\'text-helper\'>示例</span><br>- https://app.coolify.io,https://cloud.coolify.io/dashboard<br>- https://app.coolify.io/api/v3<br>- https://app.coolify.io:3000 -> app.coolify.io 会指向容器内的 3000 端口。<br>- https://app.coolify.io:8080/api -> app.coolify.io/api 会指向容器内的 8080 端口。')
+        ->and(__('Variable name: :name', ['name' => 'APP_KEY']))->toBe('变量名：APP_KEY')
+        ->and(__('If you change the values in the database, please sync it here, otherwise automations won\'t work.'))
+        ->toBe('如果你在数据库中修改了这些值，请在这里同步，否则自动化功能将无法工作。')
+        ->and(__('If you change this in the database, please sync it here, otherwise automations (like backups) won\'t work.'))
+        ->toBe('如果你在数据库中修改了这个值，请在这里同步，否则自动化功能（如备份）将无法工作。')
+        ->and(__('You only need to provide the Redis directives you want to override — Redis will use default values for everything else.<br><br><strong>Important:</strong> Coolify automatically applies the requirepass directive using the password shown in the Password field above. If you override requirepass in your custom configuration, make sure it matches the password field to avoid authentication issues.<br><br><strong>Tip:</strong> <a target=\'_blank\' class=\'underline dark:text-white\' href=\'https://raw.githubusercontent.com/redis/redis/7.2/redis.conf\'>View the full Redis default configuration</a> to see what options are available.'))
+        ->toBe('你只需要填写想覆盖的 Redis 指令，其余配置会继续使用 Redis 默认值。<br><br><strong>重要：</strong>Coolify 会自动使用上方密码字段中的值应用 `requirepass` 指令。如果你在自定义配置里覆盖了 `requirepass`，请确保它与密码字段一致，以免出现认证问题。<br><br><strong>提示：</strong>可以查看<a target=\'_blank\' class=\'underline dark:text-white\' href=\'https://raw.githubusercontent.com/redis/redis/7.2/redis.conf\'>完整的 Redis 默认配置</a>，了解可用选项。');
 });

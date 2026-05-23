@@ -111,18 +111,18 @@ class General extends Component
     }
 
     protected $validationAttributes = [
-        'name' => __('Name'),
-        'description' => __('Description'),
-        'redisConf' => __('Redis Configuration'),
-        'image' => __('Image'),
-        'portsMappings' => __('Port Mapping'),
-        'isPublic' => __('Is Public'),
-        'publicPort' => __('Public Port'),
-        'publicPortTimeout' => __('Public Port Timeout'),
-        'customDockerRunOptions' => __('Custom Docker Options'),
-        'redisUsername' => __('Redis Username'),
-        'redisPassword' => __('Redis Password'),
-        'enableSsl' => __('Enable SSL'),
+        'name' => '名称',
+        'description' => '描述',
+        'redisConf' => 'Redis 配置',
+        'image' => '镜像',
+        'portsMappings' => '端口映射',
+        'isPublic' => '是否公开',
+        'publicPort' => '公共端口',
+        'publicPortTimeout' => '公共端口超时',
+        'customDockerRunOptions' => '自定义 Docker 选项',
+        'redisUsername' => 'Redis 用户名',
+        'redisPassword' => 'Redis 密码',
+        'enableSsl' => '启用 SSL',
     ];
 
     public function mount()

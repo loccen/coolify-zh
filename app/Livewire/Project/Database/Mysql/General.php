@@ -124,21 +124,21 @@ class General extends Component
     }
 
     protected $validationAttributes = [
-        'name' => __('Name'),
-        'description' => __('Description'),
-        'mysqlRootPassword' => __('Root Password'),
-        'mysqlUser' => __('User'),
-        'mysqlPassword' => __('Password'),
-        'mysqlDatabase' => __('Database'),
-        'mysqlConf' => __('MySQL Configuration'),
-        'image' => __('Image'),
-        'portsMappings' => __('Port Mapping'),
-        'isPublic' => __('Is Public'),
-        'publicPort' => __('Public Port'),
-        'publicPortTimeout' => __('Public Port Timeout'),
-        'customDockerRunOptions' => __('Custom Docker Run Options'),
-        'enableSsl' => __('Enable SSL'),
-        'sslMode' => __('SSL Mode'),
+        'name' => '名称',
+        'description' => '描述',
+        'mysqlRootPassword' => '根密码',
+        'mysqlUser' => '用户',
+        'mysqlPassword' => '密码',
+        'mysqlDatabase' => '数据库',
+        'mysqlConf' => 'MySQL 配置',
+        'image' => '镜像',
+        'portsMappings' => '端口映射',
+        'isPublic' => '是否公开',
+        'publicPort' => '公共端口',
+        'publicPortTimeout' => '公共端口超时',
+        'customDockerRunOptions' => '自定义 Docker 运行选项',
+        'enableSsl' => '启用 SSL',
+        'sslMode' => 'SSL 模式',
     ];
 
     public function mount()
