@@ -50,6 +50,8 @@ return [
         'proxy_dynamic_configuration_file_name_reserved' => 'File name is reserved.',
         'proxy_dynamic_configuration_file_already_exists' => 'File already exists',
         'proxy_dynamic_configuration_saved' => 'Dynamic configuration saved.',
+        'proxy_running' => 'Proxy is running.',
+        'proxy_restart_failed' => 'Proxy restart failed. Check logs.',
         'invalid_container_identifier' => 'Invalid container identifier.',
         'container_started' => 'Container started.',
         'container_restarted' => 'Container restarted.',
