@@ -50,6 +50,17 @@ return [
         'notifications_pending' => 'Notifications will be sent to teams with outdated Traefik versions.',
         'dispatch_failed' => 'Failed to dispatch Traefik version check job: :message',
     ],
+    'application_deployment_queue' => [
+        'description' => 'Check application deployment queue',
+        'info' => [
+            'no_deployments_found' => 'No deployments found in the last :seconds seconds.',
+            'deployments_found' => 'Found :count deployments created in the last :seconds seconds.',
+            'deployment_is_stale' => 'Deployment :deployment_id created at :created_at is older than :seconds seconds. Setting status to failed.',
+        ],
+        'confirm' => [
+            'cancel_deployment' => 'Do you want to cancel deployment :deployment_id created at :created_at?',
+        ],
+    ],
     'clear_global_search_cache' => [
         'description' => 'Clear the global search cache',
         'error' => [
