@@ -391,12 +391,12 @@
                 @endif
             </div>
             @if ($buildPack === 'dockercompose')
-                <div x-data="{ showRaw: true }">
+                <div x-data="{ showRaw: true, isRawComposeDeploymentEnabled: @js($application->settings->is_raw_compose_deployment_enabled) }">
                     <div class="flex items-center gap-2">
                         <h3>{{ __('Docker Compose') }}</h3>
-                        <x-forms.button x-show="!($application->settings->is_raw_compose_deployment_enabled)"
+                        <x-forms.button x-show="!isRawComposeDeploymentEnabled"
                             @click.prevent="showRaw = !showRaw"
-                            x-text="showRaw ? @js(__('Show Deployable Compose')) : @js(__('Show Raw Compose'))"></x-forms.button>
+                            x-text="showRaw ? `{{ __('Show Deployable Compose') }}` : `{{ __('Show Raw Compose') }}`"></x-forms.button>
                     </div>
                     @if ($application->settings->is_raw_compose_deployment_enabled)
                         <x-forms.textarea rows="10" readonly id="dockerComposeRaw"

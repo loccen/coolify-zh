@@ -35,7 +35,7 @@
                             @click="openCategoryDropdown = !openCategoryDropdown; $nextTick(() => { if (openCategoryDropdown) $refs.categorySearchInput.focus() })"
                             class="flex items-center justify-between gap-2 py-1.5 px-3 w-64 text-sm rounded-sm border-0 ring-2 ring-inset ring-neutral-200 dark:ring-coolgray-300 bg-white dark:bg-coolgray-100 cursor-pointer hover:ring-coolgray-400 transition-all whitespace-nowrap">
                             <span class="text-sm truncate"
-                                x-text="selectedCategory === '' ? @js(__('Filter by category')) : selectedCategory"
+                                x-text="selectedCategory === '' ? `{{ __('Filter by category') }}` : selectedCategory"
                                 :class="selectedCategory === '' ? 'text-neutral-400 dark:text-neutral-600' :
                                     'capitalize text-black dark:text-white'"></span>
                             <svg class="w-4 h-4 transition-transform text-neutral-400 shrink-0"

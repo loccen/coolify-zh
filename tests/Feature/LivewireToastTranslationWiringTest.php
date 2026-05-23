@@ -124,6 +124,8 @@ it('uses explicit translation lookups in follow-up livewire toast dispatches', f
     $environmentVariableAdd = file_get_contents(app_path('Livewire/Project/Shared/EnvironmentVariable/Add.php'));
     $environmentVariableAll = file_get_contents(app_path('Livewire/Project/Shared/EnvironmentVariable/All.php'));
     $environmentVariableShow = file_get_contents(app_path('Livewire/Project/Shared/EnvironmentVariable/Show.php'));
+    $scheduledTaskAdd = file_get_contents(app_path('Livewire/Project/Shared/ScheduledTask/Add.php'));
+    $scheduledTaskShow = file_get_contents(app_path('Livewire/Project/Shared/ScheduledTask/Show.php'));
     $executeContainerCommand = file_get_contents(app_path('Livewire/Project/Shared/ExecuteContainerCommand.php'));
     $healthChecks = file_get_contents(app_path('Livewire/Project/Shared/HealthChecks.php'));
     $webhooks = file_get_contents(app_path('Livewire/Project/Shared/Webhooks.php'));
@@ -164,7 +166,7 @@ it('uses explicit translation lookups in follow-up livewire toast dispatches', f
         ->toContain("__('Scheduled backup deleted.')")
         ->and($databaseImport)
         ->toContain("__('Please select an S3 storage.')")
-        ->toContain("__('Please check the file first by clicking \":action\".'")
+        ->toContain("__('Please check the file first by clicking :action.'")
         ->toContain("__('File found in S3. Size: :size'")
         ->toContain("__('Restoring database from S3. Progress will be shown in the activity monitor...')")
         ->and($databasePostgresqlGeneral)
@@ -228,7 +230,7 @@ it('resolves follow-up livewire toast translations in zh_CN', function () {
         ->and(__('Log: :path', ['path' => '/tmp/restore.log']))->toBe('日志：/tmp/restore.log')
         ->and(__('Please select an S3 storage.'))->toBe('请选择一个 S3 存储。')
         ->and(__('Please provide an S3 path.'))->toBe('请输入 S3 路径。')
-        ->and(__('Please check the file first by clicking \":action\".', ['action' => __('Check File')]))->toBe('请先点击“检查文件”检查该文件。')
+        ->and(__('Please check the file first by clicking :action.', ['action' => '“'.__('Check File').'”']))->toBe('请先点击 “检查文件” 检查该文件。')
         ->and(__('File found in S3. Size: :size', ['size' => '42 MB']))->toBe('已在 S3 中找到文件。大小：42 MB')
         ->and(__('Restoring database from S3. Progress will be shown in the activity monitor...'))->toBe('正在从 S3 恢复数据库。进度会显示在活动监视器中...')
         ->and(__('A script with this filename already exists.'))->toBe('已存在使用此文件名的脚本。')

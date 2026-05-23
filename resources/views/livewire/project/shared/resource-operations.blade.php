@@ -134,7 +134,7 @@
                             <select x-model="selectedMoveEnvironment"
                                 :disabled="!selectedMoveProject || availableEnvironments.length === 0" class="select">
                                 <option value=""
-                                    x-text="availableEnvironments.length === 0 && isCurrentProjectSelected ? noOtherEnvironmentsLabel : @js(__('Choose an environment...'))">
+                                    x-text="availableEnvironments.length === 0 && isCurrentProjectSelected ? noOtherEnvironmentsLabel : `{{ __('Choose an environment...') }}`">
                                 </option>
                                 <template x-for="environment in availableEnvironments" :key="environment.id">
                                     <option :value="environment.id"

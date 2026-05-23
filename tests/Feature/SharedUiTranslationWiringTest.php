@@ -8,6 +8,7 @@ it('wires translation calls in shared ui follow-up files', function () {
 
     $modalConfirmation = file_get_contents($componentsRoot.'/modal-confirmation.blade.php');
     $domainConflictModal = file_get_contents($componentsRoot.'/domain-conflict-modal.blade.php');
+    $monacoEditor = file_get_contents($componentsRoot.'/forms/monaco-editor.blade.php');
     $statusRunning = file_get_contents($componentsRoot.'/status/running.blade.php');
     $storageResources = file_get_contents($livewireRoot.'/storage/resources.blade.php');
     $destinationNewDocker = file_get_contents($livewireRoot.'/destination/new/docker.blade.php');
@@ -34,6 +35,8 @@ it('wires translation calls in shared ui follow-up files', function () {
         ->toContain("__('Your Password')")
         ->and($domainConflictModal)
         ->toContain("__('I understand, proceed anyway')")
+        ->and($monacoEditor)
+        ->toContain("@js(__('Start typing here'))")
         ->and($statusRunning)
         ->toContain("__('No health check configured.")
         ->toContain("__('Unhealthy state.")
@@ -112,6 +115,7 @@ it('resolves representative shared ui follow-up translations in zh_CN', function
         ->and(__('Disable S3'))->toBe('禁用 S3')
         ->and(__('Password is required.'))->toBe('必须输入密码。')
         ->and(__('Your Password'))->toBe('你的密码')
+        ->and(__('Start typing here'))->toBe('在此输入')
         ->and(__('Select a server'))->toBe('选择服务器')
         ->and(__('No deployments running.'))->toBe('没有正在运行的部署。')
         ->and(__('configuration changes'))->toBe('项配置变更')
