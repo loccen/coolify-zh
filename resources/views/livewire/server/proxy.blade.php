@@ -1,5 +1,8 @@
 @php use App\Enums\ProxyTypes; @endphp
 <div>
+    <x-slot:title>
+        {{ data_get_str($server, 'name')->limit(10) }} > {{ __('Proxy Configuration') }} | Coolify
+    </x-slot>
     @php
         $proxySwitchWarningMessage = __("This operation may cause issues. Please refer to the guide <a href='https://coolify.io/docs/knowledge-base/server/proxies#switch-between-proxies' target='_blank' class='underline text-white'>switching between proxies</a> before proceeding!");
     @endphp

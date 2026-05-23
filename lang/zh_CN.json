@@ -1089,6 +1089,7 @@
     "Prorated charge": "按比例收费",
     "Provider": "提供者",
     "Proxy": "代理",
+    "Proxy Configuration": "代理配置",
     "Proxy Logs": "代理日志",
     "Proxy Startup Logs": "代理启动日志",
     "Proxy Timeout (seconds)": "代理超时（秒）",
