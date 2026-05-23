@@ -71,7 +71,7 @@ class Patches extends Component
     {
         $this->authorize('update', $this->server);
         if (! $this->packageManager || ! $this->osId) {
-            $this->dispatch('error', message: 'Run "Check for updates" first.');
+            $this->dispatch('error', message: __('server.toasts.check_for_updates_first'));
 
             return;
         }
@@ -103,7 +103,7 @@ class Patches extends Component
     public function sendTestEmail()
     {
         if (! isDev()) {
-            $this->dispatch('error', message: 'Test email functionality is only available in development mode.');
+            $this->dispatch('error', message: __('server.toasts.test_email_development_only'));
 
             return;
         }
@@ -115,9 +115,9 @@ class Patches extends Component
             // Send test notification
             $this->server->team->notify(new ServerPatchCheck($this->server, $testPatchData));
 
-            $this->dispatch('success', 'Test email sent successfully! Check your email inbox.');
+            $this->dispatch('success', __('server.toasts.test_email_sent_successfully'));
         } catch (\Exception $e) {
-            $this->dispatch('error', message: 'Failed to send test email: '.$e->getMessage());
+            $this->dispatch('error', message: __('server.toasts.test_email_failed', ['error' => $e->getMessage()]));
         }
     }
 

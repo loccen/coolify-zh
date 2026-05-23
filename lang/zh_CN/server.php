@@ -35,5 +35,9 @@ return [
         'cloudflare_tunnel_disabled_ip_restored' => '已禁用 Cloudflare Tunnel。<br><br>已手动将服务器 IP 地址更新回之前的 IP 地址。',
         'cloudflare_tunnel_disabled_update_ip_required' => '已禁用 Cloudflare Tunnel。需要操作：请在高级设置中将服务器 IP 地址更新为真实 IP 地址。',
         'cloudflare_tunnel_enabled' => 'Cloudflare Tunnel 已启用。',
+        'check_for_updates_first' => '请先执行“检查更新”。',
+        'test_email_development_only' => '测试邮件功能仅在开发模式下可用。',
+        'test_email_sent_successfully' => '测试邮件发送成功！请检查你的邮箱。',
+        'test_email_failed' => '发送测试邮件失败：:error',
     ],
 ];
