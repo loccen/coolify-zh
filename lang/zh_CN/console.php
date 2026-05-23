@@ -91,6 +91,17 @@ return [
         'running' => '正在清理不可达服务器...',
         'cleanup_server' => '清理不可达服务器 :id，名称为 :name',
     ],
+    'generate_testing_schema' => [
+        'description' => '生成 PostgreSQL 数据库的 SQLite 测试 schema',
+        'error' => [
+            'not_postgresql' => "连接 ':connection' 不是 PostgreSQL。",
+        ],
+        'info' => [
+            'reading_schema' => '正在从 PostgreSQL 读取 schema...',
+            'schema_written' => 'Schema 已写入 :path',
+            'summary' => ':tables 个表，:migrations 条 migration 记录。',
+        ],
+    ],
     'traefik_check_version' => [
         'description' => '检查所有服务器上的 Traefik 代理版本，并向过期版本发送通知',
         'checking' => '正在检查所有服务器上的 Traefik 版本...',
