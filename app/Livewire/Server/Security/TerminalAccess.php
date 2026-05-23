@@ -43,7 +43,7 @@ class TerminalAccess extends Component
 
             // Verify password
             if (! verifyPasswordConfirmation($password, $this)) {
-                return __('auth.failed.password');
+                return __('The provided password is incorrect.');
             }
 
             // Toggle the terminal setting
