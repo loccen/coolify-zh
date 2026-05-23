@@ -1,5 +1,6 @@
 <?php
 
+use App\Support\ValidationPatterns;
 use Illuminate\Support\Facades\App;
 
 it('uses explicit translation lookups in follow-up i18n views', function () {
@@ -361,4 +362,155 @@ it('resolves additional follow-up translations in zh_CN', function () {
         ->and(__('Try adjusting your search criteria.'))->toBe('试着调整搜索条件。')
         ->and(__('Contact your team administrator to add resources.'))->toBe('请联系团队管理员添加资源。')
         ->and(__('No executions yet'))->toBe('还没有执行记录');
+});
+
+it('uses explicit translation lookups in project validation message sources', function () {
+    $validationPatterns = file_get_contents(app_path('Support/ValidationPatterns.php'));
+    $applicationGeneral = file_get_contents(app_path('Livewire/Project/Application/General.php'));
+    $cloneMe = file_get_contents(app_path('Livewire/Project/CloneMe.php'));
+    $serviceStackForm = file_get_contents(app_path('Livewire/Project/Service/StackForm.php'));
+    $resourceLimits = file_get_contents(app_path('Livewire/Project/Shared/ResourceLimits.php'));
+    $storagesShow = file_get_contents(app_path('Livewire/Project/Shared/Storages/Show.php'));
+    $postgresqlGeneral = file_get_contents(app_path('Livewire/Project/Database/Postgresql/General.php'));
+    $redisGeneral = file_get_contents(app_path('Livewire/Project/Database/Redis/General.php'));
+
+    expect($validationPatterns)
+        ->toContain("__('The :label may only contain letters, digits, and underscores, and must start with a letter or underscore.'")
+        ->toContain("__('The :label may not contain shell-unsafe characters (backtick, $, ;, |, &, <, >, \\\\, quotes, spaces, or control characters).'")
+        ->toContain("__('Port mappings must be a comma-separated list of port pairs or ranges with optional IP and protocol (e.g. 3000:3000, 8080:80/udp, 127.0.0.1:8080:80, [::1]::80).')")
+        ->and($applicationGeneral)
+        ->toContain("__('The Git Repository field is required.')")
+        ->toContain("__('The Docker Compose start command contains invalid characters.")
+        ->toContain("__('The Build Server setting is required.')")
+        ->and($cloneMe)
+        ->toContain("__('Please select a server.')")
+        ->toContain("__('Please enter a name for the new project or environment.')")
+        ->and($serviceStackForm)
+        ->toContain("__('The Docker Compose Raw field is required.')")
+        ->and($resourceLimits)
+        ->toContain("__('Maximum Memory Limit must be a number followed by a unit (b, k, m, g). Example: 256m, 1g. Use 0 for unlimited.')")
+        ->and($storagesShow)
+        ->toContain("__('Mount path must start with / and only contain safe path characters.')")
+        ->and($postgresqlGeneral)
+        ->toContain("__('The SSL Mode must be one of: allow, prefer, require, verify-ca, verify-full.')")
+        ->and($redisGeneral)
+        ->toContain("__('The Docker Image field is required.')");
+});
+
+it('resolves project validation messages in zh_CN at runtime', function () {
+    App::setLocale('zh_CN');
+
+    $identifierMessages = ValidationPatterns::databaseIdentifierMessages('mysqlUser', 'MySQL User');
+    $passwordMessages = ValidationPatterns::databasePasswordMessages('mysqlPassword', 'MySQL Password');
+    $filePathMessages = ValidationPatterns::filePathMessages('dockerComposeLocation', 'Docker Compose');
+    $nameMessages = ValidationPatterns::nameMessages();
+    $descriptionMessages = ValidationPatterns::descriptionMessages();
+    $portMappingMessages = ValidationPatterns::portMappingMessages();
+
+    expect($identifierMessages['mysqlUser.regex'])->toBe('MySQL 用户只能包含字母、数字和下划线，并且必须以字母或下划线开头。')
+        ->and($passwordMessages['mysqlPassword.regex'])->toBe('MySQL 密码不能包含对 shell 不安全的字符（反引号、$、;、|、&、<、>、\\、引号、空格或控制字符）。')
+        ->and($filePathMessages['dockerComposeLocation.regex'])->toBe('Docker Compose路径必须是以 / 开头的有效路径，并且只能包含字母数字、点、短横线、下划线、斜杠、@、~ 和 +。')
+        ->and($nameMessages['name.regex'])->toBe('名称只能包含字母（含 Unicode）、数字、空格，以及这些字符：- _ . / @ & ( ) # , : +')
+        ->and($descriptionMessages['description.max'])->toBe('描述长度不能超过 :max 个字符。')
+        ->and($portMappingMessages['portsMappings.regex'])->toBe('端口映射必须是用逗号分隔的端口对或端口范围列表，可选带 IP 和协议（例如 3000:3000、8080:80/udp、127.0.0.1:8080:80、[::1]::80）。')
+        ->and(__('Please select a server.'))->toBe('请选择一个服务器。')
+        ->and(__('Please select a server & destination.'))->toBe('请选择服务器和目标环境。')
+        ->and(__('Please enter a name for the new project or environment.'))->toBe('请输入新项目或环境的名称。')
+        ->and(__('The Docker Compose Raw field is required.'))->toBe('必须填写 Docker Compose 原文。')
+        ->and(__('The Docker Compose field is required.'))->toBe('必须填写 Docker Compose。')
+        ->and(__('The Git Repository field is required.'))->toBe('必须填写 Git 仓库。')
+        ->and(__('The Build Pack field is required.'))->toBe('必须填写构建包。')
+        ->and(__('The Base Directory field is required.'))->toBe('必须填写基础目录。')
+        ->and(__('The Docker Image field is required.'))->toBe('必须填写 Docker 镜像。')
+        ->and(__('The Public Port must be an integer.'))->toBe('公共端口必须是整数。')
+        ->and(__('The Public Port must not exceed 65535.'))->toBe('公共端口不能超过 65535。')
+        ->and(__('The SSL Mode must be one of: allow, prefer, require, verify-ca, verify-full.'))->toBe('SSL 模式必须是以下之一：allow、prefer、require、verify-ca、verify-full。')
+        ->and(__('The Docker Compose start command contains invalid characters. Allowed: alphanumerics, && / || chaining, balanced quotes, globs (*, ?), !, and safe path/arg chars. Blocked: bare &, bare |, ;, $, backtick, (, ), <, >, \\, newlines.'))->toBe('Docker Compose 启动命令包含无效字符。允许：字母数字、&& / || 串联、成对引号、通配符（*、?）、! 以及安全的路径 / 参数字符。禁止：裸露的 &、裸露的 |、;、$、反引号、(、)、<、>、\\ 和换行。')
+        ->and(__('Maximum Memory Limit must be a number followed by a unit (b, k, m, g). Example: 256m, 1g. Use 0 for unlimited.'))->toBe('最大内存限制必须是带单位的数字（b、k、m、g）。例如 256m、1g。填 0 表示不限制。')
+        ->and(__('Mount path must start with / and only contain safe path characters.'))->toBe('挂载路径必须以 / 开头，并且只能包含安全路径字符。')
+        ->and(__('Resource not found.'))->toBe('未找到资源。');
+});
+
+it('uses explicit translation lookups in project runtime error sources', function () {
+    $cloneMe = file_get_contents(app_path('Livewire/Project/CloneMe.php'));
+    $dockerCompose = file_get_contents(app_path('Livewire/Project/New/DockerCompose.php'));
+    $dockerImage = file_get_contents(app_path('Livewire/Project/New/DockerImage.php'));
+    $simpleDockerfile = file_get_contents(app_path('Livewire/Project/New/SimpleDockerfile.php'));
+    $githubPrivateRepository = file_get_contents(app_path('Livewire/Project/New/GithubPrivateRepository.php'));
+    $githubPrivateRepositoryDeployKey = file_get_contents(app_path('Livewire/Project/New/GithubPrivateRepositoryDeployKey.php'));
+    $publicGitRepository = file_get_contents(app_path('Livewire/Project/New/PublicGitRepository.php'));
+    $serviceIndex = file_get_contents(app_path('Livewire/Project/Service/Index.php'));
+    $serviceStorage = file_get_contents(app_path('Livewire/Project/Service/Storage.php'));
+    $executeContainerCommand = file_get_contents(app_path('Livewire/Project/Shared/ExecuteContainerCommand.php'));
+    $danger = file_get_contents(app_path('Livewire/Project/Shared/Danger.php'));
+    $scheduledTaskAdd = file_get_contents(app_path('Livewire/Project/Shared/ScheduledTask/Add.php'));
+    $terminal = file_get_contents(app_path('Livewire/Project/Shared/Terminal.php'));
+    $fileStorage = file_get_contents(app_path('Livewire/Project/Service/FileStorage.php'));
+
+    expect($cloneMe)
+        ->toContain("__('Project with the same name already exists.')")
+        ->toContain("__('Environment with the same name already exists.')")
+        ->and($dockerCompose)
+        ->toContain("__('Destination not found.')")
+        ->and($dockerImage)
+        ->toContain("__('Destination not found.')")
+        ->and($simpleDockerfile)
+        ->toContain("__('Destination not found.')")
+        ->and($githubPrivateRepository)
+        ->toContain("__('Invalid repository data: :message'")
+        ->toContain("__('Destination not found.')")
+        ->and($githubPrivateRepositoryDeployKey)
+        ->toContain("__('Invalid repository URL: :message'")
+        ->toContain("__('Destination not found.')")
+        ->and($publicGitRepository)
+        ->toContain("__('Invalid repository URL: :message'")
+        ->toContain("__('Invalid branch: :message'")
+        ->and($serviceIndex)
+        ->toContain("__('An application with this name already exists.')")
+        ->toContain("__('A database with this name already exists.')")
+        ->and($serviceStorage)
+        ->toContain("__('No valid resource type for file mount storage type!')")
+        ->and($executeContainerCommand)
+        ->toContain("__('Server is disabled.')")
+        ->toContain("__('Invalid container name format')")
+        ->toContain("__('Server ownership verification failed.')")
+        ->and($danger)
+        ->toContain("__('Unknown Resource')")
+        ->toContain("__('Service Application')")
+        ->toContain("__('Service Database')")
+        ->and($scheduledTaskAdd)
+        ->toContain("__('Invalid resource type.')")
+        ->and($terminal)
+        ->toContain("__('Terminal access is disabled on this server.')")
+        ->toContain("__('Invalid container identifier format')")
+        ->and($fileStorage)
+        ->toContain("__('The selected directory and all its contents will be permanently deleted from the server.')")
+        ->toContain("__('The selected file will be permanently deleted from the server.')");
+});
+
+it('resolves project runtime error translations in zh_CN', function () {
+    App::setLocale('zh_CN');
+
+    expect(__('Project with the same name already exists.'))->toBe('已存在同名项目。')
+        ->and(__('Environment with the same name already exists.'))->toBe('已存在同名环境。')
+        ->and(__('Destination not found.'))->toBe('未找到目标环境。')
+        ->and(__('Invalid repository URL: :message', ['message' => 'bad url']))->toBe('仓库 URL 无效：bad url')
+        ->and(__('Invalid branch: :message', ['message' => 'bad branch']))->toBe('分支无效：bad branch')
+        ->and(__('Invalid repository data: :message', ['message' => 'bad repo']))->toBe('仓库数据无效：bad repo')
+        ->and(__('An application with this name already exists.'))->toBe('已存在同名应用。')
+        ->and(__('A database with this name already exists.'))->toBe('已存在同名数据库。')
+        ->and(__('No valid resource type for file mount storage type!'))->toBe('文件挂载存储类型没有有效的资源类型！')
+        ->and(__('Server is disabled.'))->toBe('服务器已禁用。')
+        ->and(__('Invalid container name format'))->toBe('容器名称格式无效')
+        ->and(__('Container not found.'))->toBe('未找到容器。')
+        ->and(__('Invalid server configuration.'))->toBe('服务器配置无效。')
+        ->and(__('Invalid resource type.'))->toBe('资源类型无效。')
+        ->and(__('Server ownership verification failed.'))->toBe('服务器归属校验失败。')
+        ->and(__('Unknown Resource'))->toBe('未知资源')
+        ->and(__('Service Application'))->toBe('服务应用')
+        ->and(__('Service Database'))->toBe('服务数据库')
+        ->and(__('Terminal access is disabled on this server.'))->toBe('此服务器已禁用终端访问。')
+        ->and(__('Invalid container identifier format'))->toBe('容器标识符格式无效')
+        ->and(__('The selected directory and all its contents will be permanently deleted from the server.'))->toBe('所选目录及其全部内容都会从服务器中永久删除。')
+        ->and(__('The selected file will be permanently deleted from the server.'))->toBe('所选文件会从服务器中永久删除。');
 });

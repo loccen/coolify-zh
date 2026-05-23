@@ -71,7 +71,7 @@ class Add extends Component
                 $this->resource = StandalonePostgresql::findOrFail($this->id);
                 break;
             default:
-                throw new \Exception('Invalid resource type');
+                throw new \Exception(__('Invalid resource type.'));
         }
 
         if ($this->containerNames->count() > 0) {

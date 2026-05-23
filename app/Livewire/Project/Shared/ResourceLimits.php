@@ -38,26 +38,26 @@ class ResourceLimits extends Component
     ];
 
     protected $validationAttributes = [
-        'limitsMemory' => 'memory',
-        'limitsMemorySwap' => 'swap',
-        'limitsMemorySwappiness' => 'swappiness',
-        'limitsMemoryReservation' => 'reservation',
-        'limitsCpus' => 'cpus',
-        'limitsCpuset' => 'cpuset',
-        'limitsCpuShares' => 'cpu shares',
+        'limitsMemory' => __('Memory'),
+        'limitsMemorySwap' => __('Swap'),
+        'limitsMemorySwappiness' => __('Swappiness'),
+        'limitsMemoryReservation' => __('Reservation'),
+        'limitsCpus' => __('CPUs'),
+        'limitsCpuset' => __('CPU Set'),
+        'limitsCpuShares' => __('CPU Shares'),
     ];
 
     protected $messages = [
-        'limitsMemory.regex' => 'Maximum Memory Limit must be a number followed by a unit (b, k, m, g). Example: 256m, 1g. Use 0 for unlimited.',
-        'limitsMemorySwap.regex' => 'Maximum Swap Limit must be a number followed by a unit (b, k, m, g). Example: 256m, 1g. Use 0 for unlimited.',
-        'limitsMemoryReservation.regex' => 'Soft Memory Limit must be a number followed by a unit (b, k, m, g). Example: 256m, 1g. Use 0 for unlimited.',
-        'limitsCpus.regex' => 'Number of CPUs must be a number (integer or decimal). Example: 0.5, 2.',
-        'limitsCpuset.regex' => 'CPU sets must be a comma-separated list of CPU numbers or ranges. Example: 0-2 or 0,1,3.',
-        'limitsMemorySwappiness.integer' => 'Swappiness must be a whole number between 0 and 100.',
-        'limitsMemorySwappiness.min' => 'Swappiness must be between 0 and 100.',
-        'limitsMemorySwappiness.max' => 'Swappiness must be between 0 and 100.',
-        'limitsCpuShares.integer' => 'CPU Weight must be a whole number.',
-        'limitsCpuShares.min' => 'CPU Weight must be a positive number.',
+        'limitsMemory.regex' => __('Maximum Memory Limit must be a number followed by a unit (b, k, m, g). Example: 256m, 1g. Use 0 for unlimited.'),
+        'limitsMemorySwap.regex' => __('Maximum Swap Limit must be a number followed by a unit (b, k, m, g). Example: 256m, 1g. Use 0 for unlimited.'),
+        'limitsMemoryReservation.regex' => __('Soft Memory Limit must be a number followed by a unit (b, k, m, g). Example: 256m, 1g. Use 0 for unlimited.'),
+        'limitsCpus.regex' => __('Number of CPUs must be a number (integer or decimal). Example: 0.5, 2.'),
+        'limitsCpuset.regex' => __('CPU sets must be a comma-separated list of CPU numbers or ranges. Example: 0-2 or 0,1,3.'),
+        'limitsMemorySwappiness.integer' => __('Swappiness must be a whole number between 0 and 100.'),
+        'limitsMemorySwappiness.min' => __('Swappiness must be between 0 and 100.'),
+        'limitsMemorySwappiness.max' => __('Swappiness must be between 0 and 100.'),
+        'limitsCpuShares.integer' => __('CPU Weight must be a whole number.'),
+        'limitsCpuShares.min' => __('CPU Weight must be a positive number.'),
     ];
 
     /**

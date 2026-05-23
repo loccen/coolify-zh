@@ -102,13 +102,13 @@ class General extends Component
             [
                 ...ValidationPatterns::databaseIdentifierMessages('clickhouseAdminUser', 'Admin User'),
                 ...ValidationPatterns::databasePasswordMessages('clickhouseAdminPassword', 'Admin Password'),
-                'image.required' => 'The Docker Image field is required.',
-                'image.string' => 'The Docker Image must be a string.',
-                'publicPort.integer' => 'The Public Port must be an integer.',
-                'publicPort.min' => 'The Public Port must be at least 1.',
-                'publicPort.max' => 'The Public Port must not exceed 65535.',
-                'publicPortTimeout.integer' => 'The Public Port Timeout must be an integer.',
-                'publicPortTimeout.min' => 'The Public Port Timeout must be at least 1.',
+                'image.required' => __('The Docker Image field is required.'),
+                'image.string' => __('The Docker Image must be a string.'),
+                'publicPort.integer' => __('The Public Port must be an integer.'),
+                'publicPort.min' => __('The Public Port must be at least 1.'),
+                'publicPort.max' => __('The Public Port must not exceed 65535.'),
+                'publicPortTimeout.integer' => __('The Public Port Timeout must be an integer.'),
+                'publicPortTimeout.min' => __('The Public Port Timeout must be at least 1.'),
             ]
         );
     }

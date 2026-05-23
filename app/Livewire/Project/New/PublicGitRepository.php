@@ -75,13 +75,13 @@ class PublicGitRepository extends Component
     }
 
     protected $validationAttributes = [
-        'repository_url' => 'repository',
-        'port' => 'port',
-        'isStatic' => 'static',
-        'publish_directory' => 'publish directory',
-        'build_pack' => 'build pack',
-        'base_directory' => 'base directory',
-        'docker_compose_location' => 'docker compose location',
+        'repository_url' => __('Repository'),
+        'port' => __('Port'),
+        'isStatic' => __('Static'),
+        'publish_directory' => __('Publish Directory'),
+        'build_pack' => __('Build Pack'),
+        'base_directory' => __('Base Directory'),
+        'docker_compose_location' => __('Docker Compose Location'),
     ];
 
     public function mount()
@@ -132,7 +132,7 @@ class PublicGitRepository extends Component
             ]);
 
             if ($validator->fails()) {
-                throw new \RuntimeException('Invalid repository URL: '.$validator->errors()->first('repository_url'));
+                throw new \RuntimeException(__('Invalid repository URL: :message', ['message' => $validator->errors()->first('repository_url')]));
             }
 
             if (str($this->repository_url)->startsWith('git@')) {
@@ -197,7 +197,7 @@ class PublicGitRepository extends Component
         ]);
 
         if ($validator->fails()) {
-            throw new \RuntimeException('Invalid repository URL: '.$validator->errors()->first('repository_url'));
+            throw new \RuntimeException(__('Invalid repository URL: :message', ['message' => $validator->errors()->first('repository_url')]));
         }
 
         $this->repository_url_parsed = Url::fromString($this->repository_url);
@@ -270,7 +270,7 @@ class PublicGitRepository extends Component
                 ]);
 
                 if ($validator->fails()) {
-                    throw new \RuntimeException('Invalid repository URL: '.$validator->errors()->first('git_repository'));
+                    throw new \RuntimeException(__('Invalid repository URL: :message', ['message' => $validator->errors()->first('git_repository')]));
                 }
             }
 
@@ -279,7 +279,7 @@ class PublicGitRepository extends Component
             ]);
 
             if ($branchValidator->fails()) {
-                throw new \RuntimeException('Invalid branch: '.$branchValidator->errors()->first('git_branch'));
+                throw new \RuntimeException(__('Invalid branch: :message', ['message' => $branchValidator->errors()->first('git_branch')]));
             }
 
             $destination_uuid = $this->query['destination'] ?? null;
@@ -288,7 +288,7 @@ class PublicGitRepository extends Component
 
             $destination = find_destination_for_current_team($destination_uuid);
             if (! $destination) {
-                throw new \Exception('Destination not found.');
+                throw new \Exception(__('Destination not found.'));
             }
             $destination_class = $destination->getMorphClass();
 

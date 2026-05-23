@@ -51,9 +51,9 @@ class StackForm extends Component
         return array_merge(
             ValidationPatterns::combinedMessages(),
             [
-                'name.required' => 'The Name field is required.',
-                'dockerComposeRaw.required' => 'The Docker Compose Raw field is required.',
-                'dockerCompose.required' => 'The Docker Compose field is required.',
+                'name.required' => __('The Name field is required.'),
+                'dockerComposeRaw.required' => __('The Docker Compose Raw field is required.'),
+                'dockerCompose.required' => __('The Docker Compose field is required.'),
             ]
         );
     }

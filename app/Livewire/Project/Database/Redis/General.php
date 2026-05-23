@@ -97,13 +97,13 @@ class General extends Component
             ValidationPatterns::combinedMessages(),
             ValidationPatterns::portMappingMessages(),
             [
-                'name.required' => 'The Name field is required.',
-                'image.required' => 'The Docker Image field is required.',
-                'publicPort.integer' => 'The Public Port must be an integer.',
-                'publicPort.min' => 'The Public Port must be at least 1.',
-                'publicPort.max' => 'The Public Port must not exceed 65535.',
-                'publicPortTimeout.integer' => 'The Public Port Timeout must be an integer.',
-                'publicPortTimeout.min' => 'The Public Port Timeout must be at least 1.',
+                'name.required' => __('The Name field is required.'),
+                'image.required' => __('The Docker Image field is required.'),
+                'publicPort.integer' => __('The Public Port must be an integer.'),
+                'publicPort.min' => __('The Public Port must be at least 1.'),
+                'publicPort.max' => __('The Public Port must not exceed 65535.'),
+                'publicPortTimeout.integer' => __('The Public Port Timeout must be an integer.'),
+                'publicPortTimeout.min' => __('The Public Port Timeout must be at least 1.'),
                 ...ValidationPatterns::databaseIdentifierMessages('redisUsername', 'Redis Username'),
                 ...ValidationPatterns::databasePasswordMessages('redisPassword', 'Redis Password'),
             ]
@@ -111,18 +111,18 @@ class General extends Component
     }
 
     protected $validationAttributes = [
-        'name' => 'Name',
-        'description' => 'Description',
-        'redisConf' => 'Redis Configuration',
-        'image' => 'Image',
-        'portsMappings' => 'Port Mapping',
-        'isPublic' => 'Is Public',
-        'publicPort' => 'Public Port',
-        'publicPortTimeout' => 'Public Port Timeout',
-        'customDockerRunOptions' => 'Custom Docker Options',
-        'redisUsername' => 'Redis Username',
-        'redisPassword' => 'Redis Password',
-        'enableSsl' => 'Enable SSL',
+        'name' => __('Name'),
+        'description' => __('Description'),
+        'redisConf' => __('Redis Configuration'),
+        'image' => __('Image'),
+        'portsMappings' => __('Port Mapping'),
+        'isPublic' => __('Is Public'),
+        'publicPort' => __('Public Port'),
+        'publicPortTimeout' => __('Public Port Timeout'),
+        'customDockerRunOptions' => __('Custom Docker Options'),
+        'redisUsername' => __('Redis Username'),
+        'redisPassword' => __('Redis Password'),
+        'enableSsl' => __('Enable SSL'),
     ];
 
     public function mount()

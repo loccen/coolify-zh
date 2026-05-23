@@ -248,7 +248,7 @@ class Index extends Component
 
             // Check if application with same name already exists
             if ($service->applications()->where('name', $serviceDatabase->name)->exists()) {
-                throw new \Exception('An application with this name already exists.');
+                throw new \Exception(__('An application with this name already exists.'));
             }
 
             // Create new parameters removing database_uuid
@@ -424,7 +424,7 @@ class Index extends Component
             $serviceApplication = $this->serviceApplication;
 
             if ($service->databases()->where('name', $serviceApplication->name)->exists()) {
-                throw new \Exception('A database with this name already exists.');
+                throw new \Exception(__('A database with this name already exists.'));
             }
 
             $redirectParams = collect($this->parameters)

@@ -333,7 +333,7 @@ EOD;
         if ($resource->getMorphClass() === ServiceDatabase::class) {
             $server = $resource->service?->server;
             if (! $server) {
-                abort(404, 'Server not found for this service database.');
+                abort(404, __('Server not found for this service database.'));
             }
             $this->serverId = $server->id;
             $this->container = $resource->name.'-'.$resource->service->uuid;
@@ -355,7 +355,7 @@ EOD;
         } else {
             $server = $resource->destination?->server;
             if (! $server) {
-                abort(404, 'Server not found for this database.');
+                abort(404, __('Server not found for this database.'));
             }
             $this->serverId = $server->id;
             $this->container = $resource->uuid;

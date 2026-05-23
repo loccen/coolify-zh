@@ -92,7 +92,7 @@ class Show extends Component
             $isValid = validate_cron_expression($this->frequency);
             if (! $isValid) {
                 $this->frequency = $this->task->frequency;
-                throw new \Exception('Invalid Cron / Human expression.');
+                throw new \Exception(__('Invalid Cron / Human expression.'));
             }
             $this->task->enabled = $this->isEnabled;
             $this->task->name = str($this->name)->trim()->value();

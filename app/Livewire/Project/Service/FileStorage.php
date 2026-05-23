@@ -219,10 +219,10 @@ class FileStorage extends Component
     {
         return view('livewire.project.service.file-storage', [
             'directoryDeletionCheckboxes' => [
-                ['id' => 'permanently_delete', 'label' => 'The selected directory and all its contents will be permantely deleted form the server.'],
+                ['id' => 'permanently_delete', 'label' => __('The selected directory and all its contents will be permanently deleted from the server.')],
             ],
             'fileDeletionCheckboxes' => [
-                ['id' => 'permanently_delete', 'label' => 'The selected file will be permanently deleted form the server.'],
+                ['id' => 'permanently_delete', 'label' => __('The selected file will be permanently deleted from the server.')],
             ],
         ]);
     }

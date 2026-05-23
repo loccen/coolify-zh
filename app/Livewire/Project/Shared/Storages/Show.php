@@ -53,8 +53,8 @@ class Show extends Component
         return array_merge(
             ValidationPatterns::volumeNameMessages(),
             [
-                'mountPath.regex' => 'Mount path must start with / and only contain safe path characters.',
-                'hostPath.regex' => 'Host path must start with / and only contain safe path characters.',
+                'mountPath.regex' => __('Mount path must start with / and only contain safe path characters.'),
+                'hostPath.regex' => __('Host path must start with / and only contain safe path characters.'),
             ]
         );
     }

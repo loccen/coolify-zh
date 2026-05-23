@@ -175,13 +175,13 @@ class GithubPrivateRepository extends Component
             ]);
 
             if ($validator->fails()) {
-                throw new \RuntimeException('Invalid repository data: '.$validator->errors()->first());
+                throw new \RuntimeException(__('Invalid repository data: :message', ['message' => $validator->errors()->first()]));
             }
 
             $destination_uuid = $this->query['destination'] ?? null;
             $destination = find_destination_for_current_team($destination_uuid);
             if (! $destination) {
-                throw new \Exception('Destination not found.');
+                throw new \Exception(__('Destination not found.'));
             }
             $destination_class = $destination->getMorphClass();
 

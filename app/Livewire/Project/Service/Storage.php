@@ -114,7 +114,7 @@ class Storage extends Component
                     ? ['required', 'string', 'regex:'.ValidationPatterns::DIRECTORY_PATH_PATTERN]
                     : ['nullable', 'string', 'regex:'.ValidationPatterns::DIRECTORY_PATH_PATTERN],
             ], array_merge(ValidationPatterns::volumeNameMessages(), [
-                'host_path.regex' => 'Host path must start with / and only contain safe path characters.',
+                'host_path.regex' => __('Host path must start with / and only contain safe path characters.'),
             ]));
 
             $name = $this->resource->uuid.'-'.$this->name;
@@ -157,7 +157,7 @@ class Storage extends Component
             } elseif (str($this->resource->getMorphClass())->contains('Standalone')) {
                 $fs_path = database_configuration_dir().'/'.$this->resource->uuid.$this->file_storage_path;
             } else {
-                throw new \Exception('No valid resource type for file mount storage type!');
+                throw new \Exception(__('No valid resource type for file mount storage type!'));
             }
 
             LocalFileVolume::create([

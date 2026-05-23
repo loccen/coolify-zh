@@ -109,7 +109,7 @@ class Previews extends Component
             $preview = $this->application->previews->find($preview_id);
 
             if (! $preview) {
-                throw new \Exception('Preview not found');
+                throw new \Exception(__('Preview not found.'));
             }
 
             // Find the key for this preview in the collection
