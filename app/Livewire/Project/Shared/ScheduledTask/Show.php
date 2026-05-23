@@ -118,7 +118,7 @@ class Show extends Component
             $this->isEnabled = ! $this->isEnabled;
             $this->task->enabled = $this->isEnabled;
             $this->task->save();
-            $this->dispatch('success', $this->isEnabled ? 'Scheduled task enabled.' : 'Scheduled task disabled.');
+            $this->dispatch('success', $this->isEnabled ? __('Scheduled task enabled.') : __('Scheduled task disabled.'));
         } catch (\Exception $e) {
             return handleError($e);
         }
@@ -129,7 +129,7 @@ class Show extends Component
         try {
             $this->authorize('update', $this->resource);
             $this->syncData(true);
-            $this->dispatch('success', 'Scheduled task updated.');
+            $this->dispatch('success', __('Scheduled task updated.'));
             $this->refreshTasks();
         } catch (\Exception $e) {
             return handleError($e);
@@ -141,7 +141,7 @@ class Show extends Component
         try {
             $this->authorize('update', $this->resource);
             $this->syncData(true);
-            $this->dispatch('success', 'Scheduled task updated.');
+            $this->dispatch('success', __('Scheduled task updated.'));
         } catch (\Exception $e) {
             return handleError($e, $this);
         }
@@ -177,7 +177,7 @@ class Show extends Component
         try {
             $this->authorize('update', $this->resource);
             ScheduledTaskJob::dispatch($this->task);
-            $this->dispatch('success', 'Scheduled task executed.');
+            $this->dispatch('success', __('Scheduled task executed.'));
         } catch (\Exception $e) {
             return handleError($e);
         }

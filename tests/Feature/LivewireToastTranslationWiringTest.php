@@ -13,6 +13,10 @@ it('uses explicit translation lookups in representative livewire toast dispatche
     $serviceEditCompose = file_get_contents(app_path('Livewire/Project/Service/EditCompose.php'));
     $applicationPreviews = file_get_contents(app_path('Livewire/Project/Application/Previews.php'));
     $applicationGeneral = file_get_contents(app_path('Livewire/Project/Application/General.php'));
+    $sharedTags = file_get_contents(app_path('Livewire/Project/Shared/Tags.php'));
+    $scheduledTaskShow = file_get_contents(app_path('Livewire/Project/Shared/ScheduledTask/Show.php'));
+    $scheduledTaskAdd = file_get_contents(app_path('Livewire/Project/Shared/ScheduledTask/Add.php'));
+    $databaseImport = file_get_contents(app_path('Livewire/Project/Database/Import.php'));
 
     expect($databaseRedisGeneral)
         ->toContain("__('Database updated.')")
@@ -47,7 +51,20 @@ it('uses explicit translation lookups in representative livewire toast dispatche
         ->and($applicationGeneral)
         ->toContain("__('Failed to parse your docker-compose file. Please check the syntax and try again.')")
         ->toContain("__('Loading docker compose file.')")
-        ->toContain("__('Application settings updated!')");
+        ->toContain("__('Application settings updated!')")
+        ->and($sharedTags)
+        ->toContain("__('Invalid tag.')")
+        ->toContain("__('Tag added.')")
+        ->and($scheduledTaskShow)
+        ->toContain("__('Scheduled task enabled.')")
+        ->toContain("__('Scheduled task executed.')")
+        ->and($scheduledTaskAdd)
+        ->toContain("__('Invalid Cron / Human expression.')")
+        ->toContain("__('Scheduled task added.')")
+        ->and($databaseImport)
+        ->toContain("__('Server not found. Please refresh the page.')")
+        ->toContain("__('Please select a file to import.')")
+        ->toContain("__('Invalid container name.')");
 });
 
 it('resolves representative livewire toast translations in zh_CN', function () {
@@ -78,5 +95,14 @@ it('resolves representative livewire toast translations in zh_CN', function () {
         ->and(__('Wildcard domain generated.'))->toBe('通配域名已生成。')
         ->and(__('Nginx configuration generated.'))->toBe('Nginx 配置已生成。')
         ->and(__('Redirect updated.'))->toBe('重定向已更新。')
-        ->and(__('Application settings updated!'))->toBe('应用设置已更新！');
+        ->and(__('Application settings updated!'))->toBe('应用设置已更新！')
+        ->and(__('Invalid tag.'))->toBe('无效标签。')
+        ->and(__('Tag added.'))->toBe('标签已添加。')
+        ->and(__('Scheduled task enabled.'))->toBe('计划任务已启用。')
+        ->and(__('Scheduled task executed.'))->toBe('计划任务已执行。')
+        ->and(__('Invalid Cron / Human expression.'))->toBe('无效的 Cron / 人类可读表达式。')
+        ->and(__('Scheduled task added.'))->toBe('计划任务已添加。')
+        ->and(__('Server not found. Please refresh the page.'))->toBe('未找到服务器，请刷新页面。')
+        ->and(__('Please select a file to import.'))->toBe('请选择要导入的文件。')
+        ->and(__('Invalid container name.'))->toBe('容器名称无效。');
 });

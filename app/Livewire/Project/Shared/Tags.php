@@ -43,12 +43,12 @@ class Tags extends Component
             foreach ($tags as $tag) {
                 $tag = strip_tags($tag);
                 if (strlen($tag) < 2) {
-                    $this->dispatch('error', 'Invalid tag.', "Tag <span class='dark:text-warning'>$tag</span> is invalid. Min length is 2.");
+                    $this->dispatch('error', __('Invalid tag.'), __('Tag <span class=\'dark:text-warning\'>:tag</span> is invalid. Min length is 2.', ['tag' => $tag]));
 
                     continue;
                 }
                 if ($this->resource->tags()->where('name', $tag)->exists()) {
-                    $this->dispatch('error', 'Duplicate tags.', "Tag <span class='dark:text-warning'>$tag</span> already added.");
+                    $this->dispatch('error', __('Duplicate tags.'), __('Tag <span class=\'dark:text-warning\'>:tag</span> already added.', ['tag' => $tag]));
 
                     continue;
                 }
@@ -73,13 +73,13 @@ class Tags extends Component
             $this->authorize('update', $this->resource);
             $name = strip_tags($name);
             if ($this->resource->tags()->where('id', $id)->exists()) {
-                $this->dispatch('error', 'Duplicate tags.', "Tag <span class='dark:text-warning'>$name</span> already added.");
+                $this->dispatch('error', __('Duplicate tags.'), __('Tag <span class=\'dark:text-warning\'>:tag</span> already added.', ['tag' => $name]));
 
                 return;
             }
             $this->resource->tags()->attach($id);
             $this->refresh();
-            $this->dispatch('success', 'Tag added.');
+            $this->dispatch('success', __('Tag added.'));
         } catch (\Exception $e) {
             return handleError($e, $this);
         }
@@ -95,7 +95,7 @@ class Tags extends Component
                 $found_more_tags->delete();
             }
             $this->refresh();
-            $this->dispatch('success', 'Tag deleted.');
+            $this->dispatch('success', __('Tag deleted.'));
         } catch (\Exception $e) {
             return handleError($e, $this);
         }
