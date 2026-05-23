@@ -94,7 +94,7 @@ class Sentinel extends Component
         if ($event['serverUuid'] === $this->server->uuid) {
             $this->server->refresh();
             $this->syncData();
-            $this->dispatch('success', 'Sentinel has been restarted successfully.');
+            $this->dispatch('success', __('server.toasts.sentinel_restarted'));
         }
     }
 
@@ -117,7 +117,7 @@ class Sentinel extends Component
             if ($value === true) {
                 if ($this->server->isBuildServer()) {
                     $this->isSentinelEnabled = false;
-                    $this->dispatch('error', 'Sentinel cannot be enabled on build servers.');
+                    $this->dispatch('error', __('server.toasts.sentinel_cannot_be_enabled_on_build_servers'));
 
                     return;
                 }
@@ -139,7 +139,7 @@ class Sentinel extends Component
         try {
             $this->authorize('manageSentinel', $this->server);
             $this->server->settings->generateSentinelToken();
-            $this->dispatch('success', 'Token regenerated. Restarting Sentinel.');
+            $this->dispatch('success', __('server.toasts.sentinel_token_regenerated'));
         } catch (\Throwable $e) {
             return handleError($e, $this);
         }
@@ -149,7 +149,7 @@ class Sentinel extends Component
     {
         try {
             $this->syncData(true);
-            $this->dispatch('success', 'Sentinel settings updated.');
+            $this->dispatch('success', __('server.toasts.server_settings_updated'));
         } catch (\Throwable $e) {
             return handleError($e, $this);
         }
