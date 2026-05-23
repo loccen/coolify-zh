@@ -83,6 +83,12 @@ return [
         'delete_application_deployment_queues' => 'Delete :count entries from application_deployment_queues.',
         'delete_scheduled_task_executions' => 'Delete :count entries from scheduled_task_executions.',
     ],
+    'cleanup_redis' => [
+        'info' => [
+            'would_delete' => 'Redis cleanup: would delete :count items',
+            'deleted' => 'Redis cleanup: deleted :count items',
+        ],
+    ],
     'cleanup_names' => [
         'error' => [
             'unknown_model' => 'Unknown model: :model',

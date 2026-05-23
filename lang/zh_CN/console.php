@@ -83,6 +83,12 @@ return [
         'delete_application_deployment_queues' => '删除 application_deployment_queues 中的 :count 条记录。',
         'delete_scheduled_task_executions' => '删除 scheduled_task_executions 中的 :count 条记录。',
     ],
+    'cleanup_redis' => [
+        'info' => [
+            'would_delete' => 'Redis 清理：将删除 :count 项',
+            'deleted' => 'Redis 清理：已删除 :count 项',
+        ],
+    ],
     'cleanup_names' => [
         'error' => [
             'unknown_model' => '未知模型：:model',
