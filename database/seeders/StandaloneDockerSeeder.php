@@ -12,14 +12,18 @@ class StandaloneDockerSeeder extends Seeder
      */
     public function run(): void
     {
-        if (StandaloneDocker::find(0) == null) {
-            StandaloneDocker::create([
-                'id' => 0,
-                'uuid' => 'docker',
-                'name' => 'Standalone Docker 1',
-                'network' => 'coolify',
+        $standaloneDocker = StandaloneDocker::query()->firstOrCreate(
+            [
                 'server_id' => 0,
-            ]);
-        }
+                'network' => 'coolify',
+            ],
+            [
+                'uuid' => 'docker',
+                'name' => '本地 Standalone Docker',
+            ],
+        );
+
+        $standaloneDocker->name = '本地 Standalone Docker';
+        $standaloneDocker->save();
     }
 }
