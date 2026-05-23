@@ -2940,5 +2940,12 @@
     "The selected resource will be converted to an application.": "选中的资源将被转换为应用。",
     "Please confirm the execution of the actions by entering the Service Database Name below": "请输入下方服务数据库名称以确认执行这些操作",
     "Service Database Name": "服务数据库名称",
-    "The selected service database container will be stopped and permanently deleted.": "选中的服务数据库容器将被停止并永久删除。"
+    "The selected service database container will be stopped and permanently deleted.": "选中的服务数据库容器将被停止并永久删除。",
+    "No shell (bash/sh) is available in this container. Please ensure either bash or sh is installed to use the terminal.": "这个容器中没有可用的 shell（bash/sh）。请先确保已安装 bash 或 sh，才能使用终端。",
+    "The latest configuration has not been applied": "最新配置尚未应用",
+    "detected but not yet applied.": "项变更已检测到，但尚未应用。",
+    "A rebuild is required.": "需要重新构建。",
+    "Please redeploy to apply the new configuration.": "请重新部署以应用新配置。",
+    "View changes": "查看变更",
+    "These changes are not applied to the latest deployment yet.": "这些变更还没有应用到最新部署中。"
 }

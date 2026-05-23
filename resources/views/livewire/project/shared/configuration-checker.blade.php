@@ -3,7 +3,7 @@
         <div x-data="{ configurationDiffModalOpen: false }">
             <x-popup-small>
                 <x-slot:title>
-                    The latest configuration has not been applied
+                    {{ __('The latest configuration has not been applied') }}
                 </x-slot:title>
                 <x-slot:icon>
                     <svg class="hidden w-10 h-10 dark:text-warning lg:block" viewBox="0 0 256 256"
@@ -15,20 +15,21 @@
                 <x-slot:description>
                     <span>
                         @if (data_get($configurationDiff, 'count'))
-                            {{ data_get($configurationDiff, 'count') }} unapplied configuration
-                            {{ data_get($configurationDiff, 'count') === 1 ? 'change' : 'changes' }} detected.
+                            {{ data_get($configurationDiff, 'count') }}
+                            {{ data_get($configurationDiff, 'count') === 1 ? __('configuration change') : __('configuration changes') }}
+                            {{ __('detected but not yet applied.') }}
                             @if (data_get($configurationDiff, 'requires_build'))
-                                A rebuild is required.
+                                {{ __('A rebuild is required.') }}
                             @else
-                                Please redeploy to apply the new configuration.
+                                {{ __('Please redeploy to apply the new configuration.') }}
                             @endif
                             <button type="button" class="ml-1 font-semibold underline text-coollabs dark:text-warning"
                                 x-on:click="$wire.refreshConfigurationChanges().then(() => configurationDiffModalOpen = true)"
                                 wire:loading.attr="disabled" wire:target="refreshConfigurationChanges">
-                                View changes
+                                {{ __('View changes') }}
                             </button>
                         @else
-                            Please redeploy to apply the new configuration.
+                            {{ __('Please redeploy to apply the new configuration.') }}
                         @endif
                     </span>
                 </x-slot:description>
@@ -52,9 +53,9 @@
                             class="relative flex max-h-[85vh] w-full flex-col rounded-sm border border-neutral-200 bg-white shadow-lg dark:border-coolgray-300 dark:bg-base lg:max-w-4xl">
                             <div class="flex shrink-0 items-center justify-between border-b border-neutral-200 px-6 py-5 dark:border-coolgray-300">
                                 <div>
-                                    <h3 class="text-2xl font-bold text-black dark:text-white">Configuration changes</h3>
+                                    <h3 class="text-2xl font-bold text-black dark:text-white">{{ __('Configuration changes') }}</h3>
                                     <p class="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
-                                        These changes are not applied to the latest deployment yet.
+                                        {{ __('These changes are not applied to the latest deployment yet.') }}
                                     </p>
                                 </div>
                                 <button type="button" @click="configurationDiffModalOpen = false"
