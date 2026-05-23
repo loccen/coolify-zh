@@ -11,17 +11,17 @@ class UserSeeder extends Seeder
     {
         User::factory()->create([
             'id' => 0,
-            'name' => 'Root User',
+            'name' => '根用户',
             'email' => 'test@example.com',
         ]);
         User::factory()->create([
             'id' => 1,
-            'name' => 'Normal User (but in root team)',
+            'name' => '普通用户（属于根团队）',
             'email' => 'test2@example.com',
         ]);
         User::factory()->create([
             'id' => 2,
-            'name' => 'Normal User (not in root team)',
+            'name' => '普通用户（不属于根团队）',
             'email' => 'test3@example.com',
         ]);
     }

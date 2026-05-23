@@ -15,7 +15,7 @@ class GitlabAppSeeder extends Seeder
         GitlabApp::create([
             'id' => 1,
             'uuid' => 'gitlab-public',
-            'name' => 'Public GitLab',
+            'name' => '公开 GitLab',
             'api_url' => 'https://gitlab.com/api/v4',
             'html_url' => 'https://gitlab.com',
             'is_public' => true,

@@ -27,9 +27,9 @@ class ProductionSeeder extends Seeder
         $user = 'root';
 
         if (isCloud()) {
-            echo "  Running in cloud mode.\n";
+            echo "  以云端模式运行。\n";
         } else {
-            echo "  Running in self-hosted mode.\n";
+            echo "  以自托管模式运行。\n";
         }
 
         if (User::find(0) !== null && Team::find(0) !== null) {
@@ -53,7 +53,7 @@ class ProductionSeeder extends Seeder
         if (GithubApp::find(0) == null) {
             GithubApp::create([
                 'id' => 0,
-                'name' => 'Public GitHub',
+                'name' => '公开 GitHub',
                 'api_url' => 'https://api.github.com',
                 'html_url' => 'https://github.com',
                 'is_public' => true,
@@ -64,7 +64,7 @@ class ProductionSeeder extends Seeder
         if (GitlabApp::find(0) == null) {
             GitlabApp::create([
                 'id' => 0,
-                'name' => 'Public GitLab',
+                'name' => '公开 GitLab',
                 'api_url' => 'https://gitlab.com/api/v4',
                 'html_url' => 'https://gitlab.com',
                 'is_public' => true,
@@ -85,16 +85,16 @@ class ProductionSeeder extends Seeder
                     PrivateKey::create([
                         'id' => 0,
                         'team_id' => 0,
-                        'name' => 'localhost\'s key',
-                        'description' => 'The private key for the Coolify host machine (localhost).',
+                        'name' => '本地主机密钥',
+                        'description' => '这是 Coolify 宿主机（localhost）使用的私钥。',
                         'private_key' => $coolify_key,
                     ]);
-                    echo "SSH key found for the Coolify host machine (localhost).\n";
+                    echo "已找到 Coolify 宿主机（localhost）的 SSH 密钥。\n";
                 } else {
-                    echo "No SSH key found for the Coolify host machine (localhost).\n";
-                    echo "Please read the following documentation (point 3) to fix it: https://coolify.
+                    echo "未找到 Coolify 宿主机（localhost）的 SSH 密钥。\n";
+                    echo "请阅读以下文档中的第 3 点完成修复：https://coolify.
                 io/docs/knowledge-base/server/openssh/\n";
-                    echo "Your localhost connection won't work until then.";
+                    echo "在修复前，本地连接将无法使用。";
                 }
             }
         }
@@ -104,7 +104,7 @@ class ProductionSeeder extends Seeder
                 $server_details = [
                     'id' => 0,
                     'name' => 'localhost',
-                    'description' => "This is the server where Coolify is running on. Don't delete this!",
+                    'description' => '这是运行 Coolify 的服务器，请不要删除！',
                     'user' => $user,
                     'ip' => 'host.docker.internal',
                     'team_id' => 0,
@@ -153,8 +153,8 @@ class ProductionSeeder extends Seeder
                     'team_id' => 0,
                 ],
                 [
-                    'name' => 'Testing-host',
-                    'description' => 'This is a a docker container with SSH access',
+                    'name' => '测试主机',
+                    'description' => '这是一个带 SSH 访问的 Docker 容器',
                     'private_key' => '-----BEGIN OPENSSH PRIVATE KEY-----
 b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
 QyNTUxOQAAACBbhpqHhqv6aI67Mj9abM3DVbmcfYhZAhC7ca4d9UCevAAAAJi/QySHv0Mk
@@ -170,7 +170,7 @@ uZx9iFkCELtxrh31QJ68AAAAEXNhaWxANzZmZjY2ZDJlMmRkAQIDBA==
                     'id' => 0,
                     'uuid' => 'coolify-testing-host',
                     'name' => 'localhost',
-                    'description' => "This is the server where Coolify is running on. Don't delete this!",
+                    'description' => '这是运行 Coolify 的服务器，请不要删除！',
                     'user' => 'root',
                     'ip' => 'coolify-testing-host',
                     'team_id' => 0,
