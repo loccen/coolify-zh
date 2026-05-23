@@ -40,7 +40,7 @@
                         'text-success': currentStep > 1,
                         'text-black dark:text-warning': currentStep === 1,
                         'text-neutral-500 dark:text-neutral-400': currentStep < 1
-                    }">Preparing</span>
+                    }">{{ __('Preparing') }}</span>
             </div>
             <div class="flex-1 h-0.5 mx-2 transition-all duration-300"
                 :class="currentStep > 1 ? 'bg-success' : 'bg-neutral-300 dark:bg-coolgray-300'"></div>
@@ -75,7 +75,7 @@
                         'text-success': currentStep > 2,
                         'text-black dark:text-warning': currentStep === 2,
                         'text-neutral-500 dark:text-neutral-400': currentStep < 2
-                    }">Helper</span>
+                    }">{{ __('Helper') }}</span>
             </div>
             <div class="flex-1 h-0.5 mx-2 transition-all duration-300"
                 :class="currentStep > 2 ? 'bg-success' : 'bg-neutral-300 dark:bg-coolgray-300'"></div>
@@ -110,7 +110,7 @@
                         'text-success': currentStep > 3,
                         'text-black dark:text-warning': currentStep === 3,
                         'text-neutral-500 dark:text-neutral-400': currentStep < 3
-                    }">Image</span>
+                    }">{{ __('Image') }}</span>
             </div>
             <div class="flex-1 h-0.5 mx-2 transition-all duration-300"
                 :class="currentStep > 3 ? 'bg-success' : 'bg-neutral-300 dark:bg-coolgray-300'"></div>
@@ -145,7 +145,7 @@
                         'text-success': currentStep > 4,
                         'text-black dark:text-warning': currentStep === 4,
                         'text-neutral-500 dark:text-neutral-400': currentStep < 4
-                    }">Restart</span>
+                    }">{{ __('Restart') }}</span>
             </div>
         </div>
     </div>
