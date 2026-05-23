@@ -73,6 +73,16 @@
                     <h4 class="py-4">{{ $serverName }}</h4>
                     <div class="grid grid-cols-1 gap-2 lg:grid-cols-3">
                         @foreach ($deployments as $deployment)
+                            @php
+                                $deploymentStatusLabel = match (data_get($deployment, 'status')) {
+                                    'finished' => __('Success'),
+                                    'failed' => __('Failed'),
+                                    'in_progress' => __('In Progress'),
+                                    'cancelled-by-user' => __('Cancelled'),
+                                    'queued' => __('Queued'),
+                                    default => str(data_get($deployment, 'status'))->replace('-', ' ')->headline()->toString(),
+                                };
+                            @endphp
                             <a {{ wireNavigate() }} href="{{ data_get($deployment, 'deployment_url') }}" @class([
                                 'gap-2 cursor-pointer coolbox group border-l-2 border-dotted',
                                 'dark:border-coolgray-300' => data_get($deployment, 'status') === 'queued',
@@ -83,7 +93,7 @@
                                         {{ data_get($deployment, 'application_name') }}
                                     </div>
                                     <div class="description">
-                                        {{ str(data_get($deployment, 'status'))->headline() }}
+                                        {{ $deploymentStatusLabel }}
                                     </div>
                                 </div>
                                 <div class="flex-1"></div>
