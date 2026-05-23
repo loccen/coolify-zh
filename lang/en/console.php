@@ -43,6 +43,17 @@ return [
         'enabled' => 'Migration is enabled on this server.',
         'disabled' => 'Migration is disabled on this server.',
     ],
+    'cleanup_database' => [
+        'description' => 'Cleanup database.',
+        'running' => 'Running database cleanup...',
+        'running_dry_run' => 'Running database cleanup in dry-run mode...',
+        'keep_days' => 'Keep days: :days',
+        'delete_failed_jobs' => 'Delete :count entries from failed_jobs.',
+        'delete_sessions' => 'Delete :count entries from sessions.',
+        'delete_activity_log' => 'Delete :count entries from activity_log.',
+        'delete_application_deployment_queues' => 'Delete :count entries from application_deployment_queues.',
+        'delete_scheduled_task_executions' => 'Delete :count entries from scheduled_task_executions.',
+    ],
     'traefik_check_version' => [
         'description' => 'Check Traefik proxy versions on all servers and send notifications for outdated versions',
         'checking' => 'Checking Traefik versions on all servers...',

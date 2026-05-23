@@ -43,6 +43,17 @@ return [
         'enabled' => '本服务器已启用迁移。',
         'disabled' => '本服务器未启用迁移。',
     ],
+    'cleanup_database' => [
+        'description' => '清理数据库。',
+        'running' => '正在清理数据库...',
+        'running_dry_run' => '正在以 dry-run 模式清理数据库...',
+        'keep_days' => '保留天数：:days',
+        'delete_failed_jobs' => '删除 failed_jobs 中的 :count 条记录。',
+        'delete_sessions' => '删除 sessions 中的 :count 条记录。',
+        'delete_activity_log' => '删除 activity_log 中的 :count 条记录。',
+        'delete_application_deployment_queues' => '删除 application_deployment_queues 中的 :count 条记录。',
+        'delete_scheduled_task_executions' => '删除 scheduled_task_executions 中的 :count 条记录。',
+    ],
     'traefik_check_version' => [
         'description' => '检查所有服务器上的 Traefik 代理版本，并向过期版本发送通知',
         'checking' => '正在检查所有服务器上的 Traefik 版本...',
