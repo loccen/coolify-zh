@@ -38,6 +38,8 @@ return [
         'log_drain_service_started' => '日志收集服务已启动。',
         'log_drain_service_stopped' => '日志收集服务已停止。',
         'settings_saved' => '设置已保存。',
+        'proxy_configuration_saved' => '代理配置已保存。',
+        'proxy_configuration_reset_to_default' => '代理配置已重置为默认值。',
         'network_already_added' => '网络已添加到此服务器。',
         'no_new_destinations_found' => '此服务器上未找到新的目标位置。',
         'scan_done' => '扫描完成。',
