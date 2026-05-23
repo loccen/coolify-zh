@@ -225,6 +225,9 @@ return [
             'cancel_deployment' => 'Do you want to cancel deployment :deployment_id created at :created_at?',
         ],
     ],
+    'cleanup_application_deployment_queue' => [
+        'description' => 'Cleanup application deployment queue.',
+    ],
     'clear_global_search_cache' => [
         'description' => 'Clear the global search cache',
         'error' => [

@@ -225,6 +225,9 @@ return [
             'cancel_deployment' => '要取消部署 :deployment_id（创建于 :created_at）吗？',
         ],
     ],
+    'cleanup_application_deployment_queue' => [
+        'description' => '清理应用部署队列。',
+    ],
     'clear_global_search_cache' => [
         'description' => '清除全局搜索缓存',
         'error' => [
