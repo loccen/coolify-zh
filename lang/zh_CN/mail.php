@@ -2,6 +2,9 @@
 
 return [
     'common' => [
+        'greeting' => '你好，',
+        'sign_off' => '此致',
+        'contact_support' => '联系支持',
         'here' => '这里',
         'click_here' => '点击这里',
         'view_deployment_logs' => '查看部署日志',

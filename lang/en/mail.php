@@ -2,6 +2,9 @@
 
 return [
     'common' => [
+        'greeting' => 'Hello,',
+        'sign_off' => 'Thank you,',
+        'contact_support' => 'Contact Support',
         'here' => 'here',
         'click_here' => 'Click here',
         'view_deployment_logs' => 'View Deployment Logs',
