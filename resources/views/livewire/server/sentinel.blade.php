@@ -59,7 +59,7 @@
                                 id="isMetricsEnabled" :label="__('Enable Metrics')" />
                         @else
                             @if (isDev())
-                                <x-forms.checkbox id="isSentinelDebugEnabled" label="Enable Sentinel (with debug)"
+                                <x-forms.checkbox id="isSentinelDebugEnabled"
                                     :label="__('Enable Sentinel (with debug)')" disabled instantSave />
                             @endif
                             <x-forms.checkbox instantSave disabled id="isMetricsEnabled"
