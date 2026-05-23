@@ -1704,6 +1704,8 @@
     "You can't delete your last / personal team.": "You can't delete your last / personal team.",
     "You can't use this server as a build server because it has defined resources.": "You can't use this server as a build server because it has defined resources.",
     "You don't have permission to update this application. Contact your team administrator for access.": "You don't have permission to update this application. Contact your team administrator for access.",
+    "Webhook Configuration on GitHub": "Webhook Configuration on GitHub",
+    "You are using an official Git App. You do not need manual webhooks.": "You are using an official Git App. You do not need manual webhooks.",
     "Select or drop a backup file here.": "Select or drop a backup file here.",
     "You can add \"--clean\" to drop objects before creating them, avoiding conflicts.": "You can add \"--clean\" to drop objects before creating them, avoiding conflicts.",
     "Or": "Or",
