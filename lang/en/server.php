@@ -29,5 +29,8 @@ return [
         'server_reachable' => 'Server is reachable.',
         'server_status_refreshed' => 'Server status refreshed: :status',
         'server_settings_updated' => 'Server settings updated.',
+        'cloudflare_tunnel_disabled_ip_restored' => 'Cloudflare Tunnel disabled.<br><br>Manually updated the server IP address to its previous IP address.',
+        'cloudflare_tunnel_disabled_update_ip_required' => 'Cloudflare Tunnel disabled. Action required: Update the server IP address to its real IP address in the Advanced settings.',
+        'cloudflare_tunnel_enabled' => 'Cloudflare Tunnel enabled.',
     ],
 ];
