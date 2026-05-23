@@ -1,8 +1,8 @@
 <div>
     <x-slot:title>
-        {{ data_get_str($application, 'name')->limit(10) }} > Configuration | Coolify
+        {{ data_get_str($application, 'name')->limit(10) }} > {{ __('Configuration') }} | Coolify
     </x-slot>
-    <h1>Configuration</h1>
+    <h1>{{ __('Configuration') }}</h1>
     <livewire:project.shared.configuration-checker :resource="$application" />
     <livewire:project.application.heading :application="$application" />
 

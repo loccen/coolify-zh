@@ -3870,9 +3870,18 @@ function isSafeTmpPath(?string $path): bool
  */
 function formatContainerStatus(string $status): string
 {
+    $translateStatusSegment = function (string $value): string {
+        $normalized = str($value)->lower()->value();
+        $translated = __($normalized);
+
+        return $translated === $normalized
+            ? str($value)->headline()->value()
+            : $translated;
+    };
+
     // Preserve Proxy statuses as-is (they follow different format)
     if (str($status)->startsWith('Proxy')) {
-        return str($status)->headline()->value();
+        return __(str($status)->headline()->value());
     }
 
     // Check for :excluded suffix
@@ -3882,17 +3891,19 @@ function formatContainerStatus(string $status): string
     if ($isExcluded) {
         if (count($parts) === 3) {
             // Has health status: running:unhealthy:excluded → Running (unhealthy, excluded)
-            return str($parts[0])->headline().' ('.$parts[1].', excluded)';
+            return $translateStatusSegment($parts[0]).' ('.
+                $translateStatusSegment($parts[1]).', '.
+                $translateStatusSegment('excluded').')';
         } else {
             // No health status: exited:excluded → Exited (excluded)
-            return str($parts[0])->headline().' (excluded)';
+            return $translateStatusSegment($parts[0]).' ('.$translateStatusSegment('excluded').')';
         }
     } elseif (count($parts) >= 2) {
         // Regular colon format: running:healthy → Running (healthy)
-        return str($parts[0])->headline().' ('.$parts[1].')';
+        return $translateStatusSegment($parts[0]).' ('.$translateStatusSegment($parts[1]).')';
     } else {
         // Simple status: running → Running
-        return str($status)->headline()->value();
+        return $translateStatusSegment($status);
     }
 }
 

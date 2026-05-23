@@ -1,6 +1,6 @@
 <x-dropdown>
     <x-slot:title>
-        Advanced
+        {{ __('Advanced') }}
     </x-slot>
     @if ($application->status === 'running')
         <div class="dropdown-iteme" wire:click='force_deploy_without_cache'>
@@ -14,8 +14,7 @@
                 <path d="M4 12v6c0 1.657 3.582 3 8 3c3.217 0 5.991 -.712 7.261 -1.74m.739 -3.26v-4" />
                 <path d="M3 3l18 18" />
             </svg>
-            Force deploy (without
-            cache)
+            {{ __('Force deploy (without cache)') }}
         </div>
     @else
         <div class="dropdown-item" wire:click='deploy(true)'>
@@ -29,8 +28,7 @@
                 <path d="M4 12v6c0 1.657 3.582 3 8 3c3.217 0 5.991 -.712 7.261 -1.74m.739 -3.26v-4" />
                 <path d="M3 3l18 18" />
             </svg>
-            Force deploy (without
-            cache)
+            {{ __('Force deploy (without cache)') }}
         </div>
     @endif
 </x-dropdown>
