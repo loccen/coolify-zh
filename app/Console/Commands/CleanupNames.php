@@ -130,9 +130,16 @@ class CleanupNames extends Command
 
                     // Only log in dry-run mode to preview changes
                     if ($this->option('dry-run')) {
-                        $this->warn("  🧹 {$modelName} #{$record->id}:");
-                        $this->line('    From: '.$this->truncate($originalName, 80));
-                        $this->line('    To:   '.$this->truncate($sanitizedName, 80));
+                        $this->warn(trans('console.cleanup_names.preview.header', [
+                            'model' => $modelName,
+                            'id' => $record->id,
+                        ]));
+                        $this->line(trans('console.cleanup_names.preview.from', [
+                            'value' => $this->truncate($originalName, 80),
+                        ]));
+                        $this->line(trans('console.cleanup_names.preview.to', [
+                            'value' => $this->truncate($sanitizedName, 80),
+                        ]));
                     }
                 }
             }

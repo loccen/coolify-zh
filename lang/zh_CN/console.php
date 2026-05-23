@@ -102,6 +102,11 @@ return [
             'unknown_model' => '未知模型：:model',
             'processing' => '处理 :model 时出错：:error',
         ],
+        'preview' => [
+            'header' => '🧹 :model #:id',
+            'from' => '    从：:value',
+            'to' => '    到：:value',
+        ],
         'info' => [
             'available_models' => '可用模型：:models',
             'would_sanitize' => '名称清理：将处理 :count 条记录',
