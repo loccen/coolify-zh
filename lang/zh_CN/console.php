@@ -223,6 +223,37 @@ return [
             'an_error_occurred' => '发生错误：:message',
         ],
     ],
+    'sync_stripe_subscriptions' => [
+        'description' => '同步 Stripe 订阅状态。默认只检查，使用 --fix 才会应用变更。',
+        'info' => [
+            'running_in_check_mode' => '当前以检查模式运行（不会做任何更改）。使用 --fix 可应用修正。',
+            'fetching_subscriptions' => '正在从 Stripe 获取订阅... :count',
+            'total_subscriptions_checked' => '已检查订阅总数：:count',
+            'all_discrepancies_fixed' => '所有差异都已修复。',
+            'run_with_fix' => '使用 --fix 可修正这些差异。',
+            'no_discrepancies_found' => '未发现差异。所有订阅都已同步。',
+        ],
+        'warn' => [
+            'running_with_fix' => '当前使用 --fix 运行：系统会修正这些差异。',
+            'discrepancies_found' => '发现差异：:count',
+            'resubscribed_users' => '重新订阅的用户（同一邮箱，不同 customer）：:count',
+        ],
+        'error' => [
+            'cloud_only' => '此命令只能在 Coolify Cloud 上运行。',
+            'stripe_not_configured' => 'Stripe 未配置。',
+            'errors_encountered' => '遇到错误：:count',
+        ],
+        'labels' => [
+            'subscription_id' => '订阅 ID：:value',
+            'team_id' => '团队 ID：:value',
+            'stripe_id' => 'Stripe ID：:value',
+            'stripe_status' => 'Stripe 状态：:value',
+            'team_id_with_email' => '团队 ID：:team_id | 邮箱：:email',
+            'old' => '旧订阅：:subscription_id (cus: :customer_id)',
+            'new' => '新订阅：:subscription_id (cus: :customer_id) [:status]',
+            'subscription_error' => '订阅 :subscription_id：:error',
+        ],
+    ],
     'traefik_check_version' => [
         'description' => '检查所有服务器上的 Traefik 代理版本，并向过期版本发送通知',
         'checking' => '正在检查所有服务器上的 Traefik 版本...',
