@@ -43,32 +43,32 @@ class PersonalAccessTokenSeeder extends Seeder
         // Define test tokens with different scopes
         $testTokens = [
             [
-                'name' => 'Development Root Token',
+                'name' => '开发根权限令牌',
                 'token' => 'root',
                 'abilities' => ['root'],
             ],
             [
-                'name' => 'Development Read Token',
+                'name' => '开发只读令牌',
                 'token' => 'read',
                 'abilities' => ['read'],
             ],
             [
-                'name' => 'Development Read Sensitive Token',
+                'name' => '开发敏感读取令牌',
                 'token' => 'read-sensitive',
                 'abilities' => ['read', 'read:sensitive'],
             ],
             [
-                'name' => 'Development Write Token',
+                'name' => '开发写入令牌',
                 'token' => 'write',
                 'abilities' => ['write'],
             ],
             [
-                'name' => 'Development Write Sensitive Token',
+                'name' => '开发敏感写入令牌',
                 'token' => 'write-sensitive',
                 'abilities' => ['write', 'write:sensitive'],
             ],
             [
-                'name' => 'Development Deploy Token',
+                'name' => '开发部署令牌',
                 'token' => 'deploy',
                 'abilities' => ['deploy'],
             ],
@@ -103,13 +103,13 @@ class PersonalAccessTokenSeeder extends Seeder
         }
 
         $this->command->info('');
-        $this->command->info('Test API tokens created successfully!');
-        $this->command->info('You can use these tokens in development as:');
-        $this->command->info('  Bearer root           - Root access');
-        $this->command->info('  Bearer read           - Read only access');
-        $this->command->info('  Bearer read-sensitive - Read with sensitive data access');
-        $this->command->info('  Bearer write          - Write access');
-        $this->command->info('  Bearer write-sensitive - Write with sensitive data access');
-        $this->command->info('  Bearer deploy         - Deploy access');
+        $this->command->info('开发环境 API 令牌已创建完成！');
+        $this->command->info('你可以在开发环境中这样使用这些令牌：');
+        $this->command->info('  Bearer root            - 根权限访问');
+        $this->command->info('  Bearer read            - 只读访问');
+        $this->command->info('  Bearer read-sensitive  - 敏感信息读取权限');
+        $this->command->info('  Bearer write           - 写入权限');
+        $this->command->info('  Bearer write-sensitive - 敏感信息写入权限');
+        $this->command->info('  Bearer deploy          - 部署权限');
     }
 }
