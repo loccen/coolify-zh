@@ -20,6 +20,7 @@ it('uses explicit translation lookups in representative core business views', fu
     $serviceConfiguration = file_get_contents($viewsRoot.'/project/service/configuration.blade.php');
     $databaseHeading = file_get_contents($viewsRoot.'/project/database/heading.blade.php');
     $databaseConfiguration = file_get_contents($viewsRoot.'/project/database/configuration.blade.php');
+    $databaseMysqlGeneral = file_get_contents($viewsRoot.'/project/database/mysql/general.blade.php');
     $tagsShow = file_get_contents($viewsRoot.'/tags/show.blade.php');
     $resourceSelect = file_get_contents(app_path('Livewire/Project/New/Select.php'));
     $globalSearch = file_get_contents($viewsRoot.'/global-search.blade.php');
@@ -39,6 +40,10 @@ it('uses explicit translation lookups in representative core business views', fu
         ->toContain("{{ __('HTTP Basic Authentication') }}")
         ->toContain("{{ __('Pre/Post Deployment Commands') }}")
         ->toContain("{{ __('will detect the required configuration automatically.') }}")
+        ->toContain("__('Domains for :serviceName'")
+        ->toContain("__('If you modify this, you probably need to have a :file'")
+        ->toContain("__('It is calculated together with the Base Directory:<br><span class=\\'dark:text-warning\\'>:path</span>'")
+        ->toContain("__('Docker Compose Content (applicationId: :id)'")
         ->and($applicationSource)
         ->toContain("{{ __('Open Repository') }}")
         ->toContain("__('Change git source to :name'")
@@ -79,10 +84,13 @@ it('uses explicit translation lookups in representative core business views', fu
         ->toContain("__('Restart Database')")
         ->and($databaseHeading)
         ->toContain("{{ __('Confirm Database Restart?') }}")
+        ->toContain("__('All non-persistent data of this database (containers, networks, unused images) will be deleted (don\\'t worry, no data is lost and you can start the database again).')")
         ->and($databaseConfiguration)
         ->toContain("{{ __('Import Backup') }}")
         ->toContain("{{ __('Metrics') }}")
         ->toContain("{{ __('Tags') }}")
+        ->and($databaseMysqlGeneral)
+        ->toContain("__('Custom MySQL Configuration')")
         ->and($tagsShow)
         ->toContain("{{ __('Tags') }} | Coolify")
         ->toContain("{{ __('Deployments') }}")
@@ -182,6 +190,13 @@ it('resolves additional core business follow-up translations in zh_CN', function
     expect(__('Application URL'))->toBe('应用 URL')
         ->and(__('All traffic will be redirected to the selected direction.'))->toBe('所有流量都会重定向到所选方向。')
         ->and(__('This will overwrite your current custom Nginx configuration.'))->toBe('这会覆盖你当前的自定义 Nginx 配置。')
+        ->and(__('The default configuration will be generated based on your application type (:type).', ['type' => 'SPA']))->toBe('默认配置会根据你的应用类型（SPA）生成。')
+        ->and(__('Domains for :serviceName', ['serviceName' => 'web']))->toBe('web 的域名')
+        ->and(__('If you modify this, you probably need to have a :file', ['file' => 'nixpacks.toml']))->toBe('如果你修改这里，通常也需要提供一个 nixpacks.toml 文件。')
+        ->and(__('It is calculated together with the Base Directory:<br><span class=\'dark:text-warning\'>:path</span>', ['path' => '/app/docker-compose.yml']))->toBe('它会与基本目录一起计算：<br><span class=\'dark:text-warning\'>/app/docker-compose.yml</span>')
+        ->and(__('Docker Compose Content (applicationId: :id)', ['id' => 42]))->toBe('Docker Compose 内容（applicationId: 42）')
+        ->and(__('Custom MySQL Configuration'))->toBe('自定义 MySQL 配置')
+        ->and(__('All non-persistent data of this database (containers, networks, unused images) will be deleted (don\'t worry, no data is lost and you can start the database again).'))->toBe('这个数据库的所有非持久化数据（容器、网络、未使用的镜像）都会被删除（不用担心，数据不会丢失，你之后仍然可以重新启动数据库）。')
         ->and(__('Container has restarted'))->toBe('容器已重启过')
         ->and(__('This application will be stopped.'))->toBe('这个应用将被停止。')
         ->and(__('All non-persistent data of this application will be deleted.'))->toBe('此应用的所有非持久化数据都会被删除。')

@@ -43,6 +43,7 @@ it('uses explicit translation lookups in follow-up i18n views', function () {
     $databaseBackupIndex = file_get_contents($viewsRoot.'/livewire/project/database/backup/index.blade.php');
     $databaseBackupExecution = file_get_contents($viewsRoot.'/livewire/project/database/backup/execution.blade.php');
     $databaseCreateScheduledBackup = file_get_contents($viewsRoot.'/livewire/project/database/create-scheduled-backup.blade.php');
+    $databaseKeydbGeneral = file_get_contents($viewsRoot.'/livewire/project/database/keydb/general.blade.php');
     $databaseScheduledBackups = file_get_contents($viewsRoot.'/livewire/project/database/scheduled-backups.blade.php');
 
     expect($sentinel)
@@ -147,6 +148,10 @@ it('uses explicit translation lookups in follow-up i18n views', function () {
         ->toContain("{{ __('Healthchecks') }}")
         ->toContain("__('Enable healthcheck for this resource.')")
         ->toContain("__('Start Period (s)')")
+        ->toContain("__('HTTP')")
+        ->toContain("__('CMD')")
+        ->and($databaseKeydbGeneral)
+        ->toContain("__('View the <a target=\\'_blank\\' class=\\'underline dark:text-white\\' href=\\'https://raw.githubusercontent.com/Snapchat/KeyDB/unstable/keydb.conf\\'>KeyDB default configuration</a>.')")
         ->and($destination)
         ->toContain("{{ __('Primary Server') }}")
         ->toContain("__('Promote to Primary')")
@@ -242,6 +247,8 @@ it('resolves representative follow-up translations in zh_CN', function () {
         ->and(__('Tip: Type'))->toBe('提示：输入')
         ->and(__('to reference a shared environment variable'))->toBe('可引用共享环境变量')
         ->and(__('Commands'))->toBe('命令')
+        ->and(__('HTTP'))->toBe('HTTP')
+        ->and(__('CMD'))->toBe('命令')
         ->and(__('Backup Now'))->toBe('立即备份')
         ->and(__('Proxy Dynamic Configuration'))->toBe('代理动态配置')
         ->and(__('File:'))->toBe('文件：')
@@ -258,6 +265,7 @@ it('resolves representative follow-up translations in zh_CN', function () {
         ->and(__('Service:'))->toBe('服务：')
         ->and(__('(inherited from host)'))->toBe('（继承自主机）')
         ->and(__('Documentation for this environment variable.'))->toBe('这个环境变量的说明。')
+        ->and(__('View the <a target=\'_blank\' class=\'underline dark:text-white\' href=\'https://raw.githubusercontent.com/Snapchat/KeyDB/unstable/keydb.conf\'>KeyDB default configuration</a>.'))->toBe('查看<a target=\'_blank\' class=\'underline dark:text-white\' href=\'https://raw.githubusercontent.com/Snapchat/KeyDB/unstable/keydb.conf\'>KeyDB 默认配置</a>。')
         ->and(__('Resource Operations'))->toBe('资源操作')
         ->and(__('Assigned Tags'))->toBe('已分配标签')
         ->and(__('Add tag'))->toBe('添加标签')
