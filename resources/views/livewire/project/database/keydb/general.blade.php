@@ -117,7 +117,7 @@
                 <x-forms.input type="number" placeholder="3600" disabled="{{ $isPublic }}" id="publicPortTimeout"
                     :label="__('Proxy Timeout (seconds)')" :helper="__('Timeout for the public TCP proxy connection in seconds. Default: 3600 (1 hour).')" canGate="update" :canResource="$database" />
         <x-forms.textarea
-            helper="<a target='_blank' class='underline dark:text-white' href='https://raw.githubusercontent.com/Snapchat/KeyDB/unstable/keydb.conf'>KeyDB Default Configuration</a>"
+            :helper="__('View the <a target=\'_blank\' class=\'underline dark:text-white\' href=\'https://raw.githubusercontent.com/Snapchat/KeyDB/unstable/keydb.conf\'>KeyDB default configuration</a>.')"
             :label="__('Custom KeyDB Configuration')" rows="10" id="keydbConf" canGate="update" :canResource="$database" />
             </div>
     </form>
