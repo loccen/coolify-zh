@@ -163,6 +163,13 @@ return [
             'processing' => '正在处理 :file',
         ],
     ],
+    'services_delete' => [
+        'no_applications_to_delete' => '没有可删除的应用。',
+        'no_databases_to_delete' => '没有可删除的数据库。',
+        'no_services_to_delete' => '没有可删除的服务。',
+        'no_servers_to_delete' => '没有可删除的应用。',
+        'confirm_delete_selected_resources' => '你确定要删除所有选中的资源吗？',
+    ],
     'traefik_check_version' => [
         'description' => '检查所有服务器上的 Traefik 代理版本，并向过期版本发送通知',
         'checking' => '正在检查所有服务器上的 Traefik 版本...',
