@@ -102,6 +102,11 @@ return [
             'unknown_model' => 'Unknown model: :model',
             'processing' => 'Error processing :model: :error',
         ],
+        'preview' => [
+            'header' => '🧹 :model #:id',
+            'from' => '    From: :value',
+            'to' => '    To: :value',
+        ],
         'info' => [
             'available_models' => 'Available models: :models',
             'would_sanitize' => 'Name cleanup: would sanitize :count records',
