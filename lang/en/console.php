@@ -102,6 +102,11 @@ return [
             'summary' => ':tables tables, :migrations migration records.',
         ],
     ],
+    'generate_openapi' => [
+        'description' => 'Generate OpenAPI documentation.',
+        'generating' => 'Generating OpenAPI documentation.',
+        'converted' => 'Converted OpenAPI YAML to JSON.',
+    ],
     'traefik_check_version' => [
         'description' => 'Check Traefik proxy versions on all servers and send notifications for outdated versions',
         'checking' => 'Checking Traefik versions on all servers...',
