@@ -1,0 +1,137 @@
+<?php
+
+use Illuminate\Support\Facades\App;
+
+it('wires cloud restore database console strings through console translations', function () {
+    $basePath = dirname(__DIR__, 2);
+    $command = file_get_contents($basePath.'/app/Console/Commands/Cloud/RestoreDatabase.php');
+    $enTranslations = require $basePath.'/lang/en/console.php';
+    $zhTranslations = require $basePath.'/lang/zh_CN/console.php';
+
+    expect($command)
+        ->toContain("trans('console.restore_database.description'")
+        ->toContain("trans('console.restore_database.info.starting'")
+        ->toContain("trans('console.restore_database.info.restoring_to_database'")
+        ->toContain("trans('console.restore_database.info.completed_successfully'")
+        ->toContain("trans('console.restore_database.info.dropping_all_tables'")
+        ->toContain("trans('console.restore_database.info.all_tables_dropped_successfully'")
+        ->toContain("trans('console.restore_database.info.restoring_database_from_dump_file'")
+        ->toContain("trans('console.restore_database.info.decompressing_gzipped_dump_file'")
+        ->toContain("trans('console.restore_database.debug.executing_drop_command'")
+        ->toContain("trans('console.restore_database.debug.output'")
+        ->toContain("trans('console.restore_database.debug.executing_decompress_command'")
+        ->toContain("trans('console.restore_database.debug.decompress_output'")
+        ->toContain("trans('console.restore_database.debug.executing_restore_command'")
+        ->toContain("trans('console.restore_database.debug.error_output'")
+        ->toContain("trans('console.restore_database.debug.exit_code'")
+        ->toContain("trans('console.restore_database.error.development_only'")
+        ->toContain("trans('console.restore_database.error.file_not_found'")
+        ->toContain("trans('console.restore_database.error.file_not_readable'")
+        ->toContain("trans('console.restore_database.error.database_configuration_incomplete'")
+        ->toContain("trans('console.restore_database.error.failed_to_start_restoration_process'")
+        ->toContain("trans('console.restore_database.error.restoration_failed_with_exit_code'")
+        ->toContain("trans('console.restore_database.error.error_details'")
+        ->toContain("trans('console.restore_database.error.an_error_occurred'");
+
+    expect($enTranslations['restore_database']['description'])->toBe('Restore a PostgreSQL database from a dump file (development mode only)')
+        ->and($enTranslations['restore_database']['info']['starting'])->toBe('Starting database restoration...')
+        ->and($enTranslations['restore_database']['info']['restoring_to_database'])->toBe('Restoring to database: :database')
+        ->and($enTranslations['restore_database']['info']['completed_successfully'])->toBe('Database restoration completed successfully!')
+        ->and($enTranslations['restore_database']['info']['dropping_all_tables'])->toBe('Dropping all tables...')
+        ->and($enTranslations['restore_database']['info']['all_tables_dropped_successfully'])->toBe('All tables dropped successfully.')
+        ->and($enTranslations['restore_database']['info']['restoring_database_from_dump_file'])->toBe('Restoring database from dump file...')
+        ->and($enTranslations['restore_database']['info']['decompressing_gzipped_dump_file'])->toBe('Decompressing gzipped dump file...')
+        ->and($enTranslations['restore_database']['debug']['executing_drop_command'])->toBe('Executing drop command:')
+        ->and($enTranslations['restore_database']['debug']['output'])->toBe('Output:')
+        ->and($enTranslations['restore_database']['debug']['executing_decompress_command'])->toBe('Executing decompress command:')
+        ->and($enTranslations['restore_database']['debug']['decompress_output'])->toBe('Decompress output:')
+        ->and($enTranslations['restore_database']['debug']['executing_restore_command'])->toBe('Executing restore command:')
+        ->and($enTranslations['restore_database']['debug']['error_output'])->toBe('Error output:')
+        ->and($enTranslations['restore_database']['debug']['exit_code'])->toBe('Exit code:')
+        ->and($enTranslations['restore_database']['error']['development_only'])->toBe('This command can only be run in development mode.')
+        ->and($enTranslations['restore_database']['error']['file_not_found'])->toBe('File not found: :file')
+        ->and($enTranslations['restore_database']['error']['file_not_readable'])->toBe('File is not readable: :file')
+        ->and($enTranslations['restore_database']['error']['database_configuration_incomplete'])->toBe('Database configuration is incomplete.')
+        ->and($enTranslations['restore_database']['error']['failed_to_start_restoration_process'])->toBe('Failed to start restoration process.')
+        ->and($enTranslations['restore_database']['error']['restoration_failed_with_exit_code'])->toBe('Restoration failed with exit code: :exit_code')
+        ->and($enTranslations['restore_database']['error']['error_details'])->toBe('Error details:')
+        ->and($enTranslations['restore_database']['error']['an_error_occurred'])->toBe('An error occurred: :message');
+
+    expect($zhTranslations['restore_database']['description'])->toBe('从转储文件恢复 PostgreSQL 数据库（仅开发模式）')
+        ->and($zhTranslations['restore_database']['info']['starting'])->toBe('正在开始数据库恢复...')
+        ->and($zhTranslations['restore_database']['info']['restoring_to_database'])->toBe('正在恢复到数据库：:database')
+        ->and($zhTranslations['restore_database']['info']['completed_successfully'])->toBe('数据库恢复已成功完成！')
+        ->and($zhTranslations['restore_database']['info']['dropping_all_tables'])->toBe('正在删除所有表...')
+        ->and($zhTranslations['restore_database']['info']['all_tables_dropped_successfully'])->toBe('所有表都已成功删除。')
+        ->and($zhTranslations['restore_database']['info']['restoring_database_from_dump_file'])->toBe('正在从转储文件恢复数据库...')
+        ->and($zhTranslations['restore_database']['info']['decompressing_gzipped_dump_file'])->toBe('正在解压 gzipped 转储文件...')
+        ->and($zhTranslations['restore_database']['debug']['executing_drop_command'])->toBe('正在执行删除命令：')
+        ->and($zhTranslations['restore_database']['debug']['output'])->toBe('输出：')
+        ->and($zhTranslations['restore_database']['debug']['executing_decompress_command'])->toBe('正在执行解压命令：')
+        ->and($zhTranslations['restore_database']['debug']['decompress_output'])->toBe('解压输出：')
+        ->and($zhTranslations['restore_database']['debug']['executing_restore_command'])->toBe('正在执行恢复命令：')
+        ->and($zhTranslations['restore_database']['debug']['error_output'])->toBe('错误输出：')
+        ->and($zhTranslations['restore_database']['debug']['exit_code'])->toBe('退出码：')
+        ->and($zhTranslations['restore_database']['error']['development_only'])->toBe('此命令只能在开发模式下运行。')
+        ->and($zhTranslations['restore_database']['error']['file_not_found'])->toBe('未找到文件：:file')
+        ->and($zhTranslations['restore_database']['error']['file_not_readable'])->toBe('文件不可读：:file')
+        ->and($zhTranslations['restore_database']['error']['database_configuration_incomplete'])->toBe('数据库配置不完整。')
+        ->and($zhTranslations['restore_database']['error']['failed_to_start_restoration_process'])->toBe('无法启动恢复进程。')
+        ->and($zhTranslations['restore_database']['error']['restoration_failed_with_exit_code'])->toBe('恢复失败，退出码：:exit_code')
+        ->and($zhTranslations['restore_database']['error']['error_details'])->toBe('错误详情：')
+        ->and($zhTranslations['restore_database']['error']['an_error_occurred'])->toBe('发生错误：:message');
+});
+
+it('resolves cloud restore database translations in en and zh_CN', function () {
+    App::setLocale('en');
+
+    expect(trans('console.restore_database.description'))->toBe('Restore a PostgreSQL database from a dump file (development mode only)')
+        ->and(trans('console.restore_database.info.starting'))->toBe('Starting database restoration...')
+        ->and(trans('console.restore_database.info.restoring_to_database', ['database' => 'coolify']))->toBe('Restoring to database: coolify')
+        ->and(trans('console.restore_database.info.completed_successfully'))->toBe('Database restoration completed successfully!')
+        ->and(trans('console.restore_database.info.dropping_all_tables'))->toBe('Dropping all tables...')
+        ->and(trans('console.restore_database.info.all_tables_dropped_successfully'))->toBe('All tables dropped successfully.')
+        ->and(trans('console.restore_database.info.restoring_database_from_dump_file'))->toBe('Restoring database from dump file...')
+        ->and(trans('console.restore_database.info.decompressing_gzipped_dump_file'))->toBe('Decompressing gzipped dump file...')
+        ->and(trans('console.restore_database.debug.executing_drop_command'))->toBe('Executing drop command:')
+        ->and(trans('console.restore_database.debug.output'))->toBe('Output:')
+        ->and(trans('console.restore_database.debug.executing_decompress_command'))->toBe('Executing decompress command:')
+        ->and(trans('console.restore_database.debug.decompress_output'))->toBe('Decompress output:')
+        ->and(trans('console.restore_database.debug.executing_restore_command'))->toBe('Executing restore command:')
+        ->and(trans('console.restore_database.debug.error_output'))->toBe('Error output:')
+        ->and(trans('console.restore_database.debug.exit_code'))->toBe('Exit code:')
+        ->and(trans('console.restore_database.error.development_only'))->toBe('This command can only be run in development mode.')
+        ->and(trans('console.restore_database.error.file_not_found', ['file' => '/tmp/dump.sql']))->toBe('File not found: /tmp/dump.sql')
+        ->and(trans('console.restore_database.error.file_not_readable', ['file' => '/tmp/dump.sql']))->toBe('File is not readable: /tmp/dump.sql')
+        ->and(trans('console.restore_database.error.database_configuration_incomplete'))->toBe('Database configuration is incomplete.')
+        ->and(trans('console.restore_database.error.failed_to_start_restoration_process'))->toBe('Failed to start restoration process.')
+        ->and(trans('console.restore_database.error.restoration_failed_with_exit_code', ['exit_code' => 1]))->toBe('Restoration failed with exit code: 1')
+        ->and(trans('console.restore_database.error.error_details'))->toBe('Error details:')
+        ->and(trans('console.restore_database.error.an_error_occurred', ['message' => 'boom']))->toBe('An error occurred: boom');
+
+    App::setLocale('zh_CN');
+
+    expect(trans('console.restore_database.description'))->toBe('从转储文件恢复 PostgreSQL 数据库（仅开发模式）')
+        ->and(trans('console.restore_database.info.starting'))->toBe('正在开始数据库恢复...')
+        ->and(trans('console.restore_database.info.restoring_to_database', ['database' => 'coolify']))->toBe('正在恢复到数据库：coolify')
+        ->and(trans('console.restore_database.info.completed_successfully'))->toBe('数据库恢复已成功完成！')
+        ->and(trans('console.restore_database.info.dropping_all_tables'))->toBe('正在删除所有表...')
+        ->and(trans('console.restore_database.info.all_tables_dropped_successfully'))->toBe('所有表都已成功删除。')
+        ->and(trans('console.restore_database.info.restoring_database_from_dump_file'))->toBe('正在从转储文件恢复数据库...')
+        ->and(trans('console.restore_database.info.decompressing_gzipped_dump_file'))->toBe('正在解压 gzipped 转储文件...')
+        ->and(trans('console.restore_database.debug.executing_drop_command'))->toBe('正在执行删除命令：')
+        ->and(trans('console.restore_database.debug.output'))->toBe('输出：')
+        ->and(trans('console.restore_database.debug.executing_decompress_command'))->toBe('正在执行解压命令：')
+        ->and(trans('console.restore_database.debug.decompress_output'))->toBe('解压输出：')
+        ->and(trans('console.restore_database.debug.executing_restore_command'))->toBe('正在执行恢复命令：')
+        ->and(trans('console.restore_database.debug.error_output'))->toBe('错误输出：')
+        ->and(trans('console.restore_database.debug.exit_code'))->toBe('退出码：')
+        ->and(trans('console.restore_database.error.development_only'))->toBe('此命令只能在开发模式下运行。')
+        ->and(trans('console.restore_database.error.file_not_found', ['file' => '/tmp/dump.sql']))->toBe('未找到文件：/tmp/dump.sql')
+        ->and(trans('console.restore_database.error.file_not_readable', ['file' => '/tmp/dump.sql']))->toBe('文件不可读：/tmp/dump.sql')
+        ->and(trans('console.restore_database.error.database_configuration_incomplete'))->toBe('数据库配置不完整。')
+        ->and(trans('console.restore_database.error.failed_to_start_restoration_process'))->toBe('无法启动恢复进程。')
+        ->and(trans('console.restore_database.error.restoration_failed_with_exit_code', ['exit_code' => 1]))->toBe('恢复失败，退出码：1')
+        ->and(trans('console.restore_database.error.error_details'))->toBe('错误详情：')
+        ->and(trans('console.restore_database.error.an_error_occurred', ['message' => 'boom']))->toBe('发生错误：boom');
+});
