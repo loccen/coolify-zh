@@ -1871,6 +1871,8 @@
     "Upgrading to <span class=\"font-mono\">:version</span> will give you access to new features and improvements.": "升级到 <span class=\"font-mono\">:version</span> 后，你将获得新的功能和改进。",
     "Before upgrading to a new minor version, please read the <a href=\"https://github.com/traefik/traefik/releases\" target=\"_blank\" class=\"underline text-white\">Traefik changelog</a> to understand breaking changes and new features.": "在升级到新的次版本前，请先阅读 <a href=\"https://github.com/traefik/traefik/releases\" target=\"_blank\" class=\"underline text-white\">Traefik 更新日志</a>，了解其中的破坏性变更和新功能。",
     "Read the docs <a class='underline dark:text-white' href='https://coolify.io/docs/knowledge-base/docker/swarm' target='_blank'>here</a>.": "请在<a class='underline dark:text-white' href='https://coolify.io/docs/knowledge-base/docker/swarm' target='_blank'>这里</a>查看文档。",
+    "Search...": "搜索...",
+    "No options found": "未找到可选项",
     "scope.": "范围内。",
     "variables": "变量",
     "In sync": "已同步",

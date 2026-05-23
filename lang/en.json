@@ -1924,6 +1924,8 @@
     "unusable": "unusable",
     "Are you sure you want to disable S3 for this backup schedule?": "Are you sure you want to disable S3 for this backup schedule?",
     "You don't have permission to create new destinations. Please contact your team administrator for access.": "You don't have permission to create new destinations. Please contact your team administrator for access.",
+    "Search...": "Search...",
+    "No options found": "No options found",
     "You don't have permission to update this application. Contact your team administrator for access.": "You don't have permission to update this application. Contact your team administrator for access.",
     "scope.": "scope.",
     "variables": "variables",
