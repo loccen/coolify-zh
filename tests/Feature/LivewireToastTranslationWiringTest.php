@@ -178,6 +178,50 @@ it('resolves second-round livewire toast translations in zh_CN', function () {
         ->toBe('已迁移到 MinIO。');
 });
 
+it('uses explicit translation lookups in ops round 3 livewire toast dispatches', function () {
+    $destinationShow = file_get_contents(app_path('Livewire/Destination/Show.php'));
+    $terminalIndex = file_get_contents(app_path('Livewire/Terminal/Index.php'));
+    $storageCreate = file_get_contents(app_path('Livewire/Storage/Create.php'));
+    $sharedVariablesEnvironment = file_get_contents(app_path('Livewire/SharedVariables/Environment/Show.php'));
+    $sharedVariablesProject = file_get_contents(app_path('Livewire/SharedVariables/Project/Show.php'));
+    $sharedVariablesServer = file_get_contents(app_path('Livewire/SharedVariables/Server/Show.php'));
+    $sharedVariablesTeam = file_get_contents(app_path('Livewire/SharedVariables/Team/Index.php'));
+    $tagsShow = file_get_contents(app_path('Livewire/Tags/Show.php'));
+    $layoutPopups = file_get_contents(app_path('Livewire/LayoutPopups.php'));
+
+    expect($destinationShow)
+        ->toContain("trans('destination.toasts.saved')")
+        ->toContain("trans('destination.toasts.delete_resources_first')")
+        ->and($terminalIndex)
+        ->toContain("trans('terminal.toasts.select_server_or_container')")
+        ->and($storageCreate)
+        ->toContain("__('Failed to create storage.')")
+        ->and($sharedVariablesEnvironment)
+        ->toContain("__('Environment variables updated.')")
+        ->and($sharedVariablesProject)
+        ->toContain("__('Environment variables updated.')")
+        ->and($sharedVariablesServer)
+        ->toContain("__('Environment variables updated.')")
+        ->and($sharedVariablesTeam)
+        ->toContain("__('Environment variables updated.')")
+        ->and($tagsShow)
+        ->toContain("trans('tags.toasts.mass_deployment_started')")
+        ->and($layoutPopups)
+        ->toContain("__('Realtime events configured!')");
+});
+
+it('resolves ops round 3 livewire toast translations in zh_CN', function () {
+    App::setLocale('zh_CN');
+
+    expect(trans('destination.toasts.saved'))->toBe('目标位置已保存。')
+        ->and(trans('destination.toasts.delete_resources_first'))->toBe('删除此目标位置前，必须先删除所有资源。')
+        ->and(trans('terminal.toasts.select_server_or_container'))->toBe('请选择服务器或容器。')
+        ->and(__('Environment variables updated.'))->toBe('环境变量已更新。')
+        ->and(__('Failed to create storage.'))->toBe('创建存储失败。')
+        ->and(trans('tags.toasts.mass_deployment_started'))->toBe('批量部署已开始。')
+        ->and(__('Realtime events configured!'))->toBe('实时事件已配置。');
+});
+
 it('uses explicit translation lookups in follow-up livewire toast dispatches', function () {
     $applicationAdvanced = file_get_contents(app_path('Livewire/Project/Application/Advanced.php'));
     $applicationDeploymentIndex = file_get_contents(app_path('Livewire/Project/Application/Deployment/Index.php'));

@@ -118,7 +118,7 @@ class Create extends Component
 
             return redirectRoute($this, 'storage.show', [$this->storage->uuid]);
         } catch (\Throwable $e) {
-            $this->dispatch('error', 'Failed to create storage.', $e->getMessage());
+            $this->dispatch('error', __('Failed to create storage.'), $e->getMessage());
             // return handleError($e, $this);
         }
     }

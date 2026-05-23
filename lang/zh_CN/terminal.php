@@ -26,6 +26,7 @@ return [
         'unexpected_error' => '（抱歉，出了点问题，请重试）',
     ],
     'toasts' => [
+        'select_server_or_container' => '请选择服务器或容器。',
         'connection_error' => '终端连接错误：:reason',
         'inactivity_closed' => '终端因 30 分钟无操作已关闭。',
         'reconnecting' => '终端 WebSocket 连接已断开，正在重新连接...',

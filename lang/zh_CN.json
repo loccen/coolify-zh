@@ -3406,5 +3406,7 @@
     "Value between 0-100.<br><br>More info <a class='underline dark:text-white' target='_blank' href='https://docs.docker.com/compose/compose-file/05-services/#mem_swappiness'>here</a>.": "值范围为 0 到 100。<br><br>更多信息请查看<a class='underline dark:text-white' target='_blank' href='https://docs.docker.com/compose/compose-file/05-services/#mem_swappiness'>这里</a>。",
     "<span class='text-helper'>Examples</span><br>• 69b (byte)<br>• 420k (kilobyte)<br>• 1337m (megabyte)<br>• 1g (gigabyte)<br><br>More info <a class='underline dark:text-white' target='_blank' href='https://docs.docker.com/compose/compose-file/05-services/#mem_limit'>here</a>.": "<span class='text-helper'>示例</span><br>• 69b（字节）<br>• 420k（千字节）<br>• 1337m（兆字节）<br>• 1g（吉字节）<br><br>更多信息请查看<a class='underline dark:text-white' target='_blank' href='https://docs.docker.com/compose/compose-file/05-services/#mem_limit'>这里</a>。",
     "<span class='text-helper'>Examples</span><br>• 69b (byte)<br>• 420k (kilobyte)<br>• 1337m (megabyte)<br>• 1g (gigabyte)<br><br>More info <a class='underline dark:text-white' target='_blank' href='https://docs.docker.com/compose/compose-file/05-services/#memswap_limit'>here</a>.": "<span class='text-helper'>示例</span><br>• 69b（字节）<br>• 420k（千字节）<br>• 1337m（兆字节）<br>• 1g（吉字节）<br><br>更多信息请查看<a class='underline dark:text-white' target='_blank' href='https://docs.docker.com/compose/compose-file/05-services/#memswap_limit'>这里</a>。",
-    "Variable name: :name": "变量名：:name"
+    "Variable name: :name": "变量名：:name",
+    "Failed to create storage.": "创建存储失败。",
+    "Realtime events configured!": "实时事件已配置。"
 }

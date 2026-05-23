@@ -14,4 +14,7 @@ return [
             'unavailable' => 'During redeploy resources will be temporarily unavailable.',
         ],
     ],
+    'toasts' => [
+        'mass_deployment_started' => 'Mass deployment started.',
+    ],
 ];
