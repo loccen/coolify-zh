@@ -88,6 +88,14 @@ return [
             'would_delete' => 'Redis cleanup: would delete :count items',
             'deleted' => 'Redis cleanup: deleted :count items',
         ],
+        'warn' => [
+            'would_delete_stale_lock' => 'Would delete STALE lock (no expiration): :key',
+            'would_mark_failed' => 'Would mark as FAILED: :jobClass (processing for :minutes min) - :reason',
+        ],
+        'error' => [
+            'redis_scan_failed' => 'Redis scan failed, stopping key retrieval',
+            'failed_to_decode_job_payload' => 'Failed to decode job payload for :key: :error. Payload: :payload',
+        ],
     ],
     'cleanup_names' => [
         'error' => [
