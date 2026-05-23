@@ -27,7 +27,7 @@
                         <br><br>
                         {!! __('Do not have a Hetzner account? <a href=":url" target="_blank" class="underline dark:text-white">Sign up here</a>', ['url' => 'https://coolify.io/hetzner']) !!}
                         <br>
-                        <span class="text-xs">{{ __("Coolify affiliate link. Only works for new accounts, supports us with €10, and gives you €20.") }}</span>
+                        <span class="text-xs">{{ __('Coolify affiliate link. Only works for new accounts, supports us with €10, and gives you €20.') }}</span>
                     @endif
                 </div>
             @endif
@@ -56,7 +56,7 @@
                         <br><br>
                         {!! __('Do not have a Hetzner account? <a href=":url" target="_blank" class="underline dark:text-white">Sign up here</a>', ['url' => 'https://coolify.io/hetzner']) !!}
                         <br>
-                        <span class="text-xs">{{ __("Coolify affiliate link. Only works for new accounts, supports us with €10, and gives you €20.") }}</span>
+                        <span class="text-xs">{{ __('Coolify affiliate link. Only works for new accounts, supports us with €10, and gives you €20.') }}</span>
                     </div>
                 @endif
             </div>

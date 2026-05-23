@@ -1988,6 +1988,7 @@
     "DigitalOcean token validation failed. Please check the token.": "DigitalOcean 令牌校验失败，请检查该令牌。",
     "Discord Webhook URL is required.": "必须填写 Discord Webhook URL。",
     "Do not have a Hetzner account? <a href=\":url\" target=\"_blank\" class=\"underline dark:text-white\">Sign up here</a>": "还没有 Hetzner 账号？<a href=\":url\" target=\"_blank\" class=\"underline dark:text-white\">点这里注册</a>",
+    "Coolify affiliate link. Only works for new accounts, supports us with €10, and gives you €20.": "这是 Coolify 的联盟链接。仅对新账号有效，会为我们带来 10 欧元支持，并给你 20 欧元额度。",
     "Eligible for a full refund — <strong class=\"dark:text-warning\">:days</strong> days remaining.": "符合全额退款条件，还剩 <strong class=\"dark:text-warning\">:days</strong> 天。",
     "Email notification settings updated.": "电子邮件通知设置已更新。",
     "Encryption type is required.": "必须选择加密类型。",

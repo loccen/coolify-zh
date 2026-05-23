@@ -1,4 +1,7 @@
 <div>
+    <x-slot:title>
+        {{ __('Cloud Provider Tokens') }} | Coolify
+    </x-slot>
     <h2>{{ __('Cloud Provider Tokens') }}</h2>
     <div class="pb-4">{{ __('Manage API tokens for cloud providers (Hetzner, DigitalOcean, etc.).') }}</div>
 
