@@ -10,6 +10,17 @@ use Livewire\Livewire;
 
 uses(RefreshDatabase::class);
 
+function serverByIpTestPrivateKey(): string
+{
+    return '-----BEGIN OPENSSH PRIVATE KEY-----
+b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+QyNTUxOQAAACBbhpqHhqv6aI67Mj9abM3DVbmcfYhZAhC7ca4d9UCevAAAAJi/QySHv0Mk
+hwAAAAtzc2gtZWQyNTUxOQAAACBbhpqHhqv6aI67Mj9abM3DVbmcfYhZAhC7ca4d9UCevA
+AAAECBQw4jg1WRT2IGHMncCiZhURCts2s24HoDS0thHnnRKVuGmoeGq/pojrsyP1pszcNV
+uZx9iFkCELtxrh31QJ68AAAAEXNhaWxANzZmZjY2ZDJlMmRkAQIDBA==
+-----END OPENSSH PRIVATE KEY-----';
+}
+
 beforeEach(function () {
     $this->user = User::factory()->create();
     $this->team = Team::factory()->create();
@@ -19,7 +30,7 @@ beforeEach(function () {
 
     $this->privateKey = PrivateKey::create([
         'name' => 'Test Key',
-        'private_key' => 'test-key-content',
+        'private_key' => serverByIpTestPrivateKey(),
         'team_id' => $this->team->id,
     ]);
 });
@@ -68,7 +79,7 @@ it('dispatches translated toast messages for server by ip validation branches', 
     $userWithLimit->teams()->attach($teamWithLimit, ['role' => 'owner']);
     $limitPrivateKey = PrivateKey::create([
         'name' => 'Limit Key',
-        'private_key' => 'limit-key-content',
+        'private_key' => serverByIpTestPrivateKey(),
         'team_id' => $teamWithLimit->id,
     ]);
 
