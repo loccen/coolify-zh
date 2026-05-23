@@ -72,6 +72,11 @@ return [
         'enabled' => '本服务器已启用迁移。',
         'disabled' => '本服务器未启用迁移。',
     ],
+    'seeder' => [
+        'description' => '开始 Seeder',
+        'enabled' => '本服务器已启用 Seeder。',
+        'disabled' => '本服务器未启用 Seeder。',
+    ],
     'cleanup_database' => [
         'description' => '清理数据库。',
         'running' => '正在清理数据库...',

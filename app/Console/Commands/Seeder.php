@@ -10,14 +10,21 @@ class Seeder extends Command
 
     protected $description = 'Start Seeder';
 
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->setDescription(trans('console.seeder.description', locale: app()->getLocale()));
+    }
+
     public function handle()
     {
         if (config('constants.seeder.is_seeder_enabled')) {
-            $this->info('Seeder is enabled on this server.');
+            $this->info(trans('console.seeder.enabled', locale: app()->getLocale()));
             $this->call('db:seed', ['--class' => 'ProductionSeeder', '--force' => true]);
             exit(0);
         } else {
-            $this->info('Seeder is disabled on this server.');
+            $this->info(trans('console.seeder.disabled', locale: app()->getLocale()));
             exit(0);
         }
     }

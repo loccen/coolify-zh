@@ -72,6 +72,11 @@ return [
         'enabled' => 'Migration is enabled on this server.',
         'disabled' => 'Migration is disabled on this server.',
     ],
+    'seeder' => [
+        'description' => 'Start Seeder',
+        'enabled' => 'Seeder is enabled on this server.',
+        'disabled' => 'Seeder is disabled on this server.',
+    ],
     'cleanup_database' => [
         'description' => 'Cleanup database.',
         'running' => 'Running database cleanup...',
