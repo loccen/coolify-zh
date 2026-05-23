@@ -76,4 +76,10 @@ return [
         'ca_certificate_regenerated_successfully' => 'CA 证书已重新生成。',
         'server_validated_proxy_starting' => '服务器已验证，代理即将启动。',
     ],
+    'delete' => [
+        'force_delete_resources_label' => '删除所有资源（共 :count 个）',
+        'force_delete_resources_warning' => '服务器在仍有资源时无法删除。',
+        'delete_from_hetzner_label' => '同时从 Hetzner Cloud 删除服务器',
+        'delete_from_hetzner_warning' => 'Hetzner Cloud 上的实际服务器不会被删除。',
+    ],
 ];
