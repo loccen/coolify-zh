@@ -12,7 +12,7 @@
                     <x-deprecated-badge />
                 </div>
                 <x-callout type="warning" :title="__('Deprecated')" class="my-4">
-                    {{ config('deprecations.swarm') }}
+                    {{ __(config('deprecations.swarm')) }}
                 </x-callout>
                 <div class="pb-4">{!! __('Read the docs <a class=\'underline dark:text-white\' href=\'https://coolify.io/docs/knowledge-base/docker/swarm\' target=\'_blank\'>here</a>.') !!}</div>
             </div>
