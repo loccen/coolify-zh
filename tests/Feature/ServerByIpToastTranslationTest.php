@@ -55,7 +55,7 @@ it('dispatches translated toast messages for server by ip validation branches', 
     ])
         ->set('ip', $sameTeamServer->ip)
         ->call('submit')
-        ->assertDispatched('error', fn (array $event): bool => $event['message'] === __('server.toasts.server_with_same_ip_exists_in_team'));
+        ->assertDispatched('error', fn (string $name, array $params): bool => $params['message'] === __('server.toasts.server_with_same_ip_exists_in_team'));
 
     Livewire::test(ByIp::class, [
         'private_keys' => collect([$this->privateKey]),
@@ -63,7 +63,7 @@ it('dispatches translated toast messages for server by ip validation branches', 
     ])
         ->set('ip', '5.6.7.8')
         ->call('submit')
-        ->assertDispatched('error', fn (array $event): bool => $event['message'] === __('server.toasts.server_with_same_ip_in_use_by_another_team'));
+        ->assertDispatched('error', fn (string $name, array $params): bool => $params['message'] === __('server.toasts.server_with_same_ip_in_use_by_another_team'));
 
     Livewire::test(ByIp::class, [
         'private_keys' => collect(),
@@ -71,7 +71,7 @@ it('dispatches translated toast messages for server by ip validation branches', 
     ])
         ->set('ip', '9.9.9.9')
         ->call('submit')
-        ->assertDispatched('error', fn (array $event): bool => $event['message'] === __('server.toasts.select_private_key'));
+        ->assertDispatched('error', fn (string $name, array $params): bool => $params['message'] === __('server.toasts.select_private_key'));
 
     config()->set('constants.coolify.self_hosted', false);
     $teamWithLimit = Team::factory()->create(['custom_server_limit' => 0]);
@@ -92,5 +92,5 @@ it('dispatches translated toast messages for server by ip validation branches', 
     ])
         ->set('ip', '10.10.10.10')
         ->call('submit')
-        ->assertDispatched('error', fn (array $event): bool => $event['message'] === __('server.toasts.server_limit_reached'));
+        ->assertDispatched('error', fn (string $name, array $params): bool => $params['message'] === __('server.toasts.server_limit_reached'));
 });
