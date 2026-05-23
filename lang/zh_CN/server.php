@@ -34,6 +34,7 @@ return [
         'swarm_settings_updated' => 'Swarm 设置已更新。',
         'server_updated' => '服务器已更新。',
         'invalid_disk_usage_check_frequency' => '磁盘使用情况检查频率的 Cron / 人类可读表达式无效。',
+        'invalid_docker_cleanup_frequency' => 'Docker 清理频率的 Cron / 人类可读表达式无效。',
         'log_drain_service_started' => '日志收集服务已启动。',
         'log_drain_service_stopped' => '日志收集服务已停止。',
         'settings_saved' => '设置已保存。',
