@@ -102,6 +102,11 @@ return [
             'summary' => ':tables 个表，:migrations 条 migration 记录。',
         ],
     ],
+    'generate_openapi' => [
+        'description' => '生成 OpenAPI 文档。',
+        'generating' => '正在生成 OpenAPI 文档。',
+        'converted' => '已将 OpenAPI YAML 转换为 JSON。',
+    ],
     'traefik_check_version' => [
         'description' => '检查所有服务器上的 Traefik 代理版本，并向过期版本发送通知',
         'checking' => '正在检查所有服务器上的 Traefik 版本...',

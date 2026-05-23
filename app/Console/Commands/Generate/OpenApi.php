@@ -12,10 +12,14 @@ class OpenApi extends Command
 
     protected $description = 'Generate OpenApi file.';
 
+    public function getDescription(): string
+    {
+        return trans('console.generate_openapi.description');
+    }
+
     public function handle()
     {
-        // Generate OpenAPI documentation
-        echo "Generating OpenAPI documentation.\n";
+        echo trans('console.generate_openapi.generating')."\n";
         // https://github.com/OAI/OpenAPI-Specification/releases
         $process = Process::run([
             './vendor/bin/openapi',
@@ -32,9 +36,9 @@ class OpenApi extends Command
         echo $process->output();
 
         $yaml = file_get_contents('openapi.yaml');
-        
+
         $json = json_encode(Yaml::parse($yaml), JSON_PRETTY_PRINT)."\n";
         file_put_contents('openapi.json', $json);
-        echo "Converted OpenAPI YAML to JSON.\n";
+        echo trans('console.generate_openapi.converted')."\n";
     }
 }
