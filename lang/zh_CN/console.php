@@ -50,4 +50,18 @@ return [
         'notifications_pending' => '系统将向使用过期 Traefik 版本的团队发送通知。',
         'dispatch_failed' => '分发 Traefik 版本检查任务失败：:message',
     ],
+    'clear_global_search_cache' => [
+        'description' => '清除全局搜索缓存',
+        'error' => [
+            'no_authenticated_user' => '未找到已登录用户。请使用 --team=TEAM_ID 或 --all。',
+            'team_not_found' => '未找到 ID 为 :team_id 的团队。',
+        ],
+        'warn' => [
+            'no_teams_found' => '未找到团队。',
+        ],
+        'info' => [
+            'cleared_team_cache' => '已清除团队 :team_name（ID：:team_id）的全局搜索缓存。',
+            'cleared_all_teams_cache' => '已清除 :count 个团队的全局搜索缓存。',
+        ],
+    ],
 ];

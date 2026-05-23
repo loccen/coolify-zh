@@ -17,7 +17,14 @@ class ClearGlobalSearchCache extends Command
     /**
      * The console command description.
      */
-    protected $description = 'Clear the global search cache for testing or manual refresh';
+    protected $description;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->setDescription(trans('console.clear_global_search_cache.description', locale: app()->getLocale()));
+    }
 
     /**
      * Execute the console command.
@@ -34,7 +41,7 @@ class ClearGlobalSearchCache extends Command
 
         // If no options provided, clear cache for current user's team
         if (! auth()->check()) {
-            $this->error('No authenticated user found. Use --team=ID or --all option.');
+            $this->error(trans('console.clear_global_search_cache.error.no_authenticated_user', locale: app()->getLocale()));
 
             return Command::FAILURE;
         }
@@ -49,13 +56,13 @@ class ClearGlobalSearchCache extends Command
         $team = Team::find($teamId);
 
         if (! $team) {
-            $this->error("Team with ID {$teamId} not found.");
+            $this->error(trans('console.clear_global_search_cache.error.team_not_found', ['team_id' => $teamId], locale: app()->getLocale()));
 
             return Command::FAILURE;
         }
 
         GlobalSearch::clearTeamCache($teamId);
-        $this->info("✓ Cleared global search cache for team: {$team->name} (ID: {$teamId})");
+        $this->info(trans('console.clear_global_search_cache.info.cleared_team_cache', ['team_name' => $team->name, 'team_id' => $teamId], locale: app()->getLocale()));
 
         return Command::SUCCESS;
     }
@@ -65,7 +72,7 @@ class ClearGlobalSearchCache extends Command
         $teams = Team::all();
 
         if ($teams->isEmpty()) {
-            $this->warn('No teams found.');
+            $this->warn(trans('console.clear_global_search_cache.warn.no_teams_found', locale: app()->getLocale()));
 
             return Command::SUCCESS;
         }
@@ -76,7 +83,7 @@ class ClearGlobalSearchCache extends Command
             $count++;
         }
 
-        $this->info("✓ Cleared global search cache for {$count} team(s)");
+        $this->info(trans('console.clear_global_search_cache.info.cleared_all_teams_cache', ['count' => $count], locale: app()->getLocale()));
 
         return Command::SUCCESS;
     }
