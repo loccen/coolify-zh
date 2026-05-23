@@ -3870,6 +3870,29 @@ function isSafeTmpPath(?string $path): bool
  */
 function formatContainerStatus(string $status): string
 {
+    if (! app()->bound('translator')) {
+        if (str($status)->startsWith('Proxy')) {
+            return str($status)->headline()->value();
+        }
+
+        $parts = explode(':', $status);
+        $isExcluded = end($parts) === 'excluded';
+
+        if ($isExcluded) {
+            if (count($parts) === 3) {
+                return str($parts[0])->headline().' ('.$parts[1].', excluded)';
+            }
+
+            return str($parts[0])->headline().' (excluded)';
+        }
+
+        if (count($parts) >= 2) {
+            return str($parts[0])->headline().' ('.$parts[1].')';
+        }
+
+        return str($status)->headline()->value();
+    }
+
     $translateStatusSegment = function (string $value): string {
         $normalized = str($value)->lower()->value();
         $translated = __($normalized);
