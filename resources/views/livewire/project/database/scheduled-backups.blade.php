@@ -2,19 +2,18 @@
     <div class="flex flex-col gap-2">
         @if ($database->is_migrated && blank($database->custom_type))
             <div>
-                <div>Select the type of
-                    database to enable automated backups.</div>
-                <div class="pb-4"> If your database is not listed, automated backups are not supported.</div>
+                <div>{{ __('Select the type of database to enable automated backups.') }}</div>
+                <div class="pb-4">{{ __('If your database is not listed, automated backups are not supported.') }}</div>
                 <form wire:submit="setCustomType" class="flex gap-2 items-end">
                     <div class="w-96">
-                        <x-forms.select label="Type" id="custom_type">
+                        <x-forms.select :label="__('Type')" id="custom_type">
                             <option selected value="mysql">MySQL</option>
                             <option value="mariadb">MariaDB</option>
                             <option value="postgresql">PostgreSQL</option>
                             <option value="mongodb">MongoDB</option>
                         </x-forms.select>
                     </div>
-                    <x-forms.button type="submit">Set</x-forms.button>
+                    <x-forms.button type="submit">{{ __('Set') }}</x-forms.button>
                 </form>
             </div>
         @else
@@ -52,9 +51,9 @@
                                 ])>
                                     @php
                                         $statusText = match (data_get($backup->latest_log, 'status')) {
-                                            'success' => 'Success',
-                                            'running' => 'In Progress',
-                                            'failed' => 'Failed',
+                                            'success' => __('Success'),
+                                            'running' => __('In Progress'),
+                                            'failed' => __('Failed'),
                                             default => ucfirst(data_get($backup->latest_log, 'status')),
                                         };
                                     @endphp
@@ -71,14 +70,14 @@
                         <div class="text-gray-600 dark:text-gray-400 text-sm">
                             @if ($backup->latest_log)
                                 @if (data_get($backup->latest_log, 'status') === 'running')
-                                    <span
-                                        title="Started: {{ formatDateInServerTimezone(data_get($backup->latest_log, 'created_at'), $backup->server()) }}">
-                                        Running for
+                                <span
+                                        title="{{ __('Started:') }} {{ formatDateInServerTimezone(data_get($backup->latest_log, 'created_at'), $backup->server()) }}">
+                                        {{ __('Running for') }}
                                         {{ calculateDuration(data_get($backup->latest_log, 'created_at'), now()) }}
                                     </span>
                                 @else
                                     <span
-                                        title="Started: {{ formatDateInServerTimezone(data_get($backup->latest_log, 'created_at'), $backup->server()) }}&#10;Ended: {{ formatDateInServerTimezone(data_get($backup->latest_log, 'finished_at'), $backup->server()) }}">
+                                        title="{{ __('Started:') }} {{ formatDateInServerTimezone(data_get($backup->latest_log, 'created_at'), $backup->server()) }}&#10;{{ __('Ended:') }} {{ formatDateInServerTimezone(data_get($backup->latest_log, 'finished_at'), $backup->server()) }}">
                                         {{ \Carbon\Carbon::parse(data_get($backup->latest_log, 'finished_at'))->diffForHumans() }}
                                         ({{ calculateDuration(data_get($backup->latest_log, 'created_at'), data_get($backup->latest_log, 'finished_at')) }})
                                         •
@@ -90,16 +89,16 @@
                                         $size = data_get($backup->latest_log, 'size', 0);
                                     @endphp
                                     @if ($size > 0)
-                                        • Size: {{ formatBytes($size) }}
+                                        • {{ __('Size') }}: {{ formatBytes($size) }}
                                     @endif
                                 @endif
                                 @if ($backup->save_s3)
-                                    • S3: Enabled
+                                    • S3: {{ __('Enabled') }}
                                 @endif
                             @else
-                                Last Run: Never • Total Executions: 0
+                                {{ __('Last Run: Never • Total Executions: 0') }}
                                 @if ($backup->save_s3)
-                                    • S3: Enabled
+                                    • S3: {{ __('Enabled') }}
                                 @endif
                             @endif
                         </div>
@@ -140,9 +139,9 @@
                                 ])>
                                     @php
                                         $statusText = match (data_get($backup->latest_log, 'status')) {
-                                            'success' => 'Success',
-                                            'running' => 'In Progress',
-                                            'failed' => 'Failed',
+                                            'success' => __('Success'),
+                                            'running' => __('In Progress'),
+                                            'failed' => __('Failed'),
                                             default => ucfirst(data_get($backup->latest_log, 'status')),
                                         };
                                     @endphp
@@ -151,22 +150,22 @@
                             @else
                                 <span
                                     class="px-3 py-1 rounded-md text-xs font-medium tracking-wide shadow-xs bg-gray-100 text-gray-800 dark:bg-neutral-800 dark:text-gray-200">
-                                    No executions yet
+                                    {{ __('No executions yet') }}
                                 </span>
                             @endif
-                            <h3 class="font-semibold">{{ $backup->frequency }} Backup</h3>
+                            <h3 class="font-semibold">{{ $backup->frequency }} {{ __('Backup') }}</h3>
                         </div>
                         <div class="text-gray-600 dark:text-gray-400 text-sm">
                             @if ($backup->latest_log)
                                 @if (data_get($backup->latest_log, 'status') === 'running')
                                     <span
-                                        title="Started: {{ formatDateInServerTimezone(data_get($backup->latest_log, 'created_at'), $backup->server()) }}">
-                                        Running for
+                                        title="{{ __('Started:') }} {{ formatDateInServerTimezone(data_get($backup->latest_log, 'created_at'), $backup->server()) }}">
+                                        {{ __('Running for') }}
                                         {{ calculateDuration(data_get($backup->latest_log, 'created_at'), now()) }}
                                     </span>
                                 @else
                                     <span
-                                        title="Started: {{ formatDateInServerTimezone(data_get($backup->latest_log, 'created_at'), $backup->server()) }}&#10;Ended: {{ formatDateInServerTimezone(data_get($backup->latest_log, 'finished_at'), $backup->server()) }}">
+                                        title="{{ __('Started:') }} {{ formatDateInServerTimezone(data_get($backup->latest_log, 'created_at'), $backup->server()) }}&#10;{{ __('Ended:') }} {{ formatDateInServerTimezone(data_get($backup->latest_log, 'finished_at'), $backup->server()) }}">
                                         {{ \Carbon\Carbon::parse(data_get($backup->latest_log, 'finished_at'))->diffForHumans() }}
                                         ({{ calculateDuration(data_get($backup->latest_log, 'created_at'), data_get($backup->latest_log, 'finished_at')) }})
                                         •
@@ -178,20 +177,20 @@
                                         $size = data_get($backup->latest_log, 'size', 0);
                                     @endphp
                                     @if ($size > 0)
-                                        • Size: {{ formatBytes($size) }}
+                                        • {{ __('Size') }}: {{ formatBytes($size) }}
                                     @endif
                                 @endif
                                 @if ($backup->save_s3)
-                                    • S3: Enabled
+                                    • S3: {{ __('Enabled') }}
                                 @endif
-                                <br>Total Executions: {{ $backup->executions()->count() }}
+                                <br>{{ __('Total Executions:') }} {{ $backup->executions()->count() }}
                                 @php
                                     $successCount = $backup->executions()->where('status', 'success')->count();
                                     $totalCount = $backup->executions()->count();
                                     $successRate = $totalCount > 0 ? round(($successCount / $totalCount) * 100) : 0;
                                 @endphp
                                 @if ($totalCount > 0)
-                                    • Success Rate: <span @class([
+                                    • {{ __('Success Rate:') }} <span @class([
                                         'font-medium',
                                         'text-green-600' => $successRate >= 80,
                                         'text-warning-600' => $successRate >= 50 && $successRate < 80,
@@ -200,9 +199,9 @@
                                     ({{ $successCount }}/{{ $totalCount }})
                                 @endif
                             @else
-                                Last Run: Never • Total Executions: 0
+                                {{ __('Last Run: Never • Total Executions: 0') }}
                                 @if ($backup->save_s3)
-                                    • S3: Enabled
+                                    • S3: {{ __('Enabled') }}
                                 @endif
                             @endif
                         </div>

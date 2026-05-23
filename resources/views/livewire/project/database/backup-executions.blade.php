@@ -1,7 +1,7 @@
 <div wire:init='refreshBackupExecutions'>
     @isset($backup)
         <div class="flex items-center gap-2">
-            <h3 class="py-4">Executions <span class="text-xs">({{ $executions_count }})</span></h3>
+            <h3 class="py-4">{{ __('Executions') }} <span class="text-xs">({{ $executions_count }})</span></h3>
             @if ($executions_count > 0)
                 <div class="flex items-center gap-2">
                     <x-forms.button disabled="{{ !$showPrev }}" wire:click="previousPage('{{ $defaultTake }}')">
@@ -11,7 +11,7 @@
                         </svg>
                     </x-forms.button>
                     <span class="text-sm text-gray-600 dark:text-gray-400 px-2">
-                        Page {{ $currentPage }} of {{ ceil($executions_count / $defaultTake) }}
+                        {{ __('Page :current of :total', ['current' => $currentPage, 'total' => ceil($executions_count / $defaultTake)]) }}
                     </span>
                     <x-forms.button disabled="{{ !$showNext }}" wire:click="nextPage('{{ $defaultTake }}')">
                         <svg class="w-4 h-4" viewBox="0 0 24 24">
@@ -21,13 +21,13 @@
                     </x-forms.button>
                 </div>
             @endif
-            <x-forms.button wire:click='cleanupFailed'>Cleanup Failed Backups</x-forms.button>
-            <x-modal-confirmation title="Cleanup Deleted Backup Entries?" buttonTitle="Cleanup Deleted" isErrorButton
+            <x-forms.button wire:click='cleanupFailed'>{{ __('Cleanup Failed Backups') }}</x-forms.button>
+            <x-modal-confirmation :title="__('Cleanup Deleted Backup Entries?')" :buttonTitle="__('Cleanup Deleted')" isErrorButton
                 submitAction="cleanupDeleted()" 
-                :actions="['This will permanently delete all backup execution entries that are marked as deleted from local storage.', 'This only removes database entries, not actual backup files.']" 
+                :actions="[__('This will permanently delete all backup execution entries that are marked as deleted from local storage.'), __('This only removes database entries, not actual backup files.')]" 
                 confirmationText="cleanup deleted backups"
-                confirmationLabel="Please confirm by typing 'cleanup deleted backups' below"
-                shortConfirmationLabel="Confirmation" />
+                :confirmationLabel="__('Please confirm by typing \'cleanup deleted backups\' below')"
+                :shortConfirmationLabel="__('Confirmation')" />
         </div>
         <div @if (!$skip) wire:poll.5000ms="refreshBackupExecutions" @endif
             class="flex flex-col gap-4">
@@ -56,40 +56,40 @@
                             'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-200 dark:shadow-green-900/5' =>
                                 data_get($execution, 'status') === 'success' && data_get($execution, 's3_uploaded') !== false,
                         ])>
-                            @php
-                                $statusText = match (data_get($execution, 'status')) {
-                                    'success' => data_get($execution, 's3_uploaded') === false ? 'Success (S3 Warning)' : 'Success',
-                                    'running' => 'In Progress',
-                                    'failed' => 'Failed',
-                                    default => ucfirst(data_get($execution, 'status')),
-                                };
+                                    @php
+                                        $statusText = match (data_get($execution, 'status')) {
+                                            'success' => data_get($execution, 's3_uploaded') === false ? __('Success (S3 Warning)') : __('Success'),
+                                            'running' => __('In Progress'),
+                                            'failed' => __('Failed'),
+                                            default => ucfirst(data_get($execution, 'status')),
+                                        };
                             @endphp
                             {{ $statusText }}
                         </span>
                     </div>
                     <div class="text-gray-600 dark:text-gray-400 text-sm">
                         @if (data_get($execution, 'status') === 'running')
-                            <span title="Started: {{ formatDateInServerTimezone(data_get($execution, 'created_at'), $this->server()) }}">
-                                Running for {{ calculateDuration(data_get($execution, 'created_at'), now()) }}
+                            <span title="{{ __('Started:') }} {{ formatDateInServerTimezone(data_get($execution, 'created_at'), $this->server()) }}">
+                                {{ __('Running for') }} {{ calculateDuration(data_get($execution, 'created_at'), now()) }}
                             </span>
                         @else
-                            <span title="Started: {{ formatDateInServerTimezone(data_get($execution, 'created_at'), $this->server()) }}&#10;Ended: {{ formatDateInServerTimezone(data_get($execution, 'finished_at'), $this->server()) }}">
+                            <span title="{{ __('Started:') }} {{ formatDateInServerTimezone(data_get($execution, 'created_at'), $this->server()) }}&#10;{{ __('Ended:') }} {{ formatDateInServerTimezone(data_get($execution, 'finished_at'), $this->server()) }}">
                                 {{ \Carbon\Carbon::parse(data_get($execution, 'finished_at'))->diffForHumans() }}
                                 ({{ calculateDuration(data_get($execution, 'created_at'), data_get($execution, 'finished_at')) }})
                                 • {{ \Carbon\Carbon::parse(data_get($execution, 'finished_at'))->format('M j, H:i') }}
                             </span>
                         @endif
-                        • Database: {{ data_get($execution, 'database_name', 'N/A') }}
+                        • {{ __('Database') }}: {{ data_get($execution, 'database_name', __('N/A')) }}
                         @if(data_get($execution, 'size'))
-                            • Size: {{ formatBytes(data_get($execution, 'size')) }}
+                            • {{ __('Size') }}: {{ formatBytes(data_get($execution, 'size')) }}
                         @endif
                     </div>
                     <div class="text-gray-600 dark:text-gray-400 text-sm">
-                        Location: {{ data_get($execution, 'filename', 'N/A') }}
+                        {{ __('Location:') }} {{ data_get($execution, 'filename', __('N/A')) }}
                     </div>
                     <div class="flex items-center gap-3 mt-2">
                         <div class="text-gray-600 dark:text-gray-400 text-sm">
-                            Backup Availability:
+                            {{ __('Backup Availability:') }}
                         </div>
                         <span @class([
                             'px-2 py-1 rounded-sm text-xs font-medium',
@@ -144,7 +144,7 @@
                                                 clip-rule="evenodd"></path>
                                         </svg>
                                     @endif
-                                    S3 Storage
+                                    {{ __('S3 Storage') }}
                                 </span>
                             </span>
                         @endif
@@ -157,7 +157,7 @@
                     <div class="flex gap-2 mt-4">
                         @if (data_get($execution, 'status') === 'success')
                             <x-forms.button class="dark:hover:bg-coolgray-400"
-                                x-on:click="download_file('{{ data_get($execution, 'id') }}')">Download</x-forms.button>
+                                x-on:click="download_file('{{ data_get($execution, 'id') }}')">{{ __('Download') }}</x-forms.button>
                         @endif
                         @if ($backup->database_id === 0 && data_get($execution, 'is_instance_restore_package'))
                             @php
@@ -190,26 +190,26 @@
                             $deleteActions = [];
 
                             if (!data_get($execution, 'local_storage_deleted', false)) {
-                                $deleteActions[] = 'This backup will be permanently deleted from local storage.';
+                                $deleteActions[] = __('This backup will be permanently deleted from local storage.');
                             }
 
                             if (data_get($execution, 's3_uploaded') === true && !data_get($execution, 's3_storage_deleted', false)) {
-                                $executionCheckboxes[] = ['id' => 'delete_backup_s3', 'label' => 'Delete the selected backup permanently from S3 Storage'];
+                                $executionCheckboxes[] = ['id' => 'delete_backup_s3', 'label' => __('Delete the selected backup permanently from S3 Storage')];
                             }
 
                             if (empty($deleteActions)) {
-                                $deleteActions[] = 'This backup execution record will be deleted.';
+                                $deleteActions[] = __('This backup execution record will be deleted.');
                             }
                         @endphp
-                        <x-modal-confirmation title="Confirm Backup Deletion?" buttonTitle="Delete" isErrorButton
+                        <x-modal-confirmation :title="__('Confirm Backup Deletion?')" :buttonTitle="__('Delete')" isErrorButton
                             submitAction="deleteBackup({{ data_get($execution, 'id') }})" :checkboxes="$executionCheckboxes"
                             :actions="$deleteActions" confirmationText="{{ data_get($execution, 'filename') }}"
-                            confirmationLabel="Please confirm the execution of the actions by entering the Backup Filename below"
-                            shortConfirmationLabel="Backup Filename" 1 />
+                            :confirmationLabel="__('Please confirm the execution of the actions by entering the Backup Filename below')"
+                            :shortConfirmationLabel="__('Backup Filename')" 1 />
                     </div>
                 </div>
             @empty
-                <div class="p-4 bg-gray-100 dark:bg-coolgray-100 rounded-sm">No executions found.</div>
+                <div class="p-4 bg-gray-100 dark:bg-coolgray-100 rounded-sm">{{ __('No executions found.') }}</div>
             @endforelse
         </div>
     @endisset
