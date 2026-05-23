@@ -63,9 +63,9 @@ class CleanupRedis extends Command
         }
 
         if ($dryRun) {
-            $this->info("Redis cleanup: would delete {$deletedCount} items");
+            $this->info(trans('console.cleanup_redis.info.would_delete', ['count' => $deletedCount]));
         } else {
-            $this->info("Redis cleanup: deleted {$deletedCount} items");
+            $this->info(trans('console.cleanup_redis.info.deleted', ['count' => $deletedCount]));
         }
     }
 
