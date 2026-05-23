@@ -38,4 +38,16 @@ return [
         'updated_successfully' => 'Root password updated successfully.',
         'failed_to_update' => 'Failed to update Root password.',
     ],
+    'migration' => [
+        'description' => 'Start Migration',
+        'enabled' => 'Migration is enabled on this server.',
+        'disabled' => 'Migration is disabled on this server.',
+    ],
+    'traefik_check_version' => [
+        'description' => 'Check Traefik proxy versions on all servers and send notifications for outdated versions',
+        'checking' => 'Checking Traefik versions on all servers...',
+        'dispatched' => 'Traefik version check job dispatched successfully.',
+        'notifications_pending' => 'Notifications will be sent to teams with outdated Traefik versions.',
+        'dispatch_failed' => 'Failed to dispatch Traefik version check job: :message',
+    ],
 ];
