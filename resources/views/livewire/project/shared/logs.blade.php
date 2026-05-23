@@ -65,7 +65,7 @@
             @endif
         </div>
     @elseif ($type === 'service')
-        <livewire:project.service.heading :service="$resource" :parameters="$parameters" :query="$query" title="Logs" />
+        <livewire:project.service.heading :service="$resource" :parameters="$parameters" :query="$query" :title="__('Logs')" />
         <div>
             <h2>{{ __('Logs') }}</h2>
             @if (str($status)->contains('exited'))

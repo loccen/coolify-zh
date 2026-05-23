@@ -14,9 +14,9 @@
         </div>
         <div class="flex flex-col gap-2">
             @if ($database->started_at)
-                <div class="pt-2 dark:text-warning">If you change the values in the database, please sync it here,
-                    otherwise
-                    automations won't work. <br>Changing them here will not change the values in the database.
+                <div class="pt-2 dark:text-warning">
+                    {{ __('If you change the values in the database, please sync it here, otherwise automations won\'t work.') }}
+                    <br>{{ __('Changing them here will not change the values in the database.') }}
                 </div>
                 <div class="flex gap-2">
                     @if (version_compare($redisVersion, '6.0', '>='))
@@ -27,8 +27,7 @@
                         :helper="__('You can only change this in the database.')" canGate="update" :canResource="$database" />
                 </div>
             @else
-                <div class="pt-2 dark:text-warning">You can only change the username and password in the database after
-                    initial start.</div>
+                <div class="pt-2 dark:text-warning">{{ __('You can only change the username and password in the database after initial start.') }}</div>
                 <div class="flex gap-2">
                     @if (version_compare($redisVersion, '6.0', '>='))
                         <x-forms.input :label="__('Username')" id="redisUsername" required
@@ -76,8 +75,8 @@
                     @if ($enableSsl && $certificateValidUntil)
                         <x-modal-confirmation :title="__('Regenerate SSL Certificates')"
                             :buttonTitle="__('Regenerate SSL Certificates')" :actions="[
-                                'The SSL certificate of this database will be regenerated.',
-                                'You must restart the database after regenerating the certificate to start using the new certificate.',
+                                __('The SSL certificate of this database will be regenerated.'),
+                                __('You must restart the database after regenerating the certificate to start using the new certificate.'),
                             ]"
                             submitAction="regenerateSslCertificate" :confirmWithText="false" :confirmWithPassword="false" />
                     @endif

@@ -12,13 +12,12 @@
             <x-forms.input :label="__('Image')" id="image" required canGate="update" :canResource="$database"
                 :helper="__('For all available images, check here:<br><br><a target=\'_blank\' href=\'https://hub.docker.com/_/mongo\'>https://hub.docker.com/_/mongo</a>')" />
         </div>
-        <div class="pt-2 dark:text-warning">If you change the values in the database, please sync it here, otherwise
-            automations (like backups) won't work.
+        <div class="pt-2 dark:text-warning">{{ __('If you change the values in the database, please sync it here, otherwise automations won\'t work.') }}
         </div>
         @if ($database->started_at)
             <div class="flex xl:flex-row flex-col gap-2">
                 <x-forms.input :label="__('Initial Username')" id="mongoInitdbRootUsername"
-                    placeholder="If empty: postgres"
+                    :placeholder="__('If empty: postgres')"
                     :helper="__('If you change this in the database, please sync it here, otherwise automations (like backups) won\'t work.')"
                     canGate="update" :canResource="$database" />
                 <x-forms.input :label="__('Initial Password')" id="mongoInitdbRootPassword" type="password"
@@ -26,17 +25,17 @@
                     :helper="__('If you change this in the database, please sync it here, otherwise automations (like backups) won\'t work.')"
                     canGate="update" :canResource="$database" />
                 <x-forms.input :label="__('Initial Database')" id="mongoInitdbDatabase"
-                    placeholder="If empty, it will be the same as Username." readonly
+                    :placeholder="__('If empty, it will be the same as Username.')" readonly
                     :helper="__('You can only change this in the database.')" canGate="update" :canResource="$database" />
             </div>
         @else
             <div class="flex xl:flex-row flex-col gap-2 pb-2">
                 <x-forms.input required :label="__('Username')" id="mongoInitdbRootUsername"
-                    placeholder="If empty: postgres" canGate="update" :canResource="$database" />
+                    :placeholder="__('If empty: postgres')" canGate="update" :canResource="$database" />
                 <x-forms.input :label="__('Password')" id="mongoInitdbRootPassword" type="password" required
                     canGate="update" :canResource="$database" />
                 <x-forms.input required :label="__('Database')" id="mongoInitdbDatabase"
-                    placeholder="If empty, it will be the same as Username." canGate="update" :canResource="$database" />
+                    :placeholder="__('If empty, it will be the same as Username.')" canGate="update" :canResource="$database" />
             </div>
         @endif
         <x-forms.input
@@ -67,8 +66,8 @@
                     @if ($enableSsl)
                         <x-modal-confirmation :title="__('Regenerate SSL Certificates')"
                             :buttonTitle="__('Regenerate SSL Certificates')" :actions="[
-                                'The SSL certificate of this database will be regenerated.',
-                                'You must restart the database after regenerating the certificate to start using the new certificate.',
+                                __('The SSL certificate of this database will be regenerated.'),
+                                __('You must restart the database after regenerating the certificate to start using the new certificate.'),
                             ]"
                             submitAction="regenerateSslCertificate" :confirmWithText="false" :confirmWithPassword="false" />
                     @endif

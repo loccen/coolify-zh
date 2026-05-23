@@ -58,7 +58,7 @@ class Heading extends Component
         if ($this->database->destination->server->isFunctional()) {
             GetContainersStatus::dispatch($this->database->destination->server);
         } else {
-            $this->dispatch('error', 'Server is not functional.');
+            $this->dispatch('error', __('Server is not functional.'));
         }
     }
 

@@ -15,7 +15,7 @@
 
         @if ($database->started_at)
             <div class="flex gap-2">
-                <x-forms.input :label="__('Initial Username')" id="clickhouseAdminUser" placeholder="If empty: clickhouse"
+                <x-forms.input :label="__('Initial Username')" id="clickhouseAdminUser" :placeholder="__('If empty: clickhouse')"
                     readonly :helper="__('You can only change this in the database.')" canGate="update" :canResource="$database" />
                 <x-forms.input :label="__('Initial Password')" id="clickhouseAdminPassword" type="password" required readonly
                     :helper="__('You can only change this in the database.')" canGate="update" :canResource="$database" />

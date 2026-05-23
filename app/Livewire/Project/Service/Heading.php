@@ -50,7 +50,7 @@ class Heading extends Component
         if ($this->service->server->isFunctional()) {
             GetContainersStatus::dispatch($this->service->server);
         } else {
-            $this->dispatch('error', 'Server is not functional.');
+            $this->dispatch('error', __('Server is not functional.'));
         }
     }
 
@@ -135,7 +135,7 @@ class Heading extends Component
     {
         $this->checkDeployments();
         if ($this->isDeploymentProgress) {
-            $this->dispatch('error', 'There is a deployment in progress.');
+            $this->dispatch('error', __('There is a deployment in progress.'));
 
             return;
         }
@@ -147,7 +147,7 @@ class Heading extends Component
     {
         $this->checkDeployments();
         if ($this->isDeploymentProgress) {
-            $this->dispatch('error', 'There is a deployment in progress.');
+            $this->dispatch('error', __('There is a deployment in progress.'));
 
             return;
         }

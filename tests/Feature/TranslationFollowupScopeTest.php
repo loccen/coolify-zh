@@ -40,6 +40,8 @@ it('uses explicit translation lookups in follow-up i18n views', function () {
     $resourceIndex = file_get_contents($viewsRoot.'/livewire/project/resource/index.blade.php');
     $resourceCreate = file_get_contents($viewsRoot.'/livewire/project/resource/create.blade.php');
     $databaseBackupIndex = file_get_contents($viewsRoot.'/livewire/project/database/backup/index.blade.php');
+    $databaseBackupExecution = file_get_contents($viewsRoot.'/livewire/project/database/backup/execution.blade.php');
+    $databaseCreateScheduledBackup = file_get_contents($viewsRoot.'/livewire/project/database/create-scheduled-backup.blade.php');
     $databaseScheduledBackups = file_get_contents($viewsRoot.'/livewire/project/database/scheduled-backups.blade.php');
 
     expect($sentinel)
@@ -168,6 +170,13 @@ it('uses explicit translation lookups in follow-up i18n views', function () {
         ->toContain("{{ __('Backups') }}")
         ->toContain("{{ __('Scheduled Backups') }}")
         ->toContain(":title=\"__('New Scheduled Backup')\"")
+        ->and($databaseBackupExecution)
+        ->toContain("{{ __('Backup') }} | Coolify")
+        ->toContain("{{ __('Backups') }}")
+        ->and($databaseCreateScheduledBackup)
+        ->toContain("__('No validated S3 Storages found.')")
+        ->toContain("__('Save to S3')")
+        ->toContain("__('Select a S3 Storage')")
         ->and($databaseScheduledBackups)
         ->toContain("{{ __('No scheduled backups configured.') }}");
 });
@@ -259,6 +268,9 @@ it('resolves representative follow-up translations in zh_CN', function () {
         ->and(__('Backups'))->toBe('备份')
         ->and(__('Scheduled Backups'))->toBe('计划备份')
         ->and(__('No scheduled backups configured.'))->toBe('未配置计划备份。')
+        ->and(__('No validated S3 Storages found.'))->toBe('未找到经过验证的 S3 存储。')
+        ->and(__('Save to S3'))->toBe('保存到S3')
+        ->and(__('Select a S3 Storage'))->toBe('选择 S3 存储')
         ->and(__('Server:'))->toBe('服务器：')
         ->and(__('Server is unreachable or misconfigured'))->toBe('服务器无法访问或配置有误')
         ->and(__('running'))->toBe('运行中')
@@ -273,6 +285,11 @@ it('resolves representative follow-up translations in zh_CN', function () {
         ->and(__('Enable SSL'))->toBe('启用 SSL')
         ->and(__('Please verify these values. You can only modify them before the initial start. After that, you need to modify it in the database.'))->toBe('请确认这些值。它们只能在首次启动前修改，启动之后需要直接在数据库中变更。')
         ->and(__('Starting the database will generate this.'))->toBe('启动数据库后会自动生成此值。')
+        ->and(__('If you change the values in the database, please sync it here, otherwise automations won\'t work.'))->toBe('如果你在数据库中修改了这些值，请在这里同步，否则自动化功能将无法工作。')
+        ->and(__('Changing them here will not change the values in the database.'))->toBe('在这里修改不会改变数据库中的实际值。')
+        ->and(__('You can only change the username and password in the database after initial start.'))->toBe('首次启动后，你只能直接在数据库中修改用户名和密码。')
+        ->and(__('The SSL certificate of this database will be regenerated.'))->toBe('这个数据库的 SSL 证书将被重新生成。')
+        ->and(__('You must restart the database after regenerating the certificate to start using the new certificate.'))->toBe('重新生成证书后，你必须重启数据库才能使用新的证书。')
         ->and(__('Custom ClickHouse Configuration'))->toBe('自定义 ClickHouse 配置')
         ->and(__('Custom Dragonfly Configuration'))->toBe('自定义 Dragonfly 配置')
         ->and(__('settings.instance_updated'))->toBe('设置已更新。')

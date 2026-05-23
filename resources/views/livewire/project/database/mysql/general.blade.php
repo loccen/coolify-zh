@@ -12,8 +12,7 @@
             <x-forms.input :label="__('Image')" id="image" required
                 :helper="__('For all available images, check here:<br><br><a target=\'_blank\' href=\'https://hub.docker.com/_/mysql\'>https://hub.docker.com/_/mysql</a>')" canGate="update" :canResource="$database" />
         </div>
-        <div class="pt-2 dark:text-warning">If you change the values in the database, please sync it here, otherwise
-            automations (like backups) won't work.
+        <div class="pt-2 dark:text-warning">{{ __('If you change the values in the database, please sync it here, otherwise automations won\'t work.') }}
         </div>
         @if ($database->started_at)
             <div class="flex xl:flex-row flex-col gap-2">
@@ -26,7 +25,7 @@
             </div>
             <div class="flex flex-col gap-2">
                 <x-forms.input :label="__('Initial Database')" id="mysqlDatabase"
-                    placeholder="If empty, it will be the same as Username." readonly
+                    :placeholder="__('If empty, it will be the same as Username.')" readonly
                     :helper="__('You can only change this in the database.')" canGate="update" :canResource="$database" />
             </div>
         @else
@@ -40,7 +39,7 @@
             </div>
             <div class="flex flex-col gap-2">
                 <x-forms.input :label="__('Initial Database')" id="mysqlDatabase"
-                    placeholder="If empty, it will be the same as Username."
+                    :placeholder="__('If empty, it will be the same as Username.')"
                     :helper="__('You can only change this in the database.')" canGate="update" :canResource="$database" />
             </div>
         @endif
@@ -73,8 +72,8 @@
                     @if ($enableSsl && $certificateValidUntil)
                         <x-modal-confirmation :title="__('Regenerate SSL Certificates')"
                             :buttonTitle="__('Regenerate SSL Certificates')" :actions="[
-                                'The SSL certificate of this database will be regenerated.',
-                                'You must restart the database after regenerating the certificate to start using the new certificate.',
+                                __('The SSL certificate of this database will be regenerated.'),
+                                __('You must restart the database after regenerating the certificate to start using the new certificate.'),
                             ]"
                             submitAction="regenerateSslCertificate" :confirmWithText="false" :confirmWithPassword="false" />
                     @endif
