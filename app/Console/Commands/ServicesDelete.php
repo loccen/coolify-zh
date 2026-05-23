@@ -36,13 +36,20 @@ class ServicesDelete extends Command
      */
     protected $description = 'Delete a service from the database';
 
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->setDescription(trans('console.services_delete.description', locale: app()->getLocale()));
+    }
+
     /**
      * Execute the console command.
      */
     public function handle()
     {
         $resource = select(
-            'What service do you want to delete?',
+            trans('console.services_delete.select_resource'),
             ['Application', 'Database', 'Service', 'Server'],
         );
         if ($resource === 'Application') {
@@ -65,7 +72,7 @@ class ServicesDelete extends Command
             return;
         }
         $serversToDelete = multiselect(
-            label: 'What server do you want to delete?',
+            label: trans('console.services_delete.select_server'),
             options: $servers->pluck('name', 'id')->sortKeys(),
         );
 
@@ -91,7 +98,7 @@ class ServicesDelete extends Command
             return;
         }
         $applicationsToDelete = multiselect(
-            'What application do you want to delete?',
+            trans('console.services_delete.select_application'),
             $applications->pluck('name', 'id')->sortKeys(),
         );
 
@@ -177,7 +184,7 @@ class ServicesDelete extends Command
         }
 
         $databasesToDelete = multiselect(
-            'What database do you want to delete?',
+            trans('console.services_delete.select_database'),
             $databaseOptions->sortKeys(),
         );
 
@@ -203,7 +210,7 @@ class ServicesDelete extends Command
             return;
         }
         $servicesToDelete = multiselect(
-            'What service do you want to delete?',
+            trans('console.services_delete.select_service'),
             $services->pluck('name', 'id')->sortKeys(),
         );
 
