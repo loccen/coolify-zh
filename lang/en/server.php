@@ -53,6 +53,7 @@ return [
         'proxy_dynamic_configuration_saved' => 'Dynamic configuration saved.',
         'proxy_running' => 'Proxy is running.',
         'proxy_restart_failed' => 'Proxy restart failed. Check logs.',
+        'docker_swarm_initiated' => 'Docker Swarm is initiated.',
         'invalid_container_identifier' => 'Invalid container identifier.',
         'container_started' => 'Container started.',
         'container_restarted' => 'Container restarted.',
@@ -63,5 +64,6 @@ return [
         'test_email_failed' => 'Failed to send test email: :error',
         'ca_certificate_saved_successfully' => 'CA Certificate saved successfully.',
         'ca_certificate_regenerated_successfully' => 'CA Certificate regenerated successfully.',
+        'server_validated_proxy_starting' => 'Server validated, proxy is starting in a moment.',
     ],
 ];

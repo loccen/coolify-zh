@@ -53,6 +53,7 @@ return [
         'proxy_dynamic_configuration_saved' => '动态配置已保存。',
         'proxy_running' => '代理正在运行。',
         'proxy_restart_failed' => '代理重启失败。请查看日志。',
+        'docker_swarm_initiated' => 'Docker Swarm 已初始化。',
         'invalid_container_identifier' => '容器标识符无效。',
         'container_started' => '容器已启动。',
         'container_restarted' => '容器已重启。',
@@ -63,5 +64,6 @@ return [
         'test_email_failed' => '发送测试邮件失败：:error',
         'ca_certificate_saved_successfully' => 'CA 证书已保存。',
         'ca_certificate_regenerated_successfully' => 'CA 证书已重新生成。',
+        'server_validated_proxy_starting' => '服务器已验证，代理即将启动。',
     ],
 ];
