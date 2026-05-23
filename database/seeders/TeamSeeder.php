@@ -12,7 +12,8 @@ class TeamSeeder extends Seeder
     {
         $normal_user_in_root_team = User::find(1);
         $root_user_personal_team = Team::find(0);
-        $root_user_personal_team->description = 'The root team';
+        $root_user_personal_team->name = '根团队';
+        $root_user_personal_team->description = '系统默认根团队';
         $root_user_personal_team->save();
 
         $normal_user_in_root_team->teams()->attach($root_user_personal_team);

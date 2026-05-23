@@ -368,8 +368,8 @@ class DevelopmentRailpackExamplesSeeder extends Seeder
         Team::query()->firstOrCreate(
             ['id' => 0],
             [
-                'name' => 'Root Team',
-                'description' => 'The root team',
+                'name' => '根团队',
+                'description' => '系统默认根团队',
                 'personal_team' => true,
             ],
         );
@@ -409,15 +409,18 @@ KEY,
             ],
         );
 
-        StandaloneDocker::query()->firstOrCreate(
-            ['id' => 0],
+        $standaloneDocker = StandaloneDocker::query()->firstOrCreate(
+            [
+                'server_id' => 0,
+                'network' => 'coolify',
+            ],
             [
                 'uuid' => 'docker',
-                'name' => 'Standalone Docker 1',
-                'network' => 'coolify',
-                'server_id' => 0,
+                'name' => '本地 Standalone Docker',
             ],
         );
+        $standaloneDocker->name = '本地 Standalone Docker';
+        $standaloneDocker->save();
 
         $this->ensurePublicGithubSourceExists();
     }
@@ -428,7 +431,7 @@ KEY,
             ['id' => 0],
             [
                 'uuid' => 'github-public',
-                'name' => 'Public GitHub',
+                'name' => '公开 GitHub',
                 'api_url' => 'https://api.github.com',
                 'html_url' => 'https://github.com',
                 'is_public' => true,

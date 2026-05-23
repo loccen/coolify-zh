@@ -1,12 +1,17 @@
 <?php
 
 use App\Models\Application;
+use App\Models\GithubApp;
 use App\Models\Project;
 use App\Models\PrivateKey;
 use App\Models\S3Storage;
 use App\Models\Server;
 use App\Models\StandalonePostgresql;
 use App\Models\StandaloneRedis;
+use App\Models\StandaloneDocker;
+use App\Models\Team;
+use Database\Seeders\DevelopmentRailpackExamplesSeeder;
+use Database\Seeders\GithubAppSeeder;
 use Database\Seeders\ApplicationSeeder;
 use Database\Seeders\PrivateKeySeeder;
 use Database\Seeders\ProjectSeeder;
@@ -97,4 +102,63 @@ it('seeds localized development application, database, and private key examples'
         ->not->toBeNull()
         ->and($githubKey->name)->toBe('开发环境 GitHub App')
         ->and($githubKey->description)->toBe('这是开发环境 GitHub App 使用的私钥');
+});
+
+it('seeds localized development team, destination, and source examples', function () {
+    $this->seed([
+        UserSeeder::class,
+        TeamSeeder::class,
+        PrivateKeySeeder::class,
+        ServerSeeder::class,
+        StandaloneDockerSeeder::class,
+        GithubAppSeeder::class,
+    ]);
+
+    $team = Team::query()->find(0);
+    $destination = StandaloneDocker::query()
+        ->where('server_id', 0)
+        ->where('network', 'coolify')
+        ->latest('id')
+        ->first();
+    $githubApp = GithubApp::query()->find(0);
+
+    expect($team)
+        ->not->toBeNull()
+        ->and($team->name)->toBe('根团队')
+        ->and($team->description)->toBe('系统默认根团队');
+
+    expect($destination)
+        ->not->toBeNull()
+        ->and($destination->getRawOriginal('name'))->toBe('本地 Standalone Docker');
+
+    expect($githubApp)
+        ->not->toBeNull()
+        ->and($githubApp->name)->toBe('公开 GitHub');
+});
+
+it('seeds localized development railpack prerequisites when created on demand', function () {
+    config()->set('app.env', 'local');
+
+    $this->seed(DevelopmentRailpackExamplesSeeder::class);
+
+    $team = Team::query()->find(0);
+    $destination = StandaloneDocker::query()
+        ->where('server_id', 0)
+        ->where('network', 'coolify')
+        ->latest('id')
+        ->first();
+    $githubApp = GithubApp::query()->find(0);
+
+    expect($team)
+        ->not->toBeNull()
+        ->and($team->name)->toBe('根团队')
+        ->and($team->description)->toBe('系统默认根团队');
+
+    expect($destination)
+        ->not->toBeNull()
+        ->and($destination->getRawOriginal('name'))->toBe('本地 Standalone Docker');
+
+    expect($githubApp)
+        ->not->toBeNull()
+        ->and($githubApp->name)->toBe('公开 GitHub');
 });

@@ -15,7 +15,7 @@ class GithubAppSeeder extends Seeder
         GithubApp::create([
             'id' => 0,
             'uuid' => 'github-public',
-            'name' => 'Public GitHub',
+            'name' => '公开 GitHub',
             'api_url' => 'https://api.github.com',
             'html_url' => 'https://github.com',
             'is_public' => true,
