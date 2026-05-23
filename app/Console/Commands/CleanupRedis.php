@@ -292,7 +292,7 @@ class CleanupRedis extends Command
             // TTL > 0 means lock is valid and will expire
             if ($ttl === -1) {
                 if ($dryRun) {
-                    $this->warn("  Would delete STALE lock (no expiration): {$lockKey}");
+                    $this->warn(trans('console.cleanup_redis.warn.would_delete_stale_lock', ['key' => $lockKey]));
                 } else {
                     $redis->del($lockKey);
                 }
@@ -325,7 +325,7 @@ class CleanupRedis extends Command
 
             // Guard against scan() returning false
             if ($result === false) {
-                $this->error('Redis scan failed, stopping key retrieval');
+                $this->error(trans('console.cleanup_redis.error.redis_scan_failed'));
                 break;
             }
 
@@ -358,7 +358,11 @@ class CleanupRedis extends Command
             if ($payloadData === null || json_last_error() !== JSON_ERROR_NONE) {
                 $errorMsg = json_last_error_msg();
                 $truncatedPayload = is_string($payload) ? substr($payload, 0, 200) : 'non-string payload';
-                $this->error("Failed to decode job payload for {$keyWithoutPrefix}: {$errorMsg}. Payload: {$truncatedPayload}");
+                $this->error(trans('console.cleanup_redis.error.failed_to_decode_job_payload', [
+                    'key' => $keyWithoutPrefix,
+                    'error' => $errorMsg,
+                    'payload' => $truncatedPayload,
+                ]));
 
                 continue;
             }
@@ -409,7 +413,11 @@ class CleanupRedis extends Command
 
             if ($shouldFail) {
                 if ($dryRun) {
-                    $this->warn("  Would mark as FAILED: {$jobClass} (processing for ".round($processingTime / 60, 1)." min) - {$reason}");
+                    $this->warn(trans('console.cleanup_redis.warn.would_mark_failed', [
+                        'jobClass' => $jobClass,
+                        'minutes' => round($processingTime / 60, 1),
+                        'reason' => $reason,
+                    ]));
                 } else {
                     // Mark job as failed
                     $redis->command('hset', [$keyWithoutPrefix, 'status', 'failed']);

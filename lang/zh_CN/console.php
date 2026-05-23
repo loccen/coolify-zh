@@ -88,6 +88,14 @@ return [
             'would_delete' => 'Redis 清理：将删除 :count 项',
             'deleted' => 'Redis 清理：已删除 :count 项',
         ],
+        'warn' => [
+            'would_delete_stale_lock' => '将删除过期锁（无过期时间）：:key',
+            'would_mark_failed' => '将标记为失败：:jobClass（处理了 :minutes 分钟）- :reason',
+        ],
+        'error' => [
+            'redis_scan_failed' => 'Redis 扫描失败，停止获取键',
+            'failed_to_decode_job_payload' => '解码作业负载失败：:key：:error。负载：:payload',
+        ],
     ],
     'cleanup_names' => [
         'error' => [
