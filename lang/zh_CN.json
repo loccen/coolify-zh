@@ -1275,7 +1275,7 @@
     "Search updates...": "搜索更新...",
     "Searching...": "搜索中...",
     "Seconds to wait for SSH connection before failing. Default: 10.": "SSH 连接失败前的等待秒数。默认值：10。",
-    "Secret Key": "秘密钥匙",
+    "Secret Key": "Secret Key",
     "Secure your servers with Cloudflare Tunnel.": "使用 Cloudflare Tunnel 保护你的服务器。",
     "Security": "安全",
     "Security related settings.": "安全相关设置。",

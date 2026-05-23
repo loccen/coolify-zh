@@ -29,7 +29,9 @@ it('uses explicit translation lookups in the static UI views under scope', funct
     $terminal = file_get_contents($viewsRoot.'/terminal/index.blade.php');
     $storageShow = file_get_contents($viewsRoot.'/storage/show.blade.php');
     $storageForm = file_get_contents($viewsRoot.'/storage/form.blade.php');
+    $storageResources = file_get_contents($viewsRoot.'/storage/resources.blade.php');
     $destination = file_get_contents($viewsRoot.'/destination/show.blade.php');
+    $tagDeployments = file_get_contents($viewsRoot.'/tags/deployments.blade.php');
 
     expect($dashboard)
         ->toContain("__('dashboard.subtitle')")
@@ -55,6 +57,15 @@ it('uses explicit translation lookups in the static UI views under scope', funct
         ->toContain("__('storage.fields.access_key')")
         ->toContain("__('storage.fields.secret_key')")
         ->toContain("__('storage.validate_connection')")
+        ->and($storageResources)
+        ->toContain("__('Enabled')")
+        ->toContain("__('Disable S3')")
+        ->and($tagDeployments)
+        ->toContain("__('In Progress')")
+        ->toContain("__('Queued')")
+        ->toContain("__('Success')")
+        ->toContain("__('Failed')")
+        ->toContain("__('Cancelled')")
         ->and($destination)
         ->toContain("__('destination.subtitle.simple')")
         ->toContain("__('destination.fields.server_ip')")
@@ -70,7 +81,8 @@ it('resolves representative zh CN translations for the static UI scope', functio
         ->and(__('terminal.loading_containers'))->toBe('正在加载服务器和容器...')
         ->and(__('storage.fields.name'))->toBe('名称')
         ->and(__('storage.fields.endpoint'))->toBe('端点')
-        ->and(__('storage.fields.secret_key'))->toBe('秘密密钥')
+        ->and(__('storage.fields.secret_key'))->toBe('Secret Key')
+        ->and(__('Secret Key'))->toBe('Secret Key')
         ->and(__('destination.fields.docker_network'))->toBe('Docker 网络')
         ->and(__('Docker Network'))->toBe('Docker 网络');
 });
@@ -116,6 +128,38 @@ it('renders representative translated static UI fragments in zh CN', function ()
         ]),
     ])->render();
 
+    $tagDeploymentsHtml = view('livewire.tags.deployments', [
+        'deploymentsPerTagPerServer' => [
+            'server-a' => [
+                [
+                    'application_name' => 'app-1',
+                    'deployment_url' => '/deployments/1',
+                    'status' => 'queued',
+                ],
+                [
+                    'application_name' => 'app-2',
+                    'deployment_url' => '/deployments/2',
+                    'status' => 'in_progress',
+                ],
+                [
+                    'application_name' => 'app-3',
+                    'deployment_url' => '/deployments/3',
+                    'status' => 'finished',
+                ],
+                [
+                    'application_name' => 'app-4',
+                    'deployment_url' => '/deployments/4',
+                    'status' => 'failed',
+                ],
+                [
+                    'application_name' => 'app-5',
+                    'deployment_url' => '/deployments/5',
+                    'status' => 'cancelled-by-user',
+                ],
+            ],
+        ],
+    ])->render();
+
     $destinationHtml = view('livewire.destination.show', [
         'destination' => $destination,
         'network' => 'coolify-prod',
@@ -132,7 +176,15 @@ it('renders representative translated static UI fragments in zh CN', function ()
         ->toContain('名称')
         ->toContain('端点')
         ->toContain('访问密钥')
-        ->toContain('秘密密钥')
+        ->toContain('Secret Key')
+        ->and($tagDeploymentsHtml)
+        ->toContain('排队中')
+        ->toContain('进行中')
+        ->toContain('成功')
+        ->toContain('失败')
+        ->toContain('已取消')
+        ->not->toContain('Queued')
+        ->not->toContain('In Progress')
         ->and($destinationHtml)
         ->toContain('一个简单的 Docker 网络。')
         ->toContain('服务器 IP')
