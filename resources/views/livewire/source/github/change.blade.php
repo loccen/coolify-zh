@@ -127,15 +127,15 @@
                     </div>
                     <div class="flex flex-col sm:flex-row gap-2">
                         <x-forms.input id="contents" :helper="__('read - mandatory.')" :label="__('Content')" readonly
-                            placeholder="N/A" />
+                            :placeholder="__('N/A')" />
                         <x-forms.input id="metadata" :helper="__('read - mandatory.')" :label="__('Metadata')" readonly
-                            placeholder="N/A" />
+                            :placeholder="__('N/A')" />
                         {{-- <x-forms.input id="administration"
                             helper="read:write access needed to setup servers as GitHub Runner." label="Administration"
                             readonly placeholder="N/A" /> --}}
                         <x-forms.input id="pullRequests"
                             :helper="__('write access needed to use deployment status update in previews.')"
-                            :label="__('Pull Request')" readonly placeholder="N/A" />
+                            :label="__('Pull Request')" readonly :placeholder="__('N/A')" />
                     </div>
                 </div>
             @endif
