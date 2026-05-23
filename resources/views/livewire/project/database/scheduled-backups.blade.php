@@ -209,7 +209,7 @@
                     </div>
                 @endif
             @empty
-                <div>No scheduled backups configured.</div>
+                <div>{{ __('No scheduled backups configured.') }}</div>
             @endforelse
         @endif
     </div>

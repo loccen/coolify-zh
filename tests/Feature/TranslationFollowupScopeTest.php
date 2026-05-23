@@ -37,6 +37,10 @@ it('uses explicit translation lookups in follow-up i18n views', function () {
     $destination = file_get_contents($viewsRoot.'/livewire/project/shared/destination.blade.php');
     $tags = file_get_contents($viewsRoot.'/livewire/project/shared/tags.blade.php');
     $scheduledTasks = file_get_contents($viewsRoot.'/livewire/project/shared/scheduled-task/all.blade.php');
+    $resourceIndex = file_get_contents($viewsRoot.'/livewire/project/resource/index.blade.php');
+    $resourceCreate = file_get_contents($viewsRoot.'/livewire/project/resource/create.blade.php');
+    $databaseBackupIndex = file_get_contents($viewsRoot.'/livewire/project/database/backup/index.blade.php');
+    $databaseScheduledBackups = file_get_contents($viewsRoot.'/livewire/project/database/scheduled-backups.blade.php');
 
     expect($sentinel)
         ->toContain("{{ __('Sentinel') }}")
@@ -151,7 +155,21 @@ it('uses explicit translation lookups in follow-up i18n views', function () {
         ->and($scheduledTasks)
         ->toContain("{{ __('Scheduled Tasks') }}")
         ->toContain("__('Last run')")
-        ->toContain("__('No runs yet')");
+        ->toContain("__('No runs yet')")
+        ->and($resourceIndex)
+        ->toContain("{{ __('New') }}")
+        ->toContain("title=\"{{ __('running') }}\"")
+        ->toContain("{{ __('Server:') }}")
+        ->toContain("{{ __('Server is unreachable or misconfigured') }}")
+        ->toContain("{{ __('Add tag') }}")
+        ->and($resourceCreate)
+        ->toContain("{{ __('New') }}")
+        ->and($databaseBackupIndex)
+        ->toContain("{{ __('Backups') }}")
+        ->toContain("{{ __('Scheduled Backups') }}")
+        ->toContain(":title=\"__('New Scheduled Backup')\"")
+        ->and($databaseScheduledBackups)
+        ->toContain("{{ __('No scheduled backups configured.') }}");
 });
 
 it('resolves representative follow-up translations in zh_CN', function () {
@@ -189,10 +207,22 @@ it('resolves representative follow-up translations in zh_CN', function () {
         ->and(__('Documentation for this environment variable.'))->toBe('这个环境变量的说明。')
         ->and(__('Resource Operations'))->toBe('资源操作')
         ->and(__('Assigned Tags'))->toBe('已分配标签')
+        ->and(__('Add tag'))->toBe('添加标签')
         ->and(__('Choose a destination...'))->toBe('选择目标位置...')
         ->and(__('Last run'))->toBe('上次运行')
         ->and(__('Promote to Primary'))->toBe('设为主服务器')
         ->and(__('Resource Name'))->toBe('资源名称')
+        ->and(__('New'))->toBe('新建')
+        ->and(__('Backups'))->toBe('备份')
+        ->and(__('Scheduled Backups'))->toBe('计划备份')
+        ->and(__('No scheduled backups configured.'))->toBe('未配置计划备份。')
+        ->and(__('Server:'))->toBe('服务器：')
+        ->and(__('Server is unreachable or misconfigured'))->toBe('服务器无法访问或配置有误')
+        ->and(__('running'))->toBe('运行中')
+        ->and(__('exited'))->toBe('已退出')
+        ->and(__('starting'))->toBe('启动中')
+        ->and(__('restarting'))->toBe('重启中')
+        ->and(__('degraded'))->toBe('已降级')
         ->and(__('settings.instance_updated'))->toBe('设置已更新。')
         ->and(trans('settings.instance_updated'))->toBe('设置已更新。');
 });
