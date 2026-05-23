@@ -75,6 +75,11 @@ return [
         'delete_application_deployment_queues' => '删除 application_deployment_queues 中的 :count 条记录。',
         'delete_scheduled_task_executions' => '删除 scheduled_task_executions 中的 :count 条记录。',
     ],
+    'cleanup_unreachable_servers' => [
+        'description' => '清理不可达服务器（7 天）',
+        'running' => '正在清理不可达服务器...',
+        'cleanup_server' => '清理不可达服务器 :id，名称为 :name',
+    ],
     'traefik_check_version' => [
         'description' => '检查所有服务器上的 Traefik 代理版本，并向过期版本发送通知',
         'checking' => '正在检查所有服务器上的 Traefik 版本...',

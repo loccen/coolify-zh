@@ -75,6 +75,11 @@ return [
         'delete_application_deployment_queues' => 'Delete :count entries from application_deployment_queues.',
         'delete_scheduled_task_executions' => 'Delete :count entries from scheduled_task_executions.',
     ],
+    'cleanup_unreachable_servers' => [
+        'description' => 'Cleanup Unreachable Servers (7 days)',
+        'running' => 'Running unreachable server cleanup...',
+        'cleanup_server' => 'Cleanup unreachable server :id with name :name',
+    ],
     'traefik_check_version' => [
         'description' => 'Check Traefik proxy versions on all servers and send notifications for outdated versions',
         'checking' => 'Checking Traefik versions on all servers...',
