@@ -17,7 +17,7 @@
     </div>
     <div class="flex gap-2">
         <x-forms.input canGate="update" :canResource="$service" id="name" required :label="__('Service Name')"
-            placeholder="My super WordPress site" />
+            :placeholder="__('My super WordPress site')" />
         <x-forms.input canGate="update" :canResource="$service" id="description" :label="__('Description')" />
     </div>
     <div>
