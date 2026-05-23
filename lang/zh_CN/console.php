@@ -123,6 +123,17 @@ return [
         'running' => '正在清理不可达服务器...',
         'cleanup_server' => '清理不可达服务器 :id，名称为 :name',
     ],
+    'scheduled_job_diagnostics' => [
+        'description' => '检查所有计划任务的去重缓存状态和调度决策',
+        'heartbeat' => 'Scheduler heartbeat: :heartbeat (:age)',
+        'heartbeat_missing' => 'Scheduler heartbeat: MISSING — ScheduledJobManager may not be running',
+        'sections' => [
+            'docker_cleanup' => '=== Docker Cleanup Jobs ===',
+            'scheduled_backups' => '=== Scheduled Backups ===',
+            'scheduled_tasks' => '=== Scheduled Tasks ===',
+            'server_manager_jobs' => '=== Server Manager Jobs ===',
+        ],
+    ],
     'generate_testing_schema' => [
         'description' => '生成 PostgreSQL 数据库的 SQLite 测试 schema',
         'error' => [

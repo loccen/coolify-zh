@@ -123,6 +123,17 @@ return [
         'running' => 'Running unreachable server cleanup...',
         'cleanup_server' => 'Cleanup unreachable server :id with name :name',
     ],
+    'scheduled_job_diagnostics' => [
+        'description' => 'Inspect dedup cache state and scheduling decisions for all scheduled jobs',
+        'heartbeat' => 'Scheduler heartbeat: :heartbeat (:age)',
+        'heartbeat_missing' => 'Scheduler heartbeat: MISSING — ScheduledJobManager may not be running',
+        'sections' => [
+            'docker_cleanup' => '=== Docker Cleanup Jobs ===',
+            'scheduled_backups' => '=== Scheduled Backups ===',
+            'scheduled_tasks' => '=== Scheduled Tasks ===',
+            'server_manager_jobs' => '=== Server Manager Jobs ===',
+        ],
+    ],
     'generate_testing_schema' => [
         'description' => 'Generate SQLite testing schema from the PostgreSQL database',
         'error' => [
