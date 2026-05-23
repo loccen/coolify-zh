@@ -150,6 +150,13 @@ return [
         'generating' => 'Generating OpenAPI documentation.',
         'converted' => 'Converted OpenAPI YAML to JSON.',
     ],
+    'horizon_manage' => [
+        'description' => 'Manage Horizon',
+        'job_status' => 'Job Status: :status',
+        'no_pending_jobs_found' => 'No pending jobs found.',
+        'no_failed_jobs_found' => 'No failed jobs found.',
+        'no_running_jobs_found' => 'No running jobs found.',
+    ],
     'generate_services' => [
         'info' => [
             'ignoring' => 'Ignoring :file',

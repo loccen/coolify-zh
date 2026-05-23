@@ -150,6 +150,13 @@ return [
         'generating' => '正在生成 OpenAPI 文档。',
         'converted' => '已将 OpenAPI YAML 转换为 JSON。',
     ],
+    'horizon_manage' => [
+        'description' => '管理 Horizon',
+        'job_status' => '任务状态：:status',
+        'no_pending_jobs_found' => '未找到待处理作业。',
+        'no_failed_jobs_found' => '未找到失败作业。',
+        'no_running_jobs_found' => '未找到运行中的作业。',
+    ],
     'generate_services' => [
         'info' => [
             'ignoring' => '忽略 :file',

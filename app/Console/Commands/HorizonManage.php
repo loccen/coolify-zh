@@ -20,7 +20,7 @@ class HorizonManage extends Command
 {
     protected $signature = 'horizon:manage {--can-i-restart-this-worker} {--job-status=}';
 
-    protected $description = 'Manage horizon';
+    protected $description = 'Manage Horizon';
 
     public function handle()
     {
@@ -53,14 +53,14 @@ class HorizonManage extends Command
         if ($action === 'job-status') {
             $jobId = text('Which job to check?');
             $jobStatus = $this->getJobStatus($jobId);
-            $this->info('Job Status: '.$jobStatus);
+            $this->info(trans('console.horizon_manage.job_status', ['status' => $jobStatus]));
         }
 
         if ($action === 'pending') {
             $pendingJobs = app(JobRepository::class)->getPending();
             $pendingJobsTable = [];
             if (count($pendingJobs) === 0) {
-                $this->info('No pending jobs found.');
+                $this->info(trans('console.horizon_manage.no_pending_jobs_found'));
 
                 return;
             }
@@ -79,7 +79,7 @@ class HorizonManage extends Command
             $failedJobs = app(JobRepository::class)->getFailed();
             $failedJobsTable = [];
             if (count($failedJobs) === 0) {
-                $this->info('No failed jobs found.');
+                $this->info(trans('console.horizon_manage.no_failed_jobs_found'));
 
                 return;
             }
@@ -105,7 +105,7 @@ class HorizonManage extends Command
             }
             app(MetricsRepository::class)->clear();
             if (count($failedJobsTable) === 0) {
-                $this->info('No failed jobs found.');
+                $this->info(trans('console.horizon_manage.no_failed_jobs_found'));
 
                 return;
             }
@@ -123,7 +123,7 @@ class HorizonManage extends Command
             $runningJobs = $redisJobRepository->getReservedJobs();
             $runningJobsTable = [];
             if (count($runningJobs) === 0) {
-                $this->info('No running jobs found.');
+                $this->info(trans('console.horizon_manage.no_running_jobs_found'));
 
                 return;
             }
@@ -174,5 +174,10 @@ class HorizonManage extends Command
     public function getJobStatus(string $jobId)
     {
         return getJobStatus($jobId);
+    }
+
+    public function getDescription(): string
+    {
+        return trans('console.horizon_manage.description');
     }
 }
