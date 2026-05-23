@@ -8,6 +8,7 @@ it('uses explicit translation lookups in representative core business views', fu
     $serverIndex = file_get_contents($viewsRoot.'/server/index.blade.php');
     $applicationHeading = file_get_contents($viewsRoot.'/project/application/heading.blade.php');
     $applicationConfiguration = file_get_contents($viewsRoot.'/project/application/configuration.blade.php');
+    $applicationGeneral = file_get_contents($viewsRoot.'/project/application/general.blade.php');
     $serviceHeading = file_get_contents($viewsRoot.'/project/service/heading.blade.php');
     $serviceConfiguration = file_get_contents($viewsRoot.'/project/service/configuration.blade.php');
     $databaseHeading = file_get_contents($viewsRoot.'/project/database/heading.blade.php');
@@ -24,6 +25,11 @@ it('uses explicit translation lookups in representative core business views', fu
         ->toContain("{{ __('General') }}")
         ->toContain("{{ __('Preview Deployments') }}")
         ->toContain("{{ __('Resource Limits') }}")
+        ->and($applicationGeneral)
+        ->toContain("{{ __('Docker Registry') }}")
+        ->toContain("{{ __('Build') }}")
+        ->toContain("{{ __('HTTP Basic Authentication') }}")
+        ->toContain("{{ __('Pre/Post Deployment Commands') }}")
         ->and($serviceHeading)
         ->toContain("{{ __('Pull Latest Images & Restart') }}")
         ->and($serviceConfiguration)
@@ -66,6 +72,10 @@ it('resolves representative T5C translations in zh_CN', function () {
         ->and(__('Documentation'))->toBe('文档')
         ->and(__('Persistent Storage'))->toBe('持久存储')
         ->and(__('Danger Zone'))->toBe('危险区')
+        ->and(__('Docker Registry'))->toBe('Docker 注册表')
+        ->and(__('Build'))->toBe('构建')
+        ->and(__('HTTP Basic Authentication'))->toBe('HTTP 基本身份验证')
+        ->and(__('Pre/Post Deployment Commands'))->toBe('部署前/后命令')
         ->and(__('You can deploy an existing Docker Image from any Registry, without Git.'))->toBe('你可以从任意镜像仓库直接部署现有的 Docker 镜像，无需 Git。')
         ->and(__('PostgreSQL is an object-relational database known for its robustness, advanced features, and strong standards compliance.'))->toBe('PostgreSQL 是一个对象关系型数据库，以稳健性、高级特性和严格的标准兼容性著称。')
         ->and(__('MySQL is an open-source relational database management system.'))->toBe('MySQL 是一个开源关系型数据库管理系统。')
