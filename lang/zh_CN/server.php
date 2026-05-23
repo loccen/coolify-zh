@@ -55,5 +55,7 @@ return [
         'test_email_development_only' => '测试邮件功能仅在开发模式下可用。',
         'test_email_sent_successfully' => '测试邮件发送成功！请检查你的邮箱。',
         'test_email_failed' => '发送测试邮件失败：:error',
+        'ca_certificate_saved_successfully' => 'CA 证书已保存。',
+        'ca_certificate_regenerated_successfully' => 'CA 证书已重新生成。',
     ],
 ];
