@@ -552,7 +552,7 @@
                         </div>
                     @else
                         <pre id="logs"
-                            class="font-logs whitespace-pre-wrap break-all max-w-full text-neutral-400">No logs yet.</pre>
+                            class="font-logs whitespace-pre-wrap break-all max-w-full text-neutral-400">{{ __('No logs yet.') }}</pre>
                     @endif
                 </div>
             </div>

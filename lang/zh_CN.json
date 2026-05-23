@@ -2947,5 +2947,10 @@
     "A rebuild is required.": "需要重新构建。",
     "Please redeploy to apply the new configuration.": "请重新部署以应用新配置。",
     "View changes": "查看变更",
-    "These changes are not applied to the latest deployment yet.": "这些变更还没有应用到最新部署中。"
+    "These changes are not applied to the latest deployment yet.": "这些变更还没有应用到最新部署中。",
+    "A comma separated list of ports you would like to map to the host system.<br><span class='inline-block font-bold dark:text-warning'>Example</span>3000:5432,3002:5433": "要映射到宿主机的端口列表，使用逗号分隔。<br><span class='inline-block font-bold dark:text-warning'>示例</span>3000:5432,3002:5433",
+    "Please verify these values. You can only modify them before the initial start. After that, you need to modify it in the database.": "请确认这些值。它们只能在首次启动前修改，启动之后需要直接在数据库中变更。",
+    "Starting the database will generate this.": "启动数据库后会自动生成此值。",
+    "Custom ClickHouse Configuration": "自定义 ClickHouse 配置",
+    "Custom Dragonfly Configuration": "自定义 Dragonfly 配置"
 }

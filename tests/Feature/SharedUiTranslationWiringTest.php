@@ -27,6 +27,7 @@ it('wires translation calls in shared ui follow-up files', function () {
     $scheduledTaskExecutions = file_get_contents($livewireRoot.'/project/shared/scheduled-task/executions.blade.php');
     $terminal = file_get_contents($livewireRoot.'/project/shared/terminal.blade.php');
     $configurationChecker = file_get_contents($livewireRoot.'/project/shared/configuration-checker.blade.php');
+    $getLogs = file_get_contents($livewireRoot.'/project/shared/get-logs.blade.php');
 
     expect($modalConfirmation)
         ->toContain("__('Password is required.')")
@@ -95,7 +96,9 @@ it('wires translation calls in shared ui follow-up files', function () {
         ->and($configurationChecker)
         ->toContain("__('The latest configuration has not been applied')")
         ->toContain("__('Please redeploy to apply the new configuration.')")
-        ->toContain("__('View changes')");
+        ->toContain("__('View changes')")
+        ->and($getLogs)
+        ->toContain("__('No logs yet.')");
 });
 
 it('resolves representative shared ui follow-up translations in zh_CN', function () {
@@ -136,5 +139,6 @@ it('resolves representative shared ui follow-up translations in zh_CN', function
         ->and(__('The latest configuration has not been applied'))->toBe('最新配置尚未应用')
         ->and(__('Please redeploy to apply the new configuration.'))->toBe('请重新部署以应用新配置。')
         ->and(__('View changes'))->toBe('查看变更')
-        ->and(__('No shell (bash/sh) is available in this container. Please ensure either bash or sh is installed to use the terminal.'))->toBe('这个容器中没有可用的 shell（bash/sh）。请先确保已安装 bash 或 sh，才能使用终端。');
+        ->and(__('No shell (bash/sh) is available in this container. Please ensure either bash or sh is installed to use the terminal.'))->toBe('这个容器中没有可用的 shell（bash/sh）。请先确保已安装 bash 或 sh，才能使用终端。')
+        ->and(__('No logs yet.'))->toBe('还没有日志。');
 });

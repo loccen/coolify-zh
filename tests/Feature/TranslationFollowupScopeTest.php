@@ -192,6 +192,29 @@ it('uses explicit translation lookups in database general proxy sections', funct
     }
 });
 
+it('uses explicit translation lookups in database general settings sections', function () {
+    $generalViews = glob(base_path('resources/views/livewire/project/database/*/general.blade.php'));
+
+    expect($generalViews)->not->toBeEmpty();
+
+    foreach ($generalViews as $viewPath) {
+        $contents = file_get_contents($viewPath);
+
+        expect($contents)
+            ->toContain("__('General')")
+            ->toContain("__('Name')")
+            ->toContain("__('Description')")
+            ->toContain("__('Image')")
+            ->toContain("__('Custom Docker Options')")
+            ->toContain("__('Network')")
+            ->toContain("__('Ports Mappings')");
+
+        if (str_contains($contents, "__('Enable SSL')") || str_contains($contents, 'Regenerate SSL Certificates')) {
+            expect($contents)->toContain("__('SSL Configuration')");
+        }
+    }
+});
+
 it('resolves representative follow-up translations in zh_CN', function () {
     App::setLocale('zh_CN');
 
@@ -248,6 +271,10 @@ it('resolves representative follow-up translations in zh_CN', function () {
         ->and(__('Public Port'))->toBe('公共端口')
         ->and(__('Proxy Timeout (seconds)'))->toBe('代理超时（秒）')
         ->and(__('Enable SSL'))->toBe('启用 SSL')
+        ->and(__('Please verify these values. You can only modify them before the initial start. After that, you need to modify it in the database.'))->toBe('请确认这些值。它们只能在首次启动前修改，启动之后需要直接在数据库中变更。')
+        ->and(__('Starting the database will generate this.'))->toBe('启动数据库后会自动生成此值。')
+        ->and(__('Custom ClickHouse Configuration'))->toBe('自定义 ClickHouse 配置')
+        ->and(__('Custom Dragonfly Configuration'))->toBe('自定义 Dragonfly 配置')
         ->and(__('settings.instance_updated'))->toBe('设置已更新。')
         ->and(trans('settings.instance_updated'))->toBe('设置已更新。');
 });
