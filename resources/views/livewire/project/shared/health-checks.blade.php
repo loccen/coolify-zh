@@ -24,8 +24,8 @@
         {{-- Healthcheck Type Selector --}}
         <div class="flex gap-2">
             <x-forms.select canGate="update" :canResource="$resource" id="healthCheckType" label="{{ __('Type') }}" required wire:model.live="healthCheckType">
-                <option value="http">HTTP</option>
-                <option value="cmd">CMD</option>
+                <option value="http">{{ __('HTTP') }}</option>
+                <option value="cmd">{{ __('CMD') }}</option>
             </x-forms.select>
         </div>
 
