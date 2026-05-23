@@ -73,8 +73,8 @@ class CleanupNames extends Command
             : $this->modelsToClean;
 
         if ($modelFilter && ! isset($this->modelsToClean[$modelFilter])) {
-            $this->error("Unknown model: {$modelFilter}");
-            $this->info('Available models: '.implode(', ', array_keys($this->modelsToClean)));
+            $this->error(trans('console.cleanup_names.error.unknown_model', ['model' => $modelFilter]));
+            $this->info(trans('console.cleanup_names.info.available_models', ['models' => implode(', ', array_keys($this->modelsToClean))]));
 
             return self::FAILURE;
         }
@@ -91,9 +91,9 @@ class CleanupNames extends Command
         }
 
         if ($this->option('dry-run')) {
-            $this->info("Name cleanup: would sanitize {$this->totalCleaned} records");
+            $this->info(trans('console.cleanup_names.info.would_sanitize', ['count' => $this->totalCleaned]));
         } else {
-            $this->info("Name cleanup: sanitized {$this->totalCleaned} records");
+            $this->info(trans('console.cleanup_names.info.sanitized', ['count' => $this->totalCleaned]));
         }
 
         return self::SUCCESS;
@@ -138,7 +138,7 @@ class CleanupNames extends Command
             }
 
         } catch (\Exception $e) {
-            $this->error("Error processing {$modelName}: ".$e->getMessage());
+            $this->error(trans('console.cleanup_names.error.processing', ['model' => $modelName, 'error' => $e->getMessage()]));
         }
     }
 
