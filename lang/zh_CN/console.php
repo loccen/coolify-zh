@@ -107,6 +107,12 @@ return [
         'generating' => '正在生成 OpenAPI 文档。',
         'converted' => '已将 OpenAPI YAML 转换为 JSON。',
     ],
+    'generate_services' => [
+        'info' => [
+            'ignoring' => '忽略 :file',
+            'processing' => '正在处理 :file',
+        ],
+    ],
     'traefik_check_version' => [
         'description' => '检查所有服务器上的 Traefik 代理版本，并向过期版本发送通知',
         'checking' => '正在检查所有服务器上的 Traefik 版本...',

@@ -107,6 +107,12 @@ return [
         'generating' => 'Generating OpenAPI documentation.',
         'converted' => 'Converted OpenAPI YAML to JSON.',
     ],
+    'generate_services' => [
+        'info' => [
+            'ignoring' => 'Ignoring :file',
+            'processing' => 'Processing :file',
+        ],
+    ],
     'traefik_check_version' => [
         'description' => 'Check Traefik proxy versions on all servers and send notifications for outdated versions',
         'checking' => 'Checking Traefik versions on all servers...',
