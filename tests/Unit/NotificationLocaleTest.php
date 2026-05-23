@@ -24,6 +24,7 @@ spl_autoload_register(function (string $class): void {
 
 use App\Notifications\TransactionalEmails\ResetPassword;
 use App\Notifications\TransactionalEmails\Test as TransactionalEmailTest;
+use App\Support\UserVisibleLocale;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
@@ -84,4 +85,23 @@ it('renders transactional email subjects with the current request locale', funct
     $notification = new TransactionalEmailTest('test@example.com');
 
     expect($notification->toMail()->subject)->toBe('Coolify: 测试邮件');
+});
+
+it('renders transactional email bodies with the captured locale', function () {
+    bindRequestWithRoute();
+    App::setLocale('zh_CN');
+
+    $notification = new TransactionalEmailTest('test@example.com');
+    App::setLocale('en');
+
+    $rendered = UserVisibleLocale::withLocale(
+        $notification->locale,
+        fn () => (string) $notification->toMail()->render()
+    );
+
+    expect($rendered)
+        ->toContain('你好，')
+        ->toContain('如果你收到了这封邮件，说明邮件设置正确。')
+        ->toContain('此致')
+        ->toContain('联系支持');
 });

@@ -1,1 +1,1 @@
-Hello,
+{{ __('mail.common.greeting') }}
