@@ -107,5 +107,7 @@ it('resolves representative server translations in zh_CN', function () {
         ->and(__('Check for Updates'))->toBe('检查更新')
         ->and(__('Managed'))->toBe('受管')
         ->and(__('Server Resources'))->toBe('服务器资源')
+        ->and(__('e.g., production-server-key'))->toBe('e.g., production-server-key')
+        ->and(__('e.g., production-app-server'))->toBe('e.g., production-app-server')
         ->and(__('Retry Validation'))->toBe('重试验证');
 });

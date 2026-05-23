@@ -142,6 +142,7 @@ it('resolves representative T5C translations in zh_CN', function () {
         ->and(__('Number of CPUs'))->toBe('CPU 数量')
         ->and(__('Limit CPUs'))->toBe('限制 CPU 数量')
         ->and(__('CPU Weight'))->toBe('CPU 权重')
+        ->and(__('Enable Gzip Compression'))->toBe('启用 Gzip 压缩')
         ->and(__('Image'))->toBe('镜像')
         ->and(__('Make it publicly available'))->toBe('公开访问')
         ->and(__('Swappiness'))->toBe('交换倾向')
