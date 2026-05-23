@@ -34,9 +34,9 @@
             ])>
                 @php
                 $statusText = match(data_get($execution, 'status')) {
-                    'success' => 'Success',
-                    'running' => 'In Progress',
-                    'failed' => 'Failed',
+                    'success' => __('Success'),
+                    'running' => __('In Progress'),
+                    'failed' => __('Failed'),
                     default => ucfirst(data_get($execution, 'status'))
                 };
                 @endphp
@@ -44,18 +44,18 @@
             </span>
         </div>
         <div class="text-gray-600 dark:text-gray-400 text-sm">
-            Started: {{ formatDateInServerTimezone(data_get($execution, 'created_at', now()), $server) }}
+            {{ __('Started:') }} {{ formatDateInServerTimezone(data_get($execution, 'created_at', now()), $server) }}
             @if(data_get($execution, 'status') !== 'running')
-            <br>Ended: {{ formatDateInServerTimezone(data_get($execution, 'finished_at'), $server) }}
-            <br>Duration: {{ calculateDuration(data_get($execution, 'created_at'), data_get($execution, 'finished_at')) }}
-            <br>Finished {{ \Carbon\Carbon::parse(data_get($execution, 'finished_at'))->diffForHumans() }}
+            <br>{{ __('Ended:') }} {{ formatDateInServerTimezone(data_get($execution, 'finished_at'), $server) }}
+            <br>{{ __('Duration:') }} {{ calculateDuration(data_get($execution, 'created_at'), data_get($execution, 'finished_at')) }}
+            <br>{{ __('Finished') }} {{ \Carbon\Carbon::parse(data_get($execution, 'finished_at'))->diffForHumans() }}
             @endif
         </div>
     </a>
     @if (strlen(data_get($execution, 'message', '')) > 0)
     <div class="flex flex-col">
         <x-forms.button wire:click.prevent="downloadLogs({{ data_get($execution, 'id') }})">
-            Download Logs
+            {{ __('Download Logs') }}
         </x-forms.button>
     </div>
     @endif
@@ -64,13 +64,13 @@
         <div class="p-4 mb-2 bg-gray-100 dark:bg-coolgray-200 rounded-sm">
             @if (data_get($execution, 'status') === 'running')
             <div class="flex items-center gap-2 mb-2">
-                <span>Execution is running...</span>
+                <span>{{ __('Execution is running...') }}</span>
                 <x-loading class="w-4 h-4" />
             </div>
             @endif
             @if ($this->logLines->isNotEmpty())
             <div>
-                <h3 class="font-semibold mb-2">Status Message:</h3>
+                <h3 class="font-semibold mb-2">{{ __('Status Message:') }}</h3>
                 <pre class="whitespace-pre-wrap">
 @foreach ($this->logLines as $line)
 {{ $line }}
@@ -79,21 +79,21 @@
                 <div class="flex gap-2">
                     @if ($this->hasMoreLogs())
                     <x-forms.button wire:click.prevent="loadMoreLogs" isHighlighted>
-                        Load More
+                        {{ __('Load More') }}
                     </x-forms.button>
                     @endif
                 </div>
             </div>
             @else
             <div>
-                <div class="font-semibold mb-2">Status Message:</div>
-                <div>No output was recorded for this execution.</div>
+                <div class="font-semibold mb-2">{{ __('Status Message:') }}</div>
+                <div>{{ __('No output was recorded for this execution.') }}</div>
             </div>
             @endif
 
             @if (data_get($execution, 'cleanup_log'))
             <div class="mt-6 space-y-6">
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Cleanup Log:</h3>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ __('Cleanup Log:') }}</h3>
                 @foreach(json_decode(data_get($execution, 'cleanup_log'), true) as $result)
                 <div class="overflow-hidden rounded-lg border border-gray-200 dark:border-coolgray-400 bg-white dark:bg-coolgray-100 shadow-xs">
                     <div class="flex items-center gap-2 px-4 py-3 bg-gray-50 dark:bg-coolgray-200 border-b border-gray-200 dark:border-coolgray-400">
@@ -111,7 +111,7 @@
                         <pre class="font-logs text-sm text-gray-600 dark:text-gray-300 whitespace-pre-wrap">{{ $output }}</pre>
                         @else
                         <p class="text-sm text-gray-500 dark:text-gray-400 italic">
-                            No output returned - command completed successfully
+                            {{ __('No output returned - command completed successfully') }}
                         </p>
                         @endif
                     </div>
@@ -123,6 +123,6 @@
     </div>
     @endif
     @empty
-    <div class="p-4 bg-gray-100 dark:bg-coolgray-100 rounded-sm">No executions found.</div>
+    <div class="p-4 bg-gray-100 dark:bg-coolgray-100 rounded-sm">{{ __('No executions found.') }}</div>
     @endforelse
 </div>
