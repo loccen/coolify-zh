@@ -2,6 +2,31 @@
     <x-slot:title>
         {{ data_get_str($server, 'name')->limit(10) }} > {{ __('Docker Cleanup') }} | Coolify
     </x-slot>
+    @php
+        $forceCleanupHelper = __('Enabling Force Docker Cleanup or manually triggering a cleanup will perform the following actions:')
+            . "<ul class='list-disc pl-4 mt-2'>"
+            . '<li>'.__('Removes stopped containers managed by Coolify (as containers are non-persistent, no data will be lost).').'</li>'
+            . '<li>'.__('Deletes unused images.').'</li>'
+            . '<li>'.__('Clears build cache.').'</li>'
+            . '<li>'.__('Removes old versions of the Coolify helper image.').'</li>'
+            . '<li>'.__('Optionally delete unused volumes (if enabled in advanced options).').'</li>'
+            . '<li>'.__('Optionally remove unused networks (if enabled in advanced options).').'</li>'
+            . '</ul>';
+        $unusedVolumesHelper = __('This option will remove all unused Docker volumes during cleanup.')
+            . "<br><br><strong>".__('Warning: Data from stopped containers will be lost!').'</strong><br><br>'
+            . __('Consequences include:')
+            . "<ul class='list-disc pl-4 mt-2'>"
+            . '<li>'.__('Volumes not attached to running containers will be permanently deleted (volumes from stopped containers are affected).').'</li>'
+            . '<li>'.__('Data stored in deleted volumes cannot be recovered.').'</li>'
+            . '</ul>';
+        $unusedNetworksHelper = __('This option will remove all unused Docker networks during cleanup.')
+            . "<br><br><strong>".__('Warning: Functionality may be lost and containers may not be able to communicate with each other!').'</strong><br><br>'
+            . __('Consequences include:')
+            . "<ul class='list-disc pl-4 mt-2'>"
+            . '<li>'.__('Networks not attached to running containers will be permanently deleted (networks used by stopped containers are affected).').'</li>'
+            . '<li>'.__('Containers may lose connectivity if required networks are removed.').'</li>'
+            . '</ul>';
+    @endphp
     <livewire:server.navbar :server="$server" />
     <div x-data="{ activeTab: window.location.hash ? window.location.hash.substring(1) : 'general' }" class="flex flex-col h-full gap-8 sm:flex-row">
         <x-server.sidebar :server="$server" activeMenu="docker-cleanup" />
@@ -57,15 +82,7 @@
                     </div>
                     <div class="w-full sm:w-96">
                         <x-forms.checkbox canGate="update" :canResource="$server"
-                            :helper="__('Enabling Force Docker Cleanup or manually triggering a cleanup will perform the following actions:
-                            <ul class='list-disc pl-4 mt-2'>
-                                <li>Removes stopped containers managed by Coolify (as containers are non-persistent, no data will be lost).</li>
-                                <li>Deletes unused images.</li>
-                                <li>Clears build cache.</li>
-                                <li>Removes old versions of the Coolify helper image.</li>
-                                <li>Optionally delete unused volumes (if enabled in advanced options).</li>
-                                <li>Optionally remove unused networks (if enabled in advanced options).</li>
-                            </ul>')"
+                            :helper="$forceCleanupHelper"
                             instantSave id="forceDockerCleanup" :label="__('Force Docker Cleanup')" />
                     </div>
 
@@ -79,18 +96,10 @@
                     <div class="w-full sm:w-96">
                         <x-forms.checkbox canGate="update" :canResource="$server" instantSave id="deleteUnusedVolumes"
                             :label="__('Delete Unused Volumes')"
-                            :helper="__('This option will remove all unused Docker volumes during cleanup.<br><br><strong>Warning: Data from stopped containers will be lost!</strong><br><br>Consequences include:<br>
-                            <ul class='list-disc pl-4 mt-2'>
-                                <li>Volumes not attached to running containers will be permanently deleted (volumes from stopped containers are affected).</li>
-                                <li>Data stored in deleted volumes cannot be recovered.</li>
-                            </ul>')" />
+                            :helper="$unusedVolumesHelper" />
                         <x-forms.checkbox canGate="update" :canResource="$server" instantSave id="deleteUnusedNetworks"
                             :label="__('Delete Unused Networks')"
-                            :helper="__('This option will remove all unused Docker networks during cleanup.<br><br><strong>Warning: Functionality may be lost and containers may not be able to communicate with each other!</strong><br><br>Consequences include:<br>
-                            <ul class='list-disc pl-4 mt-2'>
-                                <li>Networks not attached to running containers will be permanently deleted (networks used by stopped containers are affected).</li>
-                                <li>Containers may lose connectivity if required networks are removed.</li>
-                            </ul>')" />
+                            :helper="$unusedNetworksHelper" />
                         <x-forms.checkbox canGate="update" :canResource="$server" instantSave
                             id="disableApplicationImageRetention"
                             :label="__('Disable Application Image Retention')"
