@@ -115,7 +115,7 @@ class FileStorage extends Component
 
             $this->fileStorage->loadStorageOnServer();
             $this->syncData();
-            $this->dispatch('success', 'File storage loaded from server.');
+            $this->dispatch('success', __('File storage loaded from server.'));
         } catch (\Throwable $e) {
             return handleError($e, $this);
         } finally {
@@ -152,12 +152,12 @@ class FileStorage extends Component
         }
 
         try {
-            $message = 'File deleted.';
+            $message = __('File deleted.');
             if ($this->fileStorage->is_directory) {
-                $message = 'Directory deleted.';
+                $message = __('Directory deleted.');
             }
             if ($this->permanently_delete) {
-                $message = 'Directory deleted from the server.';
+                $message = __('Directory deleted from the server.');
                 $this->fileStorage->deleteStorageOnServer();
             }
             $this->fileStorage->delete();
@@ -176,7 +176,7 @@ class FileStorage extends Component
         $this->authorize('update', $this->resource);
 
         if ($this->fileStorage->is_too_large) {
-            $this->dispatch('error', 'File on server is too large to edit from the UI.');
+            $this->dispatch('error', __('File on server is too large to edit from the UI.'));
 
             return;
         }
@@ -193,7 +193,7 @@ class FileStorage extends Component
             $this->fileStorage->is_preview_suffix_enabled = $this->isPreviewSuffixEnabled;
             $this->fileStorage->save();
             $this->fileStorage->saveStorageOnServer();
-            $this->dispatch('success', 'File updated.');
+            $this->dispatch('success', __('File updated.'));
         } catch (\Throwable $e) {
             $this->fileStorage->setRawAttributes($original);
             $this->fileStorage->save();
@@ -207,12 +207,12 @@ class FileStorage extends Component
     {
         $this->authorize('update', $this->resource);
         if ($this->fileStorage->is_too_large) {
-            $this->dispatch('error', 'File on server is too large to edit from the UI.');
+            $this->dispatch('error', __('File on server is too large to edit from the UI.'));
 
             return;
         }
         $this->syncData(true);
-        $this->dispatch('success', 'File updated.');
+        $this->dispatch('success', __('File updated.'));
     }
 
     public function render()

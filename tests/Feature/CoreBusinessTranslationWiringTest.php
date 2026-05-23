@@ -152,6 +152,8 @@ it('resolves representative T5C translations in zh_CN', function () {
         ->and(__('Server is not functional.'))->toBe('服务器当前不可用。')
         ->and(__('Gracefully stopping service.<br/><br/>It could take a while depending on the service.'))->toBe('正在优雅停止服务。<br/><br/>根据服务本身情况，这可能需要一点时间。')
         ->and(__('There is a deployment in progress.'))->toBe('当前有部署正在进行。')
+        ->and(__('Service application restarted successfully.'))->toBe('服务应用已成功重启。')
+        ->and(__('Service database restarted successfully.'))->toBe('服务数据库已成功重启。')
         ->and(__('The selected service application will be unavailable during the restart.'))->toBe('选中的服务应用在重启期间将不可用。')
         ->and(__('If the service application is currently in use data could be lost.'))->toBe('如果当前正在使用这个服务应用，数据可能会丢失。')
         ->and(__('Restart Service Container'))->toBe('重启服务容器')
