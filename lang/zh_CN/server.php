@@ -50,6 +50,8 @@ return [
         'proxy_dynamic_configuration_file_name_reserved' => '文件名已被保留。',
         'proxy_dynamic_configuration_file_already_exists' => '文件已存在。',
         'proxy_dynamic_configuration_saved' => '动态配置已保存。',
+        'proxy_running' => '代理正在运行。',
+        'proxy_restart_failed' => '代理重启失败。请查看日志。',
         'invalid_container_identifier' => '容器标识符无效。',
         'container_started' => '容器已启动。',
         'container_restarted' => '容器已重启。',
