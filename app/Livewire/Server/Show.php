@@ -278,7 +278,7 @@ class Show extends Component
         if (isset($event['serverUuid']) && $event['serverUuid'] === $this->server->uuid) {
             $this->server->refresh();
             $this->syncData();
-            $this->dispatch('success', 'Sentinel has been restarted successfully.');
+            $this->dispatch('success', __('server.toasts.sentinel_restarted'));
         }
     }
 
@@ -299,13 +299,16 @@ class Show extends Component
         $this->syncData(true);
         ['uptime' => $uptime, 'error' => $error] = $this->server->validateConnection();
         if ($uptime) {
-            $this->dispatch('success', 'Server is reachable.');
+            $this->dispatch('success', __('server.toasts.server_reachable'));
             $this->server->settings->is_reachable = $this->isReachable = true;
             $this->server->settings->is_usable = $this->isUsable = true;
             $this->server->settings->save();
             ServerReachabilityChanged::dispatch($this->server);
         } else {
-            $this->dispatch('error', 'Server is not reachable.', 'Please validate your configuration and connection.<br><br>Check this <a target="_blank" class="underline" href="https://coolify.io/docs/knowledge-base/server/openssh">documentation</a> for further help. <br><br>Error: '.$error);
+            $this->dispatch('error', __('server.toasts.server_not_reachable', [
+                'documentationUrl' => 'https://coolify.io/docs/knowledge-base/server/openssh',
+                'error' => $error,
+            ]));
 
             return;
         }
@@ -317,7 +320,7 @@ class Show extends Component
             $this->authorize('manageSentinel', $this->server);
             $customImage = isDev() ? $this->sentinelCustomDockerImage : null;
             $this->server->restartSentinel($customImage);
-            $this->dispatch('info', 'Restarting Sentinel.');
+            $this->dispatch('info', __('server.toasts.restarting_sentinel'));
         } catch (\Throwable $e) {
             return handleError($e, $this);
         }
@@ -353,7 +356,7 @@ class Show extends Component
                 $this->isMetricsEnabled = false;
                 $this->isSentinelDebugEnabled = false;
                 StopSentinel::dispatch($this->server);
-                $this->dispatch('info', 'Sentinel has been disabled as build servers cannot run Sentinel.');
+                $this->dispatch('info', __('server.toasts.sentinel_disabled_for_build_servers'));
             }
             $this->submit();
             // Dispatch event to refresh the navbar
@@ -370,7 +373,7 @@ class Show extends Component
             if ($value === true) {
                 if ($this->isBuildServer) {
                     $this->isSentinelEnabled = false;
-                    $this->dispatch('error', 'Sentinel cannot be enabled on build servers.');
+                    $this->dispatch('error', __('server.toasts.sentinel_cannot_be_enabled_on_build_servers'));
 
                     return;
                 }
@@ -392,7 +395,7 @@ class Show extends Component
         try {
             $this->authorize('manageSentinel', $this->server);
             $this->server->settings->generateSentinelToken();
-            $this->dispatch('success', 'Token regenerated. Restarting Sentinel.');
+            $this->dispatch('success', __('server.toasts.sentinel_token_regenerated'));
         } catch (\Throwable $e) {
             return handleError($e, $this);
         }
@@ -411,7 +414,7 @@ class Show extends Component
     {
         try {
             if (! $this->server->hetzner_server_id || ! $this->server->cloudProviderToken) {
-                $this->dispatch('error', 'This server is not associated with a Hetzner Cloud server or token.');
+                $this->dispatch('error', __('server.toasts.hetzner_server_or_token_missing'));
 
                 return;
             }
@@ -427,20 +430,25 @@ class Show extends Component
                 $this->server->update(['hetzner_server_status' => $this->hetznerServerStatus]);
             }
             if ($manual) {
-                $this->dispatch('success', 'Server status refreshed: '.ucfirst($this->hetznerServerStatus ?? 'unknown'));
+                $this->dispatch('success', __('server.toasts.server_status_refreshed', [
+                    'status' => ucfirst($this->hetznerServerStatus ?? 'unknown'),
+                ]));
             }
 
             // If Hetzner server is off but Coolify thinks it's still reachable, update Coolify's state
             if ($this->hetznerServerStatus === 'off' && $this->server->settings->is_reachable) {
                 ['uptime' => $uptime, 'error' => $error] = $this->server->validateConnection();
                 if ($uptime) {
-                    $this->dispatch('success', 'Server is reachable.');
+                    $this->dispatch('success', __('server.toasts.server_reachable'));
                     $this->server->settings->is_reachable = $this->isReachable = true;
                     $this->server->settings->is_usable = $this->isUsable = true;
                     $this->server->settings->save();
                     ServerReachabilityChanged::dispatch($this->server);
                 } else {
-                    $this->dispatch('error', 'Server is not reachable.', 'Please validate your configuration and connection.<br><br>Check this <a target="_blank" class="underline" href="https://coolify.io/docs/knowledge-base/server/openssh">documentation</a> for further help. <br><br>Error: '.$error);
+                    $this->dispatch('error', __('server.toasts.server_not_reachable', [
+                        'documentationUrl' => 'https://coolify.io/docs/knowledge-base/server/openssh',
+                        'error' => $error,
+                    ]));
 
                     return;
                 }
@@ -475,7 +483,7 @@ class Show extends Component
     {
         try {
             if (! $this->server->hetzner_server_id || ! $this->server->cloudProviderToken) {
-                $this->dispatch('error', 'This server is not associated with a Hetzner Cloud server or token.');
+                $this->dispatch('error', __('server.toasts.hetzner_server_or_token_missing'));
 
                 return;
             }
@@ -486,7 +494,7 @@ class Show extends Component
             $this->hetznerServerStatus = 'starting';
             $this->server->update(['hetzner_server_status' => 'starting']);
             $this->hetznerServerManuallyStarted = true; // Set flag to trigger auto-validation when running
-            $this->dispatch('success', 'Hetzner server is starting...');
+            $this->dispatch('success', __('server.toasts.hetzner_server_starting'));
         } catch (\Throwable $e) {
             return handleError($e, $this);
         }
@@ -499,9 +507,9 @@ class Show extends Component
             $result = $this->server->gatherServerMetadata();
             if ($result) {
                 $this->server->refresh();
-                $this->dispatch('success', 'Server details refreshed.');
+                $this->dispatch('success', __('server.toasts.server_details_refreshed'));
             } else {
-                $this->dispatch('error', 'Could not fetch server details. Is the server reachable?');
+                $this->dispatch('error', __('server.toasts.server_details_fetch_failed'));
             }
         } catch (\Throwable $e) {
             handleError($e, $this);
@@ -512,7 +520,7 @@ class Show extends Component
     {
         try {
             $this->syncData(true);
-            $this->dispatch('success', 'Server settings updated.');
+            $this->dispatch('success', __('server.toasts.server_settings_updated'));
         } catch (\Throwable $e) {
             return handleError($e, $this);
         }
@@ -532,7 +540,7 @@ class Show extends Component
         $this->matchedHetznerServer = null;
 
         if (! $this->selectedHetznerTokenId) {
-            $this->hetznerSearchError = 'Please select a Hetzner token.';
+            $this->hetznerSearchError = __('server.toasts.select_hetzner_token');
 
             return;
         }
@@ -542,7 +550,7 @@ class Show extends Component
 
             $token = $this->availableHetznerTokens->firstWhere('id', $this->selectedHetznerTokenId);
             if (! $token) {
-                $this->hetznerSearchError = 'Invalid token selected.';
+                $this->hetznerSearchError = __('server.toasts.invalid_hetzner_token_selected');
 
                 return;
             }
@@ -567,13 +575,13 @@ class Show extends Component
         $this->matchedHetznerServer = null;
 
         if (! $this->selectedHetznerTokenId) {
-            $this->hetznerSearchError = 'Please select a Hetzner token first.';
+            $this->hetznerSearchError = __('server.toasts.select_hetzner_token_first');
 
             return;
         }
 
         if (! $this->manualHetznerServerId) {
-            $this->hetznerSearchError = 'Please enter a Hetzner Server ID.';
+            $this->hetznerSearchError = __('server.toasts.enter_hetzner_server_id');
 
             return;
         }
@@ -583,7 +591,7 @@ class Show extends Component
 
             $token = $this->availableHetznerTokens->firstWhere('id', $this->selectedHetznerTokenId);
             if (! $token) {
-                $this->hetznerSearchError = 'Invalid token selected.';
+                $this->hetznerSearchError = __('server.toasts.invalid_hetzner_token_selected');
 
                 return;
             }
@@ -604,7 +612,7 @@ class Show extends Component
     public function linkToHetzner()
     {
         if (! $this->matchedHetznerServer) {
-            $this->dispatch('error', 'No Hetzner server selected.');
+            $this->dispatch('error', __('server.toasts.no_hetzner_server_selected'));
 
             return;
         }
@@ -614,7 +622,7 @@ class Show extends Component
 
             $token = $this->availableHetznerTokens->firstWhere('id', $this->selectedHetznerTokenId);
             if (! $token) {
-                $this->dispatch('error', 'Invalid token selected.');
+                $this->dispatch('error', __('server.toasts.invalid_hetzner_token_selected'));
 
                 return;
             }
@@ -624,7 +632,9 @@ class Show extends Component
             $serverData = $hetznerService->getServer($this->matchedHetznerServer['id']);
 
             if (empty($serverData)) {
-                $this->dispatch('error', 'Could not find Hetzner server with ID: '.$this->matchedHetznerServer['id']);
+                $this->dispatch('error', __('server.toasts.hetzner_server_not_found', [
+                    'id' => $this->matchedHetznerServer['id'],
+                ]));
 
                 return;
             }
@@ -645,7 +655,7 @@ class Show extends Component
             $this->hetznerNoMatchFound = false;
             $this->hetznerSearchError = null;
 
-            $this->dispatch('success', 'Server successfully linked to Hetzner Cloud!');
+            $this->dispatch('success', __('server.toasts.server_linked_to_hetzner'));
             $this->dispatch('refreshServerShow');
         } catch (\Throwable $e) {
             return handleError($e, $this);
