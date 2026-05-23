@@ -135,7 +135,7 @@ it('resolves representative T5C translations in zh_CN', function () {
         ->and(__('Make it publicly available'))->toBe('公开访问')
         ->and(__('Swappiness'))->toBe('交换倾向')
         ->and(__('Maximum Swap Limit'))->toBe('最大交换内存限制')
-        ->and(__('Postgres URL (public)'))->toBe('Postgres 连接串（公网）')
+        ->and(__('Postgres URL (public)'))->toBe('PostgreSQL 连接串（公网）')
         ->and(__('Manual'))->toBe('手动')
         ->and(__('Proxy'))->toBe('代理')
         ->and(__('Swarm'))->toBe('Swarm')
