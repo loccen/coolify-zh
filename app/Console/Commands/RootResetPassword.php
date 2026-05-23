@@ -22,33 +22,42 @@ class RootResetPassword extends Command
      *
      * @var string
      */
-    protected $description = 'Reset Root Password';
+    protected $description = '';
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->description = trans('console.root_reset_password.description', locale: app()->getLocale());
+    }
 
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        $this->info('You are about to reset the root password.');
-        $password = password('Give me a new password for root user: ');
-        $passwordAgain = password('Again');
+        $locale = app()->getLocale();
+
+        $this->info(trans('console.root_reset_password.about_to_reset', locale: $locale));
+        $password = password(trans('console.root_reset_password.password_prompt', locale: $locale));
+        $passwordAgain = password(trans('console.root_reset_password.password_again_prompt', locale: $locale));
         if ($password != $passwordAgain) {
-            $this->error('Passwords do not match.');
+            $this->error(trans('console.root_reset_password.passwords_do_not_match', locale: $locale));
 
             return;
         }
-        $this->info('Updating root password...');
+        $this->info(trans('console.root_reset_password.updating', locale: $locale));
         try {
             $user = User::find(0);
             if (! $user) {
-                $this->error('Root user not found.');
+                $this->error(trans('console.root_reset_password.root_user_not_found', locale: $locale));
 
                 return;
             }
             $user->update(['password' => Hash::make($password)]);
-            $this->info('Root password updated successfully.');
+            $this->info(trans('console.root_reset_password.updated_successfully', locale: $locale));
         } catch (\Exception $e) {
-            $this->error('Failed to update root password.');
+            $this->error(trans('console.root_reset_password.failed_to_update', locale: $locale));
 
             return;
         }
