@@ -48,6 +48,14 @@ return [
         'server_not_found' => '未找到服务器。',
         'sent_successfully' => '邮件已成功发送至 :email。',
     ],
+    'root_change_email' => [
+        'description' => '更改 Root 邮箱',
+        'about_to_change' => '即将更改 Root 用户的邮箱。',
+        'email_prompt' => '请输入 Root 用户的新邮箱：',
+        'updating' => '正在更新 Root 邮箱...',
+        'updated_successfully' => 'Root 用户的邮箱已成功更新。',
+        'failed_to_update' => '更新 Root 用户邮箱失败。',
+    ],
     'root_reset_password' => [
         'description' => '重置 Root 密码',
         'about_to_reset' => '即将重置 Root 用户的密码。',

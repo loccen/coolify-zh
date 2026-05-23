@@ -48,6 +48,14 @@ return [
         'server_not_found' => 'Server not found.',
         'sent_successfully' => 'Email sent to :email successfully.',
     ],
+    'root_change_email' => [
+        'description' => 'Change Root Email',
+        'about_to_change' => 'You are about to change the root user\'s email.',
+        'email_prompt' => 'Give me a new email for root user',
+        'updating' => 'Updating root email...',
+        'updated_successfully' => 'Root user\'s email updated successfully.',
+        'failed_to_update' => 'Failed to update root user\'s email.',
+    ],
     'root_reset_password' => [
         'description' => 'Reset Root Password',
         'about_to_reset' => 'You are about to reset the Root password.',
