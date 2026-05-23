@@ -81,7 +81,7 @@ class Heading extends Component
         try {
             $this->authorize('manage', $this->database);
 
-            $this->dispatch('info', 'Gracefully stopping database.');
+            $this->dispatch('info', __('Gracefully stopping database.'));
             StopDatabase::dispatch($this->database, false, $this->docker_cleanup);
         } catch (\Exception $e) {
             $this->dispatch('error', $e->getMessage());

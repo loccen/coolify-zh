@@ -66,13 +66,13 @@ class EditCompose extends Component
         if ($isValid !== 'OK') {
             $this->dispatch('error', "Invalid docker-compose file.\n$isValid");
         } else {
-            $this->dispatch('success', 'Docker compose is valid.');
+            $this->dispatch('success', __('Docker compose is valid.'));
         }
     }
 
     public function saveEditedCompose()
     {
-        $this->dispatch('info', 'Saving new docker compose...');
+        $this->dispatch('info', __('Saving new docker compose...'));
         $this->dispatch('saveCompose', $this->dockerComposeRaw);
         $this->dispatch('refreshStorages');
     }
@@ -84,7 +84,7 @@ class EditCompose extends Component
         ]);
         $this->syncData(true);
         $this->service->save(['is_container_label_escape_enabled' => $this->isContainerLabelEscapeEnabled]);
-        $this->dispatch('success', 'Service updated successfully');
+        $this->dispatch('success', __('Service updated successfully'));
     }
 
     public function render()
