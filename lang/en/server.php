@@ -25,6 +25,7 @@ return [
         'server_details_fetch_failed' => 'Could not fetch server details. Is the server reachable?',
         'server_details_refreshed' => 'Server details refreshed.',
         'delete_resources_first' => 'Server has defined resources. Please delete them first or select "Delete all resources".',
+        'proxy_exited' => 'Proxy has exited.',
         'server_linked_to_hetzner' => 'Server successfully linked to Hetzner Cloud!',
         'server_not_reachable' => 'Server is not reachable.<br><br>Check this <a target="_blank" class="underline" href=":documentationUrl">documentation</a> for further help.<br><br>Error: :error',
         'server_reachable' => 'Server is reachable.',
