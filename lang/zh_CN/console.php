@@ -1,6 +1,27 @@
 <?php
 
 return [
+    'scheduled_logs' => [
+        'description' => '查看可选过滤的计划任务备份和任务日志',
+        'error' => [
+            'invalid_date_format' => '日期格式无效。请使用 Y-m-d（例如 2025-01-31）。',
+        ],
+        'info' => [
+            'following_logs' => '正在跟踪 :date 的:type日志（按 Ctrl+C 停止）...',
+            'showing_last_lines' => '显示 :date 的:type日志最后 :lines 行：',
+            'available_log_files' => '可用的计划日志文件：',
+            'normal_logs' => '  正常日志：',
+            'error_logs' => '  错误日志：',
+        ],
+        'warn' => [
+            'no_logs_found' => '未找到 :date 的:type日志',
+        ],
+        'types' => [
+            'normal' => '正常',
+            'error' => '错误',
+            'all' => '全部',
+        ],
+    ],
     'emails' => [
         'description' => '发送测试邮件或正式邮件',
         'select_prompt' => '要发送哪一封邮件？',
