@@ -11,6 +11,8 @@ it('uses explicit translation lookups in representative livewire toast dispatche
     $serviceFileStorage = file_get_contents(app_path('Livewire/Project/Service/FileStorage.php'));
     $serviceStackForm = file_get_contents(app_path('Livewire/Project/Service/StackForm.php'));
     $serviceEditCompose = file_get_contents(app_path('Livewire/Project/Service/EditCompose.php'));
+    $applicationPreviews = file_get_contents(app_path('Livewire/Project/Application/Previews.php'));
+    $applicationGeneral = file_get_contents(app_path('Livewire/Project/Application/General.php'));
 
     expect($databaseRedisGeneral)
         ->toContain("__('Database updated.')")
@@ -37,7 +39,15 @@ it('uses explicit translation lookups in representative livewire toast dispatche
         ->and($serviceEditCompose)
         ->toContain("__('Docker compose is valid.')")
         ->toContain("__('Saving new docker compose...')")
-        ->toContain("__('Service updated successfully')");
+        ->toContain("__('Service updated successfully')")
+        ->and($applicationPreviews)
+        ->toContain("__('Validating DNS failed.')")
+        ->toContain("__('Preview saved.<br><br>Do not forget to redeploy the preview to apply the changes.')")
+        ->toContain("__('Preview deletion started. It may take a few moments to complete.')")
+        ->and($applicationGeneral)
+        ->toContain("__('Failed to parse your docker-compose file. Please check the syntax and try again.')")
+        ->toContain("__('Loading docker compose file.')")
+        ->toContain("__('Application settings updated!')");
 });
 
 it('resolves representative livewire toast translations in zh_CN', function () {
@@ -54,5 +64,19 @@ it('resolves representative livewire toast translations in zh_CN', function () {
         ->and(__('Docker compose is valid.'))->toBe('Docker Compose 配置有效。')
         ->and(__('Saving new docker compose...'))->toBe('正在保存新的 Docker Compose...')
         ->and(__('Service updated successfully'))->toBe('服务已成功更新。')
-        ->and(__('Gracefully stopping database.'))->toBe('正在优雅停止数据库。');
+        ->and(__('Gracefully stopping database.'))->toBe('正在优雅停止数据库。')
+        ->and(__('Validating DNS failed.'))->toBe('DNS 校验失败。')
+        ->and(__('Preview not found.'))->toBe('未找到预览。')
+        ->and(__('Preview added.'))->toBe('预览已添加。')
+        ->and(__('Deployment queue full'))->toBe('部署队列已满')
+        ->and(__('Deployment skipped'))->toBe('已跳过部署')
+        ->and(__('Manual Docker Image previews are only available for Docker Image applications.'))->toBe('手动 Docker 镜像预览只适用于 Docker 镜像应用。')
+        ->and(__('Both pull request id and docker tag are required.'))->toBe('拉取请求 ID 和 Docker 标签都必须填写。')
+        ->and(__('Failed to parse your docker-compose file. Please check the syntax and try again.'))->toBe('无法解析你的 docker-compose 文件。请检查语法后重试。')
+        ->and(__('Loading docker compose file.'))->toBe('正在加载 Docker Compose 文件。')
+        ->and(__('Docker compose file loaded.'))->toBe('Docker Compose 文件已加载。')
+        ->and(__('Wildcard domain generated.'))->toBe('通配域名已生成。')
+        ->and(__('Nginx configuration generated.'))->toBe('Nginx 配置已生成。')
+        ->and(__('Redirect updated.'))->toBe('重定向已更新。')
+        ->and(__('Application settings updated!'))->toBe('应用设置已更新！');
 });
