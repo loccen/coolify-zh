@@ -378,7 +378,12 @@ it('resolves additional follow-up translations in zh_CN', function () {
         ->and(__('Contact your team administrator to add resources.'))->toBe('请联系团队管理员添加资源。')
         ->and(__('No executions yet'))->toBe('还没有执行记录')
         ->and(__('Edit project details here.'))->toBe('在这里编辑项目详情。')
-        ->and(__('Environment'))->toBe('环境');
+        ->and(__('Environment'))->toBe('环境')
+        ->and(__('A powerful Markdown workspace designed for speed, clarity, and creativity.'))->toBe('为速度、清晰度和创造力而设计的强大文档工作区。')
+        ->and(__('AnythingLLM is the easiest to use, all-in-one AI application that can do RAG, AI Agents, and much more with no code or infrastructure headaches.'))->toBe('AnythingLLM 是一款易用的一体化智能应用，可实现检索增强生成、智能代理等功能，无需编写代码，也不用折腾基础设施。')
+        ->and(__('AppFlowy is the AI collaborative workspace where you achieve more without losing control of your data.'))->toBe('AppFlowy 是一个智能协作工作空间，让你在不失去数据控制权的前提下完成更多工作。')
+        ->and(__('A backend-as-a-service platform that simplifies the web & mobile app development.'))->toBe('简化网页和移动应用开发的后端即服务平台。')
+        ->and(__('Process PDFs entirely in your browser. No uploads. No servers. Complete privacy.'))->toBe('完全在浏览器中处理文档。无需上传，无需服务器，隐私完全可控。');
 });
 
 it('uses explicit translation lookups in project validation message sources', function () {
