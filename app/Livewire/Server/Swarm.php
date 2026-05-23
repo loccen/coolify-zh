@@ -46,7 +46,7 @@ class Swarm extends Component
     {
         try {
             $this->syncData(true);
-            $this->dispatch('success', 'Swarm settings updated.');
+            $this->dispatch('success', __('server.toasts.swarm_settings_updated'));
         } catch (\Throwable $e) {
             return handleError($e, $this);
         }
