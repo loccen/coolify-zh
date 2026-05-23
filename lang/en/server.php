@@ -76,4 +76,10 @@ return [
         'ca_certificate_regenerated_successfully' => 'CA Certificate regenerated successfully.',
         'server_validated_proxy_starting' => 'Server validated, proxy is starting in a moment.',
     ],
+    'delete' => [
+        'force_delete_resources_label' => 'Delete all resources (:count total)',
+        'force_delete_resources_warning' => 'Server cannot be deleted while it has resources.',
+        'delete_from_hetzner_label' => 'Also delete server from Hetzner Cloud',
+        'delete_from_hetzner_warning' => 'The actual server on Hetzner Cloud will NOT be deleted.',
+    ],
 ];

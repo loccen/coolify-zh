@@ -30,7 +30,7 @@ class Delete extends Component
     public function delete($password, $selectedActions = [])
     {
         if (! verifyPasswordConfirmation($password, $this)) {
-            return 'The provided password is incorrect.';
+            return __('The provided password is incorrect.');
         }
 
         if (! empty($selectedActions)) {
@@ -74,16 +74,16 @@ class Delete extends Component
             $resourceCount = $this->server->definedResources()->count();
             $checkboxes[] = [
                 'id' => 'force_delete_resources',
-                'label' => "Delete all resources ({$resourceCount} total)",
-                'default_warning' => 'Server cannot be deleted while it has resources.',
+                'label' => __('server.delete.force_delete_resources_label', ['count' => $resourceCount]),
+                'default_warning' => __('server.delete.force_delete_resources_warning'),
             ];
         }
 
         if ($this->server->hetzner_server_id) {
             $checkboxes[] = [
                 'id' => 'delete_from_hetzner',
-                'label' => 'Also delete server from Hetzner Cloud',
-                'default_warning' => 'The actual server on Hetzner Cloud will NOT be deleted.',
+                'label' => __('server.delete.delete_from_hetzner_label'),
+                'default_warning' => __('server.delete.delete_from_hetzner_warning'),
             ];
         }
 
