@@ -82,7 +82,7 @@ class Show extends Component
                 $deploy = new DeployController;
                 $message->push($deploy->deploy_resource($resource));
             });
-            $this->dispatch('success', 'Mass deployment started.');
+            $this->dispatch('success', trans('tags.toasts.mass_deployment_started'));
         } catch (\Exception $e) {
             return handleError($e, $this);
         }

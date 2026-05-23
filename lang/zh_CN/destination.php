@@ -10,4 +10,8 @@ return [
         'server_ip' => '服务器 IP',
         'docker_network' => 'Docker 网络',
     ],
+    'toasts' => [
+        'saved' => '目标位置已保存。',
+        'delete_resources_first' => '删除此目标位置前，必须先删除所有资源。',
+    ],
 ];

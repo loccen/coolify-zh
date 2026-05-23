@@ -26,6 +26,7 @@ return [
         'unexpected_error' => '(sorry, something went wrong, please try again)',
     ],
     'toasts' => [
+        'select_server_or_container' => 'Please select a server or a container.',
         'connection_error' => 'Terminal connection error: :reason',
         'inactivity_closed' => 'Terminal closed after 30 minutes of inactivity.',
         'reconnecting' => 'Terminal websocket connection lost. Reconnecting...',

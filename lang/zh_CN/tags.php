@@ -14,4 +14,7 @@ return [
             'unavailable' => '重新部署期间资源会暂时不可用。',
         ],
     ],
+    'toasts' => [
+        'mass_deployment_started' => '批量部署已开始。',
+    ],
 ];

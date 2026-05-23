@@ -59,7 +59,7 @@ class Show extends Component
             $this->authorize('update', $this->destination);
 
             $this->syncData(true);
-            $this->dispatch('success', 'Destination saved.');
+            $this->dispatch('success', trans('destination.toasts.saved'));
         } catch (\Throwable $e) {
             return handleError($e, $this);
         }
@@ -72,7 +72,7 @@ class Show extends Component
 
             if ($this->destination->getMorphClass() === StandaloneDocker::class) {
                 if ($this->destination->attachedTo()) {
-                    return $this->dispatch('error', 'You must delete all resources before deleting this destination.');
+                    return $this->dispatch('error', trans('destination.toasts.delete_resources_first'));
                 }
                 $safeNetwork = escapeshellarg($this->destination->network);
                 instant_remote_process(["docker network disconnect {$safeNetwork} coolify-proxy"], $this->destination->server, throwError: false);

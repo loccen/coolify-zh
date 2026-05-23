@@ -2144,5 +2144,8 @@
     "You don't have permission to delete this resource. Contact your team administrator for access.": "You don't have permission to delete this resource. Contact your team administrator for access.",
     "You don't have permission to manage tags. Contact your team administrator to request access.": "You don't have permission to manage tags. Contact your team administrator to request access.",
     "You don't have permission to move resources between projects or environments. Contact your team administrator to request access.": "You don't have permission to move resources between projects or environments. Contact your team administrator to request access.",
-    "configuration required": "configuration required"
+    "configuration required": "configuration required",
+    "Environment variables updated.": "Environment variables updated.",
+    "Failed to create storage.": "Failed to create storage.",
+    "Realtime events configured!": "Realtime events configured!"
 }
