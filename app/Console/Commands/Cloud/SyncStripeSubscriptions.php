@@ -11,16 +11,21 @@ class SyncStripeSubscriptions extends Command
 
     protected $description = 'Sync subscription status with Stripe. By default only checks, use --fix to apply changes.';
 
+    public function getDescription(): string
+    {
+        return trans('console.sync_stripe_subscriptions.description');
+    }
+
     public function handle(): int
     {
         if (! isCloud()) {
-            $this->error('This command can only be run on Coolify Cloud.');
+            $this->error(trans('console.sync_stripe_subscriptions.error.cloud_only'));
 
             return 1;
         }
 
         if (! isStripe()) {
-            $this->error('Stripe is not configured.');
+            $this->error(trans('console.sync_stripe_subscriptions.error.stripe_not_configured'));
 
             return 1;
         }
@@ -28,9 +33,9 @@ class SyncStripeSubscriptions extends Command
         $fix = $this->option('fix');
 
         if ($fix) {
-            $this->warn('Running with --fix: discrepancies will be corrected.');
+            $this->warn(trans('console.sync_stripe_subscriptions.warn.running_with_fix'));
         } else {
-            $this->info('Running in check mode (no changes will be made). Use --fix to apply corrections.');
+            $this->info(trans('console.sync_stripe_subscriptions.info.running_in_check_mode'));
         }
 
         $this->newLine();
@@ -39,7 +44,7 @@ class SyncStripeSubscriptions extends Command
         $fetched = 0;
         $result = $job->handle(function (int $count) use (&$fetched): void {
             $fetched = $count;
-            $this->output->write("\r  Fetching subscriptions from Stripe... {$fetched}");
+            $this->output->write("\r  ".trans('console.sync_stripe_subscriptions.info.fetching_subscriptions', ['count' => $fetched]));
         });
         if ($fetched > 0) {
             $this->output->write("\r".str_repeat(' ', 60)."\r");
@@ -51,48 +56,48 @@ class SyncStripeSubscriptions extends Command
             return 1;
         }
 
-        $this->info("Total subscriptions checked: {$result['total_checked']}");
+        $this->info(trans('console.sync_stripe_subscriptions.info.total_subscriptions_checked', ['count' => $result['total_checked']]));
         $this->newLine();
 
         if (count($result['discrepancies']) > 0) {
-            $this->warn('Discrepancies found: '.count($result['discrepancies']));
+            $this->warn(trans('console.sync_stripe_subscriptions.warn.discrepancies_found', ['count' => count($result['discrepancies'])]));
             $this->newLine();
 
             foreach ($result['discrepancies'] as $discrepancy) {
-                $this->line("  - Subscription ID: {$discrepancy['subscription_id']}");
-                $this->line("    Team ID: {$discrepancy['team_id']}");
-                $this->line("    Stripe ID: {$discrepancy['stripe_subscription_id']}");
-                $this->line("    Stripe Status: {$discrepancy['stripe_status']}");
+                $this->line('  - '.trans('console.sync_stripe_subscriptions.labels.subscription_id', ['value' => $discrepancy['subscription_id']]));
+                $this->line('    '.trans('console.sync_stripe_subscriptions.labels.team_id', ['value' => $discrepancy['team_id']]));
+                $this->line('    '.trans('console.sync_stripe_subscriptions.labels.stripe_id', ['value' => $discrepancy['stripe_subscription_id']]));
+                $this->line('    '.trans('console.sync_stripe_subscriptions.labels.stripe_status', ['value' => $discrepancy['stripe_status']]));
                 $this->newLine();
             }
 
             if ($fix) {
-                $this->info('All discrepancies have been fixed.');
+                $this->info(trans('console.sync_stripe_subscriptions.info.all_discrepancies_fixed'));
             } else {
-                $this->comment('Run with --fix to correct these discrepancies.');
+                $this->comment(trans('console.sync_stripe_subscriptions.info.run_with_fix'));
             }
         } else {
-            $this->info('No discrepancies found. All subscriptions are in sync.');
+            $this->info(trans('console.sync_stripe_subscriptions.info.no_discrepancies_found'));
         }
 
         if (count($result['resubscribed']) > 0) {
             $this->newLine();
-            $this->warn('Resubscribed users (same email, different customer): '.count($result['resubscribed']));
+            $this->warn(trans('console.sync_stripe_subscriptions.warn.resubscribed_users', ['count' => count($result['resubscribed'])]));
             $this->newLine();
 
             foreach ($result['resubscribed'] as $resub) {
-                $this->line("  - Team ID: {$resub['team_id']} | Email: {$resub['email']}");
-                $this->line("    Old: {$resub['old_stripe_subscription_id']} (cus: {$resub['old_stripe_customer_id']})");
-                $this->line("    New: {$resub['new_stripe_subscription_id']} (cus: {$resub['new_stripe_customer_id']}) [{$resub['new_status']}]");
+                $this->line('  - '.trans('console.sync_stripe_subscriptions.labels.team_id_with_email', ['team_id' => $resub['team_id'], 'email' => $resub['email']]));
+                $this->line('    '.trans('console.sync_stripe_subscriptions.labels.old', ['subscription_id' => $resub['old_stripe_subscription_id'], 'customer_id' => $resub['old_stripe_customer_id']]));
+                $this->line('    '.trans('console.sync_stripe_subscriptions.labels.new', ['subscription_id' => $resub['new_stripe_subscription_id'], 'customer_id' => $resub['new_stripe_customer_id'], 'status' => $resub['new_status']]));
                 $this->newLine();
             }
         }
 
         if (count($result['errors']) > 0) {
             $this->newLine();
-            $this->error('Errors encountered: '.count($result['errors']));
+            $this->error(trans('console.sync_stripe_subscriptions.error.errors_encountered', ['count' => count($result['errors'])]));
             foreach ($result['errors'] as $error) {
-                $this->line("  - Subscription {$error['subscription_id']}: {$error['error']}");
+                $this->line('  - '.trans('console.sync_stripe_subscriptions.labels.subscription_error', ['subscription_id' => $error['subscription_id'], 'error' => $error['error']]));
             }
         }
 

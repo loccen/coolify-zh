@@ -223,6 +223,37 @@ return [
             'an_error_occurred' => 'An error occurred: :message',
         ],
     ],
+    'sync_stripe_subscriptions' => [
+        'description' => 'Sync subscription status with Stripe. By default only checks, use --fix to apply changes.',
+        'info' => [
+            'running_in_check_mode' => 'Running in check mode (no changes will be made). Use --fix to apply corrections.',
+            'fetching_subscriptions' => 'Fetching subscriptions from Stripe... :count',
+            'total_subscriptions_checked' => 'Total subscriptions checked: :count',
+            'all_discrepancies_fixed' => 'All discrepancies have been fixed.',
+            'run_with_fix' => 'Run with --fix to correct these discrepancies.',
+            'no_discrepancies_found' => 'No discrepancies found. All subscriptions are in sync.',
+        ],
+        'warn' => [
+            'running_with_fix' => 'Running with --fix: discrepancies will be corrected.',
+            'discrepancies_found' => 'Discrepancies found: :count',
+            'resubscribed_users' => 'Resubscribed users (same email, different customer): :count',
+        ],
+        'error' => [
+            'cloud_only' => 'This command can only be run on Coolify Cloud.',
+            'stripe_not_configured' => 'Stripe is not configured.',
+            'errors_encountered' => 'Errors encountered: :count',
+        ],
+        'labels' => [
+            'subscription_id' => 'Subscription ID: :value',
+            'team_id' => 'Team ID: :value',
+            'stripe_id' => 'Stripe ID: :value',
+            'stripe_status' => 'Stripe Status: :value',
+            'team_id_with_email' => 'Team ID: :team_id | Email: :email',
+            'old' => 'Old: :subscription_id (cus: :customer_id)',
+            'new' => 'New: :subscription_id (cus: :customer_id) [:status]',
+            'subscription_error' => 'Subscription :subscription_id: :error',
+        ],
+    ],
     'traefik_check_version' => [
         'description' => 'Check Traefik proxy versions on all servers and send notifications for outdated versions',
         'checking' => 'Checking Traefik versions on all servers...',
