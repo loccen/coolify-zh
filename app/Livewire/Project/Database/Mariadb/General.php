@@ -119,22 +119,25 @@ class General extends Component
         );
     }
 
-    protected $validationAttributes = [
-        'name' => '名称',
-        'description' => '描述',
-        'mariadbRootPassword' => '根密码',
-        'mariadbUser' => '用户',
-        'mariadbPassword' => '密码',
-        'mariadbDatabase' => '数据库',
-        'mariadbConf' => 'MariaDB 配置',
-        'image' => '镜像',
-        'portsMappings' => '端口映射',
-        'isPublic' => '是否公开',
-        'publicPort' => '公共端口',
-        'publicPortTimeout' => '公共端口超时',
-        'customDockerRunOptions' => '自定义 Docker 选项',
-        'enableSsl' => '启用 SSL',
-    ];
+    protected function validationAttributes(): array
+    {
+        return [
+            'name' => __('Name'),
+            'description' => __('Description'),
+            'mariadbRootPassword' => __('Root Password'),
+            'mariadbUser' => __('User'),
+            'mariadbPassword' => __('Password'),
+            'mariadbDatabase' => __('Database'),
+            'mariadbConf' => __('MariaDB Configuration'),
+            'image' => __('Image'),
+            'portsMappings' => __('Port Mapping'),
+            'isPublic' => __('Is Public'),
+            'publicPort' => __('Public Port'),
+            'publicPortTimeout' => __('Public Port Timeout'),
+            'customDockerRunOptions' => __('Custom Docker Options'),
+            'enableSsl' => __('Enable SSL'),
+        ];
+    }
 
     public function mount()
     {

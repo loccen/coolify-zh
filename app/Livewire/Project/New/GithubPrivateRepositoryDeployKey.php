@@ -69,14 +69,17 @@ class GithubPrivateRepositoryDeployKey extends Component
         ];
     }
 
-    protected $validationAttributes = [
-        'repository_url' => '仓库',
-        'branch' => '分支',
-        'port' => '端口',
-        'is_static' => '静态站点',
-        'publish_directory' => '发布目录',
-        'build_pack' => '构建包',
-    ];
+    protected function validationAttributes(): array
+    {
+        return [
+            'repository_url' => __('Repository'),
+            'branch' => __('Branch'),
+            'port' => __('Port'),
+            'is_static' => __('Static'),
+            'publish_directory' => __('Publish Directory'),
+            'build_pack' => __('Build Pack'),
+        ];
+    }
 
     public function mount()
     {

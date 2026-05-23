@@ -86,3 +86,30 @@ test('existing application shows railpack beta label in build pack selector', fu
         ->assertSuccessful()
         ->assertSee('Railpack (Beta)');
 });
+
+test('application general validation errors stay in english when locale is en', function () {
+    $application = Application::factory()->create([
+        'environment_id' => $this->environment->id,
+        'destination_id' => $this->destination->id,
+        'destination_type' => StandaloneDocker::class,
+        'build_pack' => 'nixpacks',
+        'static_image' => 'nginx:alpine',
+        'base_directory' => '/',
+        'is_http_basic_auth_enabled' => false,
+        'redirect' => 'no',
+        'git_repository' => 'https://github.com/coollabsio/coolify-examples',
+        'git_branch' => 'main',
+    ]);
+
+    $component = Livewire::test(General::class, ['application' => $application]);
+    $instance = $component->instance();
+
+    $validator = validator(
+        ['gitRepository' => ''],
+        ['gitRepository' => (fn () => $this->rules()['gitRepository'])->call($instance)],
+        ['gitRepository.required' => (fn () => $this->messages()['gitRepository.required'])->call($instance)],
+        ['gitRepository' => (fn () => $this->validationAttributes()['gitRepository'])->call($instance)],
+    );
+
+    expect($validator->errors()->first('gitRepository'))->toBe('The Git Repository field is required.');
+});

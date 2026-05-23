@@ -12,9 +12,11 @@ use App\Models\Project;
 use App\Models\Server;
 use App\Models\StandaloneDocker;
 use App\Models\StandaloneMysql;
+use App\Models\StandalonePostgresql;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\App;
 use Livewire\Livewire;
 
 uses(RefreshDatabase::class);
@@ -74,4 +76,39 @@ it('reloads the mysql database model when refreshing so ssl controls follow the 
 
     $component->call('refresh')
         ->assertSee('Database should be stopped to change this settings.');
+});
+
+it('keeps postgresql validation errors in english when locale is en', function () {
+    App::setLocale('en');
+
+    $server = Server::factory()->create(['team_id' => $this->team->id]);
+    $destination = StandaloneDocker::where('server_id', $server->id)->first();
+    $project = Project::factory()->create(['team_id' => $this->team->id]);
+    $environment = Environment::factory()->create(['project_id' => $project->id]);
+
+    $database = StandalonePostgresql::create([
+        'name' => 'test-postgres',
+        'image' => 'postgres:15-alpine',
+        'postgres_user' => 'postgres',
+        'postgres_password' => 'password',
+        'postgres_db' => 'testdb',
+        'status' => 'exited:unhealthy',
+        'enable_ssl' => false,
+        'is_log_drain_enabled' => false,
+        'environment_id' => $environment->id,
+        'destination_id' => $destination->id,
+        'destination_type' => $destination->getMorphClass(),
+    ]);
+
+    $component = Livewire::test(PostgresqlGeneral::class, ['database' => $database]);
+    $instance = $component->instance();
+
+    $validator = validator(
+        ['name' => ''],
+        ['name' => (fn () => $this->rules()['name'])->call($instance)],
+        ['name.required' => (fn () => $this->messages()['name.required'])->call($instance)],
+        ['name' => (fn () => $this->validationAttributes()['name'])->call($instance)],
+    );
+
+    expect($validator->errors()->first('name'))->toBe('The Name field is required.');
 });

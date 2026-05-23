@@ -74,15 +74,18 @@ class PublicGitRepository extends Component
         ];
     }
 
-    protected $validationAttributes = [
-        'repository_url' => '仓库',
-        'port' => '端口',
-        'isStatic' => '静态站点',
-        'publish_directory' => '发布目录',
-        'build_pack' => '构建包',
-        'base_directory' => '基础目录',
-        'docker_compose_location' => 'Docker Compose 路径',
-    ];
+    protected function validationAttributes(): array
+    {
+        return [
+            'repository_url' => __('Repository'),
+            'port' => __('Port'),
+            'isStatic' => __('Static'),
+            'publish_directory' => __('Publish Directory'),
+            'build_pack' => __('Build Pack'),
+            'base_directory' => __('Base Directory'),
+            'docker_compose_location' => __('Docker Compose Location'),
+        ];
+    }
 
     public function mount()
     {
