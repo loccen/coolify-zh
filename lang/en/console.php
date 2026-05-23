@@ -50,4 +50,18 @@ return [
         'notifications_pending' => 'Notifications will be sent to teams with outdated Traefik versions.',
         'dispatch_failed' => 'Failed to dispatch Traefik version check job: :message',
     ],
+    'clear_global_search_cache' => [
+        'description' => 'Clear the global search cache',
+        'error' => [
+            'no_authenticated_user' => 'No authenticated user found. Use --team=TEAM_ID or --all.',
+            'team_not_found' => 'Team with ID :team_id not found.',
+        ],
+        'warn' => [
+            'no_teams_found' => 'No teams found.',
+        ],
+        'info' => [
+            'cleared_team_cache' => 'Cleared global search cache for team :team_name (ID: :team_id).',
+            'cleared_all_teams_cache' => 'Cleared global search cache for :count team(s).',
+        ],
+    ],
 ];
