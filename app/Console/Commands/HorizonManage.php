@@ -33,16 +33,16 @@ class HorizonManage extends Command
         }
 
         $action = select(
-            label: 'What to do?',
+            label: trans('console.horizon_manage.prompts.what_to_do', locale: app()->getLocale()),
             options: [
-                'pending' => 'Pending Jobs',
-                'running' => 'Running Jobs',
-                'can-i-restart-this-worker' => 'Can I restart this worker?',
-                'job-status' => 'Job Status',
-                'workers' => 'Workers',
-                'failed' => 'Failed Jobs',
-                'failed-delete' => 'Failed Jobs - Delete',
-                'purge-queues' => 'Purge Queues',
+                'pending' => trans('console.horizon_manage.options.pending', locale: app()->getLocale()),
+                'running' => trans('console.horizon_manage.options.running', locale: app()->getLocale()),
+                'can-i-restart-this-worker' => trans('console.horizon_manage.options.can_i_restart_this_worker', locale: app()->getLocale()),
+                'job-status' => trans('console.horizon_manage.options.job_status', locale: app()->getLocale()),
+                'workers' => trans('console.horizon_manage.options.workers', locale: app()->getLocale()),
+                'failed' => trans('console.horizon_manage.options.failed', locale: app()->getLocale()),
+                'failed-delete' => trans('console.horizon_manage.options.failed_delete', locale: app()->getLocale()),
+                'purge-queues' => trans('console.horizon_manage.options.purge_queues', locale: app()->getLocale()),
             ]
         );
 
@@ -51,7 +51,7 @@ class HorizonManage extends Command
         }
 
         if ($action === 'job-status') {
-            $jobId = text('Which job to check?');
+            $jobId = text(trans('console.horizon_manage.prompts.which_job_to_check', locale: app()->getLocale()));
             $jobStatus = $this->getJobStatus($jobId);
             $this->info(trans('console.horizon_manage.job_status', ['status' => $jobStatus]));
         }
@@ -110,7 +110,7 @@ class HorizonManage extends Command
                 return;
             }
             $jobIds = multiselect(
-                label: 'Which job to delete?',
+                label: trans('console.horizon_manage.prompts.which_job_to_delete', locale: app()->getLocale()),
                 options: collect($failedJobsTable)->mapWithKeys(fn ($job) => [$job['id'] => $job['id'].' - '.$job['name']])->toArray(),
             );
             foreach ($jobIds as $jobId) {
@@ -152,7 +152,7 @@ class HorizonManage extends Command
         if ($action === 'purge-queues') {
             $getQueues = app(CustomJobRepository::class)->getQueues();
             $queueName = select(
-                label: 'Which queue to purge?',
+                label: trans('console.horizon_manage.prompts.which_queue_to_purge', locale: app()->getLocale()),
                 options: $getQueues,
             );
             $redisJobRepository = app(RedisJobRepository::class);

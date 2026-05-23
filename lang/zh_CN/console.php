@@ -156,6 +156,22 @@ return [
         'no_pending_jobs_found' => '未找到待处理作业。',
         'no_failed_jobs_found' => '未找到失败作业。',
         'no_running_jobs_found' => '未找到运行中的作业。',
+        'prompts' => [
+            'what_to_do' => '要执行什么操作？',
+            'which_job_to_check' => '要检查哪个作业？',
+            'which_job_to_delete' => '要删除哪个作业？',
+            'which_queue_to_purge' => '要清空哪个队列？',
+        ],
+        'options' => [
+            'pending' => '待处理作业',
+            'running' => '运行中的作业',
+            'can_i_restart_this_worker' => '现在可以重启这个 worker 吗？',
+            'job_status' => '作业状态',
+            'workers' => 'Workers',
+            'failed' => '失败作业',
+            'failed_delete' => '失败作业 - 删除',
+            'purge_queues' => '清空队列',
+        ],
     ],
     'generate_services' => [
         'info' => [
