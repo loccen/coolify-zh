@@ -147,6 +147,25 @@ describe('CloneMe Project IDOR', function () {
 
         expect($component->get('project_id'))->toBe($this->projectA->id);
     });
+
+    test('cloning a project from the default production environment does not create a duplicate default environment', function () {
+        $productionEnvironment = $this->projectA->environments()->where('name', 'production')->firstOrFail();
+
+        $destination = StandaloneDocker::where('server_id', $this->serverA->id)->firstOrFail();
+
+        Livewire::test(CloneMe::class, [
+            'project_uuid' => $this->projectA->uuid,
+            'environment_uuid' => $productionEnvironment->uuid,
+        ])
+            ->set('selectedDestination', $destination->id)
+            ->set('newName', 'Cloned Project')
+            ->call('clone', 'project');
+
+        $clonedProject = Project::query()->where('name', 'Cloned Project')->firstOrFail();
+
+        expect($clonedProject->environments)->toHaveCount(1)
+            ->and($clonedProject->environments->first()->name)->toBe('production');
+    });
 });
 
 describe('DeployController API Server IDOR', function () {

@@ -61,7 +61,8 @@ it('seeds the railpack examples in development mode', function () {
         ->and($project->name)->toBe('Railpack 示例')
         ->and($project->description)->toBe('仅用于开发环境的 Railpack 示例，来自 coollabsio/coolify-examples@next。')
         ->and($project->environments)->toHaveCount(1)
-        ->and($project->environments->first()->uuid)->toBe(DevelopmentRailpackExamplesSeeder::ENVIRONMENT_UUID);
+        ->and($project->environments->first()->uuid)->toBe(DevelopmentRailpackExamplesSeeder::ENVIRONMENT_UUID)
+        ->and($project->environments->first()->name)->toBe('production');
 
     $applications = $project->applications()->with('settings')->orderBy('uuid')->get();
 

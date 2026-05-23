@@ -19,7 +19,7 @@ class ProjectSeeder extends Seeder
         // Update the auto-created environment with a deterministic UUID
         $project->environments()->first()->update([
             'uuid' => 'production',
-            'name' => '生产',
+            'name' => 'production',
         ]);
     }
 }

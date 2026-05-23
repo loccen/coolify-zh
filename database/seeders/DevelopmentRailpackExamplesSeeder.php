@@ -456,12 +456,12 @@ KEY,
 
         if (! $environment) {
             $environment = $project->environments()->create([
-                'name' => '生产',
+                'name' => 'production',
                 'uuid' => self::ENVIRONMENT_UUID,
             ]);
         } else {
             $environment->update([
-                'name' => '生产',
+                'name' => 'production',
                 'uuid' => self::ENVIRONMENT_UUID,
             ]);
         }
