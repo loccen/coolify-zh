@@ -19,6 +19,13 @@ class ScheduledJobDiagnostics extends Command
 
     protected $description = 'Inspect dedup cache state and scheduling decisions for all scheduled jobs';
 
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->setDescription(trans('console.scheduled_job_diagnostics.description', locale: app()->getLocale()));
+    }
+
     public function handle(): int
     {
         $type = $this->option('type');
@@ -50,16 +57,16 @@ class ScheduledJobDiagnostics extends Command
         $heartbeat = Cache::get('scheduled-job-manager:heartbeat');
         if ($heartbeat) {
             $age = Carbon::parse($heartbeat)->diffForHumans();
-            $this->info("Scheduler heartbeat: {$heartbeat} ({$age})");
+            $this->info(trans('console.scheduled_job_diagnostics.heartbeat', ['heartbeat' => $heartbeat, 'age' => $age], locale: app()->getLocale()));
         } else {
-            $this->error('Scheduler heartbeat: MISSING — ScheduledJobManager may not be running');
+            $this->error(trans('console.scheduled_job_diagnostics.heartbeat_missing', locale: app()->getLocale()));
         }
         $this->newLine();
     }
 
     private function inspectDockerCleanups(?string $serverFilter): void
     {
-        $this->info('=== Docker Cleanup Jobs ===');
+        $this->info(trans('console.scheduled_job_diagnostics.sections.docker_cleanup', locale: app()->getLocale()));
 
         $servers = $this->getServers($serverFilter);
 
@@ -105,7 +112,7 @@ class ScheduledJobDiagnostics extends Command
 
     private function inspectBackups(): void
     {
-        $this->info('=== Scheduled Backups ===');
+        $this->info(trans('console.scheduled_job_diagnostics.sections.scheduled_backups', locale: app()->getLocale()));
 
         $backups = ScheduledDatabaseBackup::with(['database'])
             ->where('enabled', true)
@@ -148,7 +155,7 @@ class ScheduledJobDiagnostics extends Command
 
     private function inspectTasks(): void
     {
-        $this->info('=== Scheduled Tasks ===');
+        $this->info(trans('console.scheduled_job_diagnostics.sections.scheduled_tasks', locale: app()->getLocale()));
 
         $tasks = ScheduledTask::with(['service', 'application'])
             ->where('enabled', true)
@@ -191,7 +198,7 @@ class ScheduledJobDiagnostics extends Command
 
     private function inspectServerJobs(?string $serverFilter): void
     {
-        $this->info('=== Server Manager Jobs ===');
+        $this->info(trans('console.scheduled_job_diagnostics.sections.server_manager_jobs', locale: app()->getLocale()));
 
         $servers = $this->getServers($serverFilter);
 
