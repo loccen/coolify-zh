@@ -7,8 +7,10 @@ it('uses explicit translation lookups in server navbar toast dispatches', functi
 
     expect($component)
         ->toContain("__('server.toasts.proxy_running')")
+        ->toContain("__('server.toasts.proxy_exited')")
         ->toContain("__('server.toasts.proxy_restart_failed')")
         ->not->toContain('Proxy is running.')
+        ->not->toContain('Proxy has exited.')
         ->not->toContain('Proxy restart failed. Check logs.');
 });
 
@@ -17,6 +19,8 @@ it('resolves server navbar toast translations in en and zh_CN', function () {
 
     expect(__('server.toasts.proxy_running'))
         ->toBe('Proxy is running.')
+        ->and(__('server.toasts.proxy_exited'))
+        ->toBe('Proxy has exited.')
         ->and(__('server.toasts.proxy_restart_failed'))
         ->toBe('Proxy restart failed. Check logs.');
 
@@ -24,6 +28,8 @@ it('resolves server navbar toast translations in en and zh_CN', function () {
 
     expect(__('server.toasts.proxy_running'))
         ->toBe('代理正在运行。')
+        ->and(__('server.toasts.proxy_exited'))
+        ->toBe('代理已退出。')
         ->and(__('server.toasts.proxy_restart_failed'))
         ->toBe('代理重启失败。请查看日志。');
 });

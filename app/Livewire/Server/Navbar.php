@@ -167,7 +167,7 @@ class Navbar extends Component
                 // Only show "Proxy has exited" notification when transitioning from running state
                 // Don't show during normal stop/restart flows (stopping, restarting)
                 if (in_array($previousStatus, ['running'])) {
-                    $this->dispatch('info', 'Proxy has exited.');
+                    $this->dispatch('info', __('server.toasts.proxy_exited'));
                     $this->lastNotifiedStatus = $this->proxyStatus;
                 }
                 break;
