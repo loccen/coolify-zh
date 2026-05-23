@@ -63,7 +63,7 @@ class Advanced extends Component
     {
         try {
             $this->syncData(true);
-            $this->dispatch('success', 'Server updated.');
+            $this->dispatch('success', __('server.toasts.server_updated'));
         } catch (\Throwable $e) {
             return handleError($e, $this);
         }
@@ -74,10 +74,10 @@ class Advanced extends Component
         try {
             if (! validate_cron_expression($this->serverDiskUsageCheckFrequency)) {
                 $this->serverDiskUsageCheckFrequency = $this->server->settings->getOriginal('server_disk_usage_check_frequency');
-                throw new \Exception('Invalid Cron / Human expression for Disk Usage Check Frequency.');
+                throw new \Exception(__('server.toasts.invalid_disk_usage_check_frequency'));
             }
             $this->syncData(true);
-            $this->dispatch('success', 'Server updated.');
+            $this->dispatch('success', __('server.toasts.server_updated'));
         } catch (\Throwable $e) {
             return handleError($e, $this);
         }
