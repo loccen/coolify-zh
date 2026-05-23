@@ -47,6 +47,19 @@ class Add extends Component
         'timeout' => 'required|integer|min:60|max:36000',
     ];
 
+    protected function messages(): array
+    {
+        return [
+            'name.required' => __('The scheduled task name field is required.'),
+            'command.required' => __('The scheduled task command field is required.'),
+            'frequency.required' => __('The scheduled task frequency field is required.'),
+            'timeout.required' => __('The scheduled task timeout field is required.'),
+            'timeout.integer' => __('The scheduled task timeout must be an integer.'),
+            'timeout.min' => __('The scheduled task timeout must be at least :min seconds.'),
+            'timeout.max' => __('The scheduled task timeout must not be greater than :max seconds.'),
+        ];
+    }
+
     protected $validationAttributes = [
         'name' => 'name',
         'command' => 'command',

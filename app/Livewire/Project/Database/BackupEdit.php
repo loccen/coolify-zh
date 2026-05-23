@@ -123,7 +123,7 @@ class BackupEdit extends Component
         } else {
             $this->backupEnabled = $this->backup->enabled;
             $this->frequency = $this->backup->frequency;
-            $this->timezone = data_get($this->backup->server(), 'settings.server_timezone', 'Instance timezone');
+            $this->timezone = data_get($this->backup->server(), 'settings.server_timezone', __('Instance timezone'));
             $this->databaseBackupRetentionAmountLocally = $this->backup->database_backup_retention_amount_locally;
             $this->databaseBackupRetentionDaysLocally = $this->backup->database_backup_retention_days_locally;
             $this->databaseBackupRetentionMaxStorageLocally = $this->backup->database_backup_retention_max_storage_locally;

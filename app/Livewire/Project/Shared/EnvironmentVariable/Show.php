@@ -87,7 +87,7 @@ class Show extends Component
 
     protected function messages(): array
     {
-        return ValidationPatterns::environmentVariableKeyMessages('key');
+        return ValidationPatterns::environmentVariableKeyMessages('key', 'Key');
     }
 
     public function mount()

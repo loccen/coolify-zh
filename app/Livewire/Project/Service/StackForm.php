@@ -106,7 +106,7 @@ class StackForm extends Component
                     'customHelper' => $customHelper,
                 ]);
 
-                $this->validationAttributes["fields.$key.value"] = $fieldKey;
+                $this->validationAttributes["fields.$key.value"] = __($fieldKey);
             }
         }
         $this->fields = $this->fields->groupBy('serviceName')->map(function ($group) {

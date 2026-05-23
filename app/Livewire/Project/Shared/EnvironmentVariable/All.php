@@ -159,10 +159,10 @@ class All extends Component
     {
         return $variables->map(function ($item) {
             if ($item->is_shown_once) {
-                return "$item->key=(Locked Secret, delete and add again to change)";
+                return "{$item->key}=(".__('Locked Secret, delete and add again to change').')';
             }
             if ($item->is_multiline) {
-                return "$item->key=(Multiline environment variable, edit in normal view)";
+                return "{$item->key}=(".__('Multiline environment variable, edit in normal view').')';
             }
 
             return "$item->key=$item->value";
@@ -345,7 +345,7 @@ class All extends Component
             $normalizedKey = ValidationPatterns::validatedEnvironmentVariableKey((string) $key);
 
             if (array_key_exists($normalizedKey, $normalizedVariables)) {
-                throw new \InvalidArgumentException("Duplicate environment variable key after normalization: {$normalizedKey}.");
+                throw new \InvalidArgumentException(__('Duplicate environment variable key after normalization: :key.', ['key' => $normalizedKey]));
             }
 
             $normalizedVariables[$normalizedKey] = $data;
