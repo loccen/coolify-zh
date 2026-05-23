@@ -23,13 +23,21 @@ class ViewScheduledLogs extends Command
                             {--monthly : Filter monthly jobs}
                             {--frequency= : Filter by specific cron expression}';
 
-    protected $description = 'View scheduled backups and tasks logs with optional filtering';
+    protected $description = '';
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->setDescription(trans('console.scheduled_logs.description', locale: app()->getLocale()));
+    }
 
     public function handle()
     {
+        $locale = app()->getLocale();
         $date = $this->option('date') ?: now()->format('Y-m-d');
         if (! preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)) {
-            $this->error('Invalid date format. Use Y-m-d (e.g. 2025-01-31).');
+            $this->error(trans('console.scheduled_logs.error.invalid_date_format', locale: $locale));
 
             return self::INVALID;
         }
@@ -50,7 +58,11 @@ class ViewScheduledLogs extends Command
         $logTypeDescription = $this->getLogTypeDescription();
 
         if ($follow) {
-            $this->info("Following {$logTypeDescription} logs for {$date}{$filterDescription} (Press Ctrl+C to stop)...");
+            $this->info(trans('console.scheduled_logs.info.following_logs', [
+                'type' => $logTypeDescription,
+                'date' => $date,
+                'filter' => $filterDescription,
+            ], locale: $locale));
             $this->line('');
 
             if (count($logPaths) === 1) {
@@ -72,7 +84,12 @@ class ViewScheduledLogs extends Command
                 }
             }
         } else {
-            $this->info("Showing last {$lines} lines of {$logTypeDescription} logs for {$date}{$filterDescription}:");
+            $this->info(trans('console.scheduled_logs.info.showing_last_lines', [
+                'lines' => $lines,
+                'type' => $logTypeDescription,
+                'date' => $date,
+                'filter' => $filterDescription,
+            ], locale: $locale));
             $this->line('');
 
             $escapedLines = escapeshellarg((string) $lines);
@@ -131,18 +148,22 @@ class ViewScheduledLogs extends Command
 
     private function showAvailableLogFiles(string $date): void
     {
+        $locale = app()->getLocale();
         $logType = $this->getLogTypeDescription();
-        $this->warn("No {$logType} logs found for date {$date}");
+        $this->warn(trans('console.scheduled_logs.warn.no_logs_found', [
+            'type' => $logType,
+            'date' => $date,
+        ], locale: $locale));
 
         // Show available log files
         $normalFiles = File::glob(storage_path('logs/scheduled-*.log'));
         $errorFiles = File::glob(storage_path('logs/scheduled-errors-*.log'));
 
         if (! empty($normalFiles) || ! empty($errorFiles)) {
-            $this->info('Available scheduled log files:');
+            $this->info(trans('console.scheduled_logs.info.available_log_files', locale: $locale));
 
             if (! empty($normalFiles)) {
-                $this->line('  Normal logs:');
+                $this->line(trans('console.scheduled_logs.info.normal_logs', locale: $locale));
                 foreach ($normalFiles as $file) {
                     $basename = basename($file);
                     $this->line("    - {$basename}");
@@ -150,7 +171,7 @@ class ViewScheduledLogs extends Command
             }
 
             if (! empty($errorFiles)) {
-                $this->line('  Error logs:');
+                $this->line(trans('console.scheduled_logs.info.error_logs', locale: $locale));
                 foreach ($errorFiles as $file) {
                     $basename = basename($file);
                     $this->line("    - {$basename}");
@@ -162,11 +183,11 @@ class ViewScheduledLogs extends Command
     private function getLogTypeDescription(): string
     {
         if ($this->option('errors')) {
-            return 'error';
+            return trans('console.scheduled_logs.types.error', locale: app()->getLocale());
         } elseif ($this->option('all')) {
-            return 'all';
+            return trans('console.scheduled_logs.types.all', locale: app()->getLocale());
         } else {
-            return 'normal';
+            return trans('console.scheduled_logs.types.normal', locale: app()->getLocale());
         }
     }
 

@@ -1,6 +1,27 @@
 <?php
 
 return [
+    'scheduled_logs' => [
+        'description' => 'View scheduled backups and tasks logs with optional filtering',
+        'error' => [
+            'invalid_date_format' => 'Invalid date format. Use Y-m-d (e.g. 2025-01-31).',
+        ],
+        'info' => [
+            'following_logs' => 'Following :type logs for :date:filter (Press Ctrl+C to stop)...',
+            'showing_last_lines' => 'Showing last :lines lines of :type logs for :date:filter:',
+            'available_log_files' => 'Available scheduled log files:',
+            'normal_logs' => '  Normal logs:',
+            'error_logs' => '  Error logs:',
+        ],
+        'warn' => [
+            'no_logs_found' => 'No :type logs found for date :date',
+        ],
+        'types' => [
+            'normal' => 'normal',
+            'error' => 'error',
+            'all' => 'all',
+        ],
+    ],
     'emails' => [
         'description' => 'Send test or production emails',
         'select_prompt' => 'Which email should be sent?',
