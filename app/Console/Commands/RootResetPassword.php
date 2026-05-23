@@ -28,7 +28,7 @@ class RootResetPassword extends Command
     {
         parent::__construct();
 
-        $this->description = trans('console.root_reset_password.description', locale: app()->getLocale());
+        $this->setDescription(trans('console.root_reset_password.description', locale: app()->getLocale()));
     }
 
     /**
