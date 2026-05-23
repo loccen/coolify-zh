@@ -55,5 +55,7 @@ return [
         'test_email_development_only' => 'Test email functionality is only available in development mode.',
         'test_email_sent_successfully' => 'Test email sent successfully! Check your email inbox.',
         'test_email_failed' => 'Failed to send test email: :error',
+        'ca_certificate_saved_successfully' => 'CA Certificate saved successfully.',
+        'ca_certificate_regenerated_successfully' => 'CA Certificate regenerated successfully.',
     ],
 ];
