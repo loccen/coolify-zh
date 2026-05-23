@@ -39,7 +39,7 @@ class Emails extends Command
      *
      * @var string
      */
-    protected $description = 'Send out test / prod emails';
+    protected $description = '';
 
     /**
      * Execute the console command.
@@ -50,10 +50,16 @@ class Emails extends Command
 
     private string $locale = 'en';
 
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->setCommandLocale(app()->getLocale());
+    }
+
     public function handle()
     {
-        $this->locale = UserVisibleLocale::resolve();
-        $this->description = trans('console.emails.description', locale: $this->locale);
+        $this->setCommandLocale(app()->getLocale());
 
         $type = select(
             trans('console.emails.select_prompt', locale: $this->locale),
@@ -281,5 +287,14 @@ class Emails extends Command
             );
         });
         $this->info(trans('console.emails.sent_successfully', ['email' => $this->email], $this->locale));
+    }
+
+    private function setCommandLocale(?string $locale = null): void
+    {
+        $this->locale = UserVisibleLocale::resolve($locale);
+        $description = trans('console.emails.description', locale: $this->locale);
+
+        $this->description = $description;
+        $this->setDescription($description);
     }
 }

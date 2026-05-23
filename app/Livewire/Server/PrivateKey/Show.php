@@ -32,7 +32,7 @@ class Show extends Component
     {
         $ownedPrivateKey = PrivateKey::ownedByCurrentTeam()->find($privateKeyId);
         if (is_null($ownedPrivateKey)) {
-            $this->dispatch('error', 'You are not allowed to use this private key.');
+            $this->dispatch('error', trans('toast.livewire.server_private_key.forbidden'));
 
             return;
         }
@@ -46,7 +46,7 @@ class Show extends Component
                     throw new \Exception($error);
                 }
             });
-            $this->dispatch('success', 'Private key updated successfully.');
+            $this->dispatch('success', trans('toast.livewire.server_private_key.updated'));
             $this->dispatch('refreshServerShow');
         } catch (\Exception $e) {
             $this->server->refresh();
@@ -60,11 +60,14 @@ class Show extends Component
         try {
             ['uptime' => $uptime, 'error' => $error] = $this->server->validateConnection();
             if ($uptime) {
-                $this->dispatch('success', 'Server is reachable.');
+                $this->dispatch('success', trans('toast.livewire.server_private_key.server_reachable'));
                 $this->dispatch('refreshServerShow');
             } else {
                 $sanitizedError = htmlspecialchars($error ?? '', ENT_QUOTES, 'UTF-8');
-                $this->dispatch('error', 'Server is not reachable.<br><br>Check this <a target="_blank" class="underline" href="https://coolify.io/docs/knowledge-base/server/openssh">documentation</a> for further help.<br><br>Error: '.$sanitizedError);
+                $this->dispatch('error', trans('toast.livewire.server_private_key.server_not_reachable', [
+                    'documentationUrl' => 'https://coolify.io/docs/knowledge-base/server/openssh',
+                    'error' => $sanitizedError,
+                ]));
 
                 return;
             }

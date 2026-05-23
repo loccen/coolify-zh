@@ -122,13 +122,17 @@ class Form extends Component
             // Update component property to reflect the new validation status
             $this->isUsable = $this->storage->is_usable;
 
-            return $this->dispatch('success', 'Connection is working.', 'Tested with "ListObjectsV2" action.');
+            return $this->dispatch(
+                'success',
+                trans('toast.livewire.storage.connection_working'),
+                trans('toast.livewire.storage.tested_with_list_objects_v2')
+            );
         } catch (\Throwable $e) {
             // Refresh model and sync to get the latest state
             $this->storage->refresh();
             $this->isUsable = $this->storage->is_usable;
 
-            $this->dispatch('error', 'Failed to test connection.', $e->getMessage());
+            $this->dispatch('error', trans('toast.livewire.storage.failed_to_test_connection'), $e->getMessage());
         }
     }
 
@@ -157,7 +161,7 @@ class Form extends Component
                 $this->isUsable = true;
             });
 
-            $this->dispatch('success', 'Storage settings updated and connection verified.');
+            $this->dispatch('success', trans('toast.livewire.storage.storage_settings_updated_and_verified'));
         } catch (\Throwable $e) {
             // Refresh the model to revert UI to database values after rollback
             $this->storage->refresh();
