@@ -69,13 +69,15 @@ it('reloads the mysql database model when refreshing so ssl controls follow the 
         'destination_type' => $destination->getMorphClass(),
     ]);
 
+    $helperText = __('Database should be stopped to change this settings.');
+
     $component = Livewire::test(MysqlGeneral::class, ['database' => $database])
-        ->assertDontSee('Database should be stopped to change this settings.');
+        ->assertDontSee($helperText);
 
     $database->fill(['status' => 'running:healthy'])->save();
 
     $component->call('refresh')
-        ->assertSee('Database should be stopped to change this settings.');
+        ->assertSee($helperText);
 });
 
 it('keeps postgresql validation errors in english when locale is en', function () {
