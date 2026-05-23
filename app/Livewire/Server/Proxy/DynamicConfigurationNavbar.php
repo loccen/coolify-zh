@@ -36,7 +36,7 @@ class DynamicConfigurationNavbar extends Component
         validateShellSafePath($file, 'proxy configuration filename');
 
         if ($proxy_type === 'CADDY' && $file === 'Caddyfile') {
-            $this->dispatch('error', 'Cannot delete Caddyfile.');
+            $this->dispatch('error', __('server.toasts.proxy_dynamic_configuration_cannot_delete_caddyfile'));
 
             return;
         }
@@ -47,7 +47,7 @@ class DynamicConfigurationNavbar extends Component
         if ($proxy_type === 'CADDY') {
             $this->server->reloadCaddy();
         }
-        $this->dispatch('success', 'File deleted.');
+        $this->dispatch('success', __('server.toasts.proxy_dynamic_configuration_file_deleted'));
         $this->dispatch('loadDynamicConfigurations');
         $this->dispatch('refresh');
     }
