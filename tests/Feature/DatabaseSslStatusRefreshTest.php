@@ -114,3 +114,19 @@ it('keeps postgresql validation errors in english when locale is en', function (
 
     expect($validator->errors()->first('name'))->toBe('The Name field is required.');
 });
+
+it('uses plain html title attributes in ssl mode option lists', function () {
+    $mysqlView = file_get_contents(resource_path('views/livewire/project/database/mysql/general.blade.php'));
+    $mongodbView = file_get_contents(resource_path('views/livewire/project/database/mongodb/general.blade.php'));
+    $postgresqlView = file_get_contents(resource_path('views/livewire/project/database/postgresql/general.blade.php'));
+
+    expect($mysqlView)
+        ->toContain('title="{{ __(\'Prefer secure connections\') }}"')
+        ->not->toContain(':title="__(\'Prefer secure connections\')"')
+        ->and($mongodbView)
+        ->toContain('title="{{ __(\'Allow insecure connections\') }}"')
+        ->not->toContain(':title="__(\'Allow insecure connections\')"')
+        ->and($postgresqlView)
+        ->toContain('title="{{ __(\'Verify full certificate\') }}"')
+        ->not->toContain(':title="__(\'Verify full certificate\')"');
+});

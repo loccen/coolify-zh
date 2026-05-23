@@ -109,19 +109,19 @@
                             <x-forms.select id="sslMode" :label="__('SSL Mode')" wire:model.live="sslMode"
                                 instantSave="instantSaveSSL"
                                 :helper="__('Choose the SSL verification mode for MySQL connections')" canGate="update" :canResource="$database">
-                                <option value="PREFERRED" :title="__('Prefer secure connections')">{{ __('Prefer (secure)') }}</option>
-                                <option value="REQUIRED" :title="__('Require secure connections')">{{ __('Require (secure)') }}</option>
-                                <option value="VERIFY_CA" :title="__('Verify CA certificate')">{{ __('Verify CA (secure)') }}</option>
-                                <option value="VERIFY_IDENTITY" :title="__('Verify full certificate')">{{ __('Verify Full (secure)') }}
+                                <option value="PREFERRED" title="{{ __('Prefer secure connections') }}">{{ __('Prefer (secure)') }}</option>
+                                <option value="REQUIRED" title="{{ __('Require secure connections') }}">{{ __('Require (secure)') }}</option>
+                                <option value="VERIFY_CA" title="{{ __('Verify CA certificate') }}">{{ __('Verify CA (secure)') }}</option>
+                                <option value="VERIFY_IDENTITY" title="{{ __('Verify full certificate') }}">{{ __('Verify Full (secure)') }}
                                 </option>
                             </x-forms.select>
                         @else
                             <x-forms.select id="sslMode" :label="__('SSL Mode')" instantSave="instantSaveSSL"
                                 disabled :helper="__('Database should be stopped to change this settings.')">
-                                <option value="PREFERRED" :title="__('Prefer secure connections')">{{ __('Prefer (secure)') }}</option>
-                                <option value="REQUIRED" :title="__('Require secure connections')">{{ __('Require (secure)') }}</option>
-                                <option value="VERIFY_CA" :title="__('Verify CA certificate')">{{ __('Verify CA (secure)') }}</option>
-                                <option value="VERIFY_IDENTITY" :title="__('Verify full certificate')">{{ __('Verify Full (secure)') }}
+                                <option value="PREFERRED" title="{{ __('Prefer secure connections') }}">{{ __('Prefer (secure)') }}</option>
+                                <option value="REQUIRED" title="{{ __('Require secure connections') }}">{{ __('Require (secure)') }}</option>
+                                <option value="VERIFY_CA" title="{{ __('Verify CA certificate') }}">{{ __('Verify CA (secure)') }}</option>
+                                <option value="VERIFY_IDENTITY" title="{{ __('Verify full certificate') }}">{{ __('Verify Full (secure)') }}
                                 </option>
                             </x-forms.select>
                         @endif

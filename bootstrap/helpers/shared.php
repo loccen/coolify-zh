@@ -3893,12 +3893,12 @@ function formatContainerStatus(string $status): string
         return str($status)->headline()->value();
     }
 
-    $translateStatusSegment = function (string $value): string {
+    $translateStatusSegment = function (string $value, bool $headlineFallback = true): string {
         $normalized = str($value)->lower()->value();
         $translated = __($normalized);
 
         return $translated === $normalized
-            ? str($value)->headline()->value()
+            ? ($headlineFallback ? str($value)->headline()->value() : $normalized)
             : $translated;
     };
 
@@ -3915,15 +3915,15 @@ function formatContainerStatus(string $status): string
         if (count($parts) === 3) {
             // Has health status: running:unhealthy:excluded → Running (unhealthy, excluded)
             return $translateStatusSegment($parts[0]).' ('.
-                $translateStatusSegment($parts[1]).', '.
-                $translateStatusSegment('excluded').')';
+                $translateStatusSegment($parts[1], false).', '.
+                $translateStatusSegment('excluded', false).')';
         } else {
             // No health status: exited:excluded → Exited (excluded)
-            return $translateStatusSegment($parts[0]).' ('.$translateStatusSegment('excluded').')';
+            return $translateStatusSegment($parts[0]).' ('.$translateStatusSegment('excluded', false).')';
         }
     } elseif (count($parts) >= 2) {
         // Regular colon format: running:healthy → Running (healthy)
-        return $translateStatusSegment($parts[0]).' ('.$translateStatusSegment($parts[1]).')';
+        return $translateStatusSegment($parts[0]).' ('.$translateStatusSegment($parts[1], false).')';
     } else {
         // Simple status: running → Running
         return $translateStatusSegment($status);

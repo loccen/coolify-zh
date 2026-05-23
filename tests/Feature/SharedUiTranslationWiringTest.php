@@ -113,6 +113,7 @@ it('resolves representative shared ui follow-up translations in zh_CN', function
 
     expect(__('Deleted database'))->toBe('已删除的数据库')
         ->and(__('Disable S3'))->toBe('禁用 S3')
+        ->and(__('Connect'))->toBe('连接')
         ->and(__('Password is required.'))->toBe('必须输入密码。')
         ->and(__('Your Password'))->toBe('你的密码')
         ->and(__('Start typing here'))->toBe('在此输入')

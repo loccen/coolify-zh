@@ -51,7 +51,7 @@
     actions: @js($actions),
     confirmationText: (() => {
         const textarea = document.createElement('textarea');
-        textarea.innerHTML = @js(__($confirmationText));
+        textarea.innerHTML = @js($confirmationText);
         return textarea.value;
     })(),
     userConfirmationText: '',
@@ -373,7 +373,7 @@
                                     <input type="text" name="username" autocomplete="username"
                                         value="{{ auth()->user()->email }}" style="display: none;">
                                     <input type="password" id="password-confirm-{{ $passwordConfirm }}"
-                                        x-model="password" class="w-full input" :placeholder="__('Enter your password')"
+                                        x-model="password" class="w-full input" placeholder="{{ __('Enter your password') }}"
                                         autocomplete="current-password">
                                 </form>
                                 <p x-show="passwordError" x-text="passwordError" class="mt-1 text-sm text-red-500">

@@ -198,4 +198,5 @@ describe('formatContainerStatus helper', function () {
             expect($result)->toBe('Stopped');
         });
     });
+
 });

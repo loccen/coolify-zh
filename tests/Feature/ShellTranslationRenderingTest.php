@@ -142,6 +142,16 @@ it('renders translated password visibility labels in form components', function 
         ->toContain('Toggle password visibility');
 });
 
+it('keeps modal confirmation wiring safe for dynamic confirmation text and native input attributes', function () {
+    $html = file_get_contents(resource_path('views/components/modal-confirmation.blade.php'));
+
+    expect($html)
+        ->toContain('textarea.innerHTML = @js($confirmationText);')
+        ->toContain('placeholder="{{ __(\'Enter your password\') }}"')
+        ->not->toContain('textarea.innerHTML = @js(__($confirmationText));')
+        ->not->toContain(':placeholder="__(\'Enter your password\')"');
+});
+
 it('renders translated default toast title in component output', function () {
     setEnLocale();
 

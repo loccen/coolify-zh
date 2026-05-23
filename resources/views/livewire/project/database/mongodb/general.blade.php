@@ -106,20 +106,20 @@
                                 instantSave="instantSaveSSL"
                                 :helper="__('Choose the SSL verification mode for MongoDB connections')" canGate="update"
                                 :canResource="$database">
-                                <option value="allow" :title="__('Allow insecure connections')">{{ __('allow (insecure)') }}</option>
-                                <option value="prefer" :title="__('Prefer secure connections')">{{ __('prefer (secure)') }}</option>
-                                <option value="require" :title="__('Require secure connections')">{{ __('require (secure)') }}</option>
-                                <option value="verify-full" :title="__('Verify full certificate')">{{ __('verify-full (secure)') }}
+                                <option value="allow" title="{{ __('Allow insecure connections') }}">{{ __('allow (insecure)') }}</option>
+                                <option value="prefer" title="{{ __('Prefer secure connections') }}">{{ __('prefer (secure)') }}</option>
+                                <option value="require" title="{{ __('Require secure connections') }}">{{ __('require (secure)') }}</option>
+                                <option value="verify-full" title="{{ __('Verify full certificate') }}">{{ __('verify-full (secure)') }}
                                 </option>
                             </x-forms.select>
                         @else
                             <x-forms.select id="sslMode" :label="__('SSL Mode')" instantSave="instantSaveSSL"
                                 disabled :helper="__('Database should be stopped to change this settings.')" canGate="update"
                                 :canResource="$database">
-                                <option value="allow" :title="__('Allow insecure connections')">{{ __('allow (insecure)') }}</option>
-                                <option value="prefer" :title="__('Prefer secure connections')">{{ __('prefer (secure)') }}</option>
-                                <option value="require" :title="__('Require secure connections')">{{ __('require (secure)') }}</option>
-                                <option value="verify-full" :title="__('Verify full certificate')">{{ __('verify-full (secure)') }}
+                                <option value="allow" title="{{ __('Allow insecure connections') }}">{{ __('allow (insecure)') }}</option>
+                                <option value="prefer" title="{{ __('Prefer secure connections') }}">{{ __('prefer (secure)') }}</option>
+                                <option value="require" title="{{ __('Require secure connections') }}">{{ __('require (secure)') }}</option>
+                                <option value="verify-full" title="{{ __('Verify full certificate') }}">{{ __('verify-full (secure)') }}
                                 </option>
                             </x-forms.select>
                         @endif
