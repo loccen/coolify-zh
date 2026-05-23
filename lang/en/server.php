@@ -29,6 +29,7 @@ return [
         'server_reachable' => 'Server is reachable.',
         'server_status_refreshed' => 'Server status refreshed: :status',
         'server_settings_updated' => 'Server settings updated.',
+        'manual_cleanup_job_started' => 'Manual cleanup job started. Depending on the amount of data, this might take a while.',
         'swarm_settings_updated' => 'Swarm settings updated.',
         'server_updated' => 'Server updated.',
         'invalid_disk_usage_check_frequency' => 'Invalid Cron / Human expression for Disk Usage Check Frequency.',
