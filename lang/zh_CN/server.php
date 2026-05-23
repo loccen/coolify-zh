@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'toasts' => [
+        'enter_hetzner_server_id' => '请输入 Hetzner 服务器 ID。',
+        'hetzner_server_not_found' => '未找到 ID 为 :id 的 Hetzner 服务器。',
+        'hetzner_server_or_token_missing' => '此服务器未关联 Hetzner Cloud 服务器或令牌。',
+        'hetzner_server_starting' => 'Hetzner 服务器正在启动...',
+        'invalid_hetzner_token_selected' => '所选令牌无效。',
+        'no_hetzner_server_selected' => '未选择 Hetzner 服务器。',
+        'restarting_sentinel' => '正在重启 Sentinel。',
+        'select_hetzner_token' => '请选择一个 Hetzner 令牌。',
+        'select_hetzner_token_first' => '请先选择一个 Hetzner 令牌。',
+        'sentinel_cannot_be_enabled_on_build_servers' => '构建服务器无法启用 Sentinel。',
+        'sentinel_disabled_for_build_servers' => '已禁用 Sentinel，因为构建服务器无法运行 Sentinel。',
+        'sentinel_restarted' => 'Sentinel 已成功重启。',
+        'sentinel_token_regenerated' => '令牌已重新生成。正在重启 Sentinel。',
+        'server_details_fetch_failed' => '无法获取服务器详情。服务器可访问吗？',
+        'server_details_refreshed' => '服务器详情已刷新。',
+        'server_linked_to_hetzner' => '服务器已成功关联到 Hetzner Cloud！',
+        'server_not_reachable' => '服务器无法访问。<br><br>请查看此<a target="_blank" class="underline" href=":documentationUrl">文档</a>以获得更多帮助。<br><br>错误：:error',
+        'server_reachable' => '服务器可访问。',
+        'server_status_refreshed' => '服务器状态已刷新：:status',
+        'server_settings_updated' => '服务器设置已更新。',
+    ],
+];
