@@ -40,7 +40,7 @@ class Delete extends Component
         try {
             $this->authorize('delete', $this->server);
             if ($this->server->hasDefinedResources() && ! $this->force_delete_resources) {
-                $this->dispatch('error', 'Server has defined resources. Please delete them first or select "Delete all resources".');
+                $this->dispatch('error', __('server.toasts.delete_resources_first'));
 
                 return;
             }
