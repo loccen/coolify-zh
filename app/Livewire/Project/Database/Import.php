@@ -629,7 +629,7 @@ EOD;
         }
 
         if (is_null($this->s3FileSize)) {
-            $this->dispatch('error', __('Please check the file first by clicking "Check File".'));
+            $this->dispatch('error', __('Please check the file first by clicking ":action".', ['action' => __('Check File')]));
 
             return true;
         }
