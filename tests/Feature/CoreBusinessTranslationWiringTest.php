@@ -12,6 +12,7 @@ it('uses explicit translation lookups in representative core business views', fu
     $serviceConfiguration = file_get_contents($viewsRoot.'/project/service/configuration.blade.php');
     $databaseHeading = file_get_contents($viewsRoot.'/project/database/heading.blade.php');
     $databaseConfiguration = file_get_contents($viewsRoot.'/project/database/configuration.blade.php');
+    $resourceSelect = file_get_contents(app_path('Livewire/Project/New/Select.php'));
     $globalSearch = file_get_contents($viewsRoot.'/global-search.blade.php');
     $boarding = file_get_contents($viewsRoot.'/boarding/index.blade.php');
 
@@ -35,6 +36,10 @@ it('uses explicit translation lookups in representative core business views', fu
         ->toContain("{{ __('Import Backup') }}")
         ->toContain("{{ __('Metrics') }}")
         ->toContain("{{ __('Tags') }}")
+        ->and($resourceSelect)
+        ->toContain("__('You can deploy a simple Dockerfile, without Git.')")
+        ->toContain("__('You can deploy an existing Docker Image from any Registry, without Git.')")
+        ->toContain("__('PostgreSQL is an object-relational database known for its robustness, advanced features, and strong standards compliance.')")
         ->and($globalSearch)
         ->toContain("{{ __('Search resources, paths, everything (type new for create)...') }}")
         ->and($boarding)
@@ -61,6 +66,10 @@ it('resolves representative T5C translations in zh_CN', function () {
         ->and(__('Documentation'))->toBe('文档')
         ->and(__('Persistent Storage'))->toBe('持久存储')
         ->and(__('Danger Zone'))->toBe('危险区')
+        ->and(__('You can deploy an existing Docker Image from any Registry, without Git.'))->toBe('你可以从任意镜像仓库直接部署现有的 Docker 镜像，无需 Git。')
+        ->and(__('PostgreSQL is an object-relational database known for its robustness, advanced features, and strong standards compliance.'))->toBe('PostgreSQL 是一个对象关系型数据库，以稳健性、高级特性和严格的标准兼容性著称。')
+        ->and(__('MySQL is an open-source relational database management system.'))->toBe('MySQL 是一个开源关系型数据库管理系统。')
+        ->and(__('MariaDB is a community-developed, commercially supported fork of the MySQL relational database management system, intended to remain free and open-source.'))->toBe('MariaDB 是 MySQL 关系型数据库管理系统的社区分支，由商业力量提供支持，并坚持保持自由开源。')
         ->and(__('Welcome to Coolify'))->toBe('欢迎使用 Coolify')
         ->and(__('Connect your first server and start deploying in minutes'))->toBe('连接你的第一台服务器，几分钟内就能开始部署。')
         ->and(__('What You\'ll Set Up'))->toBe('你将要完成的设置')
