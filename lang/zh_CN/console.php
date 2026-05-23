@@ -27,4 +27,15 @@ return [
         'server_not_found' => '未找到服务器。',
         'sent_successfully' => '邮件已成功发送至 :email。',
     ],
+    'root_reset_password' => [
+        'description' => '重置 Root 密码',
+        'about_to_reset' => '即将重置 Root 用户的密码。',
+        'password_prompt' => '请输入 Root 用户的新密码：',
+        'password_again_prompt' => '请再次输入新密码：',
+        'passwords_do_not_match' => '两次输入的密码不一致。',
+        'updating' => '正在更新 Root 密码...',
+        'root_user_not_found' => '未找到 Root 用户。',
+        'updated_successfully' => 'Root 密码已更新。',
+        'failed_to_update' => '更新 Root 密码失败。',
+    ],
 ];

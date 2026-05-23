@@ -27,4 +27,15 @@ return [
         'server_not_found' => 'Server not found.',
         'sent_successfully' => 'Email sent to :email successfully.',
     ],
+    'root_reset_password' => [
+        'description' => 'Reset Root Password',
+        'about_to_reset' => 'You are about to reset the Root password.',
+        'password_prompt' => 'Enter a new password for the Root user:',
+        'password_again_prompt' => 'Enter the new password again:',
+        'passwords_do_not_match' => 'Passwords do not match.',
+        'updating' => 'Updating Root password...',
+        'root_user_not_found' => 'Root user not found.',
+        'updated_successfully' => 'Root password updated successfully.',
+        'failed_to_update' => 'Failed to update Root password.',
+    ],
 ];
