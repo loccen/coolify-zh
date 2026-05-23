@@ -16,5 +16,5 @@ it('resolves representative webhook translations in zh_CN', function () {
     App::setLocale('zh_CN');
 
     expect(__('Webhook Configuration on GitHub'))->toBe('GitHub 上的 Webhook 配置')
-        ->and(__('You are using an official Git App. You do not need manual webhooks.'))->toBe('你正在使用官方 Git App，因此不需要手动配置 Webhook。');
+        ->and(__('You are using an official Git App. You do not need manual webhooks.'))->toBe('你正在使用官方代码源应用，因此不需要手动配置 Webhook。');
 });

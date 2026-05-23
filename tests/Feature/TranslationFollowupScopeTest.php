@@ -232,7 +232,7 @@ it('resolves representative follow-up translations in zh_CN', function () {
         ->and(__('Image Name'))->toBe('镜像名称')
         ->and(__('Public Repository'))->toBe('公开仓库')
         ->and(__('Private Repository (with GitHub App)'))->toBe('私有仓库（使用 GitHub App）')
-        ->and(__('Private Repository (with Deploy Key)'))->toBe('私有仓库（使用 Deploy Key）')
+        ->and(__('Private Repository (with Deploy Key)'))->toBe('私有仓库（使用部署密钥）')
         ->and(__('Docker Compose Empty'))->toBe('空白 Docker Compose')
         ->and(__('Check repository'))->toBe('检查仓库')
         ->and(__('Refresh Repository List'))->toBe('刷新仓库列表')

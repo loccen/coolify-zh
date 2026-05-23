@@ -126,7 +126,7 @@ it('resolves representative T5C translations in zh_CN', function () {
         ->and(__('Cancelled'))->toBe('已取消')
         ->and(__('Running for:'))->toBe('已运行：')
         ->and(__('Commit:'))->toBe('提交：')
-        ->and(__('Commit SHA'))->toBe('提交 SHA')
+        ->and(__('Commit SHA'))->toBe('提交哈希')
         ->and(__('Container name'))->toBe('容器名称')
         ->and(__('Number of CPUs'))->toBe('CPU 数量')
         ->and(__('Limit CPUs'))->toBe('限制 CPU 数量')
