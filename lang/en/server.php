@@ -29,6 +29,8 @@ return [
         'server_reachable' => 'Server is reachable.',
         'server_status_refreshed' => 'Server status refreshed: :status',
         'server_settings_updated' => 'Server settings updated.',
+        'server_updated' => 'Server updated.',
+        'invalid_disk_usage_check_frequency' => 'Invalid Cron / Human expression for Disk Usage Check Frequency.',
         'log_drain_service_started' => 'Log drain service started.',
         'log_drain_service_stopped' => 'Log drain service stopped.',
         'settings_saved' => 'Settings saved.',
