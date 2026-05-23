@@ -2,17 +2,20 @@
 
 use App\Models\Application;
 use App\Models\GithubApp;
-use App\Models\Project;
+use App\Models\GitlabApp;
+use App\Models\InstanceSettings;
 use App\Models\PrivateKey;
+use App\Models\Project;
 use App\Models\S3Storage;
 use App\Models\Server;
+use App\Models\StandaloneDocker;
 use App\Models\StandalonePostgresql;
 use App\Models\StandaloneRedis;
-use App\Models\StandaloneDocker;
 use App\Models\Team;
+use App\Models\User;
+use Database\Seeders\ApplicationSeeder;
 use Database\Seeders\DevelopmentRailpackExamplesSeeder;
 use Database\Seeders\GithubAppSeeder;
-use Database\Seeders\ApplicationSeeder;
 use Database\Seeders\GitlabAppSeeder;
 use Database\Seeders\PrivateKeySeeder;
 use Database\Seeders\ProductionSeeder;
@@ -33,9 +36,9 @@ it('seeds localized development user examples', function () {
     $this->seed(UserSeeder::class);
 
     expect(Application::query()->count())->toBe(0)
-        ->and(\App\Models\User::query()->find(0)?->name)->toBe('根用户')
-        ->and(\App\Models\User::query()->find(1)?->name)->toBe('普通用户（属于根团队）')
-        ->and(\App\Models\User::query()->find(2)?->name)->toBe('普通用户（不属于根团队）');
+        ->and(User::query()->find(0)?->name)->toBe('根用户')
+        ->and(User::query()->find(1)?->name)->toBe('普通用户（属于根团队）')
+        ->and(User::query()->find(2)?->name)->toBe('普通用户（不属于根团队）');
 });
 
 it('seeds localized development project, server, and storage examples', function () {
@@ -119,7 +122,7 @@ it('seeds localized development application, database, and private key examples'
 it('seeds localized GitLab app example', function () {
     $this->seed(GitlabAppSeeder::class);
 
-    $gitlabApp = \App\Models\GitlabApp::query()->find(1);
+    $gitlabApp = GitlabApp::query()->find(1);
 
     expect($gitlabApp)
         ->not->toBeNull()
@@ -197,13 +200,13 @@ it('seeds localized root user defaults from environment variables', function () 
 
     $this->seed(RootUserSeeder::class);
 
-    expect(\App\Models\User::query()->find(0))
+    expect(User::query()->find(0))
         ->not->toBeNull()
-        ->and(\App\Models\User::query()->find(0)?->name)->toBe('根用户');
+        ->and(User::query()->find(0)?->name)->toBe('根用户');
 
-    expect(\App\Models\InstanceSettings::query()->find(0))
+    expect(InstanceSettings::query()->find(0))
         ->not->toBeNull()
-        ->and((bool) \App\Models\InstanceSettings::query()->find(0)?->is_registration_enabled)->toBeFalse();
+        ->and((bool) InstanceSettings::query()->find(0)?->is_registration_enabled)->toBeFalse();
 });
 
 it('seeds localized production public source examples in cloud mode', function () {
@@ -219,7 +222,7 @@ it('seeds localized production public source examples in cloud mode', function (
         ->not->toBeNull()
         ->and(GithubApp::query()->find(0)?->name)->toBe('公开 GitHub');
 
-    expect(\App\Models\GitlabApp::query()->find(0))
+    expect(GitlabApp::query()->find(0))
         ->not->toBeNull()
-        ->and(\App\Models\GitlabApp::query()->find(0)?->name)->toBe('公开 GitLab');
+        ->and(GitlabApp::query()->find(0)?->name)->toBe('公开 GitLab');
 });

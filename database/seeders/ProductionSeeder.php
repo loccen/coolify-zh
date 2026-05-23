@@ -94,7 +94,7 @@ class ProductionSeeder extends Seeder
                     echo "未找到 Coolify 宿主机（localhost）的 SSH 密钥。\n";
                     echo "请阅读以下文档中的第 3 点完成修复：https://coolify.
                 io/docs/knowledge-base/server/openssh/\n";
-                    echo "在修复前，本地连接将无法使用。";
+                    echo '在修复前，本地连接将无法使用。';
                 }
             }
         }
