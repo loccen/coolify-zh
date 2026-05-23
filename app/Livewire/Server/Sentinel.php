@@ -104,7 +104,7 @@ class Sentinel extends Component
             $this->authorize('manageSentinel', $this->server);
             $customImage = isDev() ? $this->sentinelCustomDockerImage : null;
             $this->server->restartSentinel($customImage);
-            $this->dispatch('info', 'Restarting Sentinel.');
+            $this->dispatch('info', __('server.toasts.restarting_sentinel'));
         } catch (\Throwable $e) {
             return handleError($e, $this);
         }
