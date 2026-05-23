@@ -156,6 +156,22 @@ return [
         'no_pending_jobs_found' => 'No pending jobs found.',
         'no_failed_jobs_found' => 'No failed jobs found.',
         'no_running_jobs_found' => 'No running jobs found.',
+        'prompts' => [
+            'what_to_do' => 'What to do?',
+            'which_job_to_check' => 'Which job to check?',
+            'which_job_to_delete' => 'Which job to delete?',
+            'which_queue_to_purge' => 'Which queue to purge?',
+        ],
+        'options' => [
+            'pending' => 'Pending Jobs',
+            'running' => 'Running Jobs',
+            'can_i_restart_this_worker' => 'Can I restart this worker?',
+            'job_status' => 'Job Status',
+            'workers' => 'Workers',
+            'failed' => 'Failed Jobs',
+            'failed_delete' => 'Failed Jobs - Delete',
+            'purge_queues' => 'Purge Queues',
+        ],
     ],
     'generate_services' => [
         'info' => [
