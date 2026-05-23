@@ -75,6 +75,17 @@ return [
         'delete_application_deployment_queues' => '删除 application_deployment_queues 中的 :count 条记录。',
         'delete_scheduled_task_executions' => '删除 scheduled_task_executions 中的 :count 条记录。',
     ],
+    'cleanup_names' => [
+        'error' => [
+            'unknown_model' => '未知模型：:model',
+            'processing' => '处理 :model 时出错：:error',
+        ],
+        'info' => [
+            'available_models' => '可用模型：:models',
+            'would_sanitize' => '名称清理：将处理 :count 条记录',
+            'sanitized' => '名称清理：已处理 :count 条记录',
+        ],
+    ],
     'cleanup_unreachable_servers' => [
         'description' => '清理不可达服务器（7 天）',
         'running' => '正在清理不可达服务器...',

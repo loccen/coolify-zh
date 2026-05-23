@@ -75,6 +75,17 @@ return [
         'delete_application_deployment_queues' => 'Delete :count entries from application_deployment_queues.',
         'delete_scheduled_task_executions' => 'Delete :count entries from scheduled_task_executions.',
     ],
+    'cleanup_names' => [
+        'error' => [
+            'unknown_model' => 'Unknown model: :model',
+            'processing' => 'Error processing :model: :error',
+        ],
+        'info' => [
+            'available_models' => 'Available models: :models',
+            'would_sanitize' => 'Name cleanup: would sanitize :count records',
+            'sanitized' => 'Name cleanup: sanitized :count records',
+        ],
+    ],
     'cleanup_unreachable_servers' => [
         'description' => 'Cleanup Unreachable Servers (7 days)',
         'running' => 'Running unreachable server cleanup...',
