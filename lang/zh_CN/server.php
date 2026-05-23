@@ -29,6 +29,7 @@ return [
         'server_reachable' => '服务器可访问。',
         'server_status_refreshed' => '服务器状态已刷新：:status',
         'server_settings_updated' => '服务器设置已更新。',
+        'swarm_settings_updated' => 'Swarm 设置已更新。',
         'server_updated' => '服务器已更新。',
         'invalid_disk_usage_check_frequency' => '磁盘使用情况检查频率的 Cron / 人类可读表达式无效。',
         'log_drain_service_started' => '日志收集服务已启动。',
