@@ -145,7 +145,7 @@ class DockerCleanup extends Component
         try {
             if (! validate_cron_expression($this->dockerCleanupFrequency)) {
                 $this->dockerCleanupFrequency = $this->server->settings->getOriginal('docker_cleanup_frequency');
-                throw new \Exception('Invalid Cron / Human expression for Docker Cleanup Frequency.');
+                throw new \Exception(__('server.toasts.invalid_docker_cleanup_frequency'));
             }
             $this->syncData(true);
             $this->dispatch('success', __('server.toasts.server_updated'));
