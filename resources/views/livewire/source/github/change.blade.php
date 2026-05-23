@@ -189,7 +189,7 @@
                                                                     <x-internal-link /></a>
                                                             </td>
                                                             <td class="px-5 py-4 text-sm whitespace-nowrap">
-                                                                {{ __(str($resource->type())->headline()) }}</td>
+                                                                {{ __(str($resource->type())->headline()->value()) }}</td>
                                                         </tr>
                                                     @endforeach
                                                 </tbody>
