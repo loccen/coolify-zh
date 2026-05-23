@@ -37,6 +37,7 @@ return [
         'cloudflare_tunnel_enabled' => 'Cloudflare Tunnel 已启用。',
         'check_for_updates_first' => '请先执行“检查更新”。',
         'server_limit_reached' => '你已达到当前订阅的服务器数量上限。',
+        'select_valid_hetzner_token' => '请选择一个有效的 Hetzner 令牌。',
         'select_private_key' => '你必须选择一个私钥。',
         'server_with_same_ip_exists_in_team' => '你的团队中已存在使用此 IP/域名的服务器。',
         'server_with_same_ip_in_use_by_another_team' => '其他团队已在使用此 IP/域名的服务器。',

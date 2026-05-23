@@ -37,6 +37,7 @@ return [
         'cloudflare_tunnel_enabled' => 'Cloudflare Tunnel enabled.',
         'check_for_updates_first' => 'Run "Check for updates" first.',
         'server_limit_reached' => 'You have reached the server limit for your subscription.',
+        'select_valid_hetzner_token' => 'Please select a valid Hetzner token.',
         'select_private_key' => 'You must select a private key',
         'server_with_same_ip_exists_in_team' => 'A server with this IP/Domain already exists in your team.',
         'server_with_same_ip_in_use_by_another_team' => 'A server with this IP/Domain is already in use by another team.',
