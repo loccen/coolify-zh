@@ -50,6 +50,17 @@ return [
         'notifications_pending' => '系统将向使用过期 Traefik 版本的团队发送通知。',
         'dispatch_failed' => '分发 Traefik 版本检查任务失败：:message',
     ],
+    'application_deployment_queue' => [
+        'description' => '检查应用部署队列',
+        'info' => [
+            'no_deployments_found' => '最近 :seconds 秒内未找到部署。',
+            'deployments_found' => '找到 :count 个在最近 :seconds 秒内创建的部署。',
+            'deployment_is_stale' => '部署 :deployment_id 创建于 :created_at，已超过 :seconds 秒。正在将状态设为失败。',
+        ],
+        'confirm' => [
+            'cancel_deployment' => '要取消部署 :deployment_id（创建于 :created_at）吗？',
+        ],
+    ],
     'clear_global_search_cache' => [
         'description' => '清除全局搜索缓存',
         'error' => [
