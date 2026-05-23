@@ -16,7 +16,7 @@ it('resolves server terminal access translations in en and zh_CN', function () {
     App::setLocale('en');
 
     expect(__('The provided password is incorrect.'))
-        ->toBe('输入的密码不正确。')
+        ->toBe('The provided password is incorrect.')
         ->and(__('server.toasts.terminal_access_enabled'))
         ->toBe('Terminal access is enabled.')
         ->and(__('server.toasts.terminal_access_disabled'))
