@@ -43,7 +43,7 @@ class TerminalAccess extends Component
 
             // Verify password
             if (! verifyPasswordConfirmation($password, $this)) {
-                return 'The provided password is incorrect.';
+                return __('auth.failed.password');
             }
 
             // Toggle the terminal setting
@@ -53,8 +53,9 @@ class TerminalAccess extends Component
             // Update the local property
             $this->isTerminalEnabled = $this->server->settings->is_terminal_enabled;
 
-            $status = $this->isTerminalEnabled ? 'enabled' : 'disabled';
-            $this->dispatch('success', "Terminal access has been {$status}.");
+            $this->dispatch('success', $this->isTerminalEnabled
+                ? __('server.toasts.terminal_access_enabled')
+                : __('server.toasts.terminal_access_disabled'));
 
             return true;
         } catch (\Throwable $e) {

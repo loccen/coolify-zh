@@ -39,6 +39,8 @@ return [
         'log_drain_service_started' => 'Log drain service started.',
         'log_drain_service_stopped' => 'Log drain service stopped.',
         'settings_saved' => 'Settings saved.',
+        'terminal_access_enabled' => 'Terminal access is enabled.',
+        'terminal_access_disabled' => 'Terminal access is disabled.',
         'proxy_configuration_saved' => 'Proxy configuration saved.',
         'proxy_configuration_reset_to_default' => 'Proxy configuration reset to default.',
         'network_already_added' => 'Network already added to this server.',
