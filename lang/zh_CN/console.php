@@ -38,4 +38,16 @@ return [
         'updated_successfully' => 'Root 密码已更新。',
         'failed_to_update' => '更新 Root 密码失败。',
     ],
+    'migration' => [
+        'description' => '开始迁移',
+        'enabled' => '本服务器已启用迁移。',
+        'disabled' => '本服务器未启用迁移。',
+    ],
+    'traefik_check_version' => [
+        'description' => '检查所有服务器上的 Traefik 代理版本，并向过期版本发送通知',
+        'checking' => '正在检查所有服务器上的 Traefik 版本...',
+        'dispatched' => 'Traefik 版本检查任务已成功分发。',
+        'notifications_pending' => '系统将向使用过期 Traefik 版本的团队发送通知。',
+        'dispatch_failed' => '分发 Traefik 版本检查任务失败：:message',
+    ],
 ];
