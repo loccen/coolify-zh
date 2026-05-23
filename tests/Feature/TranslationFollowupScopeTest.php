@@ -28,6 +28,7 @@ it('uses explicit translation lookups in follow-up i18n views', function () {
     $projectAddEmpty = file_get_contents($viewsRoot.'/livewire/project/add-empty.blade.php');
     $deleteEnvironment = file_get_contents($viewsRoot.'/livewire/project/delete-environment.blade.php');
     $applicationAdvanced = file_get_contents($viewsRoot.'/livewire/project/application/advanced.blade.php');
+    $applicationDeploymentShow = file_get_contents($viewsRoot.'/livewire/project/application/deployment/show.blade.php');
     $environmentVariableShow = file_get_contents($viewsRoot.'/livewire/project/shared/environment-variable/show.blade.php');
     $environmentVariableShowHardcoded = file_get_contents($viewsRoot.'/livewire/project/shared/environment-variable/show-hardcoded.blade.php');
     $resourceLimits = file_get_contents($viewsRoot.'/livewire/project/shared/resource-limits.blade.php');
@@ -45,6 +46,8 @@ it('uses explicit translation lookups in follow-up i18n views', function () {
     $databaseCreateScheduledBackup = file_get_contents($viewsRoot.'/livewire/project/database/create-scheduled-backup.blade.php');
     $databaseKeydbGeneral = file_get_contents($viewsRoot.'/livewire/project/database/keydb/general.blade.php');
     $databaseScheduledBackups = file_get_contents($viewsRoot.'/livewire/project/database/scheduled-backups.blade.php');
+    $applicationPreviewsCompose = file_get_contents($viewsRoot.'/livewire/project/application/previews-compose.blade.php');
+    $serviceStackForm = file_get_contents($viewsRoot.'/livewire/project/service/stack-form.blade.php');
 
     expect($sentinel)
         ->toContain("{{ __('Sentinel') }}")
@@ -101,12 +104,17 @@ it('uses explicit translation lookups in follow-up i18n views', function () {
         ->and($githubPrivateRepository)
         ->toContain("{{ __('Deploy any public or private Git repositories through a GitHub App.') }}")
         ->toContain("{{ __('Refresh Repository List') }}")
+        ->toContain("{{ __('Static') }}")
         ->and($deployKeyRepository)
         ->toContain("{{ __('Deploy any public or private Git repositories through a Deploy Key.') }}")
         ->toContain("{{ __('Create a new private key') }}")
+        ->toContain("{{ __('Static') }}")
         ->and($dockerCompose)
         ->toContain("{{ __('Create a new Service') }}")
         ->toContain("label=\"{{ __('Docker Compose file') }}\"")
+        ->and($publicGitRepository)
+        ->toContain("{{ __('Deploy any public Git repositories.') }}")
+        ->toContain("{{ __('Static') }}")
         ->and($newResourceSelect)
         ->toContain("{{ __('Select a server') }}")
         ->toContain("{{ __('Select a destination') }}")
@@ -121,6 +129,10 @@ it('uses explicit translation lookups in follow-up i18n views', function () {
         ->toContain("{{ __('Advanced') }}")
         ->toContain("__('Disable Build Cache')")
         ->toContain("__('Operations')")
+        ->and($applicationDeploymentShow)
+        ->toContain("{{ __('Deployment') }}")
+        ->toContain("__('Deployment is')")
+        ->toContain("__('No logs yet.')")
         ->and($environmentVariableShow)
         ->toContain("__('Comment')")
         ->toContain("__('Environment Variable Name')")
@@ -187,6 +199,15 @@ it('uses explicit translation lookups in follow-up i18n views', function () {
         ->toContain("__('Select a S3 Storage')")
         ->and($databaseScheduledBackups)
         ->toContain("{{ __('No scheduled backups configured.') }}");
+
+    expect($applicationPreviewsCompose)
+        ->toContain("__('One domain per preview.')")
+        ->toContain("__('Domains for :serviceName'")
+        ->toContain("{{ __('Save') }}")
+        ->toContain("{{ __('Generate Domain') }}");
+
+    expect($serviceStackForm)
+        ->toContain("__('My super WordPress site')");
 });
 
 it('uses explicit translation lookups in database general proxy sections', function () {
@@ -243,8 +264,12 @@ it('resolves representative follow-up translations in zh_CN', function () {
         ->and(__('Docker Compose Empty'))->toBe('空白 Docker Compose')
         ->and(__('Check repository'))->toBe('检查仓库')
         ->and(__('Refresh Repository List'))->toBe('刷新仓库列表')
+        ->and(__('Deployment'))->toBe('部署')
+        ->and(__('Deployment is'))->toBe('部署状态：')
         ->and(__('Delete Environment'))->toBe('删除环境')
         ->and(__('Permanently Delete'))->toBe('永久删除')
+        ->and(__('One domain per preview.'))->toBe('每个预览只能使用一个域名。')
+        ->and(__('My super WordPress site'))->toBe('我的 WordPress 站点')
         ->and(__('Is Multiline?'))->toBe('多行值？')
         ->and(__('Tip: Type'))->toBe('提示：输入')
         ->and(__('to reference a shared environment variable'))->toBe('可引用共享环境变量')
@@ -485,6 +510,7 @@ it('uses explicit translation lookups in project runtime error sources', functio
         ->and($dockerCompose)
         ->toContain("__('Destination not found.')")
         ->and($dockerImage)
+        ->toContain("__('Provide either a tag or SHA256 digest, not both.')")
         ->toContain("__('Destination not found.')")
         ->and($simpleDockerfile)
         ->toContain("__('Destination not found.')")
@@ -525,6 +551,7 @@ it('resolves project runtime error translations in zh_CN', function () {
 
     expect(__('Project with the same name already exists.'))->toBe('已存在同名项目。')
         ->and(__('Environment with the same name already exists.'))->toBe('已存在同名环境。')
+        ->and(__('Provide either a tag or SHA256 digest, not both.'))->toBe('请填写标签或 SHA256 摘要其中之一，不要同时填写。')
         ->and(__('Destination not found.'))->toBe('未找到目标环境。')
         ->and(__('Invalid repository URL: :message', ['message' => 'bad url']))->toBe('仓库 URL 无效：bad url')
         ->and(__('Invalid branch: :message', ['message' => 'bad branch']))->toBe('分支无效：bad branch')

@@ -154,11 +154,11 @@ describe('GitHub Private Repository Component', function () {
 
         Livewire::test(GithubPrivateRepository::class, ['type' => 'private-gh-app'])
             ->call('loadRepositories', $this->githubApp->id)
-            ->assertSee('Refresh Repository List');
+            ->assertSee(__('Refresh Repository List'));
     });
 
     test('refresh button is not visible before repositories are loaded', function () {
         Livewire::test(GithubPrivateRepository::class, ['type' => 'private-gh-app'])
-            ->assertDontSee('Refresh Repository List');
+            ->assertDontSee(__('Refresh Repository List'));
     });
 });
