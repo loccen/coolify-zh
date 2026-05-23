@@ -306,6 +306,8 @@ it('uses explicit translation lookups in additional follow-up views', function (
     $applicationGeneral = file_get_contents($viewsRoot.'/livewire/project/application/general.blade.php');
     $applicationHeading = file_get_contents($viewsRoot.'/livewire/project/application/heading.blade.php');
     $applicationSource = file_get_contents($viewsRoot.'/livewire/project/application/source.blade.php');
+    $projectEdit = file_get_contents($viewsRoot.'/livewire/project/edit.blade.php');
+    $environmentEdit = file_get_contents($viewsRoot.'/livewire/project/environment-edit.blade.php');
     $databaseHeading = file_get_contents($viewsRoot.'/livewire/project/database/heading.blade.php');
     $resourceIndex = file_get_contents($viewsRoot.'/livewire/project/resource/index.blade.php');
     $databaseScheduledBackups = file_get_contents($viewsRoot.'/livewire/project/database/scheduled-backups.blade.php');
@@ -327,6 +329,19 @@ it('uses explicit translation lookups in additional follow-up views', function (
         ->toContain("__('Update Service')")
         ->and($applicationSource)
         ->toContain("__('current')")
+        ->and($projectEdit)
+        ->toContain("{{ __('Edit') }} | Coolify")
+        ->toContain("{{ __('Save') }}")
+        ->toContain("{{ __('Edit project details here.') }}")
+        ->toContain(":label=\"__('Name')\"")
+        ->toContain(":label=\"__('Description')\"")
+        ->and($environmentEdit)
+        ->toContain("{{ __('Edit') }} | Coolify")
+        ->toContain("{{ __('Environment') }}:")
+        ->toContain("{{ __('Save') }}")
+        ->toContain("{{ __('Edit') }}")
+        ->toContain(":label=\"__('Name')\"")
+        ->toContain(":label=\"__('Description')\"")
         ->and($databaseHeading)
         ->toContain("__('If the database is currently in use data could be lost.')")
         ->toContain("__('Restarting database.')")
@@ -361,7 +376,9 @@ it('resolves additional follow-up translations in zh_CN', function () {
         ->and(__('Create / Edit'))->toBe('创建 / 编辑')
         ->and(__('Try adjusting your search criteria.'))->toBe('试着调整搜索条件。')
         ->and(__('Contact your team administrator to add resources.'))->toBe('请联系团队管理员添加资源。')
-        ->and(__('No executions yet'))->toBe('还没有执行记录');
+        ->and(__('No executions yet'))->toBe('还没有执行记录')
+        ->and(__('Edit project details here.'))->toBe('在这里编辑项目详情。')
+        ->and(__('Environment'))->toBe('环境');
 });
 
 it('uses explicit translation lookups in project validation message sources', function () {
