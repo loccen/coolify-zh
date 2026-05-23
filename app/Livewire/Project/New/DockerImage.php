@@ -88,8 +88,8 @@ class DockerImage extends Component
 
         // Validate that either tag or sha256 is provided, but not both
         if ($this->imageTag && $this->imageSha256) {
-            $this->addError('imageTag', 'Provide either a tag or SHA256 digest, not both.');
-            $this->addError('imageSha256', 'Provide either a tag or SHA256 digest, not both.');
+            $this->addError('imageTag', __('Provide either a tag or SHA256 digest, not both.'));
+            $this->addError('imageSha256', __('Provide either a tag or SHA256 digest, not both.'));
 
             return;
         }
