@@ -91,6 +91,17 @@ return [
         'running' => 'Running unreachable server cleanup...',
         'cleanup_server' => 'Cleanup unreachable server :id with name :name',
     ],
+    'generate_testing_schema' => [
+        'description' => 'Generate SQLite testing schema from the PostgreSQL database',
+        'error' => [
+            'not_postgresql' => "Connection ':connection' is not PostgreSQL.",
+        ],
+        'info' => [
+            'reading_schema' => 'Reading schema from PostgreSQL...',
+            'schema_written' => 'Schema written to :path',
+            'summary' => ':tables tables, :migrations migration records.',
+        ],
+    ],
     'traefik_check_version' => [
         'description' => 'Check Traefik proxy versions on all servers and send notifications for outdated versions',
         'checking' => 'Checking Traefik versions on all servers...',
