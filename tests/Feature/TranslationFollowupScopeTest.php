@@ -292,6 +292,8 @@ it('resolves representative follow-up translations in zh_CN', function () {
         ->and(__('You must restart the database after regenerating the certificate to start using the new certificate.'))->toBe('重新生成证书后，你必须重启数据库才能使用新的证书。')
         ->and(__('Custom ClickHouse Configuration'))->toBe('自定义 ClickHouse 配置')
         ->and(__('Custom Dragonfly Configuration'))->toBe('自定义 Dragonfly 配置')
+        ->and(__('You can change the Redis Username in the input field below or by editing the value of the REDIS_USERNAME environment variable.<br><br>If you change the Redis Username in the database, please sync it here, otherwise automations (like backups) won\'t work.<br><br>Note: If the environment variable REDIS_USERNAME is set as a shared variable (environment, project, or team-based), this input field will become read-only.'))->toBe('你可以在下方输入框中修改 Redis 用户名，或直接编辑 `REDIS_USERNAME` 环境变量的值。<br><br>如果你在数据库中修改了 Redis 用户名，请在这里同步，否则自动化功能（如备份）将无法工作。<br><br>注意：如果 `REDIS_USERNAME` 被设置为共享变量（环境、项目或团队级），这个输入框会变成只读。')
+        ->and(__('You can change the Redis Password in the input field below or by editing the value of the REDIS_PASSWORD environment variable.<br><br>If you change the Redis Password in the database, please sync it here, otherwise automations (like backups) won\'t work.<br><br>Note: If the environment variable REDIS_PASSWORD is set as a shared variable (environment, project, or team-based), this input field will become read-only.'))->toBe('你可以在下方输入框中修改 Redis 密码，或直接编辑 `REDIS_PASSWORD` 环境变量的值。<br><br>如果你在数据库中修改了 Redis 密码，请在这里同步，否则自动化功能（如备份）将无法工作。<br><br>注意：如果 `REDIS_PASSWORD` 被设置为共享变量（环境、项目或团队级），这个输入框会变成只读。')
         ->and(__('settings.instance_updated'))->toBe('设置已更新。')
         ->and(trans('settings.instance_updated'))->toBe('设置已更新。');
 });

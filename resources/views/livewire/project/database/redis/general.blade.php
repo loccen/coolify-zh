@@ -10,7 +10,7 @@
             <x-forms.input :label="__('Name')" id="name" canGate="update" :canResource="$database" />
             <x-forms.input :label="__('Description')" id="description" canGate="update" :canResource="$database" />
             <x-forms.input :label="__('Image')" id="image" required canGate="update" :canResource="$database"
-                helper="For all available images, check here:<br><br><a target='_blank' href='https://hub.docker.com/_/redis'>https://hub.docker.com/_/redis</a>" />
+                :helper="__('For all available images, check here:<br><br><a target=\'_blank\' href=\'https://hub.docker.com/_/redis\'>https://hub.docker.com/_/redis</a>')" />
         </div>
         <div class="flex flex-col gap-2">
             @if ($database->started_at)
@@ -31,19 +31,11 @@
                 <div class="flex gap-2">
                     @if (version_compare($redisVersion, '6.0', '>='))
                         <x-forms.input :label="__('Username')" id="redisUsername" required
-                            helper="You can change the Redis Username in the input field below or by editing the value of the REDIS_USERNAME environment variable.
-                    <br><br>
-                    If you change the Redis Username in the database, please sync it here, otherwise automations (like backups) won't work.
-                    <br><br>
-                    Note: If the environment variable REDIS_USERNAME is set as a shared variable (environment, project, or team-based), this input field will become read-only."
+                            :helper="__('You can change the Redis Username in the input field below or by editing the value of the REDIS_USERNAME environment variable.<br><br>If you change the Redis Username in the database, please sync it here, otherwise automations (like backups) won\\'t work.<br><br>Note: If the environment variable REDIS_USERNAME is set as a shared variable (environment, project, or team-based), this input field will become read-only.')"
                             :disabled="$this->isSharedVariable('REDIS_USERNAME')" canGate="update" :canResource="$database" />
                     @endif
                     <x-forms.input :label="__('Password')" id="redisPassword" type="password" required
-                        helper="You can change the Redis Password in the input field below or by editing the value of the REDIS_PASSWORD environment variable.
-                <br><br>
-                If you change the Redis Password in the database, please sync it here, otherwise automations (like backups) won't work.
-                <br><br>
-                Note: If the environment variable REDIS_PASSWORD is set as a shared variable (environment, project, or team-based), this input field will become read-only."
+                        :helper="__('You can change the Redis Password in the input field below or by editing the value of the REDIS_PASSWORD environment variable.<br><br>If you change the Redis Password in the database, please sync it here, otherwise automations (like backups) won\\'t work.<br><br>Note: If the environment variable REDIS_PASSWORD is set as a shared variable (environment, project, or team-based), this input field will become read-only.')"
                         :disabled="$this->isSharedVariable('REDIS_PASSWORD')" canGate="update" :canResource="$database" />
                 </div>
             @endif
@@ -140,9 +132,7 @@
         <x-forms.textarea placeholder="# maxmemory 256mb
 # maxmemory-policy allkeys-lru
 # timeout 300"
-            helper="You only need to provide the Redis directives you want to override — Redis will use default values for everything else. <br/><br/>
-⚠️ <strong>Important:</strong> Coolify automatically applies the requirepass directive using the password shown in the Password field above. If you override requirepass in your custom configuration, make sure it matches the password field to avoid authentication issues. <br/><br/>
-🔗 <strong>Tip:</strong> <a target='_blank' class='underline dark:text-white' href='https://raw.githubusercontent.com/redis/redis/7.2/redis.conf'>View the full Redis default configuration</a> to see what options are available."
+            :helper="__('You only need to provide the Redis directives you want to override — Redis will use default values for everything else.<br><br><strong>Important:</strong> Coolify automatically applies the requirepass directive using the password shown in the Password field above. If you override requirepass in your custom configuration, make sure it matches the password field to avoid authentication issues.<br><br><strong>Tip:</strong> <a target=\'_blank\' class=\'underline dark:text-white\' href=\'https://raw.githubusercontent.com/redis/redis/7.2/redis.conf\'>View the full Redis default configuration</a> to see what options are available.')"
             :label="__('Custom Redis Configuration')" rows="10" id="redisConf" canGate="update"
             :canResource="$database" />
 
