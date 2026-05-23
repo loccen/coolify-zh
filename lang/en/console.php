@@ -163,6 +163,13 @@ return [
             'processing' => 'Processing :file',
         ],
     ],
+    'services_delete' => [
+        'no_applications_to_delete' => 'There are no applications to delete.',
+        'no_databases_to_delete' => 'There are no databases to delete.',
+        'no_services_to_delete' => 'There are no services to delete.',
+        'no_servers_to_delete' => 'There are no applications to delete.',
+        'confirm_delete_selected_resources' => 'Are you sure you want to delete all selected resources?',
+    ],
     'traefik_check_version' => [
         'description' => 'Check Traefik proxy versions on all servers and send notifications for outdated versions',
         'checking' => 'Checking Traefik versions on all servers...',
