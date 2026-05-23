@@ -134,13 +134,16 @@
             {{ $trigger }}
         </div>
     @elseif ($customButton)
+        @php
+            $customButtonContent = $customButton instanceof \Illuminate\View\ComponentSlot ? $customButton : __($customButton);
+        @endphp
         @if ($buttonFullWidth)
             <x-forms.button @click="modalOpen=true" class="w-full">
-                {{ __($customButton) }}
+                {{ $customButtonContent }}
             </x-forms.button>
         @else
             <x-forms.button @click="modalOpen=true">
-                {{ __($customButton) }}
+                {{ $customButtonContent }}
             </x-forms.button>
         @endif
     @else

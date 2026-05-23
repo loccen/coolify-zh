@@ -18,6 +18,8 @@ it('wires translation calls in shared ui follow-up files', function () {
     $deleteProject = file_get_contents($livewireRoot.'/project/delete-project.blade.php');
     $editDomain = file_get_contents($livewireRoot.'/project/service/edit-domain.blade.php');
     $fileStorage = file_get_contents($livewireRoot.'/project/service/file-storage.blade.php');
+    $serviceStorage = file_get_contents($livewireRoot.'/project/service/storage.blade.php');
+    $storagesShow = file_get_contents($livewireRoot.'/project/shared/storages/show.blade.php');
 
     expect($modalConfirmation)
         ->toContain("__('Password is required.')")
@@ -54,7 +56,14 @@ it('wires translation calls in shared ui follow-up files', function () {
         ->and($fileStorage)
         ->toContain("__('Source Path')")
         ->toContain("__('Load from server')")
-        ->toContain("__('Content (refreshed after a successful deployment)')");
+        ->toContain("__('Content (refreshed after a successful deployment)')")
+        ->and($serviceStorage)
+        ->toContain("{{ __('Volumes') }}")
+        ->toContain("__('No file mounts configured.')")
+        ->and($storagesShow)
+        ->toContain("__('This volume is mounted as read-only and cannot be modified from the UI.')")
+        ->toContain("__('Confirm persistent storage deletion?')")
+        ->toContain("__('Storage Name')");
 });
 
 it('resolves representative shared ui follow-up translations in zh_CN', function () {
@@ -75,5 +84,12 @@ it('resolves representative shared ui follow-up translations in zh_CN', function
         ->and(__('Confirm Project Deletion?'))->toBe('确认删除项目？')
         ->and(__('Permanently Delete'))->toBe('永久删除')
         ->and(__('Source Path'))->toBe('源路径')
-        ->and(__('Load from server'))->toBe('从服务器加载');
+        ->and(__('Load from server'))->toBe('从服务器加载')
+        ->and(__('Volumes'))->toBe('卷')
+        ->and(__('Files'))->toBe('文件')
+        ->and(__('Directories'))->toBe('目录')
+        ->and(__('No storage found.'))->toBe('未找到存储。')
+        ->and(__('No file mounts configured.'))->toBe('未配置文件挂载。')
+        ->and(__('Confirm persistent storage deletion?'))->toBe('确认删除持久存储？')
+        ->and(__('Storage Name'))->toBe('存储名称');
 });

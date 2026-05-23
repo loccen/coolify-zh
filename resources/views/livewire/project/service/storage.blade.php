@@ -359,7 +359,7 @@
                 </div>
             </div>
             @if ($resource->persistentStorages()->get()->count() === 0 && $fileStorage->count() == 0)
-                <div>No storage found.</div>
+                <div>{{ __('No storage found.') }}</div>
             @endif
 
             @php
@@ -380,21 +380,21 @@
                                 'border-b-2 border-transparent'"
                             @if (!$hasVolumes) disabled @endif
                             class="px-4 py-2 -mb-px font-medium transition-colors {{ $hasVolumes ? 'dark:text-neutral-400 dark:hover:text-white text-neutral-600 hover:text-black cursor-pointer' : 'opacity-50 cursor-not-allowed' }} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coollabs dark:focus-visible:ring-warning focus-visible:ring-offset-2 dark:focus-visible:ring-offset-coolgray-100">
-                            Volumes ({{ $this->volumeCount }})
+                            {{ __('Volumes') }} ({{ $this->volumeCount }})
                         </button>
                         <button @click="activeTab = 'files'"
                             :class="activeTab === 'files' ? 'border-b-2 dark:border-white border-black' :
                                 'border-b-2 border-transparent'"
                             @if (!$hasFiles) disabled @endif
                             class="px-4 py-2 -mb-px font-medium transition-colors {{ $hasFiles ? 'dark:text-neutral-400 dark:hover:text-white text-neutral-600 hover:text-black cursor-pointer' : 'opacity-50 cursor-not-allowed' }} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coollabs dark:focus-visible:ring-warning focus-visible:ring-offset-2 dark:focus-visible:ring-offset-coolgray-100">
-                            Files ({{ $this->fileCount }})
+                            {{ __('Files') }} ({{ $this->fileCount }})
                         </button>
                         <button @click="activeTab = 'directories'"
                             :class="activeTab === 'directories' ? 'border-b-2 dark:border-white border-black' :
                                 'border-b-2 border-transparent'"
                             @if (!$hasDirectories) disabled @endif
                             class="px-4 py-2 -mb-px font-medium transition-colors {{ $hasDirectories ? 'dark:text-neutral-400 dark:hover:text-white text-neutral-600 hover:text-black cursor-pointer' : 'opacity-50 cursor-not-allowed' }} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coollabs dark:focus-visible:ring-warning focus-visible:ring-offset-2 dark:focus-visible:ring-offset-coolgray-100">
-                            Directories ({{ $this->directoryCount }})
+                            {{ __('Directories') }} ({{ $this->directoryCount }})
                         </button>
                     </div>
 
@@ -406,7 +406,7 @@
                                 <livewire:project.shared.storages.all :resource="$resource" />
                             @else
                                 <div class="text-center py-8 dark:text-neutral-500 text-neutral-400">
-                                    No volumes configured.
+                                    {{ __('No volumes configured.') }}
                                 </div>
                             @endif
                         </div>
@@ -420,7 +420,7 @@
                                 @endforeach
                             @else
                                 <div class="text-center py-8 dark:text-neutral-500 text-neutral-400">
-                                    No file mounts configured.
+                                    {{ __('No file mounts configured.') }}
                                 </div>
                             @endif
                         </div>
@@ -434,7 +434,7 @@
                                 @endforeach
                             @else
                                 <div class="text-center py-8 dark:text-neutral-500 text-neutral-400">
-                                    No directory mounts configured.
+                                    {{ __('No directory mounts configured.') }}
                                 </div>
                             @endif
                         </div>

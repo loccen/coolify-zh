@@ -9,6 +9,13 @@ it('uses explicit translation lookups in representative core business views', fu
     $applicationHeading = file_get_contents($viewsRoot.'/project/application/heading.blade.php');
     $applicationConfiguration = file_get_contents($viewsRoot.'/project/application/configuration.blade.php');
     $applicationGeneral = file_get_contents($viewsRoot.'/project/application/general.blade.php');
+    $applicationSource = file_get_contents($viewsRoot.'/project/application/source.blade.php');
+    $applicationDestination = file_get_contents($viewsRoot.'/project/application/destination.blade.php');
+    $applicationPreviews = file_get_contents($viewsRoot.'/project/application/previews.blade.php');
+    $applicationPreviewForm = file_get_contents($viewsRoot.'/project/application/preview/form.blade.php');
+    $applicationRollback = file_get_contents($viewsRoot.'/project/application/rollback.blade.php');
+    $applicationDeploymentIndex = file_get_contents($viewsRoot.'/project/application/deployment/index.blade.php');
+    $applicationDeploymentNavbar = file_get_contents($viewsRoot.'/project/application/deployment-navbar.blade.php');
     $serviceHeading = file_get_contents($viewsRoot.'/project/service/heading.blade.php');
     $serviceConfiguration = file_get_contents($viewsRoot.'/project/service/configuration.blade.php');
     $databaseHeading = file_get_contents($viewsRoot.'/project/database/heading.blade.php');
@@ -30,6 +37,34 @@ it('uses explicit translation lookups in representative core business views', fu
         ->toContain("{{ __('Build') }}")
         ->toContain("{{ __('HTTP Basic Authentication') }}")
         ->toContain("{{ __('Pre/Post Deployment Commands') }}")
+        ->toContain("{{ __('will detect the required configuration automatically.') }}")
+        ->and($applicationSource)
+        ->toContain("{{ __('Open Repository') }}")
+        ->toContain("__('Change git source to :name'")
+        ->toContain("__('Confirmation Text')")
+        ->and($applicationDestination)
+        ->toContain("{{ __('Destination') }}")
+        ->toContain("__('Destination Network: :name'")
+        ->and($applicationPreviews)
+        ->toContain("{{ __('Pull Requests on Git') }}")
+        ->toContain("__('Force deploy (without cache)')")
+        ->toContain("__('Preview Deployment Name')")
+        ->toContain("__('The preview deployment domain is already in use by other resources. Using the same domain for multiple resources can cause routing conflicts and unpredictable behavior.')")
+        ->and($applicationPreviewForm)
+        ->toContain("{{ __('Preview Deployments') }}")
+        ->toContain("__('Preview URL Template')")
+        ->toContain("__('Domain Preview: :preview'")
+        ->and($applicationRollback)
+        ->toContain("{{ __('Rollback') }}")
+        ->toContain("__('This image is currently running.')")
+        ->toContain("__('Loading available docker images...')")
+        ->and($applicationDeploymentIndex)
+        ->toContain("{{ __('Deployments') }}")
+        ->toContain("__('Pull Request Id')")
+        ->toContain("__('No deployments found')")
+        ->and($applicationDeploymentNavbar)
+        ->toContain("{{ __('Deployment Log') }}")
+        ->toContain("{{ __('Force Start') }}")
         ->and($serviceHeading)
         ->toContain("{{ __('Pull Latest Images & Restart') }}")
         ->and($serviceConfiguration)
@@ -65,6 +100,24 @@ it('resolves representative T5C translations in zh_CN', function () {
         ->and(__('Please load a Compose file.'))->toBe('请加载 Compose 文件。')
         ->and(__('Docker Compose'))->toBe('Docker Compose')
         ->and(__('Preview Deployments'))->toBe('Preview Deployments')
+        ->and(__('Open Repository'))->toBe('打开仓库')
+        ->and(__('Change git source to :name', ['name' => '示例来源']))->toBe('将代码源切换为 示例来源')
+        ->and(__('Destination Network: :name', ['name' => 'coolify']))->toBe('目标网络：coolify')
+        ->and(__('Force deploy (without cache)'))->toBe('强制部署（不使用缓存）')
+        ->and(__('Preview Deployment Name'))->toBe('Preview Deployment 名称')
+        ->and(__('Preview Deployments based on pull requests are here.'))->toBe('这里列出了基于拉取请求创建的 Preview Deployments。')
+        ->and(__('Domain Preview: :preview', ['preview' => 'preview.example.com']))->toBe('预览域名：preview.example.com')
+        ->and(__('Rollback'))->toBe('回滚')
+        ->and(__('This image is currently running.'))->toBe('这个镜像当前正在运行。')
+        ->and(__('Deployment Log'))->toBe('部署日志')
+        ->and(__('Force Start'))->toBe('强制启动')
+        ->and(__('will detect the required configuration automatically.'))->toBe('会自动检测所需配置。')
+        ->and(__('Pull Request #:id', ['id' => 42]))->toBe('拉取请求 # 42')
+        ->and(__('Queued'))->toBe('排队中')
+        ->and(__('Cancelled'))->toBe('已取消')
+        ->and(__('Running for:'))->toBe('已运行：')
+        ->and(__('Commit:'))->toBe('提交：')
+        ->and(__('Manual'))->toBe('手动')
         ->and(__('Proxy'))->toBe('代理')
         ->and(__('Swarm'))->toBe('Swarm')
         ->and(__('Webhook'))->toBe('Webhook')
