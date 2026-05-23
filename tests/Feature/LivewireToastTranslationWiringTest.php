@@ -106,3 +106,124 @@ it('resolves representative livewire toast translations in zh_CN', function () {
         ->and(__('Please select a file to import.'))->toBe('请选择要导入的文件。')
         ->and(__('Invalid container name.'))->toBe('容器名称无效。');
 });
+
+it('uses explicit translation lookups in follow-up livewire toast dispatches', function () {
+    $applicationAdvanced = file_get_contents(app_path('Livewire/Project/Application/Advanced.php'));
+    $applicationDeploymentIndex = file_get_contents(app_path('Livewire/Project/Application/Deployment/Index.php'));
+    $applicationHeading = file_get_contents(app_path('Livewire/Project/Application/Heading.php'));
+    $applicationPreviewForm = file_get_contents(app_path('Livewire/Project/Application/Preview/Form.php'));
+    $applicationRollback = file_get_contents(app_path('Livewire/Project/Application/Rollback.php'));
+    $applicationSource = file_get_contents(app_path('Livewire/Project/Application/Source.php'));
+    $applicationSwarm = file_get_contents(app_path('Livewire/Project/Application/Swarm.php'));
+    $backupNow = file_get_contents(app_path('Livewire/Project/Database/BackupNow.php'));
+    $backupEdit = file_get_contents(app_path('Livewire/Project/Database/BackupEdit.php'));
+    $backupExecutions = file_get_contents(app_path('Livewire/Project/Database/BackupExecutions.php'));
+    $scheduledBackups = file_get_contents(app_path('Livewire/Project/Database/ScheduledBackups.php'));
+    $databaseImport = file_get_contents(app_path('Livewire/Project/Database/Import.php'));
+    $databasePostgresqlGeneral = file_get_contents(app_path('Livewire/Project/Database/Postgresql/General.php'));
+    $environmentVariableAll = file_get_contents(app_path('Livewire/Project/Shared/EnvironmentVariable/All.php'));
+    $environmentVariableShow = file_get_contents(app_path('Livewire/Project/Shared/EnvironmentVariable/Show.php'));
+    $executeContainerCommand = file_get_contents(app_path('Livewire/Project/Shared/ExecuteContainerCommand.php'));
+    $healthChecks = file_get_contents(app_path('Livewire/Project/Shared/HealthChecks.php'));
+    $webhooks = file_get_contents(app_path('Livewire/Project/Shared/Webhooks.php'));
+    $projectEdit = file_get_contents(app_path('Livewire/Project/Edit.php'));
+
+    expect($applicationAdvanced)
+        ->toContain("__('Log drain is not enabled on this server.')")
+        ->toContain("__('You cannot set both GPU count and GPU device IDs.')")
+        ->toContain("__('Custom name saved.')")
+        ->and($applicationDeploymentIndex)
+        ->toContain("__('Invalid Pull Request ID in URL. Filter cleared.')")
+        ->toContain("__('Invalid Pull Request ID. Please enter a valid positive number.')")
+        ->and($applicationHeading)
+        ->toContain("__('Failed to deploy')")
+        ->toContain("__('Gracefully stopping application.<br/>It could take a while depending on the application.')")
+        ->and($applicationPreviewForm)
+        ->toContain("__('Preview url template updated.')")
+        ->and($applicationRollback)
+        ->toContain("__('Images loaded.')")
+        ->and($applicationSource)
+        ->toContain("__('Private key updated!')")
+        ->toContain("__('Application source updated!')")
+        ->toContain("__('Source updated!')")
+        ->and($applicationSwarm)
+        ->toContain("__('Swarm settings updated.')")
+        ->and($backupNow)
+        ->toContain("__('Backup queued. It will be available in a few minutes.')")
+        ->and($backupEdit)
+        ->toContain("__('Backup updated successfully.')")
+        ->toContain("__('Failed to delete backup: :message'")
+        ->and($backupExecutions)
+        ->toContain("__('Failed backups cleaned up.')")
+        ->toContain("__('Backup execution not found.')")
+        ->toContain("__('Log: :path'")
+        ->and($scheduledBackups)
+        ->toContain("__('Database type set.')")
+        ->toContain("__('Scheduled backup deleted.')")
+        ->and($databaseImport)
+        ->toContain("__('Please select an S3 storage.')")
+        ->toContain("__('File found in S3. Size: :size'")
+        ->toContain("__('Restoring database from S3. Progress will be shown in the activity monitor...')")
+        ->and($databasePostgresqlGeneral)
+        ->toContain("__('A script with this filename already exists.')")
+        ->toContain("__('Init script added.')")
+        ->and($environmentVariableAll)
+        ->toContain("__('Environment variable added.')")
+        ->toContain("__('Cannot delete environment variable \\'")
+        ->and($environmentVariableShow)
+        ->toContain("__('Required environment variables cannot be empty.')")
+        ->toContain("__('Environment variable deleted successfully.')")
+        ->and($executeContainerCommand)
+        ->toContain("__('Please select a container.')")
+        ->and($healthChecks)
+        ->toContain("__('Health check updated.')")
+        ->toContain("__('Health check enabled.')")
+        ->and($webhooks)
+        ->toContain("__('Secret Saved.')")
+        ->and($projectEdit)
+        ->toContain("__('Project updated.')");
+});
+
+it('resolves follow-up livewire toast translations in zh_CN', function () {
+    App::setLocale('zh_CN');
+
+    expect(__('Domain generated.'))->toBe('域名已生成。')
+        ->and(__('Log drain is not enabled on this server.'))->toBe('此服务器未启用日志转发。')
+        ->and(__('You cannot set both GPU count and GPU device IDs.'))->toBe('不能同时设置 GPU 数量和 GPU 设备 ID。')
+        ->and(__('Custom name saved.'))->toBe('自定义名称已保存。')
+        ->and(__('Stop grace period updated.'))->toBe('停止宽限期已更新。')
+        ->and(__('Invalid Pull Request ID in URL. Filter cleared.'))->toBe('URL 中的拉取请求 ID 无效，筛选条件已清除。')
+        ->and(__('Invalid Pull Request ID. Please enter a valid positive number.'))->toBe('拉取请求 ID 无效。请输入有效的正整数。')
+        ->and(__('Private key updated!'))->toBe('私钥已更新！')
+        ->and(__('Application source updated!'))->toBe('应用代码源已更新！')
+        ->and(__('Source updated!'))->toBe('代码源已更新！')
+        ->and(__('Preview url template updated.'))->toBe('预览 URL 模板已更新。')
+        ->and(__('Swarm settings updated.'))->toBe('Swarm 设置已更新。')
+        ->and(__('Backup queued. It will be available in a few minutes.'))->toBe('备份已加入队列，几分钟后可用。')
+        ->and(__('Database type set.'))->toBe('数据库类型已设置。')
+        ->and(__('Scheduled backup deleted.'))->toBe('计划备份已删除。')
+        ->and(__('Backup updated successfully.'))->toBe('备份已成功更新。')
+        ->and(__('Failed backups cleaned up.'))->toBe('失败的备份已清理。')
+        ->and(__('Backup execution not found.'))->toBe('未找到备份执行记录。')
+        ->and(__('Backup deleted.'))->toBe('备份已删除。')
+        ->and(__('Failed to delete backup: :message', ['message' => 'boom']))->toBe('删除备份失败：boom')
+        ->and(__('Log: :path', ['path' => '/tmp/restore.log']))->toBe('日志：/tmp/restore.log')
+        ->and(__('Please select an S3 storage.'))->toBe('请选择一个 S3 存储。')
+        ->and(__('Please provide an S3 path.'))->toBe('请输入 S3 路径。')
+        ->and(__('File found in S3. Size: :size', ['size' => '42 MB']))->toBe('已在 S3 中找到文件。大小：42 MB')
+        ->and(__('Restoring database from S3. Progress will be shown in the activity monitor...'))->toBe('正在从 S3 恢复数据库。进度会显示在活动监视器中...')
+        ->and(__('A script with this filename already exists.'))->toBe('已存在使用此文件名的脚本。')
+        ->and(__('Init script added.'))->toBe('初始化脚本已添加。')
+        ->and(__('Please select a container.'))->toBe('请选择一个容器。')
+        ->and(__('Environment variable added.'))->toBe('环境变量已添加。')
+        ->and(__('Required environment variables cannot be empty.'))->toBe('必填环境变量不能为空。')
+        ->and(__('Environment variable updated.'))->toBe('环境变量已更新。')
+        ->and(__('Environment variable deleted successfully.'))->toBe('环境变量已成功删除。')
+        ->and(__('Health check updated.'))->toBe('健康检查已更新。')
+        ->and(__('Health check enabled.'))->toBe('健康检查已启用。')
+        ->and(__('Health check disabled.'))->toBe('健康检查已禁用。')
+        ->and(__('Secret Saved.'))->toBe('密钥已保存。')
+        ->and(__('Project updated.'))->toBe('项目已更新。')
+        ->and(__('Invalid docker-compose file.'))->toBe('无效的 docker-compose 文件。')
+        ->and(__('The provided password is incorrect.'))->toBe('输入的密码不正确。');
+});

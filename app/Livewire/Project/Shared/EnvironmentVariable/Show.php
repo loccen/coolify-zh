@@ -210,7 +210,7 @@ class Show extends Component
             if (! $this->isSharedVariable && $this->is_required && str($this->value)->isEmpty()) {
                 $oldValue = $this->env->getOriginal('value');
                 $this->value = $oldValue;
-                $this->dispatch('error', 'Required environment variables cannot be empty.');
+                $this->dispatch('error', __('Required environment variables cannot be empty.'));
 
                 return;
             }
@@ -218,7 +218,7 @@ class Show extends Component
             $this->serialize();
             $this->syncData(true);
             $this->syncData(false);
-            $this->dispatch('success', 'Environment variable updated.');
+            $this->dispatch('success', __('Environment variable updated.'));
             $this->dispatch('envsUpdated');
             $this->dispatch('configurationChanged');
         } catch (\Exception $e) {
@@ -363,7 +363,7 @@ class Show extends Component
                 [$isUsed, $reason] = $this->isEnvironmentVariableUsedInDockerCompose($this->env->key, $this->env->resourceable?->docker_compose);
 
                 if ($isUsed) {
-                    $this->dispatch('error', "Cannot delete environment variable '{$this->env->key}' <br><br>Please remove it from the Docker Compose file first.");
+                    $this->dispatch('error', __('Cannot delete environment variable \':key\' <br><br>Please remove it from the Docker Compose file first.', ['key' => $this->env->key]));
 
                     return;
                 }
@@ -371,7 +371,7 @@ class Show extends Component
 
             $this->env->delete();
             $this->dispatch('environmentVariableDeleted');
-            $this->dispatch('success', 'Environment variable deleted successfully.');
+            $this->dispatch('success', __('Environment variable deleted successfully.'));
         } catch (\Exception $e) {
             return handleError($e);
         }

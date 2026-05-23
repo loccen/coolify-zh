@@ -348,7 +348,7 @@ class General extends Component
         $oldScript = $initScripts->firstWhere('index', $script['index']);
 
         if ($existingScript && $existingScript['index'] !== $script['index']) {
-            $this->dispatch('error', 'A script with this filename already exists.');
+            $this->dispatch('error', __('A script with this filename already exists.'));
 
             return;
         }
@@ -395,7 +395,7 @@ class General extends Component
             ->all();
 
         $this->syncData(true);
-        $this->dispatch('success', 'Init script saved and updated.');
+        $this->dispatch('success', __('Init script saved and updated.'));
     }
 
     public function delete_init_script($script)
@@ -436,7 +436,7 @@ class General extends Component
             $this->initScripts = $updatedScripts;
             $this->syncData(true);
             $this->dispatch('refresh')->self();
-            $this->dispatch('success', 'Init script deleted from the database and the server.');
+            $this->dispatch('success', __('Init script deleted from the database and the server.'));
         }
     }
 
@@ -460,7 +460,7 @@ class General extends Component
 
         $found = collect($this->initScripts)->firstWhere('filename', $this->new_filename);
         if ($found) {
-            $this->dispatch('error', 'Filename already exists.');
+            $this->dispatch('error', __('Filename already exists.'));
 
             return;
         }
@@ -475,7 +475,7 @@ class General extends Component
             ],
         ]);
         $this->syncData(true);
-        $this->dispatch('success', 'Init script added.');
+        $this->dispatch('success', __('Init script added.'));
         $this->new_content = '';
         $this->new_filename = '';
     }

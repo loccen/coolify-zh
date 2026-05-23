@@ -145,7 +145,7 @@ class BackupEdit extends Component
         $this->authorize('manageBackups', $this->backup->database);
 
         if (! verifyPasswordConfirmation($password, $this)) {
-            return 'The provided password is incorrect.';
+            return __('The provided password is incorrect.');
         }
 
         try {
@@ -189,7 +189,7 @@ class BackupEdit extends Component
                 return redirect()->route('project.database.backup.index', $this->parameters);
             }
         } catch (Exception $e) {
-            $this->dispatch('error', 'Failed to delete backup: '.$e->getMessage());
+            $this->dispatch('error', __('Failed to delete backup: :message', ['message' => $e->getMessage()]));
 
             return handleError($e, $this);
         }
@@ -201,7 +201,7 @@ class BackupEdit extends Component
             $this->authorize('manageBackups', $this->backup->database);
 
             $this->syncData(true);
-            $this->dispatch('success', 'Backup updated successfully.');
+            $this->dispatch('success', __('Backup updated successfully.'));
         } catch (\Throwable $e) {
             $this->dispatch('error', $e->getMessage());
         }
@@ -220,7 +220,7 @@ class BackupEdit extends Component
 
         $isValid = validate_cron_expression($this->backup->frequency);
         if (! $isValid) {
-            throw new Exception('Invalid Cron / Human expression');
+            throw new Exception(__('Invalid Cron / Human expression.'));
         }
         $this->validate();
     }
@@ -231,7 +231,7 @@ class BackupEdit extends Component
             $this->authorize('manageBackups', $this->backup->database);
 
             $this->syncData(true);
-            $this->dispatch('success', 'Backup updated successfully.');
+            $this->dispatch('success', __('Backup updated successfully.'));
         } catch (\Throwable $e) {
             $this->dispatch('error', $e->getMessage());
         }
@@ -242,7 +242,7 @@ class BackupEdit extends Component
         return view('livewire.project.database.backup-edit', [
             'checkboxes' => [
                 ['id' => 'delete_associated_backups_locally', 'label' => __('database.delete_backups_locally')],
-                ['id' => 'delete_associated_backups_s3', 'label' => 'All backups will be permanently deleted (associated with this backup job) from the selected S3 Storage.'],
+                ['id' => 'delete_associated_backups_s3', 'label' => __('All backups will be permanently deleted (associated with this backup job) from the selected S3 Storage.')],
                 // ['id' => 'delete_associated_backups_sftp', 'label' => 'All backups associated with this backup job from this database will be permanently deleted from the selected SFTP Storage.']
             ],
         ]);

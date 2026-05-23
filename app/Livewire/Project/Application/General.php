@@ -470,7 +470,7 @@ class General extends Component
                 $this->application->save();
             }
 
-            $this->dispatch('success', 'Settings saved.');
+            $this->dispatch('success', __('Settings saved.'));
             $this->application->refresh();
 
             $this->syncData();

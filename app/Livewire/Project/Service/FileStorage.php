@@ -148,7 +148,7 @@ class FileStorage extends Component
         $this->authorize('update', $this->resource);
 
         if (! verifyPasswordConfirmation($password, $this)) {
-            return 'The provided password is incorrect.';
+            return __('The provided password is incorrect.');
         }
 
         try {

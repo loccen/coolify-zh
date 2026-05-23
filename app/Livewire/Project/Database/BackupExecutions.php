@@ -49,7 +49,7 @@ class BackupExecutions extends Component
         if ($this->backup) {
             $this->backup->executions()->where('status', 'failed')->delete();
             $this->refreshBackupExecutions();
-            $this->dispatch('success', 'Failed backups cleaned up.');
+            $this->dispatch('success', __('Failed backups cleaned up.'));
         }
     }
 
@@ -60,9 +60,9 @@ class BackupExecutions extends Component
             if ($deletedCount > 0) {
                 $this->backup->executions()->where('local_storage_deleted', true)->delete();
                 $this->refreshBackupExecutions();
-                $this->dispatch('success', "Cleaned up {$deletedCount} backup entries deleted from local storage.");
+                $this->dispatch('success', __('Cleaned up :count backup entries deleted from local storage.', ['count' => $deletedCount]));
             } else {
-                $this->dispatch('info', 'No backup entries found that are deleted from local storage.');
+                $this->dispatch('info', __('No backup entries found that are deleted from local storage.'));
             }
         }
     }
@@ -70,12 +70,12 @@ class BackupExecutions extends Component
     public function deleteBackup($executionId, $password, $selectedActions = [])
     {
         if (! verifyPasswordConfirmation($password, $this)) {
-            return 'The provided password is incorrect.';
+            return __('The provided password is incorrect.');
         }
 
         $execution = $this->backup->executions()->where('id', $executionId)->first();
         if (is_null($execution)) {
-            $this->dispatch('error', 'Backup execution not found.');
+            $this->dispatch('error', __('Backup execution not found.'));
 
             return;
         }
@@ -94,10 +94,10 @@ class BackupExecutions extends Component
             }
 
             $execution->delete();
-            $this->dispatch('success', 'Backup deleted.');
+            $this->dispatch('success', __('Backup deleted.'));
             $this->refreshBackupExecutions();
         } catch (\Exception $e) {
-            $this->dispatch('error', 'Failed to delete backup: '.$e->getMessage());
+            $this->dispatch('error', __('Failed to delete backup: :message', ['message' => $e->getMessage()]));
 
             return true;
         }
@@ -108,7 +108,7 @@ class BackupExecutions extends Component
     public function restoreLocalBackup($executionId, $password)
     {
         if (! verifyPasswordConfirmation($password, $this)) {
-            return 'The provided password is incorrect.';
+            return __('The provided password is incorrect.');
         }
 
         try {
@@ -136,7 +136,7 @@ class BackupExecutions extends Component
 
             $this->dispatch('activityMonitor', $activity->id);
             $this->dispatch('instancerestore');
-            $this->dispatch('info', __('settings.backup_page.restore_started_local').' Log: '.$logPath);
+            $this->dispatch('info', __('settings.backup_page.restore_started_local').' '.__('Log: :path', ['path' => $logPath]));
         } catch (\Throwable $e) {
             $this->dispatch('error', $e->getMessage());
         }
@@ -147,7 +147,7 @@ class BackupExecutions extends Component
     public function restoreS3Backup($executionId, $password)
     {
         if (! verifyPasswordConfirmation($password, $this)) {
-            return 'The provided password is incorrect.';
+            return __('The provided password is incorrect.');
         }
 
         try {
@@ -189,7 +189,7 @@ class BackupExecutions extends Component
 
             $this->dispatch('activityMonitor', $activity->id);
             $this->dispatch('instancerestore');
-            $this->dispatch('info', __('settings.backup_page.restore_started_s3').' Log: '.$logPath);
+            $this->dispatch('info', __('settings.backup_page.restore_started_s3').' '.__('Log: :path', ['path' => $logPath]));
         } catch (\Throwable $e) {
             $this->dispatch('error', $e->getMessage());
         }

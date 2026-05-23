@@ -297,3 +297,68 @@ it('resolves representative follow-up translations in zh_CN', function () {
         ->and(__('settings.instance_updated'))->toBe('设置已更新。')
         ->and(trans('settings.instance_updated'))->toBe('设置已更新。');
 });
+
+it('uses explicit translation lookups in additional follow-up views', function () {
+    $viewsRoot = base_path('resources/views');
+
+    $applicationAdvanced = file_get_contents($viewsRoot.'/livewire/project/application/advanced.blade.php');
+    $applicationGeneral = file_get_contents($viewsRoot.'/livewire/project/application/general.blade.php');
+    $applicationHeading = file_get_contents($viewsRoot.'/livewire/project/application/heading.blade.php');
+    $applicationSource = file_get_contents($viewsRoot.'/livewire/project/application/source.blade.php');
+    $databaseHeading = file_get_contents($viewsRoot.'/livewire/project/database/heading.blade.php');
+    $resourceIndex = file_get_contents($viewsRoot.'/livewire/project/resource/index.blade.php');
+    $databaseScheduledBackups = file_get_contents($viewsRoot.'/livewire/project/database/scheduled-backups.blade.php');
+    $environmentVariableShow = file_get_contents($viewsRoot.'/livewire/project/shared/environment-variable/show.blade.php');
+    $newResourceSelect = file_get_contents($viewsRoot.'/livewire/project/new/select.blade.php');
+
+    expect($applicationAdvanced)
+        ->toContain('By default, you do not reach the Coolify defined networks.')
+        ->toContain('Enable GPU usage for this application. More info')
+        ->toContain('WARNING: Advanced use cases only.')
+        ->toContain('You can add a custom name for your container.')
+        ->and($applicationGeneral)
+        ->toContain("__('Application URL')")
+        ->toContain("__('All traffic will be redirected to the selected direction.')")
+        ->toContain("__('This will overwrite your current custom Nginx configuration.')")
+        ->and($applicationHeading)
+        ->toContain("__('Container has restarted')")
+        ->toContain("__('This application will be stopped.')")
+        ->toContain("__('Update Service')")
+        ->and($applicationSource)
+        ->toContain("__('current')")
+        ->and($databaseHeading)
+        ->toContain("__('If the database is currently in use data could be lost.')")
+        ->toContain("__('Restarting database.')")
+        ->toContain("__('This database will be stopped.')")
+        ->and($resourceIndex)
+        ->toContain("__('Create / Edit')")
+        ->toContain("__('Try adjusting your search criteria.')")
+        ->toContain("__('Contact your team administrator to add resources.')")
+        ->and($databaseScheduledBackups)
+        ->toContain("__('No executions yet')")
+        ->and($environmentVariableShow)
+        ->toContain("__('Please confirm the execution of the actions by entering the Environment Variable Name below')")
+        ->and($newResourceSelect)
+        ->toContain("__('AMD only')")
+        ->toContain("__('ARM only')");
+});
+
+it('resolves additional follow-up translations in zh_CN', function () {
+    App::setLocale('zh_CN');
+
+    expect(__('Please confirm the execution of the actions by entering the Environment Variable Name below'))->toBe('请输入下方的环境变量名称以确认执行这些操作')
+        ->and(__('By default, you do not reach the Coolify defined networks.<br>Starting a docker compose based resource will have an internal network. <br>If you connect to a Coolify defined network, you maybe need to use different internal DNS names to connect to a resource.<br><br>For more information, check <a class=\'underline dark:text-white\' target=\'_blank\' href=\'https://coolify.io/docs/knowledge-base/docker/compose#connect-to-predefined-networks\'>this</a>.'))->toBe('默认情况下，你无法访问 Coolify 定义的网络。启动基于 docker compose 的资源时，会创建一个内部网络。<br>如果你连接到 Coolify 定义的网络，可能需要使用不同的内部 DNS 名称来连接资源。<br><br>更多信息请查看<a class=\'underline dark:text-white\' target=\'_blank\' href=\'https://coolify.io/docs/knowledge-base/docker/compose#connect-to-predefined-networks\'>这里</a>。')
+        ->and(__('Comma separated list of device ids. More info <a href=\'https://docs.docker.com/compose/gpu-support/#access-specific-devices\' class=\'underline dark:text-white\' target=\'_blank\'>here</a>.'))->toBe('用逗号分隔的设备 ID 列表。更多信息请查看<a href=\'https://docs.docker.com/compose/gpu-support/#access-specific-devices\' class=\'underline dark:text-white\' target=\'_blank\'>这里</a>。')
+        ->and(__('Enable GPU usage for this application. More info <a href=\'https://docs.docker.com/compose/gpu-support/\' class=\'underline dark:text-white\' target=\'_blank\'>here</a>.'))->toBe('为此应用启用 GPU。更多信息请查看<a href=\'https://docs.docker.com/compose/gpu-support/\' class=\'underline dark:text-white\' target=\'_blank\'>这里</a>。')
+        ->and(__('WARNING: Advanced use cases only. Your docker compose file will be deployed as-is. Nothing is modified by Coolify. You need to configure the proxy parts. More info in the <a class=\'underline dark:text-white\' href=\'https://coolify.io/docs/knowledge-base/docker/compose#raw-docker-compose-deployment\'>documentation.</a>'))->toBe('警告：仅适用于高级场景。你的 docker compose 文件会按原样部署，Coolify 不会做任何修改。你需要自行配置代理相关部分。更多信息请查看<a class=\'underline dark:text-white\' href=\'https://coolify.io/docs/knowledge-base/docker/compose#raw-docker-compose-deployment\'>文档</a>。')
+        ->and(__('You can add a custom name for your container.<br><br>The name will be converted to slug format when you save it. <span class=\'font-bold dark:text-warning\'>You will lose the rolling update feature!</span>'))->toBe('你可以为容器设置自定义名称。<br><br>保存时会自动转换为 slug 格式。<span class=\'font-bold dark:text-warning\'>你将失去滚动更新功能！</span>')
+        ->and(__('Close'))->toBe('关闭')
+        ->and(__('AMD only'))->toBe('仅支持 AMD')
+        ->and(__('ARM only'))->toBe('仅支持 ARM')
+        ->and(__('This service only supports AMD64/x86_64 architecture. It will not work on ARM-based servers (e.g., Apple Silicon, Raspberry Pi, AWS Graviton).'))->toBe('此服务仅支持 AMD64/x86_64 架构，无法在基于 ARM 的服务器上运行（例如 Apple Silicon、Raspberry Pi、AWS Graviton）。')
+        ->and(__('This service only supports ARM64/aarch64 architecture. It will not work on AMD64/x86_64-based servers.'))->toBe('此服务仅支持 ARM64/aarch64 架构，无法在基于 AMD64/x86_64 的服务器上运行。')
+        ->and(__('Create / Edit'))->toBe('创建 / 编辑')
+        ->and(__('Try adjusting your search criteria.'))->toBe('试着调整搜索条件。')
+        ->and(__('Contact your team administrator to add resources.'))->toBe('请联系团队管理员添加资源。')
+        ->and(__('No executions yet'))->toBe('还没有执行记录');
+});

@@ -62,7 +62,7 @@
                             @else
                                 <span
                                     class="px-3 py-1 rounded-md text-xs font-medium tracking-wide shadow-xs bg-gray-100 text-gray-800 dark:bg-neutral-800 dark:text-gray-200">
-                                    No executions yet
+                                    {{ __('No executions yet') }}
                                 </span>
                             @endif
                             <h3 class="font-semibold">{{ $backup->frequency }}</h3>

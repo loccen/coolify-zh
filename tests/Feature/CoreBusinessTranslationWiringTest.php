@@ -175,3 +175,20 @@ it('resolves representative T5C translations in zh_CN', function () {
         ->and(__('Search resources, paths, everything (type new for create)...'))->toBe('搜索资源、路径等内容（输入 new 可创建）...')
         ->and(__('No resource found with the search term'))->toBe('没有找到与搜索词匹配的资源');
 });
+
+it('resolves additional core business follow-up translations in zh_CN', function () {
+    App::setLocale('zh_CN');
+
+    expect(__('Application URL'))->toBe('应用 URL')
+        ->and(__('All traffic will be redirected to the selected direction.'))->toBe('所有流量都会重定向到所选方向。')
+        ->and(__('This will overwrite your current custom Nginx configuration.'))->toBe('这会覆盖你当前的自定义 Nginx 配置。')
+        ->and(__('Container has restarted'))->toBe('容器已重启过')
+        ->and(__('This application will be stopped.'))->toBe('这个应用将被停止。')
+        ->and(__('All non-persistent data of this application will be deleted.'))->toBe('此应用的所有非持久化数据都会被删除。')
+        ->and(__('Update Service'))->toBe('更新服务')
+        ->and(__('current'))->toBe('当前')
+        ->and(__('If the database is currently in use data could be lost.'))->toBe('如果当前正在使用该数据库，数据可能会丢失。')
+        ->and(__('Restarting database.'))->toBe('正在重启数据库。')
+        ->and(__('This database will be stopped.'))->toBe('该数据库将被停止。')
+        ->and(__('This database will be unavailable during the restart.'))->toBe('该数据库在重启期间将不可用。');
+});

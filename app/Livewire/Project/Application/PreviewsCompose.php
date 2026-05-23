@@ -42,7 +42,7 @@ class PreviewsCompose extends Component
             $this->preview->docker_compose_domains = json_encode($docker_compose_domains);
             $this->preview->save();
             $this->dispatch('update_links');
-            $this->dispatch('success', 'Domain saved.');
+            $this->dispatch('success', __('Domain saved.'));
         } catch (\Throwable $e) {
             return handleError($e, $this);
         }
@@ -112,7 +112,7 @@ class PreviewsCompose extends Component
             $this->preview->save();
 
             $this->dispatch('update_links');
-            $this->dispatch('success', 'Domain generated.');
+            $this->dispatch('success', __('Domain generated.'));
         } catch (\Throwable $e) {
             return handleError($e, $this);
         }

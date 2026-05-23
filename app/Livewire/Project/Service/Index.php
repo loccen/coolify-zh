@@ -200,7 +200,7 @@ class Index extends Component
             $this->authorize('delete', $this->serviceDatabase);
 
             if (! verifyPasswordConfirmation($password, $this)) {
-                return 'The provided password is incorrect.';
+                return __('The provided password is incorrect.');
             }
 
             $this->serviceDatabase->delete();
@@ -374,7 +374,7 @@ class Index extends Component
             $this->serviceApplication->is_stripprefix_enabled = $this->isStripprefixEnabled;
             $this->serviceApplication->exclude_from_status = $this->excludeFromStatus;
             $this->serviceApplication->save();
-            $this->dispatch('success', 'Settings saved.');
+            $this->dispatch('success', __('Settings saved.'));
         } catch (\Throwable $e) {
             return handleError($e, $this);
         }
@@ -404,7 +404,7 @@ class Index extends Component
             $this->authorize('delete', $this->serviceApplication);
 
             if (! verifyPasswordConfirmation($password, $this)) {
-                return 'The provided password is incorrect.';
+                return __('The provided password is incorrect.');
             }
 
             $this->serviceApplication->delete();
@@ -539,7 +539,7 @@ class Index extends Component
             $this->syncApplicationData(false);
             updateCompose($this->serviceApplication);
             if (str($this->serviceApplication->fqdn)->contains(',')) {
-                $this->dispatch('warning', 'Some services do not support multiple domains, which can lead to problems and is NOT RECOMMENDED.<br><br>Only use multiple domains if you know what you are doing.');
+                $this->dispatch('warning', __('Some services do not support multiple domains, which can lead to problems and is NOT RECOMMENDED.<br><br>Only use multiple domains if you know what you are doing.'));
             } else {
                 ! $warning && $this->dispatch('success', __('Service saved.'));
             }
