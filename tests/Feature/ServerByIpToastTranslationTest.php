@@ -79,7 +79,13 @@ it('dispatches translated toast messages for server by ip validation branches', 
     $userWithLimit->teams()->attach($teamWithLimit, ['role' => 'owner']);
     $limitPrivateKey = PrivateKey::create([
         'name' => 'Limit Key',
-        'private_key' => serverByIpTestPrivateKey(),
+        'private_key' => '-----BEGIN OPENSSH PRIVATE KEY-----
+b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+QyNTUxOQAAACC2K9K2q2e5R5y2mJ3p4fN0Q1R3pUQ7Q8tG4qv7Wg8xwAAAJi/QySHv0Mkh
+wAAAAtzc2gtZWQyNTUxOQAAACC2K9K2q2e5R5y2mJ3p4fN0Q1R3pUQ7Q8tG4qv7Wg8xwAA
+AEA1Z1vV0W1mS2fQ5V4k0Yz3mQK2m2k6u4pJmR8o5a4Zq8bYV9dK3qg0xM3K0wH7fD6h0T
+9y9Ff1pB1Qw8mX5n5qzAAAAEXNhaWxANzZmZjY2ZDJlMmRkAQIDBA==
+-----END OPENSSH PRIVATE KEY-----',
         'team_id' => $teamWithLimit->id,
     ]);
 
