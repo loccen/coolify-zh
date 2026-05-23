@@ -87,7 +87,19 @@ it('renders invitation page copy through translations for both locales', functio
     expect($enHtml)
         ->toContain('Team Invitation')
         ->toContain('Role:')
-        ->toContain('Accept Invitation');
+        ->toContain('Member')
+        ->toContain('Accept Invitation')
+        ->not->toContain('team.roles.member');
+
+    $enAlreadyMemberHtml = view('invitation.accept', [
+        'invitation' => $invitation,
+        'team' => $team,
+        'alreadyMember' => true,
+    ])->render();
+
+    expect($enAlreadyMemberHtml)
+        ->toContain('You are already a member of this team.')
+        ->toContain('Dismiss Invitation');
 
     app()->setLocale('zh_CN');
     $zhHtml = view('invitation.accept', [
@@ -99,5 +111,17 @@ it('renders invitation page copy through translations for both locales', functio
     expect($zhHtml)
         ->toContain('团队邀请')
         ->toContain('角色：')
-        ->toContain('接受邀请');
+        ->toContain('成员')
+        ->toContain('接受邀请')
+        ->not->toContain('Member');
+
+    $zhAlreadyMemberHtml = view('invitation.accept', [
+        'invitation' => $invitation,
+        'team' => $team,
+        'alreadyMember' => true,
+    ])->render();
+
+    expect($zhAlreadyMemberHtml)
+        ->toContain('您已经是这个团队的成员了。')
+        ->not->toContain('You are already a member of this team.');
 });
