@@ -51,6 +51,8 @@ return [
         'server_with_same_ip_in_use_by_another_team' => '其他团队已在使用此 IP/域名的服务器。',
         'proxy_dynamic_configuration_file_name_reserved' => '文件名已被保留。',
         'proxy_dynamic_configuration_file_already_exists' => '文件已存在。',
+        'proxy_dynamic_configuration_cannot_delete_caddyfile' => '无法删除 Caddyfile。',
+        'proxy_dynamic_configuration_file_deleted' => '文件已删除。',
         'proxy_dynamic_configuration_saved' => '动态配置已保存。',
         'proxy_running' => '代理正在运行。',
         'proxy_restart_failed' => '代理重启失败。请查看日志。',
