@@ -66,21 +66,21 @@
     @auth
         <span x-show="popups.realtime === true">
             @if (!isCloud())
-                <x-popup>
+                    <x-popup>
                     <x-slot:title>
-                        <span class="font-bold text-left text-red-500">WARNING: </span> Cannot connect to real-time service
+                        <span class="font-bold text-left text-red-500">{{ __('WARNING:') }}</span>
+                        {{ __('Cannot connect to real-time service') }}
                     </x-slot:title>
                     <x-slot:description>
-                        <div>This will cause unusual problems on the
-                            UI! <br><br>
-                            Please ensure that you have opened the
+                        <div>{{ __('This will cause unusual problems on the UI!') }} <br><br>
+                            {{ __('Please ensure that you have opened the') }}
                             <a class="underline" href='https://coolify.io/docs/knowledge-base/server/firewall'
-                                target='_blank'>required ports</a> or get
-                            help on <a class="underline" href='https://coollabs.io/discord' target='_blank'>Discord</a>.
+                                target='_blank'>{{ __('required ports') }}</a> {{ __('or get help on') }} <a
+                                class="underline" href='https://coollabs.io/discord' target='_blank'>Discord</a>.
                         </div>
                     </x-slot:description>
                     <x-slot:button-text @click="disableRealtime()">
-                        Acknowledge & Disable This Popup
+                        {{ __('Acknowledge & Disable This Popup') }}
                     </x-slot:button-text>
                 </x-popup>
             @endif
@@ -96,18 +96,14 @@
                             <img src="{{ asset('heart.png') }}" class="w-20 h-20">
                         </div>
                         <div class="flex flex-col gap-2 lg:px-10 px-1">
-                            <div class="lg:text-xl text-md dark:text-white font-bold">Love Coolify? Support our work.
+                            <div class="lg:text-xl text-md dark:text-white font-bold">
+                                {{ __('Love Coolify? Support our work.') }}
                             </div>
                             <div class="lg:text-sm text-xs dark:text-white">
-                                We are already profitable thanks to <span class="font-bold text-pink-500">YOU</span>
-                                but...<br />We
-                                would
-                                like to
-                                make
-                                more cool features.
+                                {!! __('We are already profitable thanks to <span class="font-bold text-pink-500">YOU</span> but...<br />We would like to make more cool features.') !!}
                             </div>
                             <div class="lg:text-sm text-xs dark:text-white pt-2 ">
-                                For this we need your help to support our work financially.
+                                {{ __('For this we need your help to support our work financially.') }}
                             </div>
                         </div>
                         <div class="flex flex-col gap-2 text-center md:mx-auto lg:py-0 pt-2">
@@ -124,7 +120,7 @@
                                     class="font-bold dark:text-white">Stripe</a></x-forms.button>
                             <div class="pt-4 dark:text-white hover:underline cursor-pointer lg:text-base text-xs"
                                 @click="bannerVisible=false;disableSponsorship()">
-                                Maybe next time
+                                {{ __('Maybe next time') }}
                             </div>
                         </div>
                     </div>
@@ -140,9 +136,9 @@
                         d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
                         clip-rule="evenodd" />
                 </svg>
-                <span><span class="font-bold text-red-500">Subscription Error.</span> Something went wrong. Please try
-                    again or <a class="underline dark:text-white"
-                        href="{{ config('constants.urls.contact') }}" target="_blank">contact support</a>.</span>
+                <span><span class="font-bold text-red-500">{{ __('Subscription Error.') }}</span>
+                    {{ __('Something went wrong. Please try again or') }} <a class="underline dark:text-white"
+                        href="{{ config('constants.urls.contact') }}" target="_blank">{{ __('contact support') }}</a>.</span>
             </div>
         </x-banner>
     @endif
@@ -154,30 +150,30 @@
                         d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                         clip-rule="evenodd" />
                 </svg>
-                <span><span class="font-bold text-green-500">Welcome onboard!</span> Your subscription has been
-                    activated. It could take a few seconds before it's fully active.</span>
+                <span><span class="font-bold text-green-500">{{ __('Welcome onboard!') }}</span>
+                    {{ __('Your subscription has been activated. It could take a few seconds before it is fully active.') }}</span>
             </div>
         </x-banner>
     @endif
     @if (currentTeam()->subscriptionPastOverDue())
         <x-banner :closable=false>
-            <div><span class="font-bold text-red-500">WARNING:</span> Your subscription is in over-due. If your
-                latest
-                payment is not paid within a week, all automations <span class="font-bold text-red-500">will
-                    be deactivated</span>. Visit <a href="{{ route('subscription.show') }}" {{ wireNavigate() }}
-                    class="underline dark:text-white">/subscription</a> to check your subscription status or pay
-                your
-                invoice (or check your email for the invoice).
+            <div><span class="font-bold text-red-500">{{ __('WARNING:') }}</span>
+                {{ __('Your subscription is overdue. If your latest payment is not paid within a week, all automations') }}
+                <span class="font-bold text-red-500">{{ __('will be deactivated') }}</span>.
+                {{ __('Visit') }} <a href="{{ route('subscription.show') }}" {{ wireNavigate() }}
+                    class="underline dark:text-white">/subscription</a>
+                {{ __('to check your subscription status or pay your invoice (or check your email for the invoice).') }}
             </div>
         </x-banner>
     @endif
     @if (currentTeam()->serverOverflow())
         <x-banner :closable=false>
-            <div><span class="font-bold text-red-500">WARNING:</span> The number of active servers exceeds the limit
-                covered by your payment. If not resolved, some of your servers <span class="font-bold text-red-500">will
-                    be deactivated</span>. Visit <a href="{{ route('subscription.show') }}" {{ wireNavigate() }}
-                    class="underline dark:text-white">/subscription</a> to update your subscription or remove some
-                servers.
+            <div><span class="font-bold text-red-500">{{ __('WARNING:') }}</span>
+                {{ __('The number of active servers exceeds the limit covered by your payment. If not resolved, some of your servers') }}
+                <span class="font-bold text-red-500">{{ __('will be deactivated') }}</span>.
+                {{ __('Visit') }} <a href="{{ route('subscription.show') }}" {{ wireNavigate() }}
+                    class="underline dark:text-white">/subscription</a>
+                {{ __('to update your subscription or remove some servers.') }}
             </div>
         </x-banner>
     @endif
@@ -185,7 +181,7 @@
         <span x-show="popups.notification">
             <x-popup>
                 <x-slot:title>
-                    No notifications enabled.
+                    {{ __('No notifications enabled.') }}
                 </x-slot:title>
                 <x-slot:icon>
                     <svg xmlns="http://www.w3.org/2000/svg" class="text-red-500 stroke-current w-14 h-14 shrink-0"
@@ -195,15 +191,12 @@
                     </svg>
                 </x-slot:icon>
                 <x-slot:description>
-                    It is
-                    highly recommended to enable at least
-                    one
-                    notification channel to receive important alerts.<br>Visit <a
-                        href="{{ route('notifications.email') }}" {{ wireNavigate() }} class="underline dark:text-white">/notification</a> to
-                    enable notifications.</span>
+                    {{ __('It is highly recommended to enable at least one notification channel to receive important alerts.') }}<br>{{ __('Visit') }}
+                    <a href="{{ route('notifications.email') }}" {{ wireNavigate() }}
+                        class="underline dark:text-white">/notification</a> {{ __('to enable notifications.') }}</span>
         </x-slot:description>
         <x-slot:button-text @click="disableNotification()">
-            Accept and Close
+            {{ __('Accept and Close') }}
         </x-slot:button-text>
         </x-popup>
         </span>

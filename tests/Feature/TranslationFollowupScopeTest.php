@@ -29,6 +29,14 @@ it('uses explicit translation lookups in follow-up i18n views', function () {
     $applicationAdvanced = file_get_contents($viewsRoot.'/livewire/project/application/advanced.blade.php');
     $environmentVariableShow = file_get_contents($viewsRoot.'/livewire/project/shared/environment-variable/show.blade.php');
     $environmentVariableShowHardcoded = file_get_contents($viewsRoot.'/livewire/project/shared/environment-variable/show-hardcoded.blade.php');
+    $resourceLimits = file_get_contents($viewsRoot.'/livewire/project/shared/resource-limits.blade.php');
+    $resourceOperations = file_get_contents($viewsRoot.'/livewire/project/shared/resource-operations.blade.php');
+    $metrics = file_get_contents($viewsRoot.'/livewire/project/shared/metrics.blade.php');
+    $danger = file_get_contents($viewsRoot.'/livewire/project/shared/danger.blade.php');
+    $healthChecks = file_get_contents($viewsRoot.'/livewire/project/shared/health-checks.blade.php');
+    $destination = file_get_contents($viewsRoot.'/livewire/project/shared/destination.blade.php');
+    $tags = file_get_contents($viewsRoot.'/livewire/project/shared/tags.blade.php');
+    $scheduledTasks = file_get_contents($viewsRoot.'/livewire/project/shared/scheduled-task/all.blade.php');
 
     expect($sentinel)
         ->toContain("{{ __('Sentinel') }}")
@@ -111,7 +119,39 @@ it('uses explicit translation lookups in follow-up i18n views', function () {
         ->and($environmentVariableShowHardcoded)
         ->toContain("__('Hardcoded env')")
         ->toContain("__('Service:')")
-        ->toContain("__('Documentation for this environment variable.')");
+        ->toContain("__('Documentation for this environment variable.')")
+        ->and($resourceLimits)
+        ->toContain("{{ __('Resource Limits') }}")
+        ->toContain("__('Limit CPUs')")
+        ->toContain("__('Maximum Memory Limit')")
+        ->and($resourceOperations)
+        ->toContain("{{ __('Resource Operations') }}")
+        ->toContain("__('Clone Resource')")
+        ->toContain("__('Move Resource')")
+        ->and($metrics)
+        ->toContain("{{ __('Metrics') }}")
+        ->toContain("__('Metrics are only available for servers with Sentinel & Metrics enabled!')")
+        ->toContain("__('Server settings')")
+        ->and($danger)
+        ->toContain("{{ __('Danger Zone') }}")
+        ->toContain("__('Confirm Resource Deletion?')")
+        ->toContain("__('Resource Name')")
+        ->and($healthChecks)
+        ->toContain("{{ __('Healthchecks') }}")
+        ->toContain("__('Enable healthcheck for this resource.')")
+        ->toContain("__('Start Period (s)')")
+        ->and($destination)
+        ->toContain("{{ __('Primary Server') }}")
+        ->toContain("__('Promote to Primary')")
+        ->toContain("__('No additional servers available to attach.')")
+        ->and($tags)
+        ->toContain("{{ __('Assigned Tags') }}")
+        ->toContain("__('Create new or assign existing tags')")
+        ->toContain("__('Click to add quickly')")
+        ->and($scheduledTasks)
+        ->toContain("{{ __('Scheduled Tasks') }}")
+        ->toContain("__('Last run')")
+        ->toContain("__('No runs yet')");
 });
 
 it('resolves representative follow-up translations in zh_CN', function () {
@@ -147,6 +187,12 @@ it('resolves representative follow-up translations in zh_CN', function () {
         ->and(__('Service:'))->toBe('服务：')
         ->and(__('(inherited from host)'))->toBe('（继承自主机）')
         ->and(__('Documentation for this environment variable.'))->toBe('这个环境变量的说明。')
+        ->and(__('Resource Operations'))->toBe('资源操作')
+        ->and(__('Assigned Tags'))->toBe('已分配标签')
+        ->and(__('Choose a destination...'))->toBe('选择目标位置...')
+        ->and(__('Last run'))->toBe('上次运行')
+        ->and(__('Promote to Primary'))->toBe('设为主服务器')
+        ->and(__('Resource Name'))->toBe('资源名称')
         ->and(__('settings.instance_updated'))->toBe('设置已更新。')
         ->and(trans('settings.instance_updated'))->toBe('设置已更新。');
 });

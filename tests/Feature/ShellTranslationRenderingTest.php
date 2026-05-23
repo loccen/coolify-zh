@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Help;
 use App\Livewire\SettingsDropdown;
 use App\Models\InstanceSettings;
 use App\Models\User;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\ViewErrorBag;
 use Livewire\Livewire;
+
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
@@ -157,4 +159,25 @@ it('defines the frontend i18n payload for toast, logs, and terminal prompts', fu
         ->toContain('logsCopiedToClipboard')
         ->toContain('matchesSuffix')
         ->toContain("__('terminal.toasts.reconnecting')");
+});
+
+it('wires shell popup translations and renders help form copy', function () {
+    setEnLocale();
+
+    $layoutPopups = file_get_contents(resource_path('views/livewire/layout-popups.blade.php'));
+
+    expect($layoutPopups)
+        ->toContain("__('Love Coolify? Support our work.')")
+        ->toContain("__('Maybe next time')")
+        ->toContain("__('Acknowledge & Disable This Popup')")
+        ->toContain("__('No notifications enabled.')")
+        ->toContain("__('Accept and Close')");
+
+    Livewire::test(Help::class)
+        ->assertSee('Your feedback helps us to improve Coolify. Thank you! 💜')
+        ->assertSee('Subject')
+        ->assertSee('Help with...')
+        ->assertSee('Description')
+        ->assertSee('Having trouble with... Please provide as much information as possible.')
+        ->assertSee('Send');
 });
