@@ -2,19 +2,25 @@
 
 use App\Models\Application;
 use App\Models\GithubApp;
-use App\Models\Project;
+use App\Models\GitlabApp;
+use App\Models\InstanceSettings;
 use App\Models\PrivateKey;
+use App\Models\Project;
 use App\Models\S3Storage;
 use App\Models\Server;
+use App\Models\StandaloneDocker;
 use App\Models\StandalonePostgresql;
 use App\Models\StandaloneRedis;
-use App\Models\StandaloneDocker;
 use App\Models\Team;
+use App\Models\User;
+use Database\Seeders\ApplicationSeeder;
 use Database\Seeders\DevelopmentRailpackExamplesSeeder;
 use Database\Seeders\GithubAppSeeder;
-use Database\Seeders\ApplicationSeeder;
+use Database\Seeders\GitlabAppSeeder;
 use Database\Seeders\PrivateKeySeeder;
+use Database\Seeders\ProductionSeeder;
 use Database\Seeders\ProjectSeeder;
+use Database\Seeders\RootUserSeeder;
 use Database\Seeders\S3StorageSeeder;
 use Database\Seeders\ServerSeeder;
 use Database\Seeders\StandaloneDockerSeeder;
@@ -25,6 +31,15 @@ use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
+
+it('seeds localized development user examples', function () {
+    $this->seed(UserSeeder::class);
+
+    expect(Application::query()->count())->toBe(0)
+        ->and(User::query()->find(0)?->name)->toBe('根用户')
+        ->and(User::query()->find(1)?->name)->toBe('普通用户（属于根团队）')
+        ->and(User::query()->find(2)?->name)->toBe('普通用户（不属于根团队）');
+});
 
 it('seeds localized development project, server, and storage examples', function () {
     $this->seed([
@@ -104,6 +119,16 @@ it('seeds localized development application, database, and private key examples'
         ->and($githubKey->description)->toBe('这是开发环境 GitHub App 使用的私钥');
 });
 
+it('seeds localized GitLab app example', function () {
+    $this->seed(GitlabAppSeeder::class);
+
+    $gitlabApp = GitlabApp::query()->find(1);
+
+    expect($gitlabApp)
+        ->not->toBeNull()
+        ->and($gitlabApp->name)->toBe('公开 GitLab');
+});
+
 it('seeds localized development team, destination, and source examples', function () {
     $this->seed([
         UserSeeder::class,
@@ -161,4 +186,43 @@ it('seeds localized development railpack prerequisites when created on demand', 
     expect($githubApp)
         ->not->toBeNull()
         ->and($githubApp->name)->toBe('公开 GitHub');
+});
+
+it('seeds localized root user defaults from environment variables', function () {
+    putenv('ROOT_USER_EMAIL=root@laravel.com');
+    putenv('ROOT_USER_PASSWORD=V3ry-Safe!9472');
+    putenv('ROOT_USERNAME');
+    $_ENV['ROOT_USER_EMAIL'] = 'root@laravel.com';
+    $_SERVER['ROOT_USER_EMAIL'] = 'root@laravel.com';
+    $_ENV['ROOT_USER_PASSWORD'] = 'V3ry-Safe!9472';
+    $_SERVER['ROOT_USER_PASSWORD'] = 'V3ry-Safe!9472';
+    unset($_ENV['ROOT_USERNAME'], $_SERVER['ROOT_USERNAME']);
+
+    $this->seed(RootUserSeeder::class);
+
+    expect(User::query()->find(0))
+        ->not->toBeNull()
+        ->and(User::query()->find(0)?->name)->toBe('根用户');
+
+    expect(InstanceSettings::query()->find(0))
+        ->not->toBeNull()
+        ->and((bool) InstanceSettings::query()->find(0)?->is_registration_enabled)->toBeFalse();
+});
+
+it('seeds localized production public source examples in cloud mode', function () {
+    config()->set('constants.coolify.self_hosted', false);
+
+    $this->seed([
+        UserSeeder::class,
+        TeamSeeder::class,
+        ProductionSeeder::class,
+    ]);
+
+    expect(GithubApp::query()->find(0))
+        ->not->toBeNull()
+        ->and(GithubApp::query()->find(0)?->name)->toBe('公开 GitHub');
+
+    expect(GitlabApp::query()->find(0))
+        ->not->toBeNull()
+        ->and(GitlabApp::query()->find(0)?->name)->toBe('公开 GitLab');
 });
