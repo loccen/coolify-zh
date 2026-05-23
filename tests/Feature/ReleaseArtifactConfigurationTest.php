@@ -33,6 +33,10 @@ it('points install and upgrade scripts at the artifact repository', function () 
 
     expect($productionInstall)->toContain('$ARTIFACT_BASE_URL/upgrade.sh');
     expect($nightlyInstall)->toContain('$ARTIFACT_BASE_URL/upgrade.sh');
+    expect($productionInstall)->toContain('$ARTIFACT_BASE_URL/restore-coolify-instance.sh');
+    expect($nightlyInstall)->toContain('$ARTIFACT_BASE_URL/restore-coolify-instance.sh');
+    expect($productionInstall)->toContain('/data/coolify/bin/restore-coolify-instance.sh');
+    expect($nightlyInstall)->toContain('/data/coolify/bin/restore-coolify-instance.sh');
     expect($productionUpgrade)->toContain('${IMAGE_NAMESPACE}/coolify-helper:${LATEST_HELPER_VERSION}');
     expect($nightlyUpgrade)->toContain('${IMAGE_NAMESPACE}/coolify-helper:${LATEST_HELPER_VERSION}');
     expect($productionUpgrade)->toContain('$ARTIFACT_BASE_URL/restore-coolify-instance.sh');

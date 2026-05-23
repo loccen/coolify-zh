@@ -159,7 +159,7 @@
                             <x-forms.button class="dark:hover:bg-coolgray-400"
                                 x-on:click="download_file('{{ data_get($execution, 'id') }}')">{{ __('Download') }}</x-forms.button>
                         @endif
-                        @if ($backup->database_id === 0 && data_get($execution, 'is_instance_restore_package'))
+                        @if ($backup->isInstanceBackup() && data_get($execution, 'is_instance_restore_package'))
                             @php
                                 $restoreActions = [__('settings.backup_page.restore_warning')];
                                 if (!data_get($execution, 'includes_app_key')) {

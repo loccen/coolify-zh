@@ -298,7 +298,7 @@ class BackupExecutions extends Component
             throw new \RuntimeException(__('settings.backup_page.restore_requires_instance_admin'));
         }
 
-        if (! $this->backup || $this->backup->database_id !== 0) {
+        if (! $this->backup || ! $this->backup->isInstanceBackup()) {
             throw new \RuntimeException(__('settings.backup_page.restore_not_supported'));
         }
 

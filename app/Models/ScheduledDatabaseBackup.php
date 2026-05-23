@@ -114,4 +114,17 @@ class ScheduledDatabaseBackup extends BaseModel
 
         return null;
     }
+
+    public function isInstanceBackup(): bool
+    {
+        if ($this->database_type !== StandalonePostgresql::class) {
+            return false;
+        }
+
+        if ($this->database_id === 0) {
+            return true;
+        }
+
+        return data_get($this->database, 'name') === 'coolify-db';
+    }
 }
