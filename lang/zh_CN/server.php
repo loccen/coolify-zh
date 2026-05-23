@@ -24,6 +24,7 @@ return [
         'sentinel_token_regenerated' => '令牌已重新生成。正在重启 Sentinel。',
         'server_details_fetch_failed' => '无法获取服务器详情。服务器可访问吗？',
         'server_details_refreshed' => '服务器详情已刷新。',
+        'delete_resources_first' => '服务器已定义资源。请先删除这些资源，或选择“删除所有资源”。',
         'server_linked_to_hetzner' => '服务器已成功关联到 Hetzner Cloud！',
         'server_not_reachable' => '服务器无法访问。<br><br>请查看此<a target="_blank" class="underline" href=":documentationUrl">文档</a>以获得更多帮助。<br><br>错误：:error',
         'server_reachable' => '服务器可访问。',
