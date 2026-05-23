@@ -164,6 +164,12 @@ return [
         ],
     ],
     'services_delete' => [
+        'description' => '从数据库中删除服务及相关资源',
+        'select_resource' => '你想删除哪种服务？',
+        'select_application' => '你想删除哪个应用？',
+        'select_database' => '你想删除哪个数据库？',
+        'select_service' => '你想删除哪个服务？',
+        'select_server' => '你想删除哪台服务器？',
         'no_applications_to_delete' => '没有可删除的应用。',
         'no_databases_to_delete' => '没有可删除的数据库。',
         'no_services_to_delete' => '没有可删除的服务。',

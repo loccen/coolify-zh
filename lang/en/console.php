@@ -164,6 +164,12 @@ return [
         ],
     ],
     'services_delete' => [
+        'description' => 'Delete services and related resources from the database',
+        'select_resource' => 'What service do you want to delete?',
+        'select_application' => 'What application do you want to delete?',
+        'select_database' => 'What database do you want to delete?',
+        'select_service' => 'What service do you want to delete?',
+        'select_server' => 'What server do you want to delete?',
         'no_applications_to_delete' => 'There are no applications to delete.',
         'no_databases_to_delete' => 'There are no databases to delete.',
         'no_services_to_delete' => 'There are no services to delete.',
