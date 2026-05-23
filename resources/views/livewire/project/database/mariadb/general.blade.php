@@ -18,13 +18,13 @@
         @if ($database->started_at)
             <div class="flex xl:flex-row flex-col gap-2">
                 <x-forms.input :label="__('Root Password')" id="mariadbRootPassword" type="password" required
-                    helper="If you change this in the database, please sync it here, otherwise automations (like backups) won't work."
+                    :helper="__('If you change this in the database, please sync it here, otherwise automations (like backups) won\'t work.')"
                     canGate="update" :canResource="$database" />
                 <x-forms.input :label="__('Normal User')" id="mariadbUser" required
-                    helper="If you change this in the database, please sync it here, otherwise automations (like backups) won't work."
+                    :helper="__('If you change this in the database, please sync it here, otherwise automations (like backups) won\'t work.')"
                     canGate="update" :canResource="$database" />
                 <x-forms.input :label="__('Normal User Password')" id="mariadbPassword" type="password" required
-                    helper="If you change this in the database, please sync it here, otherwise automations (like backups) won't work."
+                    :helper="__('If you change this in the database, please sync it here, otherwise automations (like backups) won\'t work.')"
                     canGate="update" :canResource="$database" />
             </div>
             <div class="flex flex-col gap-2">
@@ -49,7 +49,7 @@
         @endif
         <div class="pt-2">
             <x-forms.input
-                helper="You can add custom docker run options that will be used when your container is started.<br>Note: Not all options are supported, as they could mess up Coolify's automation and could cause bad experience for users.<br><br>Check the <a class='underline dark:text-white' {{ wireNavigate() }} href='https://coolify.io/docs/knowledge-base/docker/custom-commands'>docs.</a>"
+                :helper="__('You can add custom docker run options that will be used when your container is started.<br>Note: Not all options are supported, as they could mess up Coolify\'s automation and could cause bad experience for users.<br><br>Check the <a class=\'underline dark:text-white\' href=\'https://coolify.io/docs/knowledge-base/docker/custom-commands\'>docs.</a>')"
                 placeholder="--cap-add SYS_ADMIN --device=/dev/fuse --security-opt apparmor:unconfined --ulimit nofile=1024:1024 --tmpfs /run:rw,noexec,nosuid,size=65536k"
                 id="customDockerRunOptions" :label="__('Custom Docker Options')" canGate="update"
                 :canResource="$database" />
@@ -58,14 +58,14 @@
             <h3 class="py-2">{{ __('Network') }}</h3>
             <div class="flex items-end gap-2">
                 <x-forms.input placeholder="3000:5432" id="portsMappings" :label="__('Ports Mappings')"
-                    helper="A comma separated list of ports you would like to map to the host system.<br><span class='inline-block font-bold dark:text-warning'>Example</span>3000:5432,3002:5433"
+                    :helper="__('A comma separated list of ports you would like to map to the host system.<br><span class=\'inline-block font-bold dark:text-warning\'>Example</span>3000:5432,3002:5433')"
                     canGate="update" :canResource="$database" />
             </div>
-            <x-forms.input label="MariaDB URL (internal)"
+            <x-forms.input :label="__('MariaDB URL (internal)')"
                 :helper="__('If you change the user/password/port, this could be different. This is with the default values.')"
                 type="password" readonly wire:model="db_url" canGate="update" :canResource="$database" />
             @if ($db_url_public)
-                <x-forms.input label="MariaDB URL (public)"
+                <x-forms.input :label="__('MariaDB URL (public)')"
                     :helper="__('If you change the user/password/port, this could be different. This is with the default values.')"
                     type="password" readonly wire:model="db_url_public" canGate="update" :canResource="$database" />
             @endif

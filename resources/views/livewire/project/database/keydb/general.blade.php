@@ -27,25 +27,25 @@
             </div>
         @endif
         <x-forms.input
-            helper="You can add custom docker run options that will be used when your container is started.<br>Note: Not all options are supported, as they could mess up Coolify's automation and could cause bad experience for users.<br><br>Check the <a class='underline dark:text-white' target='_blank' href='https://coolify.io/docs/knowledge-base/docker/custom-commands'>docs.</a>"
+            :helper="__('You can add custom docker run options that will be used when your container is started.<br>Note: Not all options are supported, as they could mess up Coolify\'s automation and could cause bad experience for users.<br><br>Check the <a class=\'underline dark:text-white\' target=\'_blank\' href=\'https://coolify.io/docs/knowledge-base/docker/custom-commands\'>docs.</a>')"
             placeholder="--cap-add SYS_ADMIN --device=/dev/fuse --security-opt apparmor:unconfined --ulimit nofile=1024:1024 --tmpfs /run:rw,noexec,nosuid,size=65536k"
             id="customDockerRunOptions" :label="__('Custom Docker Options')" canGate="update" :canResource="$database" />
         <div class="flex flex-col gap-2">
             <h3 class="py-2">{{ __('Network') }}</h3>
             <div class="flex items-end gap-2">
                 <x-forms.input placeholder="3000:5432" id="portsMappings" :label="__('Ports Mappings')"
-                    helper="A comma separated list of ports you would like to map to the host system.<br><span class='inline-block font-bold dark:text-warning'>Example</span>3000:5432,3002:5433"
+                    :helper="__('A comma separated list of ports you would like to map to the host system.<br><span class=\'inline-block font-bold dark:text-warning\'>Example</span>3000:5432,3002:5433')"
                     canGate="update" :canResource="$database" />
             </div>
-            <x-forms.input label="KeyDB URL (internal)"
+            <x-forms.input :label="__('KeyDB URL (internal)')"
                 :helper="__('If you change the user/password/port, this could be different. This is with the default values.')"
                 type="password" readonly wire:model="dbUrl" canGate="update" :canResource="$database" />
             @if ($dbUrlPublic)
-                <x-forms.input label="KeyDB URL (public)"
+                <x-forms.input :label="__('KeyDB URL (public)')"
                     :helper="__('If you change the user/password/port, this could be different. This is with the default values.')"
                     type="password" readonly wire:model="dbUrlPublic" canGate="update" :canResource="$database" />
             @else
-                <x-forms.input label="KeyDB URL (public)"
+                <x-forms.input :label="__('KeyDB URL (public)')"
                     :helper="__('If you change the user/password/port, this could be different. This is with the default values.')"
                     readonly :value="__('Starting the database will generate this.')" canGate="update" :canResource="$database" />
             @endif

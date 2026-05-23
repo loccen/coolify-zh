@@ -19,11 +19,11 @@
             <div class="flex xl:flex-row flex-col gap-2">
                 <x-forms.input :label="__('Initial Username')" id="mongoInitdbRootUsername"
                     placeholder="If empty: postgres"
-                    helper="If you change this in the database, please sync it here, otherwise automations (like backups) won't work."
+                    :helper="__('If you change this in the database, please sync it here, otherwise automations (like backups) won\'t work.')"
                     canGate="update" :canResource="$database" />
                 <x-forms.input :label="__('Initial Password')" id="mongoInitdbRootPassword" type="password"
                     required
-                    helper="If you change this in the database, please sync it here, otherwise automations (like backups) won't work."
+                    :helper="__('If you change this in the database, please sync it here, otherwise automations (like backups) won\'t work.')"
                     canGate="update" :canResource="$database" />
                 <x-forms.input :label="__('Initial Database')" id="mongoInitdbDatabase"
                     placeholder="If empty, it will be the same as Username." readonly
@@ -35,26 +35,26 @@
                     placeholder="If empty: postgres" canGate="update" :canResource="$database" />
                 <x-forms.input :label="__('Password')" id="mongoInitdbRootPassword" type="password" required
                     canGate="update" :canResource="$database" />
-                <x-forms.input required label="Database" id="mongoInitdbDatabase"
+                <x-forms.input required :label="__('Database')" id="mongoInitdbDatabase"
                     placeholder="If empty, it will be the same as Username." canGate="update" :canResource="$database" />
             </div>
         @endif
         <x-forms.input
-            helper="You can add custom docker run options that will be used when your container is started.<br>Note: Not all options are supported, as they could mess up Coolify's automation and could cause bad experience for users.<br><br>Check the <a class='underline dark:text-white' {{ wireNavigate() }} href='https://coolify.io/docs/knowledge-base/docker/custom-commands'>docs.</a>"
+            :helper="__('You can add custom docker run options that will be used when your container is started.<br>Note: Not all options are supported, as they could mess up Coolify\'s automation and could cause bad experience for users.<br><br>Check the <a class=\'underline dark:text-white\' href=\'https://coolify.io/docs/knowledge-base/docker/custom-commands\'>docs.</a>')"
             placeholder="--cap-add SYS_ADMIN --device=/dev/fuse --security-opt apparmor:unconfined --ulimit nofile=1024:1024 --tmpfs /run:rw,noexec,nosuid,size=65536k"
             id="customDockerRunOptions" :label="__('Custom Docker Options')" canGate="update" :canResource="$database" />
         <div class="flex flex-col gap-2">
             <h3 class="py-2">{{ __('Network') }}</h3>
             <div class="flex items-end gap-2">
                 <x-forms.input placeholder="3000:5432" id="portsMappings" :label="__('Ports Mappings')"
-                    helper="A comma separated list of ports you would like to map to the host system.<br><span class='inline-block font-bold dark:text-warning'>Example</span>3000:5432,3002:5433"
+                    :helper="__('A comma separated list of ports you would like to map to the host system.<br><span class=\'inline-block font-bold dark:text-warning\'>Example</span>3000:5432,3002:5433')"
                     canGate="update" :canResource="$database" />
             </div>
-            <x-forms.input label="Mongo URL (internal)"
+            <x-forms.input :label="__('Mongo URL (internal)')"
                 :helper="__('If you change the user/password/port, this could be different. This is with the default values.')"
                 type="password" readonly wire:model="db_url" canGate="update" :canResource="$database" />
             @if ($db_url_public)
-                <x-forms.input label="Mongo URL (public)"
+                <x-forms.input :label="__('Mongo URL (public)')"
                     :helper="__('If you change the user/password/port, this could be different. This is with the default values.')"
                     type="password" readonly wire:model="db_url_public" canGate="update" :canResource="$database" />
             @endif
@@ -103,24 +103,24 @@
                 @if ($enableSsl)
                     <div class="mx-2">
                         @if (str($database->status)->contains('exited'))
-                            <x-forms.select id="sslMode" label="SSL Mode" wire:model.live="sslMode"
+                            <x-forms.select id="sslMode" :label="__('SSL Mode')" wire:model.live="sslMode"
                                 instantSave="instantSaveSSL"
-                                helper="Choose the SSL verification mode for MongoDB connections" canGate="update"
+                                :helper="__('Choose the SSL verification mode for MongoDB connections')" canGate="update"
                                 :canResource="$database">
-                                <option value="allow" title="Allow insecure connections">allow (insecure)</option>
-                                <option value="prefer" title="Prefer secure connections">prefer (secure)</option>
-                                <option value="require" title="Require secure connections">require (secure)</option>
-                                <option value="verify-full" title="Verify full certificate">verify-full (secure)
+                                <option value="allow" :title="__('Allow insecure connections')">{{ __('allow (insecure)') }}</option>
+                                <option value="prefer" :title="__('Prefer secure connections')">{{ __('prefer (secure)') }}</option>
+                                <option value="require" :title="__('Require secure connections')">{{ __('require (secure)') }}</option>
+                                <option value="verify-full" :title="__('Verify full certificate')">{{ __('verify-full (secure)') }}
                                 </option>
                             </x-forms.select>
                         @else
-                            <x-forms.select id="sslMode" label="SSL Mode" instantSave="instantSaveSSL"
+                            <x-forms.select id="sslMode" :label="__('SSL Mode')" instantSave="instantSaveSSL"
                                 disabled :helper="__('Database should be stopped to change this settings.')" canGate="update"
                                 :canResource="$database">
-                                <option value="allow" title="Allow insecure connections">allow (insecure)</option>
-                                <option value="prefer" title="Prefer secure connections">prefer (secure)</option>
-                                <option value="require" title="Require secure connections">require (secure)</option>
-                                <option value="verify-full" title="Verify full certificate">verify-full (secure)
+                                <option value="allow" :title="__('Allow insecure connections')">{{ __('allow (insecure)') }}</option>
+                                <option value="prefer" :title="__('Prefer secure connections')">{{ __('prefer (secure)') }}</option>
+                                <option value="require" :title="__('Require secure connections')">{{ __('require (secure)') }}</option>
+                                <option value="verify-full" :title="__('Verify full certificate')">{{ __('verify-full (secure)') }}
                                 </option>
                             </x-forms.select>
                         @endif
