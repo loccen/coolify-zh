@@ -29,5 +29,8 @@ return [
         'server_reachable' => '服务器可访问。',
         'server_status_refreshed' => '服务器状态已刷新：:status',
         'server_settings_updated' => '服务器设置已更新。',
+        'cloudflare_tunnel_disabled_ip_restored' => '已禁用 Cloudflare Tunnel。<br><br>已手动将服务器 IP 地址更新回之前的 IP 地址。',
+        'cloudflare_tunnel_disabled_update_ip_required' => '已禁用 Cloudflare Tunnel。需要操作：请在高级设置中将服务器 IP 地址更新为真实 IP 地址。',
+        'cloudflare_tunnel_enabled' => 'Cloudflare Tunnel 已启用。',
     ],
 ];
