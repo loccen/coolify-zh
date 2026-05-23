@@ -20,6 +20,7 @@ it('uses explicit translation lookups in representative core business views', fu
     $serviceConfiguration = file_get_contents($viewsRoot.'/project/service/configuration.blade.php');
     $databaseHeading = file_get_contents($viewsRoot.'/project/database/heading.blade.php');
     $databaseConfiguration = file_get_contents($viewsRoot.'/project/database/configuration.blade.php');
+    $tagsShow = file_get_contents($viewsRoot.'/tags/show.blade.php');
     $resourceSelect = file_get_contents(app_path('Livewire/Project/New/Select.php'));
     $globalSearch = file_get_contents($viewsRoot.'/global-search.blade.php');
     $boarding = file_get_contents($viewsRoot.'/boarding/index.blade.php');
@@ -71,12 +72,18 @@ it('uses explicit translation lookups in representative core business views', fu
         ->toContain("{{ __('Documentation') }}")
         ->toContain("{{ __('Scheduled Tasks') }}")
         ->toContain("{{ __('Danger Zone') }}")
+        ->toContain("__('Confirm Service Application Restart?')")
+        ->toContain("__('Restart Service Container')")
+        ->toContain("__('Restart Database')")
         ->and($databaseHeading)
         ->toContain("{{ __('Confirm Database Restart?') }}")
         ->and($databaseConfiguration)
         ->toContain("{{ __('Import Backup') }}")
         ->toContain("{{ __('Metrics') }}")
         ->toContain("{{ __('Tags') }}")
+        ->and($tagsShow)
+        ->toContain("{{ __('Tags') }} | Coolify")
+        ->toContain("{{ __('Deployments') }}")
         ->and($resourceSelect)
         ->toContain("__('You can deploy a simple Dockerfile, without Git.')")
         ->toContain("__('You can deploy an existing Docker Image from any Registry, without Git.')")
@@ -117,6 +124,16 @@ it('resolves representative T5C translations in zh_CN', function () {
         ->and(__('Cancelled'))->toBe('已取消')
         ->and(__('Running for:'))->toBe('已运行：')
         ->and(__('Commit:'))->toBe('提交：')
+        ->and(__('Commit SHA'))->toBe('提交 SHA')
+        ->and(__('Container name'))->toBe('容器名称')
+        ->and(__('Number of CPUs'))->toBe('CPU 数量')
+        ->and(__('Limit CPUs'))->toBe('限制 CPU 数量')
+        ->and(__('CPU Weight'))->toBe('CPU 权重')
+        ->and(__('Image'))->toBe('镜像')
+        ->and(__('Make it publicly available'))->toBe('公开访问')
+        ->and(__('Swappiness'))->toBe('交换倾向')
+        ->and(__('Maximum Swap Limit'))->toBe('最大交换内存限制')
+        ->and(__('Postgres URL (public)'))->toBe('Postgres 连接串（公网）')
         ->and(__('Manual'))->toBe('手动')
         ->and(__('Proxy'))->toBe('代理')
         ->and(__('Swarm'))->toBe('Swarm')
@@ -125,6 +142,12 @@ it('resolves representative T5C translations in zh_CN', function () {
         ->and(__('Documentation'))->toBe('文档')
         ->and(__('Persistent Storage'))->toBe('持久存储')
         ->and(__('Danger Zone'))->toBe('危险区')
+        ->and(__('The selected service application will be unavailable during the restart.'))->toBe('选中的服务应用在重启期间将不可用。')
+        ->and(__('If the service application is currently in use data could be lost.'))->toBe('如果当前正在使用这个服务应用，数据可能会丢失。')
+        ->and(__('Restart Service Container'))->toBe('重启服务容器')
+        ->and(__('This service database will be unavailable during the restart.'))->toBe('这个服务数据库在重启期间将不可用。')
+        ->and(__('If the service database is currently in use data could be lost.'))->toBe('如果当前正在使用这个服务数据库，数据可能会丢失。')
+        ->and(__('Restart Database'))->toBe('重启数据库')
         ->and(__('Docker Registry'))->toBe('Docker 注册表')
         ->and(__('Build'))->toBe('构建')
         ->and(__('HTTP Basic Authentication'))->toBe('HTTP 基本身份验证')

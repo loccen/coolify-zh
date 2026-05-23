@@ -172,6 +172,26 @@ it('uses explicit translation lookups in follow-up i18n views', function () {
         ->toContain("{{ __('No scheduled backups configured.') }}");
 });
 
+it('uses explicit translation lookups in database general proxy sections', function () {
+    $generalViews = glob(base_path('resources/views/livewire/project/database/*/general.blade.php'));
+
+    expect($generalViews)->not->toBeEmpty();
+
+    foreach ($generalViews as $viewPath) {
+        $contents = file_get_contents($viewPath);
+
+        expect($contents)
+            ->toContain("__('Proxy')")
+            ->toContain("__('Proxy Logs')")
+            ->toContain("__('Logs')")
+            ->toContain("__('Make it publicly available')")
+            ->toContain("__('Public Port')")
+            ->toContain("__('Proxy Timeout (seconds)')")
+            ->toContain("__('Advanced')")
+            ->toContain("__('Drain Logs')");
+    }
+});
+
 it('resolves representative follow-up translations in zh_CN', function () {
     App::setLocale('zh_CN');
 
@@ -223,6 +243,11 @@ it('resolves representative follow-up translations in zh_CN', function () {
         ->and(__('starting'))->toBe('启动中')
         ->and(__('restarting'))->toBe('重启中')
         ->and(__('degraded'))->toBe('已降级')
+        ->and(__('Proxy Logs'))->toBe('代理日志')
+        ->and(__('Logs'))->toBe('日志')
+        ->and(__('Public Port'))->toBe('公共端口')
+        ->and(__('Proxy Timeout (seconds)'))->toBe('代理超时（秒）')
+        ->and(__('Enable SSL'))->toBe('启用 SSL')
         ->and(__('settings.instance_updated'))->toBe('设置已更新。')
         ->and(trans('settings.instance_updated'))->toBe('设置已更新。');
 });

@@ -19,7 +19,12 @@ it('wires translation calls in shared ui follow-up files', function () {
     $editDomain = file_get_contents($livewireRoot.'/project/service/edit-domain.blade.php');
     $fileStorage = file_get_contents($livewireRoot.'/project/service/file-storage.blade.php');
     $serviceStorage = file_get_contents($livewireRoot.'/project/service/storage.blade.php');
+    $serviceIndex = file_get_contents($livewireRoot.'/project/service/index.blade.php');
+    $serviceDatabaseBackups = file_get_contents($livewireRoot.'/project/service/database-backups.blade.php');
     $storagesShow = file_get_contents($livewireRoot.'/project/shared/storages/show.blade.php');
+    $scheduledTaskAdd = file_get_contents($livewireRoot.'/project/shared/scheduled-task/add.blade.php');
+    $scheduledTaskShow = file_get_contents($livewireRoot.'/project/shared/scheduled-task/show.blade.php');
+    $scheduledTaskExecutions = file_get_contents($livewireRoot.'/project/shared/scheduled-task/executions.blade.php');
 
     expect($modalConfirmation)
         ->toContain("__('Password is required.')")
@@ -60,10 +65,28 @@ it('wires translation calls in shared ui follow-up files', function () {
         ->and($serviceStorage)
         ->toContain("{{ __('Volumes') }}")
         ->toContain("__('No file mounts configured.')")
+        ->and($serviceIndex)
+        ->toContain("__('Convert to Database')")
+        ->toContain("__('Service Application Name')")
+        ->toContain("__('Convert to Application')")
+        ->and($serviceDatabaseBackups)
+        ->toContain("{{ __('Scheduled Backups') }}")
+        ->toContain(":title=\"__('New Scheduled Backup')\"")
         ->and($storagesShow)
         ->toContain("__('This volume is mounted as read-only and cannot be modified from the UI.')")
         ->toContain("__('Confirm persistent storage deletion?')")
-        ->toContain("__('Storage Name')");
+        ->toContain("__('Storage Name')")
+        ->and($scheduledTaskAdd)
+        ->toContain("__('Run cron')")
+        ->toContain("__('Timeout (seconds)')")
+        ->and($scheduledTaskShow)
+        ->toContain("__('Task: :name'")
+        ->toContain("__('Execute Now')")
+        ->toContain("__('Scheduled Task Name')")
+        ->and($scheduledTaskExecutions)
+        ->toContain("__('Download Logs')")
+        ->toContain("__('Task is running...')")
+        ->toContain("__('No executions found.')");
 });
 
 it('resolves representative shared ui follow-up translations in zh_CN', function () {
@@ -91,5 +114,14 @@ it('resolves representative shared ui follow-up translations in zh_CN', function
         ->and(__('No storage found.'))->toBe('未找到存储。')
         ->and(__('No file mounts configured.'))->toBe('未配置文件挂载。')
         ->and(__('Confirm persistent storage deletion?'))->toBe('确认删除持久存储？')
-        ->and(__('Storage Name'))->toBe('存储名称');
+        ->and(__('Storage Name'))->toBe('存储名称')
+        ->and(__('Task: :name', ['name' => '清理缓存']))->toBe('任务：清理缓存')
+        ->and(__('Execute Now'))->toBe('立即执行')
+        ->and(__('Scheduled Task Name'))->toBe('计划任务名称')
+        ->and(__('Download Logs'))->toBe('下载日志')
+        ->and(__('Task is running...'))->toBe('任务正在运行...')
+        ->and(__('Convert to Database'))->toBe('转换为数据库')
+        ->and(__('Service Application Name'))->toBe('服务应用名称')
+        ->and(__('Convert to Application'))->toBe('转换为应用')
+        ->and(__('Service Database Name'))->toBe('服务数据库名称');
 });

@@ -1,4 +1,5 @@
 <div>
+    <x-slot:title>{{ __('Tags') }} | Coolify</x-slot:title>
     <div class="flex items-start gap-2 pb-10">
         <div>
             <h1 class="pb-2">{{ __('navigation.tags') }}</h1>
@@ -62,7 +63,7 @@
                 @endif
             </div>
             <div class="flex items-center gap-2">
-                <h3 class="py-4">Deployments</h3>
+                <h3 class="py-4">{{ __('Deployments') }}</h3>
                 @if (count($deploymentsPerTagPerServer) > 0)
                     <x-loading />
                 @endif

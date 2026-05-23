@@ -58,18 +58,18 @@
                             @endif
                             <x-forms.button canGate="update" :canResource="$serviceApplication" type="submit">{{ __('Save') }}</x-forms.button>
                             @can('update', $serviceApplication)
-                                <x-modal-confirmation wire:click="convertToDatabase" title="Convert to Database"
-                                    buttonTitle="Convert to Database" submitAction="convertToDatabase" :actions="['The selected resource will be converted to a service database.']"
+                                <x-modal-confirmation wire:click="convertToDatabase" :title="__('Convert to Database')"
+                                    :buttonTitle="__('Convert to Database')" submitAction="convertToDatabase" :actions="[__('The selected resource will be converted to a service database.')]"
                                     confirmationText="{{ Str::headline($serviceApplication->name) }}"
-                                    confirmationLabel="Please confirm the execution of the actions by entering the Service Application Name below"
-                                    shortConfirmationLabel="Service Application Name" />
+                                    :confirmationLabel="__('Please confirm the execution of the actions by entering the Service Application Name below')"
+                                    :shortConfirmationLabel="__('Service Application Name')" />
                             @endcan
                             @can('delete', $serviceApplication)
-                                <x-modal-confirmation title="Confirm Service Application Deletion?" buttonTitle="Delete" isErrorButton
-                                    submitAction="deleteApplication" :actions="['The selected service application container will be stopped and permanently deleted.']"
+                                <x-modal-confirmation :title="__('Confirm Service Application Deletion?')" :buttonTitle="__('Delete')" isErrorButton
+                                    submitAction="deleteApplication" :actions="[__('The selected service application container will be stopped and permanently deleted.')]"
                                     confirmationText="{{ Str::headline($serviceApplication->name) }}"
-                                    confirmationLabel="Please confirm the execution of the actions by entering the Service Application Name below"
-                                    shortConfirmationLabel="Service Application Name" />
+                                    :confirmationLabel="__('Please confirm the execution of the actions by entering the Service Application Name below')"
+                                    :shortConfirmationLabel="__('Service Application Name')" />
                             @endcan
                         </div>
                         <div class="flex flex-col gap-2">
@@ -205,20 +205,20 @@
                             @endif
                             <x-forms.button canGate="update" :canResource="$serviceDatabase" type="submit">{{ __('Save') }}</x-forms.button>
                             @can('update', $serviceDatabase)
-                                <x-modal-confirmation wire:click="convertToApplication" title="Convert to Application"
-                                    buttonTitle="Convert to Application" submitAction="convertToApplication" :actions="['The selected resource will be converted to an application.']"
+                                <x-modal-confirmation wire:click="convertToApplication" :title="__('Convert to Application')"
+                                    :buttonTitle="__('Convert to Application')" submitAction="convertToApplication" :actions="[__('The selected resource will be converted to an application.')]"
                                     confirmationText="{{ Str::headline($serviceDatabase->name) }}"
-                                    confirmationLabel="Please confirm the execution of the actions by entering the Service Database Name below"
-                                    shortConfirmationLabel="Service Database Name" />
+                                    :confirmationLabel="__('Please confirm the execution of the actions by entering the Service Database Name below')"
+                                    :shortConfirmationLabel="__('Service Database Name')" />
                             @endcan
                             @can('delete', $serviceDatabase)
-                                <x-modal-confirmation title="Confirm Service Database Deletion?" buttonTitle="Delete"
+                                <x-modal-confirmation :title="__('Confirm Service Database Deletion?')" :buttonTitle="__('Delete')"
                                     isErrorButton submitAction="deleteDatabase" :actions="[
-                                        'The selected service database container will be stopped and permanently deleted.',
+                                        __('The selected service database container will be stopped and permanently deleted.'),
                                     ]"
                                     confirmationText="{{ Str::headline($serviceDatabase->name) }}"
-                                    confirmationLabel="Please confirm the execution of the actions by entering the Service Database Name below"
-                                    shortConfirmationLabel="Service Database Name" />
+                                    :confirmationLabel="__('Please confirm the execution of the actions by entering the Service Database Name below')"
+                                    :shortConfirmationLabel="__('Service Database Name')" />
                             @endcan
                         </div>
                         <div class="flex flex-col gap-2">

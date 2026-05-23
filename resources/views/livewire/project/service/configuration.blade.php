@@ -71,7 +71,7 @@
                                     @if ($application->fqdn)
                                         <span class="flex gap-1 text-xs">{{ Str::limit($application->fqdn, 60) }}
                                             @can('update', $service)
-                                                <x-modal-input title="Edit Domains" :closeOutside="false">
+                                                <x-modal-input :title="__('Edit Domains')" :closeOutside="false">
                                                     <x-slot:content>
                                                         <span class="cursor-pointer">
                                                             <svg xmlns="http://www.w3.org/2000/svg"
@@ -104,14 +104,14 @@
                                     </a>
                                     @if (str($application->status)->contains('running'))
                                         @can('update', $service)
-                                            <x-modal-confirmation title="Confirm Service Application Restart?"
-                                                buttonTitle="Restart"
+                                            <x-modal-confirmation :title="__('Confirm Service Application Restart?')"
+                                                :buttonTitle="__('Restart')"
                                                 submitAction="restartApplication({{ $application->id }})" :actions="[
-                                                    'The selected service application will be unavailable during the restart.',
-                                                    'If the service application is currently in use data could be lost.',
+                                                    __('The selected service application will be unavailable during the restart.'),
+                                                    __('If the service application is currently in use data could be lost.'),
                                                 ]"
                                                 :confirmWithText="false" :confirmWithPassword="false"
-                                                step2ButtonText="Restart Service Container" />
+                                                :step2ButtonText="__('Restart Service Container')" />
                                         @endcan
                                     @endif
                                 </div>
@@ -159,13 +159,13 @@
                                     </a>
                                     @if (str($database->status)->contains('running'))
                                         @can('update', $service)
-                                            <x-modal-confirmation title="Confirm Service Database Restart?"
-                                                buttonTitle="Restart" submitAction="restartDatabase({{ $database->id }})"
+                                            <x-modal-confirmation :title="__('Confirm Service Database Restart?')"
+                                                :buttonTitle="__('Restart')" submitAction="restartDatabase({{ $database->id }})"
                                                 :actions="[
-                                                    'This service database will be unavailable during the restart.',
-                                                    'If the service database is currently in use data could be lost.',
+                                                    __('This service database will be unavailable during the restart.'),
+                                                    __('If the service database is currently in use data could be lost.'),
                                                 ]" :confirmWithText="false" :confirmWithPassword="false"
-                                                step2ButtonText="Restart Database" />
+                                                :step2ButtonText="__('Restart Database')" />
                                         @endcan
                                     @endif
                                 </div>
@@ -177,7 +177,7 @@
                 <livewire:project.shared.environment-variable.all :resource="$service" />
             @elseif ($currentRoute === 'project.service.storages')
                 <div class="flex gap-2 items-center">
-                    <h2>{{ __('Storages') }}</h2>
+                    <h2>{{ __('Persistent Storages') }}</h2>
                 </div>
                 <div class="pb-4">{{ __('Persistent storage to preserve data between deployments.') }}</div>
                 @foreach ($applications as $application)

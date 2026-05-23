@@ -97,12 +97,12 @@
             <div class="flex flex-col gap-2">
                 <div class="w-64">
                     @if (str($database->status)->contains('exited'))
-                        <x-forms.checkbox id="enableSsl" label="Enable SSL"
+                        <x-forms.checkbox id="enableSsl" :label="__('Enable SSL')"
                             wire:model.live="enableSsl" instantSave="instantSaveSSL" canGate="update" :canResource="$database" />
                     @else
-                        <x-forms.checkbox id="enableSsl" label="Enable SSL"
+                        <x-forms.checkbox id="enableSsl" :label="__('Enable SSL')"
                             wire:model.live="enableSsl" instantSave="instantSaveSSL" disabled
-                            helper="Database should be stopped to change this settings." />
+                            :helper="__('Database should be stopped to change this settings.')" />
                     @endif
                 </div>
                 @if ($enableSsl)
@@ -119,7 +119,7 @@
                             </x-forms.select>
                         @else
                             <x-forms.select id="sslMode" label="SSL Mode" instantSave="instantSaveSSL"
-                                disabled helper="Database should be stopped to change this settings.">
+                                disabled :helper="__('Database should be stopped to change this settings.')">
                                 <option value="PREFERRED" title="Prefer secure connections">Prefer (secure)</option>
                                 <option value="REQUIRED" title="Require secure connections">Require (secure)</option>
                                 <option value="VERIFY_CA" title="Verify CA certificate">Verify CA (secure)</option>
@@ -136,35 +136,35 @@
             <div class="flex flex-col py-2 w-64">
                 <div class="flex items-center gap-2 pb-2">
                     <div class="flex items-center">
-                        <h3>Proxy</h3>
+                        <h3>{{ __('Proxy') }}</h3>
                         <x-loading wire:loading wire:target="instantSave" />
                     </div>
                     @if (data_get($database, 'is_public'))
                         <x-slide-over fullScreen>
-                            <x-slot:title>Proxy Logs</x-slot:title>
+                            <x-slot:title>{{ __('Proxy Logs') }}</x-slot:title>
                             <x-slot:content>
                                 <livewire:project.shared.get-logs :server="$server" :resource="$database"
                                     container="{{ data_get($database, 'uuid') }}-proxy" :collapsible="false" lazy />
                             </x-slot:content>
                             <x-forms.button disabled="{{ !data_get($database, 'is_public') }}"
-                                @click="slideOverOpen=true">Logs</x-forms.button>
+                                @click="slideOverOpen=true">{{ __('Logs') }}</x-forms.button>
                         </x-slide-over>
                     @endif
                 </div>
-                <x-forms.checkbox instantSave id="isPublic" label="Make it publicly available" canGate="update" :canResource="$database" />
+                <x-forms.checkbox instantSave id="isPublic" :label="__('Make it publicly available')" canGate="update" :canResource="$database" />
             </div>
             <div class="flex flex-col gap-2">
             <x-forms.input type="number" placeholder="5432" disabled="{{ $isPublic }}"
-                id="publicPort" label="Public Port" canGate="update" :canResource="$database" />
+                id="publicPort" :label="__('Public Port')" canGate="update" :canResource="$database" />
             <x-forms.input type="number" placeholder="3600" disabled="{{ $isPublic }}" id="publicPortTimeout"
-                label="Proxy Timeout (seconds)" helper="Timeout for the public TCP proxy connection in seconds. Default: 3600 (1 hour)." canGate="update" :canResource="$database" />
+                :label="__('Proxy Timeout (seconds)')" :helper="__('Timeout for the public TCP proxy connection in seconds. Default: 3600 (1 hour).')" canGate="update" :canResource="$database" />
             </div>
         </div>
-        <x-forms.textarea label="Custom Mysql Configuration" rows="10" id="mysqlConf" canGate="update" :canResource="$database" />
-        <h3 class="pt-4">Advanced</h3>
+        <x-forms.textarea :label="__('Custom Mysql Configuration')" rows="10" id="mysqlConf" canGate="update" :canResource="$database" />
+        <h3 class="pt-4">{{ __('Advanced') }}</h3>
         <div class="flex flex-col">
-            <x-forms.checkbox helper="Drain logs to your configured log drain endpoint in your Server settings."
-                instantSave="instantSaveAdvanced" id="isLogDrainEnabled" label="Drain Logs" canGate="update" :canResource="$database" />
+            <x-forms.checkbox :helper="__('Drain logs to your configured log drain endpoint in your Server settings.')"
+                instantSave="instantSaveAdvanced" id="isLogDrainEnabled" :label="__('Drain Logs')" canGate="update" :canResource="$database" />
         </div>
     </form>
 </div>
