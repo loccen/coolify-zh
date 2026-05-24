@@ -151,7 +151,7 @@
                     </div>
                     @if (data_get($execution, 'message'))
                         <div class="mt-2 p-2 bg-gray-100 dark:bg-coolgray-200 rounded-sm">
-                            <pre class="whitespace-pre-wrap text-sm">{{ data_get($execution, 'message') }}</pre>
+                            <pre class="whitespace-pre-wrap text-sm">{{ \App\Support\PersistentExecutionMessage::forDisplay(data_get($execution, 'message')) }}</pre>
                         </div>
                     @endif
                     <div class="flex gap-2 mt-4">
