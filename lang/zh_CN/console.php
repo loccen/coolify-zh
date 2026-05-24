@@ -155,6 +155,30 @@ return [
         'teams' => [
             'phase_title' => '第 4 阶段：处理团队',
             'no_changes_needed' => '不需要调整团队。',
+            'edge_cases' => [
+                'detected_cannot_proceed' => '⚠️  检测到边界情况，无法继续',
+                'team_line' => '团队：:team（ID：:id）',
+                'issue_line' => '问题：:issue',
+                'current_members' => '当前成员：',
+                'member_line' => '  - :name (:email) - 角色：:role',
+                'active_resources_warning' => '  ⚠️  该团队有 :count 个活跃资源！',
+                'active_stripe_subscription_details' => '  ⚠️  Stripe 活跃订阅详情：',
+                'other_owners_billing' => '  可接手账单的其他 owner：',
+                'manual_resolution_title' => '请先手动处理这些问题，再重试：',
+                'subscription_payment_issues' => [
+                    'title' => '针对存在订阅支付问题的团队：',
+                    'step_1' => '1. 通过 Stripe Dashboard 取消订阅，或',
+                    'step_2' => '2. 将订阅转移到其他 owner 的支付方式，或',
+                    'step_3' => '3. 先取消当前订阅，再由其他 owner 重新创建订阅',
+                ],
+                'no_owner_replacement' => [
+                    'title' => '针对没有合适 owner 接替人的团队：',
+                    'step_1' => '1. 给可信成员分配 admin 角色，或',
+                    'step_2' => '2. 将团队资源转移到其他团队，或',
+                    'step_3' => '3. 如果已经不再需要，手动删除该团队',
+                ],
+                'user_deletion_aborted' => '由于边界情况，用户删除已中止',
+            ],
             'delete_summary_title' => '即将删除的团队（该用户是唯一成员）：',
             'table_headers' => [
                 'id' => 'ID',

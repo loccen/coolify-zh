@@ -661,21 +661,28 @@ class AdminDeleteUser extends Command
         // Check for edge cases first - EXIT IMMEDIATELY if found
         if ($preview['edge_cases']->isNotEmpty()) {
             $this->error('═══════════════════════════════════════');
-            $this->error('⚠️  EDGE CASES DETECTED - CANNOT PROCEED');
+            $this->error(trans('console.admin_delete_user.teams.edge_cases.detected_cannot_proceed'));
             $this->error('═══════════════════════════════════════');
             $this->newLine();
 
             foreach ($preview['edge_cases'] as $edgeCase) {
                 $team = $edgeCase['team'];
                 $reason = $edgeCase['reason'];
-                $this->error("Team: {$team->name} (ID: {$team->id})");
-                $this->error("Issue: {$reason}");
+                $this->error(trans('console.admin_delete_user.teams.edge_cases.team_line', [
+                    'team' => $team->name,
+                    'id' => $team->id,
+                ]));
+                $this->error(trans('console.admin_delete_user.teams.edge_cases.issue_line', ['issue' => $reason]));
 
                 // Show team members for context
-                $this->info('Current members:');
+                $this->info(trans('console.admin_delete_user.teams.edge_cases.current_members'));
                 foreach ($team->members as $member) {
                     $role = $member->pivot->role;
-                    $this->line("  - {$member->name} ({$member->email}) - Role: {$role}");
+                    $this->line(trans('console.admin_delete_user.teams.edge_cases.member_line', [
+                        'name' => $member->name,
+                        'email' => $member->email,
+                        'role' => $role,
+                    ]));
                 }
 
                 // Check for active resources
@@ -686,12 +693,14 @@ class AdminDeleteUser extends Command
                 }
 
                 if ($resourceCount > 0) {
-                    $this->warn("  ⚠️  This team has {$resourceCount} active resources!");
+                    $this->warn(trans('console.admin_delete_user.teams.edge_cases.active_resources_warning', [
+                        'count' => $resourceCount,
+                    ]));
                 }
 
                 // Show subscription details if relevant
                 if ($team->subscription && $team->subscription->stripe_subscription_id) {
-                    $this->warn('  ⚠️  Active Stripe subscription details:');
+                    $this->warn(trans('console.admin_delete_user.teams.edge_cases.active_stripe_subscription_details'));
                     $this->warn("    Subscription ID: {$team->subscription->stripe_subscription_id}");
                     $this->warn("    Customer ID: {$team->subscription->stripe_customer_id}");
 
@@ -703,7 +712,7 @@ class AdminDeleteUser extends Command
                         });
 
                     if ($otherOwners->isNotEmpty()) {
-                        $this->info('  Other owners who could take over billing:');
+                        $this->info(trans('console.admin_delete_user.teams.edge_cases.other_owners_billing'));
                         foreach ($otherOwners as $owner) {
                             $this->line("    - {$owner->name} ({$owner->email})");
                         }
@@ -713,7 +722,7 @@ class AdminDeleteUser extends Command
                 $this->newLine();
             }
 
-            $this->error('Please resolve these issues manually before retrying:');
+            $this->error(trans('console.admin_delete_user.teams.edge_cases.manual_resolution_title'));
 
             // Check if any edge case involves subscription payment issues
             $hasSubscriptionIssue = $preview['edge_cases']->contains(function ($edgeCase) {
@@ -721,10 +730,10 @@ class AdminDeleteUser extends Command
             });
 
             if ($hasSubscriptionIssue) {
-                $this->info('For teams with subscription payment issues:');
-                $this->info('1. Cancel the subscription through Stripe dashboard, OR');
-                $this->info('2. Transfer the subscription to another owner\'s payment method, OR');
-                $this->info('3. Have the other owner create a new subscription after cancelling this one');
+                $this->info(trans('console.admin_delete_user.teams.edge_cases.subscription_payment_issues.title'));
+                $this->info(trans('console.admin_delete_user.teams.edge_cases.subscription_payment_issues.step_1'));
+                $this->info(trans('console.admin_delete_user.teams.edge_cases.subscription_payment_issues.step_2'));
+                $this->info(trans('console.admin_delete_user.teams.edge_cases.subscription_payment_issues.step_3'));
                 $this->newLine();
             }
 
@@ -733,14 +742,14 @@ class AdminDeleteUser extends Command
             });
 
             if ($hasNoOwnerReplacement) {
-                $this->info('For teams with no suitable owner replacement:');
-                $this->info('1. Assign an admin role to a trusted member, OR');
-                $this->info('2. Transfer team resources to another team, OR');
-                $this->info('3. Delete the team manually if no longer needed');
+                $this->info(trans('console.admin_delete_user.teams.edge_cases.no_owner_replacement.title'));
+                $this->info(trans('console.admin_delete_user.teams.edge_cases.no_owner_replacement.step_1'));
+                $this->info(trans('console.admin_delete_user.teams.edge_cases.no_owner_replacement.step_2'));
+                $this->info(trans('console.admin_delete_user.teams.edge_cases.no_owner_replacement.step_3'));
                 $this->newLine();
             }
 
-            $this->error('USER DELETION ABORTED DUE TO EDGE CASES');
+            $this->error(trans('console.admin_delete_user.teams.edge_cases.user_deletion_aborted'));
             $this->logAction("User deletion aborted for {$this->user->email}: Edge cases in team handling");
 
             // Return false to trigger proper cleanup and lock release
