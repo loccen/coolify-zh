@@ -20,6 +20,11 @@ return [
         'recommendation_heading' => '建议',
         'action_required' => '需要处理',
     ],
+    'channels' => [
+        'transactional_email' => [
+            'no_email_settings_found' => '未找到邮件设置。',
+        ],
+    ],
     'api_token_expiring' => [
         'subject' => "Coolify: API Token ':tokenName' 将在 24 小时后过期",
         'intro' => '你的 Coolify API Token（:tokenName）将于 :expiresAt 过期。',

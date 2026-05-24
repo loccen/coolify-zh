@@ -44,7 +44,7 @@ class TransactionalEmailChannel
     {
         $type = set_transanctional_email_settings();
         if (blank($type)) {
-            throw new Exception('No email settings found.');
+            throw new Exception(trans('mail.channels.transactional_email.no_email_settings_found'));
         }
     }
 }

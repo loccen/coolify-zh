@@ -20,6 +20,11 @@ return [
         'recommendation_heading' => 'Recommendation',
         'action_required' => 'Action Required',
     ],
+    'channels' => [
+        'transactional_email' => [
+            'no_email_settings_found' => 'No email settings found.',
+        ],
+    ],
     'api_token_expiring' => [
         'subject' => "Coolify: API token ':tokenName' expires in 24 hours",
         'intro' => 'Your Coolify API token (:tokenName) expires on :expiresAt.',
