@@ -304,6 +304,23 @@ return [
             'log_file' => '日志文件',
             'check_logs' => '请检查日志以获取详细错误信息',
         ],
+        'error_state' => [
+            'title' => '删除失败时的状态',
+            'failed_at' => '失败位置：:phase',
+            'table_headers' => [
+                'phase' => '阶段',
+                'status' => '状态',
+            ],
+            'status' => [
+                'completed' => '✓ 已完成',
+                'not_completed' => '✗ 未完成',
+            ],
+            'database_committed' => '⚠️  数据库已提交，变更无法回滚！',
+            'database_rolled_back' => '✓ 数据库变更已回滚',
+            'user_email' => '用户邮箱：:email',
+            'user_id' => '用户 ID：:id',
+            'timestamp' => '时间戳：:timestamp',
+        ],
     ],
     'migration' => [
         'description' => '开始迁移',

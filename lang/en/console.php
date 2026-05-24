@@ -304,6 +304,23 @@ return [
             'log_file' => 'Log file',
             'check_logs' => 'Check logs for detailed error information',
         ],
+        'error_state' => [
+            'title' => 'DELETION STATE AT FAILURE',
+            'failed_at' => 'Failed at: :phase',
+            'table_headers' => [
+                'phase' => 'Phase',
+                'status' => 'Status',
+            ],
+            'status' => [
+                'completed' => '✓ Completed',
+                'not_completed' => '✗ Not completed',
+            ],
+            'database_committed' => '⚠️  DATABASE COMMITTED - Changes CANNOT be rolled back!',
+            'database_rolled_back' => '✓ Database changes were ROLLED BACK',
+            'user_email' => 'User email: :email',
+            'user_id' => 'User ID: :id',
+            'timestamp' => 'Timestamp: :timestamp',
+        ],
     ],
     'migration' => [
         'description' => 'Start Migration',
