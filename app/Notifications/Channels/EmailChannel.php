@@ -146,7 +146,7 @@ class EmailChannel
             throw new Exception($userMessage, $e->getCode(), $e);
         } catch (TransporterException $e) {
             send_internal_notification("Resend Transport Error: {$e->getMessage()}");
-            throw new Exception('Unable to connect to Resend API. Please check your internet connection and try again.');
+            throw new Exception(trans('mail.channels.email.resend.connection_failed'));
         } catch (\Throwable $e) {
             // Check if this is a Resend domain verification error on cloud instances
             if (isCloud() && str_contains($e->getMessage(), 'domain is not verified')) {

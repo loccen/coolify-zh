@@ -13,7 +13,8 @@ it('wires resend ErrorException status messages through mail translations', func
         ->toContain("trans('mail.channels.email.resend.restricted_api_key')")
         ->toContain("trans('mail.channels.email.resend.rate_limit_exceeded')")
         ->toContain("trans('mail.channels.email.resend.validation_failed', ['message' => \$e->getErrorMessage()])")
-        ->toContain("trans('mail.channels.email.resend.send_failed', ['message' => \$e->getErrorMessage()])");
+        ->toContain("trans('mail.channels.email.resend.send_failed', ['message' => \$e->getErrorMessage()])")
+        ->toContain("trans('mail.channels.email.resend.connection_failed')");
 
     expect($enTranslations['channels']['email']['resend']['invalid_api_key'])
         ->toBe('Invalid Resend API key. Please verify your API key in the Resend dashboard and update it in settings.')
@@ -25,6 +26,8 @@ it('wires resend ErrorException status messages through mail translations', func
         ->toBe('Email validation failed: :message')
         ->and($enTranslations['channels']['email']['resend']['send_failed'])
         ->toBe('Failed to send email via Resend: :message')
+        ->and($enTranslations['channels']['email']['resend']['connection_failed'])
+        ->toBe('Unable to connect to Resend API. Please check your internet connection and try again.')
         ->and($zhTranslations['channels']['email']['resend']['invalid_api_key'])
         ->toBe('Resend API Key 无效。请在 Resend 控制台检查 API Key，并在设置中更新。')
         ->and($zhTranslations['channels']['email']['resend']['restricted_api_key'])
@@ -34,7 +37,9 @@ it('wires resend ErrorException status messages through mail translations', func
         ->and($zhTranslations['channels']['email']['resend']['validation_failed'])
         ->toBe('邮件校验失败：:message')
         ->and($zhTranslations['channels']['email']['resend']['send_failed'])
-        ->toBe('通过 Resend 发送邮件失败：:message');
+        ->toBe('通过 Resend 发送邮件失败：:message')
+        ->and($zhTranslations['channels']['email']['resend']['connection_failed'])
+        ->toBe('无法连接到 Resend API。请检查网络连接后重试。');
 });
 
 it('resolves resend ErrorException translations and placeholders in en and zh_CN', function () {
@@ -49,7 +54,9 @@ it('resolves resend ErrorException translations and placeholders in en and zh_CN
         ->and(trans('mail.channels.email.resend.validation_failed', ['message' => 'Invalid email format.']))
         ->toBe('Email validation failed: Invalid email format.')
         ->and(trans('mail.channels.email.resend.send_failed', ['message' => 'Internal server error.']))
-        ->toBe('Failed to send email via Resend: Internal server error.');
+        ->toBe('Failed to send email via Resend: Internal server error.')
+        ->and(trans('mail.channels.email.resend.connection_failed'))
+        ->toBe('Unable to connect to Resend API. Please check your internet connection and try again.');
 
     App::setLocale('zh_CN');
 
@@ -62,5 +69,7 @@ it('resolves resend ErrorException translations and placeholders in en and zh_CN
         ->and(trans('mail.channels.email.resend.validation_failed', ['message' => 'Invalid email format.']))
         ->toBe('邮件校验失败：Invalid email format.')
         ->and(trans('mail.channels.email.resend.send_failed', ['message' => 'Internal server error.']))
-        ->toBe('通过 Resend 发送邮件失败：Internal server error.');
+        ->toBe('通过 Resend 发送邮件失败：Internal server error.')
+        ->and(trans('mail.channels.email.resend.connection_failed'))
+        ->toBe('无法连接到 Resend API。请检查网络连接后重试。');
 });

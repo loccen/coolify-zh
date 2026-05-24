@@ -28,6 +28,7 @@ return [
                 'rate_limit_exceeded' => 'Resend rate limit exceeded. Please try again in a few minutes.',
                 'validation_failed' => 'Email validation failed: :message',
                 'send_failed' => 'Failed to send email via Resend: :message',
+                'connection_failed' => 'Unable to connect to Resend API. Please check your internet connection and try again.',
             ],
         ],
         'transactional_email' => [
