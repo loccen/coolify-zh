@@ -282,10 +282,17 @@ return [
             'processing' => 'Processing: :filename',
             'image_updated' => ':service_name: :current_image -> :latest_version',
             'image_up_to_date' => ':service_name: :current_image (up to date)',
+            'manual_review' => 'Manual review: :registry_url',
+            'using_cached_tags' => '[cached] Using cached tags for :repository',
+            'latest_points_to' => "Found 'latest' points to: :best_version",
         ],
         'warn' => [
             'no_services_found' => 'No services found in :filename',
             'dry_run_would_update_file' => '[DRY RUN] Would update this file',
+            'using_latest_tag' => ":service_name: :current_image (using 'latest' tag)",
+            'skipping_custom_registry' => 'Skipping custom registry: :repository',
+            'registry_api_error' => ':registry API error for :repository: :message',
+            'ghcr_requires_authentication' => 'GHCR requires authentication - manual review needed',
         ],
         'error' => [
             'failed' => 'Failed: :message',

@@ -282,10 +282,17 @@ return [
             'processing' => '正在处理：:filename',
             'image_updated' => ':service_name：:current_image -> :latest_version',
             'image_up_to_date' => ':service_name：:current_image（已是最新）',
+            'manual_review' => '手动检查：:registry_url',
+            'using_cached_tags' => '[cached] 正在使用 :repository 的缓存标签',
+            'latest_points_to' => "发现 'latest' 指向：:best_version",
         ],
         'warn' => [
             'no_services_found' => ':filename 中未找到服务',
             'dry_run_would_update_file' => '[DRY RUN] 将更新此文件',
+            'using_latest_tag' => ":service_name：:current_image（使用 'latest' 标签）",
+            'skipping_custom_registry' => '跳过自定义镜像仓库：:repository',
+            'registry_api_error' => ':registry API 错误，仓库 :repository：:message',
+            'ghcr_requires_authentication' => 'GHCR 需要认证，需要手动检查',
         ],
         'error' => [
             'failed' => '失败：:message',

@@ -90,9 +90,12 @@ class UpdateServiceVersions extends Command
                 // Check if using 'latest' tag and log for manual review
                 if (str_contains($currentImage, ':latest')) {
                     $registryUrl = $this->getRegistryUrl($currentImage);
-                    $this->warn("  {$serviceName}: {$currentImage} (using 'latest' tag)");
+                    $this->warn('  '.trans('console.update_service_versions.warn.using_latest_tag', [
+                        'service_name' => $serviceName,
+                        'current_image' => $currentImage,
+                    ]));
                     if ($registryUrl) {
-                        $this->line("    → Manual review: {$registryUrl}");
+                        $this->line('    → '.trans('console.update_service_versions.info.manual_review', ['registry_url' => $registryUrl]));
                     }
                 }
 
@@ -151,7 +154,7 @@ class UpdateServiceVersions extends Command
             $result = $this->getDockerHubLatestVersion($repository, $currentTag);
         } elseif ($this->isCustomRegistry($repository)) {
             // Custom registries - skip for now, log warning
-            $this->warn("  Skipping custom registry: {$repository}");
+            $this->warn('  '.trans('console.update_service_versions.warn.skipping_custom_registry', ['repository' => $repository]));
             $result = null;
         } else {
             // DockerHub (default registry - no prefix or docker.io/index.docker.io)
@@ -277,7 +280,7 @@ class UpdateServiceVersions extends Command
                 // Cache the tags for this repository
                 $this->registryCache[$repository.'_tags'] = $tags;
             } else {
-                $this->line("    [cached] Using cached tags for {$repository}");
+                $this->line('    '.trans('console.update_service_versions.info.using_cached_tags', ['repository' => $repository]));
                 $tags = $this->registryCache[$repository.'_tags'];
             }
 
@@ -285,7 +288,11 @@ class UpdateServiceVersions extends Command
             return $this->findBestTag($tags, $currentTag, $repository);
 
         } catch (\Throwable $e) {
-            $this->warn("  DockerHub API error for {$repository}: {$e->getMessage()}");
+            $this->warn('  '.trans('console.update_service_versions.warn.registry_api_error', [
+                'registry' => 'DockerHub',
+                'repository' => $repository,
+                'message' => $e->getMessage(),
+            ]));
 
             return null;
         }
@@ -349,7 +356,7 @@ class UpdateServiceVersions extends Command
             if (! $response->successful()) {
                 // Most GHCR packages require authentication
                 if ($currentTag === 'latest') {
-                    $this->warn('    ⚠ GHCR requires authentication - manual review needed');
+                    $this->warn('    ⚠ '.trans('console.update_service_versions.warn.ghcr_requires_authentication'));
                 }
 
                 return null;
@@ -375,7 +382,11 @@ class UpdateServiceVersions extends Command
             return $this->findBestTag($tags, $currentTag, $repository);
 
         } catch (\Throwable $e) {
-            $this->warn("  GHCR API error for {$repository}: {$e->getMessage()}");
+            $this->warn('  '.trans('console.update_service_versions.warn.registry_api_error', [
+                'registry' => 'GHCR',
+                'repository' => $repository,
+                'message' => $e->getMessage(),
+            ]));
 
             return null;
         }
@@ -402,14 +413,18 @@ class UpdateServiceVersions extends Command
                 // Cache the tags for this repository
                 $this->registryCache[$repository.'_tags'] = $tags;
             } else {
-                $this->line("    [cached] Using cached tags for {$repository}");
+                $this->line('    '.trans('console.update_service_versions.info.using_cached_tags', ['repository' => $repository]));
                 $tags = $this->registryCache[$repository.'_tags'];
             }
 
             return $this->findBestTag($tags, $currentTag, $repository);
 
         } catch (\Throwable $e) {
-            $this->warn("  Quay API error for {$repository}: {$e->getMessage()}");
+            $this->warn('  '.trans('console.update_service_versions.warn.registry_api_error', [
+                'registry' => 'Quay',
+                'repository' => $repository,
+                'message' => $e->getMessage(),
+            ]));
 
             return null;
         }
@@ -454,14 +469,18 @@ class UpdateServiceVersions extends Command
                 // Cache the tags for this repository
                 $this->registryCache[$repository.'_tags'] = $tags;
             } else {
-                $this->line("    [cached] Using cached tags for {$repository}");
+                $this->line('    '.trans('console.update_service_versions.info.using_cached_tags', ['repository' => $repository]));
                 $tags = $this->registryCache[$repository.'_tags'];
             }
 
             return $this->findBestTag($tags, $currentTag, $repository);
 
         } catch (\Throwable $e) {
-            $this->warn("  Codeberg API error for {$repository}: {$e->getMessage()}");
+            $this->warn('  '.trans('console.update_service_versions.warn.registry_api_error', [
+                'registry' => 'Codeberg',
+                'repository' => $repository,
+                'message' => $e->getMessage(),
+            ]));
 
             return null;
         }
@@ -485,7 +504,7 @@ class UpdateServiceVersions extends Command
                 if (! empty($versionTags)) {
                     // Prefer shorter version tags (1.8 over 1.8.1)
                     $bestVersion = $this->preferShorterVersion($versionTags);
-                    $this->info("    ✓ Found 'latest' points to: {$bestVersion}");
+                    $this->info('    ✓ '.trans('console.update_service_versions.info.latest_points_to', ['best_version' => $bestVersion]));
 
                     return $repository.':'.$bestVersion;
                 }
