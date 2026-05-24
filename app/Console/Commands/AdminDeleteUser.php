@@ -836,19 +836,23 @@ class AdminDeleteUser extends Command
         }
 
         if (! $this->isDryRun) {
-            $this->info('Processing team changes...');
+            $this->info(trans('console.admin_delete_user.teams.processing'));
             try {
                 $result = $action->execute();
-                $this->info("✓ Teams deleted: {$result['deleted']}, ownership transferred: {$result['transferred']}, left: {$result['left']}");
+                $this->info(trans('console.admin_delete_user.teams.processed_summary', [
+                    'deleted' => $result['deleted'],
+                    'transferred' => $result['transferred'],
+                    'left' => $result['left'],
+                ]));
                 $this->logAction("Team changes for user {$this->user->email}: deleted {$result['deleted']}, transferred {$result['transferred']}, left {$result['left']}");
             } catch (\Exception $e) {
-                $this->error('Failed to process team changes:');
-                $this->error('Exception: '.get_class($e));
-                $this->error('Message: '.$e->getMessage());
-                $this->error('File: '.$e->getFile().':'.$e->getLine());
+                $this->error(trans('console.admin_delete_user.teams.process_failed'));
+                $this->error(trans('console.admin_delete_user.teams.exception_label').': '.get_class($e));
+                $this->error(trans('console.admin_delete_user.teams.message_label').': '.$e->getMessage());
+                $this->error(trans('console.admin_delete_user.teams.file_label').': '.$e->getFile().':'.$e->getLine());
 
                 if ($this->output->isVerbose()) {
-                    $this->error('Stack Trace:');
+                    $this->error(trans('console.admin_delete_user.teams.stack_trace_label'));
                     $this->error($e->getTraceAsString());
                 }
 

@@ -178,6 +178,13 @@ return [
             ],
             'final_warning' => '⚠️  WARNING: Team changes affect access control and ownership!',
             'confirm_proceed' => 'Are you sure you want to proceed with these team changes?',
+            'processing' => 'Processing team changes...',
+            'processed_summary' => '✓ Teams deleted: :deleted, ownership transferred: :transferred, left: :left',
+            'process_failed' => 'Failed to process team changes:',
+            'exception_label' => 'Exception',
+            'message_label' => 'Message',
+            'file_label' => 'File',
+            'stack_trace_label' => 'Stack Trace:',
         ],
         'user_profile' => [
             'phase_title' => 'PHASE 5: DELETE USER PROFILE',
