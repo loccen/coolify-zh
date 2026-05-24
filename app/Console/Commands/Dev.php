@@ -64,7 +64,7 @@ class Dev extends Command
             Artisan::call('cleanup:redis', ['--restart' => true, '--clear-locks' => true]);
             echo '   INFO  '.trans('console.dev.info.redis_cleanup_completed', locale: $locale)."\n";
         } catch (\Throwable $e) {
-            echo "   ERROR  Redis cleanup failed: {$e->getMessage()}\n";
+            echo '   ERROR  '.trans('console.dev.error.redis_cleanup_failed', ['error' => $e->getMessage()], locale: $locale)."\n";
         }
 
         try {
@@ -75,10 +75,10 @@ class Dev extends Command
             ]);
 
             if ($updatedTaskCount > 0) {
-                echo "   INFO  Marked {$updatedTaskCount} stuck scheduled task executions as failed.\n";
+                echo '   INFO  '.trans('console.dev.info.marked_stuck_scheduled_task_executions_as_failed', ['count' => $updatedTaskCount], locale: $locale)."\n";
             }
         } catch (\Throwable $e) {
-            echo "   ERROR  Could not clean up stuck scheduled task executions: {$e->getMessage()}\n";
+            echo '   ERROR  '.trans('console.dev.error.could_not_clean_up_stuck_scheduled_task_executions', ['error' => $e->getMessage()], locale: $locale)."\n";
         }
 
         try {
@@ -89,10 +89,10 @@ class Dev extends Command
             ]);
 
             if ($updatedBackupCount > 0) {
-                echo "   INFO  Marked {$updatedBackupCount} stuck database backup executions as failed.\n";
+                echo '   INFO  '.trans('console.dev.info.marked_stuck_database_backup_executions_as_failed', ['count' => $updatedBackupCount], locale: $locale)."\n";
             }
         } catch (\Throwable $e) {
-            echo "   ERROR  Could not clean up stuck database backup executions: {$e->getMessage()}\n";
+            echo '   ERROR  '.trans('console.dev.error.could_not_clean_up_stuck_database_backup_executions', ['error' => $e->getMessage()], locale: $locale)."\n";
         }
 
         CheckHelperImageJob::dispatch();

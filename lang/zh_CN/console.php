@@ -133,6 +133,11 @@ return [
     ],
     'dev' => [
         'description' => '开发辅助命令。',
+        'error' => [
+            'redis_cleanup_failed' => 'Redis 清理失败：:error',
+            'could_not_clean_up_stuck_scheduled_task_executions' => '无法清理卡住的计划任务执行记录：:error',
+            'could_not_clean_up_stuck_database_backup_executions' => '无法清理卡住的数据库备份执行记录：:error',
+        ],
         'info' => [
             'generating_app_key' => '正在生成 APP_KEY。',
             'generating_storage_link' => '正在生成 storage 链接。',
@@ -140,6 +145,8 @@ return [
             'instance_already_initialized' => '实例已初始化。',
             'cleaning_up_redis' => '正在清理 Redis（卡住的作业和过期锁）...',
             'redis_cleanup_completed' => 'Redis 清理完成。',
+            'marked_stuck_scheduled_task_executions_as_failed' => '已将 :count 条卡住的计划任务执行记录标记为失败。',
+            'marked_stuck_database_backup_executions_as_failed' => '已将 :count 条卡住的数据库备份执行记录标记为失败。',
         ],
     ],
     'scheduled_job_diagnostics' => [
