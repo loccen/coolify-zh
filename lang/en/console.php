@@ -285,6 +285,8 @@ return [
             'manual_review' => 'Manual review: :registry_url',
             'using_cached_tags' => '[cached] Using cached tags for :repository',
             'latest_points_to' => "Found 'latest' points to: :best_version",
+            'summary' => 'Summary:',
+            'major_version_review_notice' => 'Major version updates may include breaking changes. Review before upgrading.',
         ],
         'warn' => [
             'no_services_found' => 'No services found in :filename',
@@ -293,9 +295,22 @@ return [
             'skipping_custom_registry' => 'Skipping custom registry: :repository',
             'registry_api_error' => ':registry API error for :repository: :message',
             'ghcr_requires_authentication' => 'GHCR requires authentication - manual review needed',
+            'major_version_updates_available' => 'Services with available MAJOR version updates:',
         ],
         'error' => [
             'failed' => 'Failed: :message',
+        ],
+        'labels' => [
+            'metric' => 'Metric',
+            'count' => 'Count',
+            'total_templates' => 'Total Templates',
+            'updated' => 'Updated',
+            'skipped_up_to_date' => 'Skipped (up to date)',
+            'failed' => 'Failed',
+            'repository' => 'Repository',
+            'current' => 'Current',
+            'available' => 'Available',
+            'registry_url' => 'Registry URL',
         ],
     ],
     'sync_stripe_subscriptions' => [

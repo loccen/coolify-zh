@@ -285,6 +285,8 @@ return [
             'manual_review' => '手动检查：:registry_url',
             'using_cached_tags' => '[cached] 正在使用 :repository 的缓存标签',
             'latest_points_to' => "发现 'latest' 指向：:best_version",
+            'summary' => '汇总：',
+            'major_version_review_notice' => 'MAJOR 版本更新可能包含破坏性变更。升级前请先检查。',
         ],
         'warn' => [
             'no_services_found' => ':filename 中未找到服务',
@@ -293,9 +295,22 @@ return [
             'skipping_custom_registry' => '跳过自定义镜像仓库：:repository',
             'registry_api_error' => ':registry API 错误，仓库 :repository：:message',
             'ghcr_requires_authentication' => 'GHCR 需要认证，需要手动检查',
+            'major_version_updates_available' => '存在可用 MAJOR 版本更新的服务：',
         ],
         'error' => [
             'failed' => '失败：:message',
+        ],
+        'labels' => [
+            'metric' => '指标',
+            'count' => '数量',
+            'total_templates' => '模板总数',
+            'updated' => '已更新',
+            'skipped_up_to_date' => '已跳过（已是最新）',
+            'failed' => '失败',
+            'repository' => '仓库',
+            'current' => '当前',
+            'available' => '可用',
+            'registry_url' => 'Registry URL',
         ],
     ],
     'sync_stripe_subscriptions' => [

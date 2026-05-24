@@ -783,21 +783,24 @@ class UpdateServiceVersions extends Command
 
     protected function displayStats(): void
     {
-        $this->info('Summary:');
+        $this->info(trans('console.update_service_versions.info.summary'));
         $this->table(
-            ['Metric', 'Count'],
             [
-                ['Total Templates', $this->stats['total']],
-                ['Updated', $this->stats['updated']],
-                ['Skipped (up to date)', $this->stats['skipped']],
-                ['Failed', $this->stats['failed']],
+                trans('console.update_service_versions.labels.metric'),
+                trans('console.update_service_versions.labels.count'),
+            ],
+            [
+                [trans('console.update_service_versions.labels.total_templates'), $this->stats['total']],
+                [trans('console.update_service_versions.labels.updated'), $this->stats['updated']],
+                [trans('console.update_service_versions.labels.skipped_up_to_date'), $this->stats['skipped']],
+                [trans('console.update_service_versions.labels.failed'), $this->stats['failed']],
             ]
         );
 
         // Display major version updates if any
         if (! empty($this->majorVersionUpdates)) {
             $this->newLine();
-            $this->warn('⚠ Services with available MAJOR version updates:');
+            $this->warn('⚠ '.trans('console.update_service_versions.warn.major_version_updates_available'));
             $this->newLine();
 
             $tableData = [];
@@ -811,12 +814,17 @@ class UpdateServiceVersions extends Command
             }
 
             $this->table(
-                ['Repository', 'Current', 'Available', 'Registry URL'],
+                [
+                    trans('console.update_service_versions.labels.repository'),
+                    trans('console.update_service_versions.labels.current'),
+                    trans('console.update_service_versions.labels.available'),
+                    trans('console.update_service_versions.labels.registry_url'),
+                ],
                 $tableData
             );
 
             $this->newLine();
-            $this->comment('💡 Major version updates may include breaking changes. Review before upgrading.');
+            $this->comment('💡 '.trans('console.update_service_versions.info.major_version_review_notice'));
         }
     }
 }
