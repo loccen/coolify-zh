@@ -155,6 +155,30 @@ return [
         'teams' => [
             'phase_title' => 'PHASE 4: HANDLE TEAMS',
             'no_changes_needed' => 'No team changes needed.',
+            'edge_cases' => [
+                'detected_cannot_proceed' => '⚠️  EDGE CASES DETECTED - CANNOT PROCEED',
+                'team_line' => 'Team: :team (ID: :id)',
+                'issue_line' => 'Issue: :issue',
+                'current_members' => 'Current members:',
+                'member_line' => '  - :name (:email) - Role: :role',
+                'active_resources_warning' => '  ⚠️  This team has :count active resources!',
+                'active_stripe_subscription_details' => '  ⚠️  Active Stripe subscription details:',
+                'other_owners_billing' => '  Other owners who could take over billing:',
+                'manual_resolution_title' => 'Please resolve these issues manually before retrying:',
+                'subscription_payment_issues' => [
+                    'title' => 'For teams with subscription payment issues:',
+                    'step_1' => '1. Cancel the subscription through Stripe dashboard, OR',
+                    'step_2' => '2. Transfer the subscription to another owner\'s payment method, OR',
+                    'step_3' => '3. Have the other owner create a new subscription after cancelling this one',
+                ],
+                'no_owner_replacement' => [
+                    'title' => 'For teams with no suitable owner replacement:',
+                    'step_1' => '1. Assign an admin role to a trusted member, OR',
+                    'step_2' => '2. Transfer team resources to another team, OR',
+                    'step_3' => '3. Delete the team manually if no longer needed',
+                ],
+                'user_deletion_aborted' => 'USER DELETION ABORTED DUE TO EDGE CASES',
+            ],
             'delete_summary_title' => 'Teams to be DELETED (user is the only member):',
             'table_headers' => [
                 'id' => 'ID',
