@@ -110,6 +110,7 @@ return [
         ],
     ],
     'cleanup_names' => [
+        'description' => '清理名称字段中的危险字符',
         'error' => [
             'unknown_model' => '未知模型：:model',
             'processing' => '处理 :model 时出错：:error',
