@@ -69,11 +69,11 @@ class SyncBunny extends Command
         $files = $nightly ? $this->nightlyArtifactFiles() : $this->productionArtifactFiles();
 
         $this->info(trans('console.sync_bunny.info.preparing_artifacts', [
-            'kind' => $nightly ? 'nightly' : 'production',
+            'kind' => trans('console.sync_bunny.kinds.'.($nightly ? 'nightly' : 'production'), locale: app()->getLocale()),
             'repository' => $this->artifactsRepository,
         ], locale: app()->getLocale()));
 
-        if (! confirm('确认要同步这些 artifacts 吗？', default: true)) {
+        if (! confirm(trans('console.sync_bunny.confirm.sync_artifacts', locale: app()->getLocale()), default: true)) {
             return self::SUCCESS;
         }
 
@@ -90,7 +90,7 @@ class SyncBunny extends Command
     {
         $this->info(trans('console.sync_bunny.info.preparing_service_template_artifact', locale: app()->getLocale()));
 
-        if (! confirm('确认要同步 service template 吗？', default: true)) {
+        if (! confirm(trans('console.sync_bunny.confirm.sync_service_template', locale: app()->getLocale()), default: true)) {
             return self::SUCCESS;
         }
 
@@ -105,7 +105,7 @@ class SyncBunny extends Command
     {
         $this->info(trans('console.sync_bunny.info.preparing_versions_and_releases_artifacts', locale: app()->getLocale()));
 
-        if (! confirm('确认要同步版本与发布记录吗？', default: true)) {
+        if (! confirm(trans('console.sync_bunny.confirm.sync_versions_and_releases', locale: app()->getLocale()), default: true)) {
             return self::SUCCESS;
         }
 
@@ -119,7 +119,7 @@ class SyncBunny extends Command
     {
         $this->info(trans('console.sync_bunny.info.preparing_releases_artifact', locale: app()->getLocale()));
 
-        if (! confirm('确认要同步 releases.json 吗？', default: true)) {
+        if (! confirm(trans('console.sync_bunny.confirm.sync_releases_json', locale: app()->getLocale()), default: true)) {
             return self::SUCCESS;
         }
 
@@ -132,7 +132,7 @@ class SyncBunny extends Command
     {
         $this->info(trans('console.sync_bunny.info.preparing_versions_artifact', locale: app()->getLocale()));
 
-        if (! confirm('确认要同步 versions.json 吗？', default: true)) {
+        if (! confirm(trans('console.sync_bunny.confirm.sync_versions_json', locale: app()->getLocale()), default: true)) {
             return self::SUCCESS;
         }
 

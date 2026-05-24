@@ -260,6 +260,17 @@ return [
             'no_artifact_changes_detected' => 'No artifact changes detected.',
             'artifacts_pushed_successfully' => 'Artifacts pushed to :repository successfully.',
         ],
+        'confirm' => [
+            'sync_artifacts' => 'Do you want to sync these artifacts?',
+            'sync_service_template' => 'Do you want to sync the service template artifact?',
+            'sync_versions_and_releases' => 'Do you want to sync versions and release metadata?',
+            'sync_releases_json' => 'Do you want to sync releases.json?',
+            'sync_versions_json' => 'Do you want to sync versions.json?',
+        ],
+        'kinds' => [
+            'nightly' => 'nightly',
+            'production' => 'production',
+        ],
     ],
     'services_delete' => [
         'description' => 'Delete services and related resources from the database',
