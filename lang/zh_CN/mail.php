@@ -28,6 +28,7 @@ return [
                 'rate_limit_exceeded' => '已达到 Resend 的速率限制。请几分钟后再试。',
                 'validation_failed' => '邮件校验失败：:message',
                 'send_failed' => '通过 Resend 发送邮件失败：:message',
+                'connection_failed' => '无法连接到 Resend API。请检查网络连接后重试。',
             ],
         ],
         'transactional_email' => [
