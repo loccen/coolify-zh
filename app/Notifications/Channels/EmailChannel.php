@@ -47,7 +47,7 @@ class EmailChannel
 
             // Validate team membership for all recipients
             if (count($recipients) === 0) {
-                throw new Exception('No email recipients found');
+                throw new Exception(trans('mail.channels.email.no_email_recipients_found'));
             }
 
             // Skip team membership validation for test notifications
