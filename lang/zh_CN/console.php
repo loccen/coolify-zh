@@ -178,6 +178,13 @@ return [
             ],
             'final_warning' => '⚠️  警告：团队变更会影响访问权限和所有权！',
             'confirm_proceed' => '确认要继续这些团队变更吗？',
+            'processing' => '正在处理团队变更...',
+            'processed_summary' => '✓ 已删除 :deleted 个团队，已转移所有权 :transferred 个，已退出 :left 个',
+            'process_failed' => '处理团队变更失败：',
+            'exception_label' => '异常',
+            'message_label' => '消息',
+            'file_label' => '文件',
+            'stack_trace_label' => '堆栈跟踪：',
         ],
         'user_profile' => [
             'phase_title' => '第 5 阶段：删除用户资料',
