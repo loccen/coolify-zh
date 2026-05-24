@@ -651,7 +651,7 @@ class AdminDeleteUser extends Command
     {
         $this->newLine();
         $this->info('═══════════════════════════════════════');
-        $this->info('PHASE 4: HANDLE TEAMS');
+        $this->info(trans('console.admin_delete_user.teams.phase_title'));
         $this->info('═══════════════════════════════════════');
         $this->newLine();
 
@@ -750,15 +750,20 @@ class AdminDeleteUser extends Command
         if ($preview['to_delete']->isEmpty() &&
             $preview['to_transfer']->isEmpty() &&
             $preview['to_leave']->isEmpty()) {
-            $this->info('No team changes needed.');
+            $this->info(trans('console.admin_delete_user.teams.no_changes_needed'));
 
             return true;
         }
 
         if ($preview['to_delete']->isNotEmpty()) {
-            $this->warn('Teams to be DELETED (user is the only member):');
+            $this->warn(trans('console.admin_delete_user.teams.delete_summary_title'));
             $this->table(
-                ['ID', 'Name', 'Resources', 'Subscription'],
+                [
+                    trans('console.admin_delete_user.teams.table_headers.id'),
+                    trans('console.admin_delete_user.teams.table_headers.name'),
+                    trans('console.admin_delete_user.teams.table_headers.resources'),
+                    trans('console.admin_delete_user.teams.table_headers.subscription'),
+                ],
                 $preview['to_delete']->map(function ($team) {
                     $resourceCount = 0;
                     foreach ($team->servers()->get() as $server) {
@@ -780,9 +785,14 @@ class AdminDeleteUser extends Command
         }
 
         if ($preview['to_transfer']->isNotEmpty()) {
-            $this->warn('Teams where ownership will be TRANSFERRED:');
+            $this->warn(trans('console.admin_delete_user.teams.transfer_summary_title'));
             $this->table(
-                ['Team ID', 'Team Name', 'New Owner', 'New Owner Email'],
+                [
+                    trans('console.admin_delete_user.teams.transfer_table_headers.team_id'),
+                    trans('console.admin_delete_user.teams.transfer_table_headers.team_name'),
+                    trans('console.admin_delete_user.teams.transfer_table_headers.new_owner'),
+                    trans('console.admin_delete_user.teams.transfer_table_headers.new_owner_email'),
+                ],
                 $preview['to_transfer']->map(function ($item) {
                     return [
                         $item['team']->id,
@@ -796,10 +806,15 @@ class AdminDeleteUser extends Command
         }
 
         if ($preview['to_leave']->isNotEmpty()) {
-            $this->warn('Teams where user will be REMOVED (other owners/admins exist):');
+            $this->warn(trans('console.admin_delete_user.teams.leave_summary_title'));
             $userId = $this->user->id;
             $this->table(
-                ['ID', 'Name', 'User Role', 'Other Members'],
+                [
+                    trans('console.admin_delete_user.teams.leave_table_headers.id'),
+                    trans('console.admin_delete_user.teams.leave_table_headers.name'),
+                    trans('console.admin_delete_user.teams.leave_table_headers.user_role'),
+                    trans('console.admin_delete_user.teams.leave_table_headers.other_members'),
+                ],
                 $preview['to_leave']->map(function ($team) use ($userId) {
                     $userRole = $team->members->where('id', $userId)->first()->pivot->role;
                     $otherMembers = $team->members->count() - 1;
@@ -815,8 +830,8 @@ class AdminDeleteUser extends Command
             $this->newLine();
         }
 
-        $this->error('⚠️  WARNING: Team changes affect access control and ownership!');
-        if (! $this->confirm('Are you sure you want to proceed with these team changes?', false)) {
+        $this->error(trans('console.admin_delete_user.teams.final_warning'));
+        if (! $this->confirm(trans('console.admin_delete_user.teams.confirm_proceed'), false)) {
             return false;
         }
 

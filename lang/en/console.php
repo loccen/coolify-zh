@@ -152,6 +152,33 @@ return [
             'file_label' => 'File',
             'stack_trace_label' => 'Stack Trace:',
         ],
+        'teams' => [
+            'phase_title' => 'PHASE 4: HANDLE TEAMS',
+            'no_changes_needed' => 'No team changes needed.',
+            'delete_summary_title' => 'Teams to be DELETED (user is the only member):',
+            'table_headers' => [
+                'id' => 'ID',
+                'name' => 'Name',
+                'resources' => 'Resources',
+                'subscription' => 'Subscription',
+            ],
+            'transfer_summary_title' => 'Teams where ownership will be TRANSFERRED:',
+            'transfer_table_headers' => [
+                'team_id' => 'Team ID',
+                'team_name' => 'Team Name',
+                'new_owner' => 'New Owner',
+                'new_owner_email' => 'New Owner Email',
+            ],
+            'leave_summary_title' => 'Teams where user will be REMOVED (other owners/admins exist):',
+            'leave_table_headers' => [
+                'id' => 'ID',
+                'name' => 'Name',
+                'user_role' => 'User Role',
+                'other_members' => 'Other Members',
+            ],
+            'final_warning' => '⚠️  WARNING: Team changes affect access control and ownership!',
+            'confirm_proceed' => 'Are you sure you want to proceed with these team changes?',
+        ],
         'user_profile' => [
             'phase_title' => 'PHASE 5: DELETE USER PROFILE',
             'final_warning' => '⚠️  FINAL STEP - This action is IRREVERSIBLE!',

@@ -152,6 +152,33 @@ return [
             'file_label' => '文件',
             'stack_trace_label' => '堆栈跟踪：',
         ],
+        'teams' => [
+            'phase_title' => '第 4 阶段：处理团队',
+            'no_changes_needed' => '不需要调整团队。',
+            'delete_summary_title' => '即将删除的团队（该用户是唯一成员）：',
+            'table_headers' => [
+                'id' => 'ID',
+                'name' => '名称',
+                'resources' => '资源数量',
+                'subscription' => '订阅',
+            ],
+            'transfer_summary_title' => '即将转移所有权的团队：',
+            'transfer_table_headers' => [
+                'team_id' => '团队 ID',
+                'team_name' => '团队名称',
+                'new_owner' => '新所有者',
+                'new_owner_email' => '新所有者邮箱',
+            ],
+            'leave_summary_title' => '即将移除该用户的团队（存在其他 owner/admin）：',
+            'leave_table_headers' => [
+                'id' => 'ID',
+                'name' => '名称',
+                'user_role' => '用户角色',
+                'other_members' => '其他成员数',
+            ],
+            'final_warning' => '⚠️  警告：团队变更会影响访问权限和所有权！',
+            'confirm_proceed' => '确认要继续这些团队变更吗？',
+        ],
         'user_profile' => [
             'phase_title' => '第 5 阶段：删除用户资料',
             'final_warning' => '⚠️  最后一步 - 此操作不可逆！',
