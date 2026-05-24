@@ -56,6 +56,7 @@ return [
         'more_packages' => '... 以及另外 :count 个软件包',
         'more_critical_packages' => '... 以及另外 :count 个关键软件包',
         'notifications' => '通知',
+        'click_here' => '点击这里',
     ],
     'deployment_success' => [
         'discord_title' => ':white_check_mark: 新版本已成功部署',
@@ -268,7 +269,7 @@ return [
             'pushover_title' => '服务器补丁检查失败',
             'pushover_message' => '[错误] :server 的补丁检查失败！',
             'slack_title' => 'Coolify: [错误] 服务器补丁检查失败',
-            'slack_description' => ":server 的补丁检查失败。",
+            'slack_description' => ':server 的补丁检查失败。',
             'webhook_message' => '补丁检查失败',
         ],
         'available' => [
@@ -278,7 +279,7 @@ return [
             'pushover_title' => '服务器补丁可用',
             'pushover_message' => '[需要处理] :server 有 :count 个可用服务器补丁！',
             'slack_title' => 'Coolify: [需要处理] 服务器补丁可用',
-            'slack_description' => ":server 有 :count 个可用服务器补丁。",
+            'slack_description' => ':server 有 :count 个可用服务器补丁。',
             'critical_packages_detected' => '检测到关键软件包',
             'webhook_message' => '服务器补丁可用',
         ],
