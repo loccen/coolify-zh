@@ -824,7 +824,7 @@ class AdminDeleteUser extends Command
     {
         $this->newLine();
         $this->info('═══════════════════════════════════════');
-        $this->info('PHASE 6: CANCEL STRIPE SUBSCRIPTIONS');
+        $this->info(trans('console.admin_delete_user.stripe.phase_title'));
         $this->info('═══════════════════════════════════════');
         $this->newLine();
 
@@ -832,17 +832,17 @@ class AdminDeleteUser extends Command
         $subscriptions = $action->getSubscriptionsPreview();
 
         if ($subscriptions->isEmpty()) {
-            $this->info('No Stripe subscriptions to cancel.');
+            $this->info(trans('console.admin_delete_user.stripe.no_subscriptions'));
 
             return true;
         }
 
         // Verify subscriptions in Stripe before showing details
-        $this->info('Verifying subscriptions in Stripe...');
+        $this->info(trans('console.admin_delete_user.stripe.verifying'));
         $verification = $action->verifySubscriptionsInStripe();
 
         if (! empty($verification['errors'])) {
-            $this->warn('⚠️  Errors occurred during verification:');
+            $this->warn(trans('console.admin_delete_user.stripe.verification_errors_title'));
             foreach ($verification['errors'] as $error) {
                 $this->warn("  - {$error}");
             }
@@ -850,7 +850,7 @@ class AdminDeleteUser extends Command
         }
 
         if ($verification['not_found']->isNotEmpty()) {
-            $this->warn('⚠️  Subscriptions not found or inactive in Stripe:');
+            $this->warn(trans('console.admin_delete_user.stripe.not_found_or_inactive'));
             foreach ($verification['not_found'] as $item) {
                 $subscription = $item['subscription'];
                 $reason = $item['reason'];
@@ -860,12 +860,12 @@ class AdminDeleteUser extends Command
         }
 
         if ($verification['verified']->isEmpty()) {
-            $this->info('No active subscriptions found in Stripe to cancel.');
+            $this->info(trans('console.admin_delete_user.stripe.no_active_subscriptions'));
 
             return true;
         }
 
-        $this->info('Active Stripe subscriptions to cancel:');
+        $this->info(trans('console.admin_delete_user.stripe.active_subscriptions_title'));
         $this->newLine();
 
         $totalMonthlyValue = 0;
@@ -880,33 +880,36 @@ class AdminDeleteUser extends Command
             $totalMonthlyValue += $monthlyValue;
 
             $this->line("  - {$subscription->stripe_subscription_id} (Team: {$team->name})");
-            $this->line("    Stripe Status: {$stripeStatus}");
+            $this->line(trans('console.admin_delete_user.stripe.status', ['status' => $stripeStatus]));
             if ($monthlyValue > 0) {
-                $this->line("    Monthly value: \${$monthlyValue}");
+                $this->line(trans('console.admin_delete_user.stripe.monthly_value', ['amount' => $monthlyValue]));
             }
             if ($subscription->stripe_cancel_at_period_end) {
-                $this->line('    ⚠️  Already set to cancel at period end');
+                $this->line(trans('console.admin_delete_user.stripe.already_cancel_at_period_end'));
             }
         }
 
         if ($totalMonthlyValue > 0) {
             $this->newLine();
-            $this->warn("Total monthly value: \${$totalMonthlyValue}");
+            $this->warn(trans('console.admin_delete_user.stripe.total_monthly_value', ['amount' => $totalMonthlyValue]));
         }
         $this->newLine();
 
-        $this->error('⚠️  WARNING: Subscriptions will be cancelled IMMEDIATELY (not at period end)!');
-        $this->warn('⚠️  NOTE: This operation happens AFTER database commit and cannot be rolled back!');
-        if (! $this->confirm('Are you sure you want to cancel all these subscriptions immediately?', false)) {
+        $this->error(trans('console.admin_delete_user.stripe.immediate_cancellation_warning'));
+        $this->warn(trans('console.admin_delete_user.stripe.irreversible_note'));
+        if (! $this->confirm(trans('console.admin_delete_user.stripe.confirm_immediate_cancellation'), false)) {
             return false;
         }
 
         if (! $this->isDryRun) {
-            $this->info('Cancelling subscriptions...');
+            $this->info(trans('console.admin_delete_user.stripe.cancelling'));
             $result = $action->execute();
-            $this->info("Cancelled {$result['cancelled']} subscriptions, {$result['failed']} failed");
+            $this->info(trans('console.admin_delete_user.stripe.cancelled_summary', [
+                'cancelled' => $result['cancelled'],
+                'failed' => $result['failed'],
+            ]));
             if ($result['failed'] > 0 && ! empty($result['errors'])) {
-                $this->error('Failed subscriptions:');
+                $this->error(trans('console.admin_delete_user.stripe.failed_subscriptions_title'));
                 foreach ($result['errors'] as $error) {
                     $this->error("  - {$error}");
                 }
