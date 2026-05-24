@@ -97,6 +97,13 @@ return [
             'self_hosted_instance' => '🏠 Self-hosted instance - Stripe operations will be skipped',
             'verbose_retry_tip' => 'Run with -v for full stack trace',
         ],
+        'gate' => [
+            'user_not_found' => "User with email ':email' not found.",
+            'lock_running' => 'Another deletion process is already running for this user.',
+            'lock_force_tip' => 'Use --force to bypass this lock (use with extreme caution).',
+            'lock_force_proceed' => '⚠️  Lock exists but proceeding due to --force flag',
+            'lock_force_warning' => '   There may be another deletion process running!',
+        ],
         'confirm' => [
             'phase_2_to_3' => 'Phase 2 completed. Continue to Phase 3 (Delete Servers)?',
             'phase_3_to_4' => 'Phase 3 completed. Continue to Phase 4 (Handle Teams)?',
