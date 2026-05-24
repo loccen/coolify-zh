@@ -74,6 +74,17 @@ return [
         'failed_to_update' => '更新 Root 密码失败。',
     ],
     'admin_delete_user' => [
+        'description' => '删除用户，并按阶段确认是否执行完整的资源清理（兼容 Cloud 和自托管）',
+        'arguments' => [
+            'email' => '要删除的用户邮箱地址',
+        ],
+        'options' => [
+            'dry_run' => '只预览将删除的内容，不实际删除',
+            'skip_stripe' => '跳过取消 Stripe 订阅',
+            'skip_resources' => '跳过删除资源',
+            'auto_confirm' => '跳过各阶段之间的所有确认提示',
+            'force' => '绕过锁检查并强制删除（请谨慎使用）',
+        ],
         'intro' => [
             'force_mode_title' => '⚠️  强制模式 - 将跳过锁检查',
             'force_mode_warning' => '   只有在你确认没有其他删除流程正在运行时才使用这个标志',

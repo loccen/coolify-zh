@@ -7,6 +7,13 @@ it('wires admin delete user console translations through console language files'
     $command = file_get_contents(app_path('Console/Commands/AdminDeleteUser.php'));
 
     expect($command)
+        ->toContain("trans('console.admin_delete_user.description', locale: app()->getLocale())")
+        ->toContain("trans('console.admin_delete_user.arguments.email', locale: app()->getLocale())")
+        ->toContain("trans('console.admin_delete_user.options.dry_run', locale: app()->getLocale())")
+        ->toContain("trans('console.admin_delete_user.options.skip_stripe', locale: app()->getLocale())")
+        ->toContain("trans('console.admin_delete_user.options.skip_resources', locale: app()->getLocale())")
+        ->toContain("trans('console.admin_delete_user.options.auto_confirm', locale: app()->getLocale())")
+        ->toContain("trans('console.admin_delete_user.options.force', locale: app()->getLocale())")
         ->toContain("trans('console.admin_delete_user.confirm.phase_2_to_3')")
         ->toContain("trans('console.admin_delete_user.confirm.phase_3_to_4')")
         ->toContain("trans('console.admin_delete_user.confirm.phase_4_to_5')")
@@ -174,6 +181,40 @@ it('wires admin delete user console translations through console language files'
         ->toContain("trans('console.admin_delete_user.signals.cleanup_and_release_lock')")
         ->toContain("trans('console.admin_delete_user.signals.lock_released_exit_gracefully')");
 });
+
+it('localizes admin delete user command metadata on the command definition', function (string $locale, array $expected) {
+    App::setLocale($locale);
+
+    $command = new AdminDeleteUser;
+    $definition = $command->getDefinition();
+
+    expect($command->getDescription())->toBe($expected['description'])
+        ->and($definition->getArgument('email')->getDescription())->toBe($expected['argument_email'])
+        ->and($definition->getOption('dry-run')->getDescription())->toBe($expected['option_dry_run'])
+        ->and($definition->getOption('skip-stripe')->getDescription())->toBe($expected['option_skip_stripe'])
+        ->and($definition->getOption('skip-resources')->getDescription())->toBe($expected['option_skip_resources'])
+        ->and($definition->getOption('auto-confirm')->getDescription())->toBe($expected['option_auto_confirm'])
+        ->and($definition->getOption('force')->getDescription())->toBe($expected['option_force']);
+})->with([
+    'en' => ['en', [
+        'description' => 'Delete a user with comprehensive resource cleanup and phase-by-phase confirmation (works on cloud and self-hosted)',
+        'argument_email' => 'The email address of the user to delete',
+        'option_dry_run' => 'Preview what will be deleted without actually deleting',
+        'option_skip_stripe' => 'Skip Stripe subscription cancellation',
+        'option_skip_resources' => 'Skip resource deletion',
+        'option_auto_confirm' => 'Skip all confirmation prompts between phases',
+        'option_force' => 'Bypass the lock check and force deletion (use with caution)',
+    ]],
+    'zh_CN' => ['zh_CN', [
+        'description' => '删除用户，并按阶段确认是否执行完整的资源清理（兼容 Cloud 和自托管）',
+        'argument_email' => '要删除的用户邮箱地址',
+        'option_dry_run' => '只预览将删除的内容，不实际删除',
+        'option_skip_stripe' => '跳过取消 Stripe 订阅',
+        'option_skip_resources' => '跳过删除资源',
+        'option_auto_confirm' => '跳过各阶段之间的所有确认提示',
+        'option_force' => '绕过锁检查并强制删除（请谨慎使用）',
+    ]],
+]);
 
 it('resolves admin delete user console translations in english', function () {
     App::setLocale('en');
@@ -802,5 +843,5 @@ it('resolves admin delete user console translations in chinese', function () {
         ->and(trans('console.admin_delete_user.stripe.failed_subscriptions_title'))
         ->toBe('取消失败的订阅：')
         ->and((new AdminDeleteUser)->getDescription())
-        ->toBe('Delete a user with comprehensive resource cleanup and phase-by-phase confirmation (works on cloud and self-hosted)');
+        ->toBe('删除用户，并按阶段确认是否执行完整的资源清理（兼容 Cloud 和自托管）');
 });

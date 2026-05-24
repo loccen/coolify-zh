@@ -13,17 +13,32 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
 class AdminDeleteUser extends Command
 {
     protected $signature = 'admin:delete-user {email}
-                            {--dry-run : Preview what will be deleted without actually deleting}
-                            {--skip-stripe : Skip Stripe subscription cancellation}
-                            {--skip-resources : Skip resource deletion}
-                            {--auto-confirm : Skip all confirmation prompts between phases}
-                            {--force : Bypass the lock check and force deletion (use with caution)}';
+                            {--dry-run}
+                            {--skip-stripe}
+                            {--skip-resources}
+                            {--auto-confirm}
+                            {--force}';
 
-    protected $description = 'Delete a user with comprehensive resource cleanup and phase-by-phase confirmation (works on cloud and self-hosted)';
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->setDescription(trans('console.admin_delete_user.description', locale: app()->getLocale()));
+        $this->setDefinition([
+            new InputArgument('email', InputArgument::REQUIRED, trans('console.admin_delete_user.arguments.email', locale: app()->getLocale())),
+            new InputOption('dry-run', null, InputOption::VALUE_NONE, trans('console.admin_delete_user.options.dry_run', locale: app()->getLocale())),
+            new InputOption('skip-stripe', null, InputOption::VALUE_NONE, trans('console.admin_delete_user.options.skip_stripe', locale: app()->getLocale())),
+            new InputOption('skip-resources', null, InputOption::VALUE_NONE, trans('console.admin_delete_user.options.skip_resources', locale: app()->getLocale())),
+            new InputOption('auto-confirm', null, InputOption::VALUE_NONE, trans('console.admin_delete_user.options.auto_confirm', locale: app()->getLocale())),
+            new InputOption('force', null, InputOption::VALUE_NONE, trans('console.admin_delete_user.options.force', locale: app()->getLocale())),
+        ]);
+    }
 
     private bool $isDryRun = false;
 

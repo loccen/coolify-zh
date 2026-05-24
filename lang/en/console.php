@@ -74,6 +74,17 @@ return [
         'failed_to_update' => 'Failed to update Root password.',
     ],
     'admin_delete_user' => [
+        'description' => 'Delete a user with comprehensive resource cleanup and phase-by-phase confirmation (works on cloud and self-hosted)',
+        'arguments' => [
+            'email' => 'The email address of the user to delete',
+        ],
+        'options' => [
+            'dry_run' => 'Preview what will be deleted without actually deleting',
+            'skip_stripe' => 'Skip Stripe subscription cancellation',
+            'skip_resources' => 'Skip resource deletion',
+            'auto_confirm' => 'Skip all confirmation prompts between phases',
+            'force' => 'Bypass the lock check and force deletion (use with caution)',
+        ],
         'intro' => [
             'force_mode_title' => '⚠️  FORCE MODE - Lock check will be bypassed',
             'force_mode_warning' => '   Use this flag only if you are certain no other deletion is running',
