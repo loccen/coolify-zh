@@ -22,6 +22,7 @@ return [
     ],
     'channels' => [
         'email' => [
+            'no_email_recipients_found' => 'No email recipients found.',
             'resend' => [
                 'invalid_api_key' => 'Invalid Resend API key. Please verify your API key in the Resend dashboard and update it in settings.',
                 'restricted_api_key' => 'Your Resend API key has restricted permissions. Please use an API key with Full Access permissions.',
