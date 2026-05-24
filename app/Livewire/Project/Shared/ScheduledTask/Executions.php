@@ -3,6 +3,7 @@
 namespace App\Livewire\Project\Shared\ScheduledTask;
 
 use App\Models\ScheduledTask;
+use App\Support\PersistentExecutionMessage;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Locked;
@@ -128,7 +129,8 @@ class Executions extends Component
             return collect([__('Waiting for task output...')]);
         }
 
-        $lines = collect(explode("\n", $this->selectedExecution->message));
+        $displayMessage = PersistentExecutionMessage::forDisplay($this->selectedExecution->message);
+        $lines = collect(explode("\n", $displayMessage));
 
         return $lines->take($this->currentPage * $this->logsPerPage);
     }

@@ -9,6 +9,7 @@ use App\Models\Team;
 use App\Models\User;
 use App\Services\SchedulerLogParser;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\App;
 use Livewire\Livewire;
 
 uses(RefreshDatabase::class);
@@ -126,6 +127,37 @@ test('only failed executions are shown', function () {
     Livewire::test(ScheduledJobs::class)
         ->assertSee('Backup failed: connection refused')
         ->assertDontSee('Backup completed successfully');
+});
+
+test('scheduled jobs page translates known persistent startup interruption message and keeps unknown messages unchanged', function () {
+    $this->actingAs($this->rootUser);
+    session(['currentTeam' => $this->rootTeam]);
+    App::setLocale('zh_CN');
+
+    $backup = ScheduledDatabaseBackup::create([
+        'team_id' => $this->rootTeam->id,
+        'frequency' => '0 * * * *',
+        'database_id' => 1,
+        'database_type' => 'App\Models\StandalonePostgresql',
+        'enabled' => true,
+    ]);
+
+    ScheduledDatabaseBackupExecution::create([
+        'scheduled_database_backup_id' => $backup->id,
+        'status' => 'failed',
+        'message' => 'Marked as failed during Coolify startup - job was interrupted',
+    ]);
+
+    ScheduledDatabaseBackupExecution::create([
+        'scheduled_database_backup_id' => $backup->id,
+        'status' => 'failed',
+        'message' => 'Backup failed: connection refused',
+    ]);
+
+    Livewire::test(ScheduledJobs::class)
+        ->assertSee('Coolify 启动时已标记为失败，任务已中断')
+        ->assertDontSee('Marked as failed during Coolify startup - job was interrupted')
+        ->assertSee('Backup failed: connection refused');
 });
 
 test('filter by date range works', function () {

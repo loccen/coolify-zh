@@ -116,8 +116,8 @@
                                         -
                                     @endif
                                 </td>
-                                <td class="px-4 py-3 max-w-xs truncate" title="{{ $execution['message'] }}">
-                                    {{ \Illuminate\Support\Str::limit($execution['message'], 80) }}
+                                <td class="px-4 py-3 max-w-xs truncate" title="{{ $execution['display_message'] }}">
+                                    {{ \Illuminate\Support\Str::limit($execution['display_message'], 80) }}
                                 </td>
                             </tr>
                         @empty
