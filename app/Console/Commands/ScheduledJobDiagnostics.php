@@ -9,6 +9,7 @@ use App\Models\Server;
 use App\Models\Team;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 
 class ScheduledJobDiagnostics extends Command
@@ -52,21 +53,26 @@ class ScheduledJobDiagnostics extends Command
         return self::SUCCESS;
     }
 
+    private function translation(string $key, array $replace = []): string
+    {
+        return trans('console.scheduled_job_diagnostics.'.$key, $replace, locale: app()->getLocale());
+    }
+
     private function outputHeartbeat(): void
     {
         $heartbeat = Cache::get('scheduled-job-manager:heartbeat');
         if ($heartbeat) {
             $age = Carbon::parse($heartbeat)->diffForHumans();
-            $this->info(trans('console.scheduled_job_diagnostics.heartbeat', ['heartbeat' => $heartbeat, 'age' => $age], locale: app()->getLocale()));
+            $this->info($this->translation('heartbeat', ['heartbeat' => $heartbeat, 'age' => $age]));
         } else {
-            $this->error(trans('console.scheduled_job_diagnostics.heartbeat_missing', locale: app()->getLocale()));
+            $this->error($this->translation('heartbeat_missing'));
         }
         $this->newLine();
     }
 
     private function inspectDockerCleanups(?string $serverFilter): void
     {
-        $this->info(trans('console.scheduled_job_diagnostics.sections.docker_cleanup', locale: app()->getLocale()));
+        $this->info($this->translation('sections.docker_cleanup'));
 
         $servers = $this->getServers($serverFilter);
 
@@ -97,14 +103,23 @@ class ScheduledJobDiagnostics extends Command
                 $timezone,
                 $frequency,
                 $dedupKey,
-                $cacheValue ?? '<missing>',
-                $wouldFire ? 'YES' : 'no',
-                $lastExecution ? $lastExecution->status.' @ '.$lastExecution->created_at : 'never',
+                $cacheValue ?? $this->translation('values.missing'),
+                $wouldFire ? $this->translation('values.yes') : $this->translation('values.no'),
+                $lastExecution ? $lastExecution->status.' @ '.$lastExecution->created_at : $this->translation('values.never'),
             ];
         }
 
         $this->table(
-            ['ID', 'Server', 'TZ', 'Frequency', 'Dedup Key', 'Cache Value', 'Would Fire', 'Last Execution'],
+            [
+                $this->translation('headers.docker_cleanup.id'),
+                $this->translation('headers.docker_cleanup.server'),
+                $this->translation('headers.docker_cleanup.timezone'),
+                $this->translation('headers.docker_cleanup.frequency'),
+                $this->translation('headers.docker_cleanup.dedup_key'),
+                $this->translation('headers.docker_cleanup.cache_value'),
+                $this->translation('headers.docker_cleanup.would_fire'),
+                $this->translation('headers.docker_cleanup.last_execution'),
+            ],
             $rows
         );
         $this->newLine();
@@ -112,7 +127,7 @@ class ScheduledJobDiagnostics extends Command
 
     private function inspectBackups(): void
     {
-        $this->info(trans('console.scheduled_job_diagnostics.sections.scheduled_backups', locale: app()->getLocale()));
+        $this->info($this->translation('sections.scheduled_backups'));
 
         $backups = ScheduledDatabaseBackup::with(['database'])
             ->where('enabled', true)
@@ -138,16 +153,23 @@ class ScheduledJobDiagnostics extends Command
 
             $rows[] = [
                 $backup->id,
-                $backup->database_type ?? 'unknown',
-                $server?->name ?? 'N/A',
+                $backup->database_type ?? $this->translation('values.unknown'),
+                $server?->name ?? $this->translation('values.not_applicable'),
                 $frequency,
-                $cacheValue ?? '<missing>',
-                $wouldFire ? 'YES' : 'no',
+                $cacheValue ?? $this->translation('values.missing'),
+                $wouldFire ? $this->translation('values.yes') : $this->translation('values.no'),
             ];
         }
 
         $this->table(
-            ['Backup ID', 'DB Type', 'Server', 'Frequency', 'Cache Value', 'Would Fire'],
+            [
+                $this->translation('headers.scheduled_backups.backup_id'),
+                $this->translation('headers.scheduled_backups.database_type'),
+                $this->translation('headers.scheduled_backups.server'),
+                $this->translation('headers.scheduled_backups.frequency'),
+                $this->translation('headers.scheduled_backups.cache_value'),
+                $this->translation('headers.scheduled_backups.would_fire'),
+            ],
             $rows
         );
         $this->newLine();
@@ -155,7 +177,7 @@ class ScheduledJobDiagnostics extends Command
 
     private function inspectTasks(): void
     {
-        $this->info(trans('console.scheduled_job_diagnostics.sections.scheduled_tasks', locale: app()->getLocale()));
+        $this->info($this->translation('sections.scheduled_tasks'));
 
         $tasks = ScheduledTask::with(['service', 'application'])
             ->where('enabled', true)
@@ -182,15 +204,22 @@ class ScheduledJobDiagnostics extends Command
             $rows[] = [
                 $task->id,
                 $task->name,
-                $server?->name ?? 'N/A',
+                $server?->name ?? $this->translation('values.not_applicable'),
                 $frequency,
-                $cacheValue ?? '<missing>',
-                $wouldFire ? 'YES' : 'no',
+                $cacheValue ?? $this->translation('values.missing'),
+                $wouldFire ? $this->translation('values.yes') : $this->translation('values.no'),
             ];
         }
 
         $this->table(
-            ['Task ID', 'Name', 'Server', 'Frequency', 'Cache Value', 'Would Fire'],
+            [
+                $this->translation('headers.scheduled_tasks.task_id'),
+                $this->translation('headers.scheduled_tasks.name'),
+                $this->translation('headers.scheduled_tasks.server'),
+                $this->translation('headers.scheduled_tasks.frequency'),
+                $this->translation('headers.scheduled_tasks.cache_value'),
+                $this->translation('headers.scheduled_tasks.would_fire'),
+            ],
             $rows
         );
         $this->newLine();
@@ -198,7 +227,7 @@ class ScheduledJobDiagnostics extends Command
 
     private function inspectServerJobs(?string $serverFilter): void
     {
-        $this->info(trans('console.scheduled_job_diagnostics.sections.server_manager_jobs', locale: app()->getLocale()));
+        $this->info($this->translation('sections.server_manager_jobs'));
 
         $servers = $this->getServers($serverFilter);
 
@@ -229,20 +258,27 @@ class ScheduledJobDiagnostics extends Command
                     $server->name,
                     $dedupKey,
                     $frequency,
-                    $cacheValue ?? '<missing>',
-                    $wouldFire ? 'YES' : 'no',
+                    $cacheValue ?? $this->translation('values.missing'),
+                    $wouldFire ? $this->translation('values.yes') : $this->translation('values.no'),
                 ];
             }
         }
 
         $this->table(
-            ['Server ID', 'Server', 'Dedup Key', 'Frequency', 'Cache Value', 'Would Fire'],
+            [
+                $this->translation('headers.server_manager_jobs.server_id'),
+                $this->translation('headers.server_manager_jobs.server'),
+                $this->translation('headers.server_manager_jobs.dedup_key'),
+                $this->translation('headers.server_manager_jobs.frequency'),
+                $this->translation('headers.server_manager_jobs.cache_value'),
+                $this->translation('headers.server_manager_jobs.would_fire'),
+            ],
             $rows
         );
         $this->newLine();
     }
 
-    private function getServers(?string $serverFilter): \Illuminate\Support\Collection
+    private function getServers(?string $serverFilter): Collection
     {
         $query = Server::with('settings')->where('ip', '!=', '1.2.3.4');
 
