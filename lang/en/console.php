@@ -249,6 +249,7 @@ return [
         'error' => [
             'could_not_pull_templates_from_cdn' => 'Could not pull templates from CDN: :error',
             'could_not_changelogs_from_github' => 'Could not changelogs from github: :error',
+            'could_not_fetch_changelog_from_github' => 'Could not fetch changelog from GitHub: :error',
             'error_in_pull_helper_image_command' => 'Error in pullHelperImage command: :error',
             'error_in_cleanup_redis_command' => 'Error in cleanup:redis command: :error',
             'error_in_cleanup_names_command' => 'Error in cleanup:names command: :error',
@@ -257,6 +258,11 @@ return [
             'could_not_cleanup_stuck_scheduled_task_executions' => 'Could not cleanup stuck scheduled task executions: :error',
             'could_not_cleanup_stuck_database_backup_executions' => 'Could not cleanup stuck database backup executions: :error',
             'could_not_setup_dynamic_configuration' => 'Could not setup dynamic configuration: :error',
+            'error_in_updating_user_emails' => 'Error in updating user emails: :error',
+            'error_in_updating_traefik_labels' => 'Error in updating traefik labels: :error',
+            'error_in_cleaning_up_unused_networks_from_coolify_proxy' => 'Error in cleaning up unused networks from coolify proxy: :error',
+            'error_in_restoring_coolify_db_backup' => 'Error in restoring coolify db backup: :error',
+            'error_in_sending_live_signal' => 'Error in sending live signal: :error',
         ],
     ],
     'horizon_manage' => [

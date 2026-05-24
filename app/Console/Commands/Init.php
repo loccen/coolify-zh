@@ -183,7 +183,7 @@ class Init extends Command
             PullChangelog::dispatch();
             echo trans('console.init.info.changelog_fetch_initiated', locale: app()->getLocale())."\n";
         } catch (\Throwable $e) {
-            echo "Could not fetch changelog from GitHub: {$e->getMessage()}\n";
+            echo trans('console.init.error.could_not_fetch_changelog_from_github', ['error' => $e->getMessage()], locale: app()->getLocale())."\n";
         }
     }
 
@@ -194,7 +194,7 @@ class Init extends Command
                 $user->update(['email' => $user->email]);
             });
         } catch (\Throwable $e) {
-            echo "Error in updating user emails: {$e->getMessage()}\n";
+            echo trans('console.init.error.error_in_updating_user_emails', ['error' => $e->getMessage()], locale: app()->getLocale())."\n";
         }
     }
 
@@ -203,7 +203,7 @@ class Init extends Command
         try {
             Server::where('proxy->type', 'TRAEFIK_V2')->update(['proxy->type' => 'TRAEFIK']);
         } catch (\Throwable $e) {
-            echo "Error in updating traefik labels: {$e->getMessage()}\n";
+            echo trans('console.init.error.error_in_updating_traefik_labels', ['error' => $e->getMessage()], locale: app()->getLocale())."\n";
         }
     }
 
@@ -242,7 +242,7 @@ class Init extends Command
                     remote_process(command: $commands, type: ActivityTypes::INLINE->value, server: $server, ignore_errors: false);
                 }
             } catch (\Throwable $e) {
-                echo "Error in cleaning up unused networks from coolify proxy: {$e->getMessage()}\n";
+                echo trans('console.init.error.error_in_cleaning_up_unused_networks_from_coolify_proxy', ['error' => $e->getMessage()], locale: app()->getLocale())."\n";
             }
         }
     }
@@ -268,7 +268,7 @@ class Init extends Command
                     }
                 }
             } catch (\Throwable $e) {
-                echo "Error in restoring coolify db backup: {$e->getMessage()}\n";
+                echo trans('console.init.error.error_in_restoring_coolify_db_backup', ['error' => $e->getMessage()], locale: app()->getLocale())."\n";
             }
         }
     }
@@ -280,7 +280,7 @@ class Init extends Command
         try {
             Http::get("https://undead.coolify.io/v4/alive?appId=$id&version=$version");
         } catch (\Throwable $e) {
-            echo "Error in sending live signal: {$e->getMessage()}\n";
+            echo trans('console.init.error.error_in_sending_live_signal', ['error' => $e->getMessage()], locale: app()->getLocale())."\n";
         }
     }
 

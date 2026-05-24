@@ -24,7 +24,13 @@ it('wires init command phase one strings through console translations', function
         ->toContain("trans('console.init.error.could_not_cleanup_inprogress_deployments', ['error' => \$e->getMessage()], locale: \$locale)")
         ->toContain("trans('console.init.error.could_not_cleanup_stuck_scheduled_task_executions', ['error' => \$e->getMessage()], locale: \$locale)")
         ->toContain("trans('console.init.error.could_not_cleanup_stuck_database_backup_executions', ['error' => \$e->getMessage()], locale: \$locale)")
-        ->toContain("trans('console.init.error.could_not_setup_dynamic_configuration', ['error' => \$e->getMessage()], locale: \$locale)");
+        ->toContain("trans('console.init.error.could_not_setup_dynamic_configuration', ['error' => \$e->getMessage()], locale: \$locale)")
+        ->toContain("trans('console.init.error.could_not_fetch_changelog_from_github', ['error' => \$e->getMessage()], locale: app()->getLocale())")
+        ->toContain("trans('console.init.error.error_in_updating_user_emails', ['error' => \$e->getMessage()], locale: app()->getLocale())")
+        ->toContain("trans('console.init.error.error_in_updating_traefik_labels', ['error' => \$e->getMessage()], locale: app()->getLocale())")
+        ->toContain("trans('console.init.error.error_in_cleaning_up_unused_networks_from_coolify_proxy', ['error' => \$e->getMessage()], locale: app()->getLocale())")
+        ->toContain("trans('console.init.error.error_in_restoring_coolify_db_backup', ['error' => \$e->getMessage()], locale: app()->getLocale())")
+        ->toContain("trans('console.init.error.error_in_sending_live_signal', ['error' => \$e->getMessage()], locale: app()->getLocale())");
 
     expect($enTranslations['init']['description'])->toBe('Cleanup instance related stuffs')
         ->and($enTranslations['init']['info']['changelog_fetch_initiated'])->toBe('Changelog fetch initiated')
@@ -40,7 +46,13 @@ it('wires init command phase one strings through console translations', function
         ->and($enTranslations['init']['error']['could_not_cleanup_inprogress_deployments'])->toBe('Could not cleanup inprogress deployments: :error')
         ->and($enTranslations['init']['error']['could_not_cleanup_stuck_scheduled_task_executions'])->toBe('Could not cleanup stuck scheduled task executions: :error')
         ->and($enTranslations['init']['error']['could_not_cleanup_stuck_database_backup_executions'])->toBe('Could not cleanup stuck database backup executions: :error')
-        ->and($enTranslations['init']['error']['could_not_setup_dynamic_configuration'])->toBe('Could not setup dynamic configuration: :error');
+        ->and($enTranslations['init']['error']['could_not_setup_dynamic_configuration'])->toBe('Could not setup dynamic configuration: :error')
+        ->and($enTranslations['init']['error']['could_not_fetch_changelog_from_github'])->toBe('Could not fetch changelog from GitHub: :error')
+        ->and($enTranslations['init']['error']['error_in_updating_user_emails'])->toBe('Error in updating user emails: :error')
+        ->and($enTranslations['init']['error']['error_in_updating_traefik_labels'])->toBe('Error in updating traefik labels: :error')
+        ->and($enTranslations['init']['error']['error_in_cleaning_up_unused_networks_from_coolify_proxy'])->toBe('Error in cleaning up unused networks from coolify proxy: :error')
+        ->and($enTranslations['init']['error']['error_in_restoring_coolify_db_backup'])->toBe('Error in restoring coolify db backup: :error')
+        ->and($enTranslations['init']['error']['error_in_sending_live_signal'])->toBe('Error in sending live signal: :error');
 
     expect($zhTranslations['init']['description'])->toBe('清理实例相关内容')
         ->and($zhTranslations['init']['info']['changelog_fetch_initiated'])->toBe('已开始拉取更新日志')
@@ -56,7 +68,13 @@ it('wires init command phase one strings through console translations', function
         ->and($zhTranslations['init']['error']['could_not_cleanup_inprogress_deployments'])->toBe('无法清理进行中的部署：:error')
         ->and($zhTranslations['init']['error']['could_not_cleanup_stuck_scheduled_task_executions'])->toBe('无法清理卡住的计划任务执行记录：:error')
         ->and($zhTranslations['init']['error']['could_not_cleanup_stuck_database_backup_executions'])->toBe('无法清理卡住的数据库备份执行记录：:error')
-        ->and($zhTranslations['init']['error']['could_not_setup_dynamic_configuration'])->toBe('无法设置动态配置：:error');
+        ->and($zhTranslations['init']['error']['could_not_setup_dynamic_configuration'])->toBe('无法设置动态配置：:error')
+        ->and($zhTranslations['init']['error']['could_not_fetch_changelog_from_github'])->toBe('无法从 GitHub 获取更新日志：:error')
+        ->and($zhTranslations['init']['error']['error_in_updating_user_emails'])->toBe('更新用户邮箱时出错：:error')
+        ->and($zhTranslations['init']['error']['error_in_updating_traefik_labels'])->toBe('更新 Traefik 标签时出错：:error')
+        ->and($zhTranslations['init']['error']['error_in_cleaning_up_unused_networks_from_coolify_proxy'])->toBe('清理 coolify proxy 未使用网络时出错：:error')
+        ->and($zhTranslations['init']['error']['error_in_restoring_coolify_db_backup'])->toBe('恢复 coolify 数据库备份时出错：:error')
+        ->and($zhTranslations['init']['error']['error_in_sending_live_signal'])->toBe('发送存活信号时出错：:error');
 });
 
 it('resolves init command phase one translations in en and zh_CN', function () {
@@ -77,6 +95,12 @@ it('resolves init command phase one translations in en and zh_CN', function () {
         ->and(trans('console.init.error.could_not_cleanup_stuck_scheduled_task_executions', ['error' => 'boom']))->toBe('Could not cleanup stuck scheduled task executions: boom')
         ->and(trans('console.init.error.could_not_cleanup_stuck_database_backup_executions', ['error' => 'boom']))->toBe('Could not cleanup stuck database backup executions: boom')
         ->and(trans('console.init.error.could_not_setup_dynamic_configuration', ['error' => 'boom']))->toBe('Could not setup dynamic configuration: boom')
+        ->and(trans('console.init.error.could_not_fetch_changelog_from_github', ['error' => 'boom']))->toBe('Could not fetch changelog from GitHub: boom')
+        ->and(trans('console.init.error.error_in_updating_user_emails', ['error' => 'boom']))->toBe('Error in updating user emails: boom')
+        ->and(trans('console.init.error.error_in_updating_traefik_labels', ['error' => 'boom']))->toBe('Error in updating traefik labels: boom')
+        ->and(trans('console.init.error.error_in_cleaning_up_unused_networks_from_coolify_proxy', ['error' => 'boom']))->toBe('Error in cleaning up unused networks from coolify proxy: boom')
+        ->and(trans('console.init.error.error_in_restoring_coolify_db_backup', ['error' => 'boom']))->toBe('Error in restoring coolify db backup: boom')
+        ->and(trans('console.init.error.error_in_sending_live_signal', ['error' => 'boom']))->toBe('Error in sending live signal: boom')
         ->and((new Init)->getDescription())->toBe('Cleanup instance related stuffs');
 
     App::setLocale('zh_CN');
@@ -96,5 +120,11 @@ it('resolves init command phase one translations in en and zh_CN', function () {
         ->and(trans('console.init.error.could_not_cleanup_stuck_scheduled_task_executions', ['error' => 'boom']))->toBe('无法清理卡住的计划任务执行记录：boom')
         ->and(trans('console.init.error.could_not_cleanup_stuck_database_backup_executions', ['error' => 'boom']))->toBe('无法清理卡住的数据库备份执行记录：boom')
         ->and(trans('console.init.error.could_not_setup_dynamic_configuration', ['error' => 'boom']))->toBe('无法设置动态配置：boom')
+        ->and(trans('console.init.error.could_not_fetch_changelog_from_github', ['error' => 'boom']))->toBe('无法从 GitHub 获取更新日志：boom')
+        ->and(trans('console.init.error.error_in_updating_user_emails', ['error' => 'boom']))->toBe('更新用户邮箱时出错：boom')
+        ->and(trans('console.init.error.error_in_updating_traefik_labels', ['error' => 'boom']))->toBe('更新 Traefik 标签时出错：boom')
+        ->and(trans('console.init.error.error_in_cleaning_up_unused_networks_from_coolify_proxy', ['error' => 'boom']))->toBe('清理 coolify proxy 未使用网络时出错：boom')
+        ->and(trans('console.init.error.error_in_restoring_coolify_db_backup', ['error' => 'boom']))->toBe('恢复 coolify 数据库备份时出错：boom')
+        ->and(trans('console.init.error.error_in_sending_live_signal', ['error' => 'boom']))->toBe('发送存活信号时出错：boom')
         ->and((new Init)->getDescription())->toBe('清理实例相关内容');
 });
