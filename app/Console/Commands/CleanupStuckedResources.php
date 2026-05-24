@@ -64,7 +64,7 @@ class CleanupStuckedResources extends Command
                 CleanupHelperContainersJob::dispatch($server);
             }
         } catch (\Throwable $e) {
-            echo "Error in cleaning stucked resources: {$e->getMessage()}\n";
+            echo trans('console.cleanup_stucked_resources.error.error_in_cleaning_stucked_resources', ['error' => $e->getMessage()], locale: app()->getLocale())."\n";
         }
         try {
             $servers = Server::onlyTrashed()->get();
@@ -73,7 +73,7 @@ class CleanupStuckedResources extends Command
                 $server->forceDelete();
             }
         } catch (\Throwable $e) {
-            echo "Error in cleaning stuck servers: {$e->getMessage()}\n";
+            echo trans('console.cleanup_stucked_resources.error.error_in_cleaning_stuck_servers', ['error' => $e->getMessage()], locale: app()->getLocale())."\n";
         }
         try {
             $applicationsDeploymentQueue = ApplicationDeploymentQueue::get();
@@ -84,7 +84,7 @@ class CleanupStuckedResources extends Command
                 }
             }
         } catch (\Throwable $e) {
-            echo "Error in cleaning stuck application deployment queue: {$e->getMessage()}\n";
+            echo trans('console.cleanup_stucked_resources.error.error_in_cleaning_stuck_application_deployment_queue', ['error' => $e->getMessage()], locale: app()->getLocale())."\n";
         }
         try {
             $applications = Application::withTrashed()->whereNotNull('deleted_at')->get();
@@ -93,7 +93,7 @@ class CleanupStuckedResources extends Command
                 DeleteResourceJob::dispatch($application);
             }
         } catch (\Throwable $e) {
-            echo "Error in cleaning stuck application: {$e->getMessage()}\n";
+            echo trans('console.cleanup_stucked_resources.error.error_in_cleaning_stuck_application', ['error' => $e->getMessage()], locale: app()->getLocale())."\n";
         }
         try {
             $applicationsPreviews = ApplicationPreview::get();
@@ -104,7 +104,7 @@ class CleanupStuckedResources extends Command
                 }
             }
         } catch (\Throwable $e) {
-            echo "Error in cleaning stuck application: {$e->getMessage()}\n";
+            echo trans('console.cleanup_stucked_resources.error.error_in_cleaning_stuck_application', ['error' => $e->getMessage()], locale: app()->getLocale())."\n";
         }
         try {
             $applicationsPreviews = ApplicationPreview::withTrashed()->whereNotNull('deleted_at')->get();
@@ -113,7 +113,7 @@ class CleanupStuckedResources extends Command
                 DeleteResourceJob::dispatch($applicationPreview);
             }
         } catch (\Throwable $e) {
-            echo "Error in cleaning stuck application: {$e->getMessage()}\n";
+            echo trans('console.cleanup_stucked_resources.error.error_in_cleaning_stuck_application', ['error' => $e->getMessage()], locale: app()->getLocale())."\n";
         }
         try {
             $postgresqls = StandalonePostgresql::withTrashed()->whereNotNull('deleted_at')->get();
@@ -122,7 +122,7 @@ class CleanupStuckedResources extends Command
                 DeleteResourceJob::dispatch($postgresql);
             }
         } catch (\Throwable $e) {
-            echo "Error in cleaning stuck postgresql: {$e->getMessage()}\n";
+            echo trans('console.cleanup_stucked_resources.error.error_in_cleaning_stuck_postgresql', ['error' => $e->getMessage()], locale: app()->getLocale())."\n";
         }
         try {
             $rediss = StandaloneRedis::withTrashed()->whereNotNull('deleted_at')->get();
@@ -131,7 +131,7 @@ class CleanupStuckedResources extends Command
                 DeleteResourceJob::dispatch($redis);
             }
         } catch (\Throwable $e) {
-            echo "Error in cleaning stuck redis: {$e->getMessage()}\n";
+            echo trans('console.cleanup_stucked_resources.error.error_in_cleaning_stuck_redis', ['error' => $e->getMessage()], locale: app()->getLocale())."\n";
         }
         try {
             $keydbs = StandaloneKeydb::withTrashed()->whereNotNull('deleted_at')->get();
@@ -140,7 +140,7 @@ class CleanupStuckedResources extends Command
                 DeleteResourceJob::dispatch($keydb);
             }
         } catch (\Throwable $e) {
-            echo "Error in cleaning stuck keydb: {$e->getMessage()}\n";
+            echo trans('console.cleanup_stucked_resources.error.error_in_cleaning_stuck_keydb', ['error' => $e->getMessage()], locale: app()->getLocale())."\n";
         }
         try {
             $dragonflies = StandaloneDragonfly::withTrashed()->whereNotNull('deleted_at')->get();
@@ -149,7 +149,7 @@ class CleanupStuckedResources extends Command
                 DeleteResourceJob::dispatch($dragonfly);
             }
         } catch (\Throwable $e) {
-            echo "Error in cleaning stuck dragonfly: {$e->getMessage()}\n";
+            echo trans('console.cleanup_stucked_resources.error.error_in_cleaning_stuck_dragonfly', ['error' => $e->getMessage()], locale: app()->getLocale())."\n";
         }
         try {
             $clickhouses = StandaloneClickhouse::withTrashed()->whereNotNull('deleted_at')->get();
@@ -158,7 +158,7 @@ class CleanupStuckedResources extends Command
                 DeleteResourceJob::dispatch($clickhouse);
             }
         } catch (\Throwable $e) {
-            echo "Error in cleaning stuck clickhouse: {$e->getMessage()}\n";
+            echo trans('console.cleanup_stucked_resources.error.error_in_cleaning_stuck_clickhouse', ['error' => $e->getMessage()], locale: app()->getLocale())."\n";
         }
         try {
             $mongodbs = StandaloneMongodb::withTrashed()->whereNotNull('deleted_at')->get();
@@ -167,7 +167,7 @@ class CleanupStuckedResources extends Command
                 DeleteResourceJob::dispatch($mongodb);
             }
         } catch (\Throwable $e) {
-            echo "Error in cleaning stuck mongodb: {$e->getMessage()}\n";
+            echo trans('console.cleanup_stucked_resources.error.error_in_cleaning_stuck_mongodb', ['error' => $e->getMessage()], locale: app()->getLocale())."\n";
         }
         try {
             $mysqls = StandaloneMysql::withTrashed()->whereNotNull('deleted_at')->get();
@@ -176,7 +176,7 @@ class CleanupStuckedResources extends Command
                 DeleteResourceJob::dispatch($mysql);
             }
         } catch (\Throwable $e) {
-            echo "Error in cleaning stuck mysql: {$e->getMessage()}\n";
+            echo trans('console.cleanup_stucked_resources.error.error_in_cleaning_stuck_mysql', ['error' => $e->getMessage()], locale: app()->getLocale())."\n";
         }
         try {
             $mariadbs = StandaloneMariadb::withTrashed()->whereNotNull('deleted_at')->get();
@@ -185,7 +185,7 @@ class CleanupStuckedResources extends Command
                 DeleteResourceJob::dispatch($mariadb);
             }
         } catch (\Throwable $e) {
-            echo "Error in cleaning stuck mariadb: {$e->getMessage()}\n";
+            echo trans('console.cleanup_stucked_resources.error.error_in_cleaning_stuck_mariadb', ['error' => $e->getMessage()], locale: app()->getLocale())."\n";
         }
         try {
             $services = Service::withTrashed()->whereNotNull('deleted_at')->get();
@@ -194,7 +194,7 @@ class CleanupStuckedResources extends Command
                 DeleteResourceJob::dispatch($service);
             }
         } catch (\Throwable $e) {
-            echo "Error in cleaning stuck service: {$e->getMessage()}\n";
+            echo trans('console.cleanup_stucked_resources.error.error_in_cleaning_stuck_service', ['error' => $e->getMessage()], locale: app()->getLocale())."\n";
         }
         try {
             $serviceApps = ServiceApplication::withTrashed()->whereNotNull('deleted_at')->get();
@@ -203,7 +203,7 @@ class CleanupStuckedResources extends Command
                 $serviceApp->forceDelete();
             }
         } catch (\Throwable $e) {
-            echo "Error in cleaning stuck serviceapp: {$e->getMessage()}\n";
+            echo trans('console.cleanup_stucked_resources.error.error_in_cleaning_stuck_serviceapp', ['error' => $e->getMessage()], locale: app()->getLocale())."\n";
         }
         try {
             $serviceDbs = ServiceDatabase::withTrashed()->whereNotNull('deleted_at')->get();
@@ -212,7 +212,7 @@ class CleanupStuckedResources extends Command
                 $serviceDb->forceDelete();
             }
         } catch (\Throwable $e) {
-            echo "Error in cleaning stuck serviceapp: {$e->getMessage()}\n";
+            echo trans('console.cleanup_stucked_resources.error.error_in_cleaning_stuck_serviceapp', ['error' => $e->getMessage()], locale: app()->getLocale())."\n";
         }
         try {
             $scheduled_tasks = ScheduledTask::all();
@@ -223,7 +223,7 @@ class CleanupStuckedResources extends Command
                 }
             }
         } catch (\Throwable $e) {
-            echo "Error in cleaning stuck scheduledtasks: {$e->getMessage()}\n";
+            echo trans('console.cleanup_stucked_resources.error.error_in_cleaning_stuck_scheduledtasks', ['error' => $e->getMessage()], locale: app()->getLocale())."\n";
         }
 
         try {
@@ -236,11 +236,11 @@ class CleanupStuckedResources extends Command
                         $scheduled_backup->delete();
                     }
                 } catch (\Throwable $e) {
-                    echo "Error checking server for scheduledbackup {$scheduled_backup->id}: {$e->getMessage()}\n";
+                    echo trans('console.cleanup_stucked_resources.error.error_checking_server_for_scheduledbackup', ['id' => $scheduled_backup->id, 'error' => $e->getMessage()], locale: app()->getLocale())."\n";
                 }
             }
         } catch (\Throwable $e) {
-            echo "Error in cleaning stuck scheduledbackups: {$e->getMessage()}\n";
+            echo trans('console.cleanup_stucked_resources.error.error_in_cleaning_stuck_scheduledbackups', ['error' => $e->getMessage()], locale: app()->getLocale())."\n";
         }
 
         // Cleanup any resources that are not attached to any environment or destination or server
@@ -267,7 +267,7 @@ class CleanupStuckedResources extends Command
                 }
             }
         } catch (\Throwable $e) {
-            echo "Error in application: {$e->getMessage()}\n";
+            echo trans('console.cleanup_stucked_resources.error.error_in_application', ['error' => $e->getMessage()], locale: app()->getLocale())."\n";
         }
         try {
             $postgresqls = StandalonePostgresql::all()->where('id', '!=', 0);
@@ -292,7 +292,7 @@ class CleanupStuckedResources extends Command
                 }
             }
         } catch (\Throwable $e) {
-            echo "Error in postgresql: {$e->getMessage()}\n";
+            echo trans('console.cleanup_stucked_resources.error.error_in_postgresql', ['error' => $e->getMessage()], locale: app()->getLocale())."\n";
         }
         try {
             $redis = StandaloneRedis::all();
@@ -317,7 +317,7 @@ class CleanupStuckedResources extends Command
                 }
             }
         } catch (\Throwable $e) {
-            echo "Error in redis: {$e->getMessage()}\n";
+            echo trans('console.cleanup_stucked_resources.error.error_in_redis', ['error' => $e->getMessage()], locale: app()->getLocale())."\n";
         }
 
         try {
@@ -343,7 +343,7 @@ class CleanupStuckedResources extends Command
                 }
             }
         } catch (\Throwable $e) {
-            echo "Error in mongodb: {$e->getMessage()}\n";
+            echo trans('console.cleanup_stucked_resources.error.error_in_mongodb', ['error' => $e->getMessage()], locale: app()->getLocale())."\n";
         }
 
         try {
@@ -369,7 +369,7 @@ class CleanupStuckedResources extends Command
                 }
             }
         } catch (\Throwable $e) {
-            echo "Error in mysql: {$e->getMessage()}\n";
+            echo trans('console.cleanup_stucked_resources.error.error_in_mysql', ['error' => $e->getMessage()], locale: app()->getLocale())."\n";
         }
 
         try {
@@ -395,7 +395,7 @@ class CleanupStuckedResources extends Command
                 }
             }
         } catch (\Throwable $e) {
-            echo "Error in mariadb: {$e->getMessage()}\n";
+            echo trans('console.cleanup_stucked_resources.error.error_in_mariadb', ['error' => $e->getMessage()], locale: app()->getLocale())."\n";
         }
 
         try {
@@ -421,7 +421,7 @@ class CleanupStuckedResources extends Command
                 }
             }
         } catch (\Throwable $e) {
-            echo "Error in service: {$e->getMessage()}\n";
+            echo trans('console.cleanup_stucked_resources.error.error_in_service', ['error' => $e->getMessage()], locale: app()->getLocale())."\n";
         }
         try {
             $serviceApplications = ServiceApplication::all();
@@ -434,7 +434,7 @@ class CleanupStuckedResources extends Command
                 }
             }
         } catch (\Throwable $e) {
-            echo "Error in serviceApplications: {$e->getMessage()}\n";
+            echo trans('console.cleanup_stucked_resources.error.error_in_service_applications', ['error' => $e->getMessage()], locale: app()->getLocale())."\n";
         }
         try {
             $serviceDatabases = ServiceDatabase::all();
@@ -447,7 +447,7 @@ class CleanupStuckedResources extends Command
                 }
             }
         } catch (\Throwable $e) {
-            echo "Error in ServiceDatabases: {$e->getMessage()}\n";
+            echo trans('console.cleanup_stucked_resources.error.error_in_service_databases', ['error' => $e->getMessage()], locale: app()->getLocale())."\n";
         }
 
         try {
@@ -460,7 +460,7 @@ class CleanupStuckedResources extends Command
                 $cert->delete();
             }
         } catch (\Throwable $e) {
-            echo "Error in cleaning orphaned SSL certificates: {$e->getMessage()}\n";
+            echo trans('console.cleanup_stucked_resources.error.error_in_cleaning_orphaned_ssl_certificates', ['error' => $e->getMessage()], locale: app()->getLocale())."\n";
         }
     }
 }
