@@ -249,6 +249,18 @@ return [
             'processing' => '正在处理 :file',
         ],
     ],
+    'sync_bunny' => [
+        'description' => '将发布 artifacts 同步到 GitHub Pages artifacts 仓库',
+        'info' => [
+            'preparing_artifacts' => '正在为 :repository 准备 :kind artifacts。',
+            'preparing_service_template_artifact' => '正在准备 service template artifact。',
+            'preparing_versions_and_releases_artifacts' => '正在准备 versions.json 和 releases.json artifacts。',
+            'preparing_releases_artifact' => '正在准备 releases.json artifact。',
+            'preparing_versions_artifact' => '正在准备 versions.json artifact。',
+            'no_artifact_changes_detected' => '未检测到 artifact 变更。',
+            'artifacts_pushed_successfully' => 'Artifacts 已成功推送到 :repository。',
+        ],
+    ],
     'services_delete' => [
         'description' => '从数据库中删除服务及相关资源',
         'select_resource' => '你想删除哪种服务？',
