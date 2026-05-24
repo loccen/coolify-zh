@@ -167,10 +167,10 @@ class LogDrains extends Component
             $this->syncData(true);
             if ($this->server->isLogDrainEnabled()) {
                 StartLogDrain::run($this->server);
-                $this->dispatch('success', 'Log drain service started.');
+                $this->dispatch('success', __('server.toasts.log_drain_service_started'));
             } else {
                 StopLogDrain::run($this->server);
-                $this->dispatch('success', 'Log drain service stopped.');
+                $this->dispatch('success', __('server.toasts.log_drain_service_stopped'));
             }
         } catch (\Throwable $e) {
             return handleError($e, $this);
@@ -182,7 +182,7 @@ class LogDrains extends Component
         try {
             $this->authorize('update', $this->server);
             $this->syncData(true, $type);
-            $this->dispatch('success', 'Settings saved.');
+            $this->dispatch('success', __('server.toasts.settings_saved'));
         } catch (\Throwable $e) {
             return handleError($e, $this);
         }

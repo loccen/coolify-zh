@@ -3870,9 +3870,41 @@ function isSafeTmpPath(?string $path): bool
  */
 function formatContainerStatus(string $status): string
 {
+    if (! app()->bound('translator')) {
+        if (str($status)->startsWith('Proxy')) {
+            return str($status)->headline()->value();
+        }
+
+        $parts = explode(':', $status);
+        $isExcluded = end($parts) === 'excluded';
+
+        if ($isExcluded) {
+            if (count($parts) === 3) {
+                return str($parts[0])->headline().' ('.$parts[1].', excluded)';
+            }
+
+            return str($parts[0])->headline().' (excluded)';
+        }
+
+        if (count($parts) >= 2) {
+            return str($parts[0])->headline().' ('.$parts[1].')';
+        }
+
+        return str($status)->headline()->value();
+    }
+
+    $translateStatusSegment = function (string $value, bool $headlineFallback = true): string {
+        $normalized = str($value)->lower()->value();
+        $translated = __($normalized);
+
+        return $translated === $normalized
+            ? ($headlineFallback ? str($value)->headline()->value() : $normalized)
+            : $translated;
+    };
+
     // Preserve Proxy statuses as-is (they follow different format)
     if (str($status)->startsWith('Proxy')) {
-        return str($status)->headline()->value();
+        return __(str($status)->headline()->value());
     }
 
     // Check for :excluded suffix
@@ -3882,17 +3914,19 @@ function formatContainerStatus(string $status): string
     if ($isExcluded) {
         if (count($parts) === 3) {
             // Has health status: running:unhealthy:excluded → Running (unhealthy, excluded)
-            return str($parts[0])->headline().' ('.$parts[1].', excluded)';
+            return $translateStatusSegment($parts[0]).' ('.
+                $translateStatusSegment($parts[1], false).', '.
+                $translateStatusSegment('excluded', false).')';
         } else {
             // No health status: exited:excluded → Exited (excluded)
-            return str($parts[0])->headline().' (excluded)';
+            return $translateStatusSegment($parts[0]).' ('.$translateStatusSegment('excluded', false).')';
         }
     } elseif (count($parts) >= 2) {
         // Regular colon format: running:healthy → Running (healthy)
-        return str($parts[0])->headline().' ('.$parts[1].')';
+        return $translateStatusSegment($parts[0]).' ('.$translateStatusSegment($parts[1], false).')';
     } else {
         // Simple status: running → Running
-        return str($status)->headline()->value();
+        return $translateStatusSegment($status);
     }
 }
 

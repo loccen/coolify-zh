@@ -10,7 +10,7 @@ return [
         'bucket' => '存储桶',
         'region' => '区域',
         'access_key' => '访问密钥',
-        'secret_key' => '秘密密钥',
+        'secret_key' => 'Secret Key',
     ],
     'delete_confirmation' => [
         'title' => '确认删除存储？',

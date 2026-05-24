@@ -53,8 +53,8 @@ class Show extends Component
         return array_merge(
             ValidationPatterns::volumeNameMessages(),
             [
-                'mountPath.regex' => 'Mount path must start with / and only contain safe path characters.',
-                'hostPath.regex' => 'Host path must start with / and only contain safe path characters.',
+                'mountPath.regex' => __('Mount path must start with / and only contain safe path characters.'),
+                'hostPath.regex' => __('Host path must start with / and only contain safe path characters.'),
             ]
         );
     }
@@ -94,7 +94,7 @@ class Show extends Component
 
         $this->syncData(true);
         $this->storage->save();
-        $this->dispatch('success', 'Storage updated successfully');
+        $this->dispatch('success', __('Storage updated successfully'));
     }
 
     public function submit()
@@ -104,7 +104,7 @@ class Show extends Component
         $this->validate();
         $this->syncData(true);
         $this->storage->save();
-        $this->dispatch('success', 'Storage updated successfully');
+        $this->dispatch('success', __('Storage updated successfully'));
     }
 
     public function delete($password, $selectedActions = [])
@@ -112,7 +112,7 @@ class Show extends Component
         $this->authorize('update', $this->resource);
 
         if (! verifyPasswordConfirmation($password, $this)) {
-            return 'The provided password is incorrect.';
+            return __('The provided password is incorrect.');
         }
 
         $this->storage->delete();

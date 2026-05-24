@@ -64,7 +64,7 @@ class Storage extends Component
     public function refreshStoragesFromEvent()
     {
         $this->refreshStorages();
-        $this->dispatch('warning', 'File storage changed. Usually it means that the file / directory is already defined on the server, so Coolify set it up for you properly on the UI.');
+        $this->dispatch('warning', __('File storage changed. Usually it means that the file / directory is already defined on the server, so Coolify set it up for you properly on the UI.'));
     }
 
     public function refreshStorages()
@@ -114,7 +114,7 @@ class Storage extends Component
                     ? ['required', 'string', 'regex:'.ValidationPatterns::DIRECTORY_PATH_PATTERN]
                     : ['nullable', 'string', 'regex:'.ValidationPatterns::DIRECTORY_PATH_PATTERN],
             ], array_merge(ValidationPatterns::volumeNameMessages(), [
-                'host_path.regex' => 'Host path must start with / and only contain safe path characters.',
+                'host_path.regex' => __('Host path must start with / and only contain safe path characters.'),
             ]));
 
             $name = $this->resource->uuid.'-'.$this->name;
@@ -127,7 +127,7 @@ class Storage extends Component
                 'resource_type' => $this->resource->getMorphClass(),
             ]);
             $this->resource->refresh();
-            $this->dispatch('success', 'Volume added successfully');
+            $this->dispatch('success', __('Volume added successfully'));
             $this->dispatch('closeStorageModal', 'volume');
             $this->clearForm();
             $this->refreshStorages();
@@ -157,7 +157,7 @@ class Storage extends Component
             } elseif (str($this->resource->getMorphClass())->contains('Standalone')) {
                 $fs_path = database_configuration_dir().'/'.$this->resource->uuid.$this->file_storage_path;
             } else {
-                throw new \Exception('No valid resource type for file mount storage type!');
+                throw new \Exception(__('No valid resource type for file mount storage type!'));
             }
 
             LocalFileVolume::create([
@@ -169,7 +169,7 @@ class Storage extends Component
                 'resource_type' => get_class($this->resource),
             ]);
 
-            $this->dispatch('success', 'File mount added successfully');
+            $this->dispatch('success', __('File mount added successfully'));
             $this->dispatch('closeStorageModal', 'file');
             $this->clearForm();
             $this->refreshStorages();
@@ -205,7 +205,7 @@ class Storage extends Component
                 'resource_type' => get_class($this->resource),
             ]);
 
-            $this->dispatch('success', 'Directory mount added successfully');
+            $this->dispatch('success', __('Directory mount added successfully'));
             $this->dispatch('closeStorageModal', 'directory');
             $this->clearForm();
             $this->refreshStorages();

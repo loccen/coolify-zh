@@ -32,13 +32,13 @@ class Terminal extends Component
     {
         $server = Server::ownedByCurrentTeam()->whereUuid($serverUuid)->firstOrFail();
         if (! $server->isTerminalEnabled() || $server->isForceDisabled()) {
-            abort(403, 'Terminal access is disabled on this server.');
+            abort(403, __('Terminal access is disabled on this server.'));
         }
 
         if ($isContainer) {
             // Validate container identifier format (alphanumeric, dashes, and underscores only)
             if (! ValidationPatterns::isValidContainerName($identifier)) {
-                throw new \InvalidArgumentException('Invalid container identifier format');
+                throw new \InvalidArgumentException(__('Invalid container identifier format'));
             }
 
             // Verify container exists and belongs to the user's team

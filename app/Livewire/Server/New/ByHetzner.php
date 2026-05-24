@@ -220,7 +220,7 @@ class ByHetzner extends Component
             $hetznerToken = $this->getHetznerToken();
 
             if (! $hetznerToken) {
-                return $this->dispatch('error', 'Please select a valid Hetzner token.');
+                return $this->dispatch('error', __('server.toasts.select_valid_hetzner_token'));
             }
 
             // Load Hetzner data
@@ -473,7 +473,7 @@ class ByHetzner extends Component
             $this->authorize('create', Server::class);
 
             if (Team::serverLimitReached()) {
-                return $this->dispatch('error', 'You have reached the server limit for your subscription.');
+                return $this->dispatch('error', __('server.toasts.server_limit_reached'));
             }
 
             // Save cloud-init script if requested

@@ -9,6 +9,7 @@ use App\Models\ScheduledTask;
 use App\Models\ScheduledTaskExecution;
 use App\Models\Server;
 use App\Services\SchedulerLogParser;
+use App\Support\PersistentExecutionMessage;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Livewire\Component;
@@ -236,6 +237,7 @@ class ScheduledJobs extends Component
                 'created_at' => $execution->created_at,
                 'finished_at' => $execution->updated_at,
                 'message' => $execution->message,
+                'display_message' => PersistentExecutionMessage::forDisplay($execution->message),
                 'size' => $execution->size ?? null,
             ];
         });
@@ -274,6 +276,7 @@ class ScheduledJobs extends Component
                 'created_at' => $execution->created_at,
                 'finished_at' => $execution->finished_at,
                 'message' => $execution->message,
+                'display_message' => PersistentExecutionMessage::forDisplay($execution->message),
                 'size' => null,
             ];
         });
@@ -304,6 +307,7 @@ class ScheduledJobs extends Component
                 'created_at' => $execution->created_at,
                 'finished_at' => $execution->finished_at ?? $execution->updated_at,
                 'message' => $execution->message,
+                'display_message' => PersistentExecutionMessage::forDisplay($execution->message),
                 'size' => null,
             ];
         });

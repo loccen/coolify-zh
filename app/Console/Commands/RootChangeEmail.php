@@ -19,24 +19,42 @@ class RootChangeEmail extends Command
      *
      * @var string
      */
-    protected $description = 'Change Root Email';
+    protected $description = '';
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->setDescription(trans('console.root_change_email.description', locale: app()->getLocale()));
+    }
 
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
-        //
-        $this->info('You are about to change the root user\'s email.');
-        $email = $this->ask('Give me a new email for root user');
-        $this->info('Updating root email...');
-        try {
-            User::find(0)->update(['email' => $email]);
-            $this->info('Root user\'s email updated successfully.');
-        } catch (\Exception $e) {
-            $this->error('Failed to update root user\'s email.');
+        $locale = app()->getLocale();
 
-            return;
+        $this->info(trans('console.root_change_email.about_to_change', locale: $locale));
+        $email = $this->ask(trans('console.root_change_email.email_prompt', locale: $locale));
+        $this->info(trans('console.root_change_email.updating', locale: $locale));
+        try {
+            $rootUser = User::find(0);
+
+            if ($rootUser === null) {
+                $this->error(trans('console.root_change_email.failed_to_update', locale: $locale));
+
+                return self::FAILURE;
+            }
+
+            $rootUser->update(['email' => $email]);
+            $this->info(trans('console.root_change_email.updated_successfully', locale: $locale));
+
+            return self::SUCCESS;
+        } catch (\Throwable $e) {
+            $this->error(trans('console.root_change_email.failed_to_update', locale: $locale));
+
+            return self::FAILURE;
         }
     }
 }

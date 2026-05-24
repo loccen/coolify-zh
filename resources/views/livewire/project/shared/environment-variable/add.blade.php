@@ -1,7 +1,7 @@
 <form class="flex flex-col w-full gap-2 rounded-sm" wire:submit='submit'
     x-data="{ isMultiline: $wire.entangle('is_multiline') }">
     @php
-        $literalHelper = __("This means that when you use \$VARIABLES in a value, it should be interpreted as the actual characters '\$VARIABLES' and not as the value of a variable named VARIABLE.<br><br>Useful if you have \$ sign in your value and there are some characters after it, but you would not like to interpolate it from another value. In this case, you should set this to true.");
+        $literalHelper = __('This means that when you use $VARIABLES in a value, it should be interpreted as the actual characters \'$VARIABLES\' and not as the value of a variable named VARIABLE.<br><br>Useful if you have $ sign in your value and there are some characters after it, but you would not like to interpolate it from another value. In this case, you should set this to true.');
     @endphp
     <x-forms.input placeholder="NODE_ENV" id="key" :label="__('Name')" required />
     <template x-if="isMultiline">
@@ -21,7 +21,7 @@
 
     @if (!$shared)
         <div x-cloak x-show="!isMultiline" wire:key="env-value-tip" class="text-xs text-neutral-500 dark:text-neutral-400 -mt-1">
-            {{ __('Tip: Type') }} <span class="font-mono dark:text-warning text-coollabs">{{</span> {{ __('to reference a shared environment variable') }}
+            {{ __('Tip: Type') }} <span class="font-mono dark:text-warning text-coollabs">&#123;&#123;</span> {{ __('to reference a shared environment variable') }}
         </div>
     @endif
 

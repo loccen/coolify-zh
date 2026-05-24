@@ -7,7 +7,7 @@
         @if (str($status)->startsWith('running'))
             <livewire:project.database.backup-now :backup="$backup" />
         @endif
-        @if ($backup->database_id !== 0)
+        @if (! $backup->isInstanceBackup())
             <x-modal-confirmation :title="__('Confirm Backup Schedule Deletion?')" :buttonTitle="__('Delete Backups and Schedule')"
                 isErrorButton submitAction="delete" :checkboxes="$checkboxes" :actions="[
                     __('The selected backup schedule will be deleted.'),
@@ -47,7 +47,7 @@
     <div class="flex flex-col gap-2">
         <h3>{{ __('Settings') }}</h3>
         <div class="flex gap-2 flex-col ">
-            @if ($backup->database_type === 'App\Models\StandalonePostgresql' && $backup->database_id !== 0)
+            @if ($backup->database_type === 'App\Models\StandalonePostgresql' && ! $backup->isInstanceBackup())
                 <div class="w-48">
                     <x-forms.checkbox :label="__('Backup All Databases')" id="dumpAll" instantSave />
                 </div>
@@ -79,7 +79,7 @@
                         id="databasesToBackup" />
                 @endif
             @endif
-            @if ($backup->database_id === 0)
+            @if ($backup->isInstanceBackup())
                 <div class="w-80">
                     <x-forms.checkbox :label="__('settings.backup_page.include_app_key')" id="includeAppKey" instantSave
                         :helper="__('settings.backup_page.include_app_key_helper')" />

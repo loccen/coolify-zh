@@ -19,13 +19,21 @@
                             {{ $team->name }}
                         </p>
 
+                        @php
+                            $roleLabel = match ($invitation->role) {
+                                'owner' => __('team.roles.owner'),
+                                'admin' => __('team.roles.admin'),
+                                'member' => __('team.roles.member'),
+                                default => str($invitation->role)->headline()->toString(),
+                            };
+                        @endphp
                         <p class="text-sm text-gray-600 dark:text-neutral-400 mb-1">
-                            {{ __('Role:') }} <span class="font-medium text-gray-900 dark:text-white">{{ __(str($invitation->role)->headline()->toString()) }}</span>
+                            {{ __('Role:') }} <span class="font-medium text-gray-900 dark:text-white">{{ $roleLabel }}</span>
                         </p>
 
                         @if ($alreadyMember)
                             <div class="mt-4 p-3 bg-warning/10 border border-warning rounded-lg">
-                                <p class="text-sm text-warning">You are already a member of this team.</p>
+                                <p class="text-sm text-warning">{{ __('You are already a member of this team.') }}</p>
                             </div>
                         @endif
 

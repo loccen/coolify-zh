@@ -1,6 +1,6 @@
 <x-dropdown>
     <x-slot:title>
-        Links
+        {{ __('Links') }}
     </x-slot>
     @if (
         (data_get($application, 'fqdn') ||
@@ -88,6 +88,6 @@
             @endif
         </div>
     @else
-        <div class="px-2 py-1.5 text-xs">No links available</div>
+        <div class="px-2 py-1.5 text-xs">{{ __('No links available') }}</div>
     @endif
 </x-dropdown>

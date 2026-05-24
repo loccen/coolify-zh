@@ -154,7 +154,7 @@ class ExecuteContainerCommand extends Component
         try {
             $server = $this->servers->first();
             if ($server->isForceDisabled()) {
-                throw new \RuntimeException('Server is disabled.');
+                throw new \RuntimeException(__('Server is disabled.'));
             }
             $this->dispatch(
                 'send-terminal-command',
@@ -176,30 +176,30 @@ class ExecuteContainerCommand extends Component
     public function connectToContainer()
     {
         if ($this->selected_container === 'default') {
-            $this->dispatch('error', 'Please select a container.');
+            $this->dispatch('error', __('Please select a container.'));
 
             return;
         }
         try {
             // Validate container name format
             if (! ValidationPatterns::isValidContainerName($this->selected_container)) {
-                throw new \InvalidArgumentException('Invalid container name format');
+                throw new \InvalidArgumentException(__('Invalid container name format'));
             }
 
             // Verify container exists in our allowed list
             $container = collect($this->containers)->firstWhere('container.Names', $this->selected_container);
             if (is_null($container)) {
-                throw new \RuntimeException('Container not found.');
+                throw new \RuntimeException(__('Container not found.'));
             }
 
             // Verify server ownership and status
             $server = data_get($container, 'server');
             if (! $server || ! $server instanceof Server) {
-                throw new \RuntimeException('Invalid server configuration.');
+                throw new \RuntimeException(__('Invalid server configuration.'));
             }
 
             if ($server->isForceDisabled()) {
-                throw new \RuntimeException('Server is disabled.');
+                throw new \RuntimeException(__('Server is disabled.'));
             }
 
             // Additional ownership verification based on resource type
@@ -207,11 +207,11 @@ class ExecuteContainerCommand extends Component
                 'application' => $this->resource->destination->server,
                 'database' => $this->resource->destination->server,
                 'service' => $this->resource->server,
-                default => throw new \RuntimeException('Invalid resource type.')
+                default => throw new \RuntimeException(__('Invalid resource type.'))
             };
 
             if ($server->id !== $resourceServer->id && ! $this->resource->additional_servers->contains('id', $server->id)) {
-                throw new \RuntimeException('Server ownership verification failed.');
+                throw new \RuntimeException(__('Server ownership verification failed.'));
             }
 
             $this->dispatch(

@@ -2,6 +2,9 @@
 
 return [
     'common' => [
+        'greeting' => 'Hello,',
+        'sign_off' => 'Thank you,',
+        'contact_support' => 'Contact Support',
         'here' => 'here',
         'click_here' => 'Click here',
         'view_deployment_logs' => 'View Deployment Logs',
@@ -16,6 +19,23 @@ return [
         'next_steps_heading' => 'Next Steps',
         'recommendation_heading' => 'Recommendation',
         'action_required' => 'Action Required',
+    ],
+    'channels' => [
+        'email' => [
+            'no_email_recipients_found' => 'No email recipients found.',
+            'recipient_not_in_team' => 'Recipient is not part of the team.',
+            'resend' => [
+                'invalid_api_key' => 'Invalid Resend API key. Please verify your API key in the Resend dashboard and update it in settings.',
+                'restricted_api_key' => 'Your Resend API key has restricted permissions. Please use an API key with Full Access permissions.',
+                'rate_limit_exceeded' => 'Resend rate limit exceeded. Please try again in a few minutes.',
+                'validation_failed' => 'Email validation failed: :message',
+                'send_failed' => 'Failed to send email via Resend: :message',
+                'connection_failed' => 'Unable to connect to Resend API. Please check your internet connection and try again.',
+            ],
+        ],
+        'transactional_email' => [
+            'no_email_settings_found' => 'No email settings found.',
+        ],
     ],
     'api_token_expiring' => [
         'subject' => "Coolify: API token ':tokenName' expires in 24 hours",

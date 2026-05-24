@@ -1,5 +1,8 @@
 @php use App\Enums\ProxyTypes; @endphp
 <div>
+    <x-slot:title>
+        {{ data_get_str($server, 'name')->limit(10) }} > {{ __('Proxy Configuration') }} | Coolify
+    </x-slot>
     @php
         $proxySwitchWarningMessage = __("This operation may cause issues. Please refer to the guide <a href='https://coolify.io/docs/knowledge-base/server/proxies#switch-between-proxies' target='_blank' class='underline text-white'>switching between proxies</a> before proceeding!");
     @endphp
@@ -90,40 +93,32 @@
                                      x-transition:leave-start="opacity-100 translate-y-0"
                                      x-transition:leave-end="opacity-0 -translate-y-2">
                                     @if ($server->detected_traefik_version === 'latest')
-                                        <x-callout dismissible onDismiss="traefikWarningsDismissed = true; localStorage.setItem('callout-dismissed-traefik-warnings-{{ $server->id }}', 'true')" type="warning" title="Using 'latest' Traefik Tag" class="my-4">
-                                            Your proxy container is running the <span class="font-mono">latest</span> tag. While
-                                            this ensures you always have the newest version, it may introduce unexpected breaking
-                                            changes.
+                                        <x-callout dismissible onDismiss="traefikWarningsDismissed = true; localStorage.setItem('callout-dismissed-traefik-warnings-{{ $server->id }}', 'true')" type="warning" :title="__('Using \'latest\' Traefik Tag')" class="my-4">
+                                            {!! __('Your proxy container is running the <span class="font-mono">latest</span> tag. While this ensures you always have the newest version, it may introduce unexpected breaking changes.') !!}
                                             <br><br>
-                                            <strong>Recommendation:</strong> Pin to a specific version (e.g., <span
-                                                class="font-mono">traefik:{{ $this->latestTraefikVersion }}</span>) to ensure
-                                            stability and predictable updates.
+                                            <strong>{{ __('Recommendation:') }}</strong>
+                                            {!! __('Pin to a specific version (e.g., <span class="font-mono">traefik::version</span>) to ensure stability and predictable updates.', ['version' => $this->latestTraefikVersion]) !!}
                                         </x-callout>
                                     @elseif($this->isTraefikOutdated)
-                                        <x-callout dismissible onDismiss="traefikWarningsDismissed = true; localStorage.setItem('callout-dismissed-traefik-warnings-{{ $server->id }}', 'true')" type="warning" title="Traefik Patch Update Available" class="my-4">
-                                            Your Traefik proxy container is running version <span
-                                                class="font-mono">v{{ $server->detected_traefik_version }}</span>, but version <span
-                                                class="font-mono">{{ $this->latestTraefikVersion }}</span> is available.
+                                        <x-callout dismissible onDismiss="traefikWarningsDismissed = true; localStorage.setItem('callout-dismissed-traefik-warnings-{{ $server->id }}', 'true')" type="warning" :title="__('Traefik Patch Update Available')" class="my-4">
+                                            {!! __('Your Traefik proxy container is running version <span class="font-mono">v:current</span>, but version <span class="font-mono">:latest</span> is available.', ['current' => $server->detected_traefik_version, 'latest' => $this->latestTraefikVersion]) !!}
                                             <br><br>
-                                            <strong>Recommendation:</strong> Update to the latest patch version for security fixes
-                                            and
-                                            bug fixes. Please test in a non-production environment first.
+                                            <strong>{{ __('Recommendation:') }}</strong>
+                                            {{ __('Update to the latest patch version for security fixes and bug fixes. Please test in a non-production environment first.') }}
                                         </x-callout>
                                     @endif
                                     @if ($this->newerTraefikBranchAvailable)
-                                        <x-callout dismissible onDismiss="traefikWarningsDismissed = true; localStorage.setItem('callout-dismissed-traefik-warnings-{{ $server->id }}', 'true')" type="info" title="New Minor Traefik Version Available" class="my-4">
-                                            A new minor version of Traefik is available: <span
-                                                class="font-mono">{{ $this->newerTraefikBranchAvailable }}</span>
+                                        <x-callout dismissible onDismiss="traefikWarningsDismissed = true; localStorage.setItem('callout-dismissed-traefik-warnings-{{ $server->id }}', 'true')" type="info" :title="__('New Minor Traefik Version Available')" class="my-4">
+                                            {!! __('A new minor version of Traefik is available: <span class="font-mono">:version</span>', ['version' => $this->newerTraefikBranchAvailable]) !!}
                                             <br><br>
-                                            You are currently running <span class="font-mono">v{{ $server->detected_traefik_version }}</span>.
-                                            Upgrading to <span class="font-mono">{{ $this->newerTraefikBranchAvailable }}</span> will give you access to new features and improvements.
+                                            {!! __('You are currently running <span class="font-mono">v:current</span>.', ['current' => $server->detected_traefik_version]) !!}
+                                            {!! __('Upgrading to <span class="font-mono">:version</span> will give you access to new features and improvements.', ['version' => $this->newerTraefikBranchAvailable]) !!}
                                             <br><br>
-                                            <strong>Important:</strong> Before upgrading to a new minor version, please read
-                                            the <a href="https://github.com/traefik/traefik/releases" target="_blank"
-                                                class="underline text-white">Traefik changelog</a> to understand breaking changes
-                                            and new features.
+                                            <strong>{{ __('Important:') }}</strong>
+                                            {!! __('Before upgrading to a new minor version, please read the <a href="https://github.com/traefik/traefik/releases" target="_blank" class="underline text-white">Traefik changelog</a> to understand breaking changes and new features.') !!}
                                             <br><br>
-                                            <strong>Recommendation:</strong> Test the upgrade in a non-production environment first.
+                                            <strong>{{ __('Recommendation:') }}</strong>
+                                            {{ __('Test the upgrade in a non-production environment first.') }}
                                         </x-callout>
                                     @endif
                                 </div>

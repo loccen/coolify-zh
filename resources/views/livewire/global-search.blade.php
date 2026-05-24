@@ -60,7 +60,7 @@
     get groupedCreatableItems() {
         const grouped = {};
         this.filteredCreatableItems.forEach(item => {
-            const category = item.category || 'Other';
+            const category = item.category || @js(__('Other'));
             if (!grouped[category]) {
                 grouped[category] = [];
             }
@@ -835,15 +835,15 @@
                                                                 <template x-if="item.amd_only">
                                                                     <span
                                                                         class="px-2 py-0.5 text-xs rounded-full bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-200 shrink-0"
-                                                                        title="This service only supports AMD64/x86_64 architecture">
-                                                                        AMD only
+                                                                        title="{{ __('This service only supports AMD64/x86_64 architecture') }}">
+                                                                        {{ __('AMD only') }}
                                                                     </span>
                                                                 </template>
                                                                 <template x-if="item.arm_only">
                                                                     <span
                                                                         class="px-2 py-0.5 text-xs rounded-full bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-200 shrink-0"
-                                                                        title="This service only supports ARM64/aarch64 architecture">
-                                                                        ARM only
+                                                                        title="{{ __('This service only supports ARM64/aarch64 architecture') }}">
+                                                                        {{ __('ARM only') }}
                                                                     </span>
                                                                 </template>
                                                                 <span
@@ -997,7 +997,7 @@
                     x-transition:leave-end="opacity-0 -translate-y-2 sm:scale-95"
                     class="relative w-full py-6 border rounded-sm drop-shadow-sm min-w-full lg:min-w-[36rem] max-w-fit bg-white border-neutral-200 dark:bg-base px-6 dark:border-coolgray-300">
                     <div class="flex items-center justify-between pb-3">
-                        <h3 class="text-2xl font-bold">New Team</h3>
+                        <h3 class="text-2xl font-bold">{{ __('New Team') }}</h3>
                         <button @click="modalOpen=false"
                             class="absolute top-0 right-0 flex items-center justify-center w-8 h-8 mt-5 mr-5 rounded-full dark:text-white hover:bg-neutral-100 dark:hover:bg-coolgray-300 outline-0 focus-visible:ring-2 focus-visible:ring-coollabs dark:focus-visible:ring-warning">
                             <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -1077,7 +1077,7 @@
                     x-transition:leave-end="opacity-0 -translate-y-2 sm:scale-95"
                     class="relative w-full py-6 border rounded-sm drop-shadow-sm min-w-full lg:min-w-[36rem] max-w-fit bg-white border-neutral-200 dark:bg-base px-6 dark:border-coolgray-300">
                     <div class="flex items-center justify-between pb-3">
-                        <h3 class="text-2xl font-bold">New Private Key</h3>
+                        <h3 class="text-2xl font-bold">{{ __('New Private Key') }}</h3>
                         <button @click="modalOpen=false"
                             class="absolute top-0 right-0 flex items-center justify-center w-8 h-8 mt-5 mr-5 rounded-full dark:text-white hover:bg-neutral-100 dark:hover:bg-coolgray-300 outline-0 focus-visible:ring-2 focus-visible:ring-coollabs dark:focus-visible:ring-warning">
                             <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -1117,7 +1117,7 @@
                     x-transition:leave-end="opacity-0 -translate-y-2 sm:scale-95"
                     class="relative w-full py-6 border rounded-sm drop-shadow-sm min-w-full lg:min-w-[36rem] max-w-fit bg-white border-neutral-200 dark:bg-base px-6 dark:border-coolgray-300">
                     <div class="flex items-center justify-between pb-3">
-                        <h3 class="text-2xl font-bold">New GitHub App</h3>
+                        <h3 class="text-2xl font-bold">{{ __('New GitHub App') }}</h3>
                         <button @click="modalOpen=false"
                             class="absolute top-0 right-0 flex items-center justify-center w-8 h-8 mt-5 mr-5 rounded-full dark:text-white hover:bg-neutral-100 dark:hover:bg-coolgray-300 outline-0 focus-visible:ring-2 focus-visible:ring-coollabs dark:focus-visible:ring-warning">
                             <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"

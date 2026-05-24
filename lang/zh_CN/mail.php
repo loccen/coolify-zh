@@ -2,6 +2,9 @@
 
 return [
     'common' => [
+        'greeting' => '你好，',
+        'sign_off' => '此致',
+        'contact_support' => '联系支持',
         'here' => '这里',
         'click_here' => '点击这里',
         'view_deployment_logs' => '查看部署日志',
@@ -16,6 +19,23 @@ return [
         'next_steps_heading' => '后续步骤',
         'recommendation_heading' => '建议',
         'action_required' => '需要处理',
+    ],
+    'channels' => [
+        'email' => [
+            'no_email_recipients_found' => '未找到邮件收件人。',
+            'recipient_not_in_team' => '收件人不属于当前团队。',
+            'resend' => [
+                'invalid_api_key' => 'Resend API Key 无效。请在 Resend 控制台检查 API Key，并在设置中更新。',
+                'restricted_api_key' => '当前 Resend API Key 权限受限。请使用具有 Full Access 权限的 API Key。',
+                'rate_limit_exceeded' => '已达到 Resend 的速率限制。请几分钟后再试。',
+                'validation_failed' => '邮件校验失败：:message',
+                'send_failed' => '通过 Resend 发送邮件失败：:message',
+                'connection_failed' => '无法连接到 Resend API。请检查网络连接后重试。',
+            ],
+        ],
+        'transactional_email' => [
+            'no_email_settings_found' => '未找到邮件设置。',
+        ],
     ],
     'api_token_expiring' => [
         'subject' => "Coolify: API Token ':tokenName' 将在 24 小时后过期",

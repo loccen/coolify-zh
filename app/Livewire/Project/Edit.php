@@ -55,7 +55,7 @@ class Edit extends Component
     {
         try {
             $this->syncData(true);
-            $this->dispatch('success', 'Project updated.');
+            $this->dispatch('success', __('Project updated.'));
         } catch (\Throwable $e) {
             return handleError($e, $this);
         }

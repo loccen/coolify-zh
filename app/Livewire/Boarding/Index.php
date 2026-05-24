@@ -188,7 +188,7 @@ class Index extends Component
             $this->createdServer = Server::find(0);
             $this->selectedExistingServer = 0;
             if (! $this->createdServer) {
-                return $this->dispatch('error', 'Localhost server is not found. Something went wrong during installation. Please try to reinstall or contact support.');
+                return $this->dispatch('error', trans('toast.livewire.boarding.localhost_server_not_found'));
             }
             $this->serverPublicKey = $this->createdServer->privateKey->getPublicKey();
 
@@ -221,7 +221,7 @@ class Index extends Component
     public function selectExistingPrivateKey()
     {
         if (is_null($this->selectedExistingPrivateKey)) {
-            $this->dispatch('error', 'Please select a private key.');
+            $this->dispatch('error', trans('toast.livewire.boarding.select_private_key'));
 
             return;
         }
@@ -285,10 +285,10 @@ class Index extends Component
         $foundServer = Server::whereIp($this->remoteServerHost)->first();
         if ($foundServer) {
             if ($foundServer->team_id === currentTeam()->id) {
-                return $this->dispatch('error', 'A server with this IP/Domain already exists in your team.');
+                return $this->dispatch('error', trans('toast.livewire.boarding.server_exists_in_team'));
             }
 
-            return $this->dispatch('error', 'A server with this IP/Domain is already in use by another team.');
+            return $this->dispatch('error', trans('toast.livewire.boarding.server_exists_in_other_team'));
         }
         $this->createdServer = Server::create([
             'name' => $this->remoteServerName,
@@ -434,7 +434,7 @@ class Index extends Component
     {
         $this->createdProject = Project::ownedByCurrentTeam()->find($this->selectedProject);
         if (! $this->createdProject) {
-            return $this->dispatch('error', 'Project not found.');
+            return $this->dispatch('error', trans('toast.livewire.boarding.project_not_found'));
         }
         $this->currentState = 'create-resource';
     }

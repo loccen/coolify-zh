@@ -1,4 +1,9 @@
-<div @if ($isUpgradeAvailable) title="New version available" @else title="No upgrade available" @endif
+<div
+    @if ($isUpgradeAvailable)
+        title="{{ __('settings.updates_page.new_version_available') }}"
+    @else
+        title="{{ __('settings.updates_page.no_new_version_available') }}"
+    @endif
     x-init="$wire.checkUpdate" x-data="upgradeModal({
         currentVersion: @js($currentVersion),
         latestVersion: @js($latestVersion),
@@ -13,7 +18,7 @@
                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                     <path d="M19.5 13.572l-7.5 7.428l-7.5 -7.428m0 0a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" />
                 </svg>
-                In progress
+                {{ __('In progress') }}
             </button>
             <button class="menu-item cursor-pointer" @click="modalOpen=true" x-show="!showProgress">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-pink-500 transition-colors hover:text-pink-300"
@@ -25,7 +30,7 @@
                     <path d="M9 21h6" />
                     <path d="M9 18h6" />
                 </svg>
-                Upgrade
+                {{ __('Upgrade') }}
             </button>
             <template x-teleport="body">
                 <div x-show="modalOpen"
@@ -46,7 +51,7 @@
                         <div class="flex items-center justify-between pb-3">
                             <div>
                                 <h3 class="text-lg font-semibold"
-                                    x-text="upgradeComplete ? 'Upgrade Complete!' : (showProgress ? 'Upgrading...' : 'Upgrade Available')">
+                                    x-text="upgradeComplete ? @js(__('Upgrade Complete!')) : (showProgress ? @js(__('Upgrading...')) : @js(__('Upgrade Available')))">
                                 </h3>
                                 <div class="text-sm text-neutral-500 dark:text-neutral-400">
                                     {{ $currentVersion }} <span class="mx-1">&rarr;</span> {{ $latestVersion }}
@@ -73,7 +78,7 @@
 
                                     {{-- Elapsed Time --}}
                                     <div class="text-center">
-                                        <span class="text-sm text-neutral-500 dark:text-neutral-400">Elapsed time:</span>
+                                        <span class="text-sm text-neutral-500 dark:text-neutral-400">{{ __('Elapsed time:') }}</span>
                                         <span class="ml-2 font-mono text-sm" x-text="formatElapsedTime()"></span>
                                     </div>
 
@@ -114,11 +119,11 @@
                                     <template x-if="upgradeComplete">
                                         <div class="flex flex-col items-center gap-4">
                                             <p class="text-sm text-neutral-500 dark:text-neutral-400">
-                                                Reloading in <span x-text="successCountdown"
-                                                    class="font-bold text-warning"></span> seconds...
+                                                {{ __('Reloading in') }} <span x-text="successCountdown"
+                                                    class="font-bold text-warning"></span> {{ __('seconds...') }}
                                             </p>
                                             <x-forms.button @click="reloadNow()" type="button">
-                                                Reload Now
+                                                {{ __('Reload Now') }}
                                             </x-forms.button>
                                         </div>
                                     </template>
@@ -127,10 +132,10 @@
                                     <template x-if="upgradeError">
                                         <div class="flex flex-col items-center gap-4">
                                             <p class="text-sm text-neutral-600 dark:text-neutral-400">
-                                                Check the logs on the server at /data/coolify/source/upgrade*.
+                                                {{ __('Check the logs on the server at /data/coolify/source/upgrade*.') }}
                                             </p>
                                             <x-forms.button @click="closeErrorModal()" type="button">
-                                                Close
+                                                {{ __('button.close') }}
                                             </x-forms.button>
                                         </div>
                                     </template>
@@ -141,18 +146,16 @@
                             <template x-if="!showProgress">
                                 <div class="space-y-4">
                                     {{-- Warning --}}
-                                    <x-callout type="warning" title="Caution">
-                                        <p>Any deployments running during the update process will
-                                            fail.
-                                        </p>
+                                    <x-callout type="warning" :title="__('Caution')">
+                                        <p>{{ __('Any deployments running during the update process will fail.') }}</p>
                                     </x-callout>
 
                                     {{-- Help Links --}}
                                     <p class="text-sm text-neutral-600 dark:text-neutral-400">
-                                        If something goes wrong, check the
+                                        {{ __('If something goes wrong, check the') }}
                                         <a class="font-medium underline dark:text-white hover:text-neutral-800 dark:hover:text-neutral-300"
-                                            href="{{ config('constants.coolify.upgrade_guide_url') }}" target="_blank">upgrade guide</a> or the
-                                        logs on the server at /data/coolify/source/upgrade*.
+                                            href="{{ config('constants.coolify.upgrade_guide_url') }}" target="_blank">{{ __('upgrade guide') }}</a>
+                                        {{ __('or the logs on the server at /data/coolify/source/upgrade*.') }}
                                     </p>
                                 </div>
                             </template>
@@ -161,17 +164,17 @@
                         {{-- Footer Actions --}}
                         <div class="flex gap-4" x-show="!showProgress">
                             <x-forms.button @click="modalOpen=false"
-                                class="w-24 dark:bg-coolgray-200 dark:hover:bg-coolgray-300">Cancel
+                                class="w-24 dark:bg-coolgray-200 dark:hover:bg-coolgray-300">{{ __('button.cancel') }}
                             </x-forms.button>
                             <div class="flex-1"></div>
                             <template x-if="devMode">
                                 <x-forms.button @click="simulateUpgrade" type="button"
                                     class="dark:bg-coolgray-200 dark:hover:bg-coolgray-300">
-                                    Simulate
+                                    {{ __('Simulate') }}
                                 </x-forms.button>
                             </template>
                             <x-forms.button @click="confirmed" class="w-32" isHighlighted type="button">
-                                Upgrade Now
+                                {{ __('Upgrade Now') }}
                             </x-forms.button>
                         </div>
                     </div>
@@ -208,16 +211,16 @@
 
                 this.showProgress = true;
                 this.currentStep = 1;
-                this.currentStatus = '[DEV] Starting simulated upgrade...';
+                this.currentStatus = @js(__('[DEV] Starting simulated upgrade...'));
                 this.startTimer();
                 this.upgradeComplete = false;
                 this.upgradeError = false;
 
                 const steps = [
-                    { step: 1, status: '[DEV] Preparing upgrade environment...' },
-                    { step: 2, status: '[DEV] Pulling helper image...' },
-                    { step: 3, status: '[DEV] Pulling Coolify image...' },
-                    { step: 4, status: '[DEV] Restarting services...' },
+                    { step: 1, status: @js(__('[DEV] Preparing upgrade environment...')) },
+                    { step: 2, status: @js(__('[DEV] Pulling helper image...')) },
+                    { step: 3, status: @js(__('[DEV] Pulling Coolify image...')) },
+                    { step: 4, status: @js(__('[DEV] Restarting services...')) },
                 ];
 
                 let stepIndex = 0;
@@ -237,7 +240,7 @@
             confirmed() {
                 this.showProgress = true;
                 this.currentStep = 1;
-                this.currentStatus = 'Starting upgrade...';
+                this.currentStatus = @js(__('Starting upgrade...'));
                 this.startTimer();
                 // Trigger server-side upgrade script via Livewire
                 this.$wire.$call('upgrade');
@@ -276,15 +279,23 @@
 
             getReviveStatusMessage(elapsedMinutes, attempts) {
                 if (elapsedMinutes === 0) {
-                    return `Waiting for Coolify to come back online... (attempt ${attempts})`;
+                    return @js(__('Waiting for Coolify to come back online... (attempt :attempts)', ['attempts' => '__ATTEMPTS__']))
+                        .replace('__ATTEMPTS__', attempts);
                 } else if (elapsedMinutes < 2) {
-                    return `Waiting for Coolify to come back online... (${elapsedMinutes} minute${elapsedMinutes !== 1 ? 's' : ''} elapsed)`;
+                    return elapsedMinutes === 1
+                        ? @js(__('Waiting for Coolify to come back online... (:minutes minute elapsed)', ['minutes' => '__MINUTES__']))
+                            .replace('__MINUTES__', elapsedMinutes)
+                        : @js(__('Waiting for Coolify to come back online... (:minutes minutes elapsed)', ['minutes' => '__MINUTES__']))
+                            .replace('__MINUTES__', elapsedMinutes);
                 } else if (elapsedMinutes < 5) {
-                    return `Update in progress, this may take several minutes... (${elapsedMinutes} minutes elapsed)`;
+                    return @js(__('Update in progress, this may take several minutes... (:minutes minutes elapsed)', ['minutes' => '__MINUTES__']))
+                        .replace('__MINUTES__', elapsedMinutes);
                 } else if (elapsedMinutes < 10) {
-                    return `Large updates can take 10+ minutes. Please be patient... (${elapsedMinutes} minutes elapsed)`;
+                    return @js(__('Large updates can take 10+ minutes. Please be patient... (:minutes minutes elapsed)', ['minutes' => '__MINUTES__']))
+                        .replace('__MINUTES__', elapsedMinutes);
                 } else {
-                    return `Still updating. If this takes longer than 15 minutes, please check server logs... (${elapsedMinutes} minutes elapsed)`;
+                    return @js(__('Still updating. If this takes longer than 15 minutes, please check server logs... (:minutes minutes elapsed)', ['minutes' => '__MINUTES__']))
+                        .replace('__MINUTES__', elapsedMinutes);
                 }
             },
 

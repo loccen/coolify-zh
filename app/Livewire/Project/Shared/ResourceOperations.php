@@ -63,7 +63,7 @@ class ResourceOperations extends Component
             $new_destination = SwarmDocker::ownedByCurrentTeam()->find($destination_id);
         }
         if (! $new_destination) {
-            return $this->addError('destination_id', 'Destination not found.');
+            return $this->addError('destination_id', __('Destination not found.'));
         }
         $uuid = (string) new Cuid2;
         $server = $new_destination->server;

@@ -6,7 +6,7 @@
             <livewire:activity-monitor header="{{ __('Logs') }}" fullHeight />
         </x-slot:content>
     </x-slide-over>
-    <h1>{{ $title }}</h1>
+    <h1>{{ __($title) }}</h1>
     <x-resources.breadcrumbs :resource="$service" :parameters="$parameters" />
     <div class="navbar-main" x-data">
         <nav

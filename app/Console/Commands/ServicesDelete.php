@@ -36,13 +36,20 @@ class ServicesDelete extends Command
      */
     protected $description = 'Delete a service from the database';
 
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->setDescription(trans('console.services_delete.description', locale: app()->getLocale()));
+    }
+
     /**
      * Execute the console command.
      */
     public function handle()
     {
         $resource = select(
-            'What service do you want to delete?',
+            trans('console.services_delete.select_resource'),
             ['Application', 'Database', 'Service', 'Server'],
         );
         if ($resource === 'Application') {
@@ -60,12 +67,12 @@ class ServicesDelete extends Command
     {
         $servers = Server::all();
         if ($servers->count() === 0) {
-            $this->error('There are no applications to delete.');
+            $this->error(trans('console.services_delete.no_servers_to_delete'));
 
             return;
         }
         $serversToDelete = multiselect(
-            label: 'What server do you want to delete?',
+            label: trans('console.services_delete.select_server'),
             options: $servers->pluck('name', 'id')->sortKeys(),
         );
 
@@ -73,7 +80,7 @@ class ServicesDelete extends Command
             $toDelete = $servers->where('id', $server)->first();
             if ($toDelete) {
                 $this->info($toDelete);
-                $confirmed = confirm('Are you sure you want to delete all selected resources?');
+                $confirmed = confirm(trans('console.services_delete.confirm_delete_selected_resources'));
                 if (! $confirmed) {
                     break;
                 }
@@ -86,12 +93,12 @@ class ServicesDelete extends Command
     {
         $applications = Application::all();
         if ($applications->count() === 0) {
-            $this->error('There are no applications to delete.');
+            $this->error(trans('console.services_delete.no_applications_to_delete'));
 
             return;
         }
         $applicationsToDelete = multiselect(
-            'What application do you want to delete?',
+            trans('console.services_delete.select_application'),
             $applications->pluck('name', 'id')->sortKeys(),
         );
 
@@ -99,7 +106,7 @@ class ServicesDelete extends Command
             $toDelete = $applications->where('id', $application)->first();
             if ($toDelete) {
                 $this->info($toDelete);
-                $confirmed = confirm('Are you sure you want to delete all selected resources? ');
+                $confirmed = confirm(trans('console.services_delete.confirm_delete_selected_resources'));
                 if (! $confirmed) {
                     break;
                 }
@@ -171,13 +178,13 @@ class ServicesDelete extends Command
         }
 
         if ($allDatabases->count() === 0) {
-            $this->error('There are no databases to delete.');
+            $this->error(trans('console.services_delete.no_databases_to_delete'));
 
             return;
         }
 
         $databasesToDelete = multiselect(
-            'What database do you want to delete?',
+            trans('console.services_delete.select_database'),
             $databaseOptions->sortKeys(),
         );
 
@@ -185,7 +192,7 @@ class ServicesDelete extends Command
             $toDelete = $allDatabases->get($databaseKey);
             if ($toDelete) {
                 $this->info($toDelete);
-                $confirmed = confirm('Are you sure you want to delete all selected resources?');
+                $confirmed = confirm(trans('console.services_delete.confirm_delete_selected_resources'));
                 if (! $confirmed) {
                     return;
                 }
@@ -198,12 +205,12 @@ class ServicesDelete extends Command
     {
         $services = Service::all();
         if ($services->count() === 0) {
-            $this->error('There are no services to delete.');
+            $this->error(trans('console.services_delete.no_services_to_delete'));
 
             return;
         }
         $servicesToDelete = multiselect(
-            'What service do you want to delete?',
+            trans('console.services_delete.select_service'),
             $services->pluck('name', 'id')->sortKeys(),
         );
 
@@ -211,7 +218,7 @@ class ServicesDelete extends Command
             $toDelete = $services->where('id', $service)->first();
             if ($toDelete) {
                 $this->info($toDelete);
-                $confirmed = confirm('Are you sure you want to delete all selected resources?');
+                $confirmed = confirm(trans('console.services_delete.confirm_delete_selected_resources'));
                 if (! $confirmed) {
                     return;
                 }

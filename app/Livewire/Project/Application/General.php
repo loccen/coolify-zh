@@ -192,94 +192,97 @@ class General extends Component
         return array_merge(
             ValidationPatterns::combinedMessages(),
             [
-                ...ValidationPatterns::filePathMessages('dockerfileLocation', 'Dockerfile'),
-                ...ValidationPatterns::filePathMessages('dockerComposeLocation', 'Docker Compose'),
-                'baseDirectory.regex' => 'The base directory must be a valid path starting with / and containing only safe characters.',
-                'publishDirectory.regex' => 'The publish directory must be a valid path starting with / and containing only safe characters.',
-                'dockerfileTargetBuild.regex' => 'The Dockerfile target build must contain only alphanumeric characters, dots, hyphens, and underscores.',
-                'dockerComposeCustomStartCommand.regex' => 'The Docker Compose start command contains invalid characters. Allowed: alphanumerics, && / || chaining, balanced quotes, globs (*, ?), !, and safe path/arg chars. Blocked: bare &, bare |, ;, $, backtick, (, ), <, >, \\, newlines.',
-                'dockerComposeCustomBuildCommand.regex' => 'The Docker Compose build command contains invalid characters. Allowed: alphanumerics, && / || chaining, balanced quotes, globs (*, ?), !, and safe path/arg chars. Blocked: bare &, bare |, ;, $, backtick, (, ), <, >, \\, newlines.',
-                'customDockerRunOptions.regex' => 'The custom Docker run options contain invalid characters. Allowed: alphanumerics, && / || chaining, balanced quotes, globs (*, ?), !, and safe path/arg chars. Blocked: bare &, bare |, ;, $, backtick, (, ), <, >, \\, newlines.',
-                'installCommand.regex' => 'The install command contains invalid characters. Allowed: alphanumerics, && / || chaining, balanced quotes, globs (*, ?), !, and safe path/arg chars. Blocked: bare &, bare |, ;, $, backtick, (, ), <, >, \\, newlines.',
-                'buildCommand.regex' => 'The build command contains invalid characters. Allowed: alphanumerics, && / || chaining, balanced quotes, globs (*, ?), !, and safe path/arg chars. Blocked: bare &, bare |, ;, $, backtick, (, ), <, >, \\, newlines.',
-                'startCommand.regex' => 'The start command contains invalid characters. Allowed: alphanumerics, && / || chaining, balanced quotes, globs (*, ?), !, and safe path/arg chars. Blocked: bare &, bare |, ;, $, backtick, (, ), <, >, \\, newlines.',
-                'preDeploymentCommandContainer.regex' => 'The pre-deployment command container name must contain only alphanumeric characters, dots, hyphens, and underscores.',
-                'postDeploymentCommandContainer.regex' => 'The post-deployment command container name must contain only alphanumeric characters, dots, hyphens, and underscores.',
-                'name.required' => 'The Name field is required.',
-                'gitRepository.required' => 'The Git Repository field is required.',
-                'gitBranch.required' => 'The Git Branch field is required.',
-                'buildPack.required' => 'The Build Pack field is required.',
-                'staticImage.required' => 'The Static Image field is required.',
-                'baseDirectory.required' => 'The Base Directory field is required.',
-                'portsExposes.required' => 'The Exposed Ports field is required.',
-                'portsExposes.regex' => 'Ports exposes must be a comma-separated list of port numbers (e.g. 3000,3001).',
+                ...ValidationPatterns::filePathMessages('dockerfileLocation', __('Dockerfile')),
+                ...ValidationPatterns::filePathMessages('dockerComposeLocation', __('Docker Compose')),
+                'baseDirectory.regex' => __('The base directory must be a valid path starting with / and containing only safe characters.'),
+                'publishDirectory.regex' => __('The publish directory must be a valid path starting with / and containing only safe characters.'),
+                'dockerfileTargetBuild.regex' => __('The Dockerfile target build must contain only alphanumeric characters, dots, hyphens, and underscores.'),
+                'dockerComposeCustomStartCommand.regex' => __('The Docker Compose start command contains invalid characters. Allowed: alphanumerics, && / || chaining, balanced quotes, globs (*, ?), !, and safe path/arg chars. Blocked: bare &, bare |, ;, $, backtick, (, ), <, >, \\, newlines.'),
+                'dockerComposeCustomBuildCommand.regex' => __('The Docker Compose build command contains invalid characters. Allowed: alphanumerics, && / || chaining, balanced quotes, globs (*, ?), !, and safe path/arg chars. Blocked: bare &, bare |, ;, $, backtick, (, ), <, >, \\, newlines.'),
+                'customDockerRunOptions.regex' => __('The custom Docker run options contain invalid characters. Allowed: alphanumerics, && / || chaining, balanced quotes, globs (*, ?), !, and safe path/arg chars. Blocked: bare &, bare |, ;, $, backtick, (, ), <, >, \\, newlines.'),
+                'installCommand.regex' => __('The install command contains invalid characters. Allowed: alphanumerics, && / || chaining, balanced quotes, globs (*, ?), !, and safe path/arg chars. Blocked: bare &, bare |, ;, $, backtick, (, ), <, >, \\, newlines.'),
+                'buildCommand.regex' => __('The build command contains invalid characters. Allowed: alphanumerics, && / || chaining, balanced quotes, globs (*, ?), !, and safe path/arg chars. Blocked: bare &, bare |, ;, $, backtick, (, ), <, >, \\, newlines.'),
+                'startCommand.regex' => __('The start command contains invalid characters. Allowed: alphanumerics, && / || chaining, balanced quotes, globs (*, ?), !, and safe path/arg chars. Blocked: bare &, bare |, ;, $, backtick, (, ), <, >, \\, newlines.'),
+                'preDeploymentCommandContainer.regex' => __('The pre-deployment command container name must contain only alphanumeric characters, dots, hyphens, and underscores.'),
+                'postDeploymentCommandContainer.regex' => __('The post-deployment command container name must contain only alphanumeric characters, dots, hyphens, and underscores.'),
+                'name.required' => __('The Name field is required.'),
+                'gitRepository.required' => __('The Git Repository field is required.'),
+                'gitBranch.required' => __('The Git Branch field is required.'),
+                'buildPack.required' => __('The Build Pack field is required.'),
+                'staticImage.required' => __('The Static Image field is required.'),
+                'baseDirectory.required' => __('The Base Directory field is required.'),
+                'portsExposes.required' => __('The Exposed Ports field is required.'),
+                'portsExposes.regex' => __('Ports exposes must be a comma-separated list of port numbers (e.g. 3000,3001).'),
                 ...ValidationPatterns::portMappingMessages(),
-                'isStatic.required' => 'The Static setting is required.',
-                'isStatic.boolean' => 'The Static setting must be true or false.',
-                'isSpa.required' => 'The SPA setting is required.',
-                'isSpa.boolean' => 'The SPA setting must be true or false.',
-                'isBuildServerEnabled.required' => 'The Build Server setting is required.',
-                'isBuildServerEnabled.boolean' => 'The Build Server setting must be true or false.',
-                'isContainerLabelEscapeEnabled.required' => 'The Container Label Escape setting is required.',
-                'isContainerLabelEscapeEnabled.boolean' => 'The Container Label Escape setting must be true or false.',
-                'isContainerLabelReadonlyEnabled.required' => 'The Container Label Readonly setting is required.',
-                'isContainerLabelReadonlyEnabled.boolean' => 'The Container Label Readonly setting must be true or false.',
-                'isPreserveRepositoryEnabled.required' => 'The Preserve Repository setting is required.',
-                'isPreserveRepositoryEnabled.boolean' => 'The Preserve Repository setting must be true or false.',
-                'isHttpBasicAuthEnabled.required' => 'The HTTP Basic Auth setting is required.',
-                'isHttpBasicAuthEnabled.boolean' => 'The HTTP Basic Auth setting must be true or false.',
-                'redirect.required' => 'The Redirect setting is required.',
-                'redirect.string' => 'The Redirect setting must be a string.',
+                'isStatic.required' => __('The Static setting is required.'),
+                'isStatic.boolean' => __('The Static setting must be true or false.'),
+                'isSpa.required' => __('The SPA setting is required.'),
+                'isSpa.boolean' => __('The SPA setting must be true or false.'),
+                'isBuildServerEnabled.required' => __('The Build Server setting is required.'),
+                'isBuildServerEnabled.boolean' => __('The Build Server setting must be true or false.'),
+                'isContainerLabelEscapeEnabled.required' => __('The Container Label Escape setting is required.'),
+                'isContainerLabelEscapeEnabled.boolean' => __('The Container Label Escape setting must be true or false.'),
+                'isContainerLabelReadonlyEnabled.required' => __('The Container Label Readonly setting is required.'),
+                'isContainerLabelReadonlyEnabled.boolean' => __('The Container Label Readonly setting must be true or false.'),
+                'isPreserveRepositoryEnabled.required' => __('The Preserve Repository setting is required.'),
+                'isPreserveRepositoryEnabled.boolean' => __('The Preserve Repository setting must be true or false.'),
+                'isHttpBasicAuthEnabled.required' => __('The HTTP Basic Auth setting is required.'),
+                'isHttpBasicAuthEnabled.boolean' => __('The HTTP Basic Auth setting must be true or false.'),
+                'redirect.required' => __('The Redirect setting is required.'),
+                'redirect.string' => __('The Redirect setting must be a string.'),
             ]
         );
     }
 
-    protected $validationAttributes = [
-        'name' => 'name',
-        'description' => 'description',
-        'fqdn' => 'FQDN',
-        'gitRepository' => 'Git repository',
-        'gitBranch' => 'Git branch',
-        'gitCommitSha' => 'Git commit SHA',
-        'installCommand' => 'Install command',
-        'buildCommand' => 'Build command',
-        'startCommand' => 'Start command',
-        'buildPack' => 'Build pack',
-        'staticImage' => 'Static image',
-        'baseDirectory' => 'Base directory',
-        'publishDirectory' => 'Publish directory',
-        'portsExposes' => 'Ports exposes',
-        'portsMappings' => 'Ports mappings',
-        'dockerfile' => 'Dockerfile',
-        'dockerRegistryImageName' => 'Docker registry image name',
-        'dockerRegistryImageTag' => 'Docker registry image tag',
-        'dockerfileLocation' => 'Dockerfile location',
-        'dockerComposeLocation' => 'Docker compose location',
-        'dockerCompose' => 'Docker compose',
-        'dockerComposeRaw' => 'Docker compose raw',
-        'customLabels' => 'Custom labels',
-        'dockerfileTargetBuild' => 'Dockerfile target build',
-        'customDockerRunOptions' => 'Custom docker run commands',
-        'customNetworkAliases' => 'Custom docker network aliases',
-        'dockerComposeCustomStartCommand' => 'Docker compose custom start command',
-        'dockerComposeCustomBuildCommand' => 'Docker compose custom build command',
-        'customNginxConfiguration' => 'Custom Nginx configuration',
-        'isStatic' => 'Is static',
-        'isSpa' => 'Is SPA',
-        'isBuildServerEnabled' => 'Is build server enabled',
-        'isContainerLabelEscapeEnabled' => 'Is container label escape enabled',
-        'isContainerLabelReadonlyEnabled' => 'Is container label readonly',
-        'isPreserveRepositoryEnabled' => 'Is preserve repository enabled',
-        'watchPaths' => 'Watch paths',
-        'redirect' => 'Redirect',
-    ];
+    protected function validationAttributes(): array
+    {
+        return [
+            'name' => __('Name'),
+            'description' => __('Description'),
+            'fqdn' => __('FQDN'),
+            'gitRepository' => __('Git Repository'),
+            'gitBranch' => __('Git Branch'),
+            'gitCommitSha' => __('Git Commit SHA'),
+            'installCommand' => __('Install Command'),
+            'buildCommand' => __('Build Command'),
+            'startCommand' => __('Start Command'),
+            'buildPack' => __('Build Pack'),
+            'staticImage' => __('Static Image'),
+            'baseDirectory' => __('Base Directory'),
+            'publishDirectory' => __('Publish Directory'),
+            'portsExposes' => __('Exposed Ports'),
+            'portsMappings' => __('Ports Mappings'),
+            'dockerfile' => __('Dockerfile'),
+            'dockerRegistryImageName' => __('Docker Registry Image Name'),
+            'dockerRegistryImageTag' => __('Docker Registry Image Tag'),
+            'dockerfileLocation' => __('Dockerfile Location'),
+            'dockerComposeLocation' => __('Docker Compose Location'),
+            'dockerCompose' => __('Docker Compose'),
+            'dockerComposeRaw' => __('Docker Compose Raw'),
+            'customLabels' => __('Custom Labels'),
+            'dockerfileTargetBuild' => __('Dockerfile Target Build'),
+            'customDockerRunOptions' => __('Custom Docker Run Options'),
+            'customNetworkAliases' => __('Custom Docker Network Aliases'),
+            'dockerComposeCustomStartCommand' => __('Docker Compose Custom Start Command'),
+            'dockerComposeCustomBuildCommand' => __('Docker Compose Custom Build Command'),
+            'customNginxConfiguration' => __('Custom Nginx Configuration'),
+            'isStatic' => __('Static'),
+            'isSpa' => __('SPA'),
+            'isBuildServerEnabled' => __('Build Server'),
+            'isContainerLabelEscapeEnabled' => __('Container Label Escape'),
+            'isContainerLabelReadonlyEnabled' => __('Container Label Readonly'),
+            'isPreserveRepositoryEnabled' => __('Preserve Repository'),
+            'watchPaths' => __('Watch Paths'),
+            'redirect' => __('Redirect'),
+        ];
+    }
 
     public function mount()
     {
         try {
             $this->parsedServices = $this->application->parse();
             if (is_null($this->parsedServices) || empty($this->parsedServices)) {
-                $this->dispatch('error', 'Failed to parse your docker-compose file. Please check the syntax and try again.');
+                $this->dispatch('error', __('Failed to parse your docker-compose file. Please check the syntax and try again.'));
                 // Still sync data even if parse fails, so form fields are populated
                 $this->syncData();
 
@@ -328,7 +331,7 @@ class General extends Component
             try {
                 $this->authorize('update', $this->application);
                 $this->initLoadingCompose = true;
-                $this->dispatch('info', 'Loading docker compose file.');
+                $this->dispatch('info', __('Loading docker compose file.'));
             } catch (AuthorizationException $e) {
                 // User doesn't have update permission, skip loading compose file
             }
@@ -470,7 +473,7 @@ class General extends Component
                 $this->application->save();
             }
 
-            $this->dispatch('success', 'Settings saved.');
+            $this->dispatch('success', __('Settings saved.'));
             $this->application->refresh();
 
             $this->syncData();
@@ -506,7 +509,7 @@ class General extends Component
 
             ['parsedServices' => $this->parsedServices, 'initialDockerComposeLocation' => $this->initialDockerComposeLocation] = $this->application->loadComposeFile($isInit, $restoreBaseDirectory, $restoreDockerComposeLocation);
             if (is_null($this->parsedServices)) {
-                $showToast && $this->dispatch('error', 'Failed to parse your docker-compose file. Please check the syntax and try again.');
+                $showToast && $this->dispatch('error', __('Failed to parse your docker-compose file. Please check the syntax and try again.'));
 
                 return;
             }
@@ -527,7 +530,7 @@ class General extends Component
             }
             $this->parsedServiceDomains = $sanitizedDomains;
 
-            $showToast && $this->dispatch('success', 'Docker compose file loaded.');
+            $showToast && $this->dispatch('success', __('Docker compose file loaded.'));
             $this->dispatch('compose_loaded');
             $this->dispatch('refreshStorages');
             $this->dispatch('refreshEnvs');
@@ -572,7 +575,7 @@ class General extends Component
 
             $this->application->docker_compose_domains = json_encode($originalDomains);
             $this->application->save();
-            $this->dispatch('success', 'Domain generated.');
+            $this->dispatch('success', __('Domain generated.'));
             if ($this->application->build_pack === 'dockercompose') {
                 $this->loadComposeFile(showToast: false);
             }
@@ -648,7 +651,7 @@ class General extends Component
                 $this->application->refresh();
                 $this->syncData();
                 $this->resetDefaultLabels();
-                $this->dispatch('success', 'Wildcard domain generated.');
+                $this->dispatch('success', __('Wildcard domain generated.'));
             }
         } catch (\Throwable $e) {
             return handleError($e, $this);
@@ -665,7 +668,7 @@ class General extends Component
             $this->application->save();
             $this->application->refresh();
             $this->syncData();
-            $this->dispatch('success', 'Nginx configuration generated.');
+            $this->dispatch('success', __('Nginx configuration generated.'));
         } catch (\Throwable $e) {
             return handleError($e, $this);
         }
@@ -698,7 +701,14 @@ class General extends Component
             if ($this->application->additional_servers->count() === 0) {
                 foreach ($domains as $domain) {
                     if (! validateDNSEntry($domain, $this->application->destination->server)) {
-                        $showToaster && $this->dispatch('error', 'Validating DNS failed.', "Make sure you have added the DNS records correctly.<br><br>$domain->{$this->application->destination->server->ip}<br><br>Check this <a target='_blank' class='underline dark:text-white' href='https://coolify.io/docs/knowledge-base/dns-configuration'>documentation</a> for further help.");
+                        $showToaster && $this->dispatch(
+                            'error',
+                            __('Validating DNS failed.'),
+                            __('Make sure you have added the DNS records correctly.<br><br>:fqdn->:ip<br><br>Check this <a target="_blank" class="underline dark:text-white" href="https://coolify.io/docs/knowledge-base/dns-configuration">documentation</a> for further help.', [
+                                'fqdn' => $domain,
+                                'ip' => $this->application->destination->server->ip,
+                            ])
+                        );
                     }
                 }
             }
@@ -740,13 +750,13 @@ class General extends Component
             $this->application->redirect = $this->redirect;
             $has_www = collect($this->application->fqdns)->filter(fn ($fqdn) => str($fqdn)->contains('www.'))->count();
             if ($has_www === 0 && $this->application->redirect === 'www') {
-                $this->dispatch('error', 'You want to redirect to www, but you do not have a www domain set.<br><br>Please add www to your domain list and as an A DNS record (if applicable).');
+                $this->dispatch('error', __('You want to redirect to www, but you do not have a www domain set.<br><br>Please add www to your domain list and as an A DNS record (if applicable).'));
 
                 return;
             }
             $this->application->save();
             $this->resetDefaultLabels();
-            $this->dispatch('success', 'Redirect updated.');
+            $this->dispatch('success', __('Redirect updated.'));
         } catch (\Throwable $e) {
             return handleError($e, $this);
         }
@@ -870,7 +880,14 @@ class General extends Component
                         $domain = data_get($service, 'domain');
                         if ($domain) {
                             if (! validateDNSEntry($domain, $this->application->destination->server)) {
-                                $showToaster && $this->dispatch('error', 'Validating DNS failed.', "Make sure you have added the DNS records correctly.<br><br>$domain->{$this->application->destination->server->ip}<br><br>Check this <a target='_blank' class='underline dark:text-white' href='https://coolify.io/docs/knowledge-base/dns-configuration'>documentation</a> for further help.");
+                                $showToaster && $this->dispatch(
+                                    'error',
+                                    __('Validating DNS failed.'),
+                                    __('Make sure you have added the DNS records correctly.<br><br>:fqdn->:ip<br><br>Check this <a target="_blank" class="underline dark:text-white" href="https://coolify.io/docs/knowledge-base/dns-configuration">documentation</a> for further help.', [
+                                        'fqdn' => $domain,
+                                        'ip' => $this->application->destination->server->ip,
+                                    ])
+                                );
                             }
                         }
                     }
@@ -896,7 +913,7 @@ class General extends Component
             $this->application->save();
             $this->application->refresh();
             $this->syncData();
-            $showToaster && ! $warning && $this->dispatch('success', 'Application settings updated!');
+            $showToaster && ! $warning && $this->dispatch('success', __('Application settings updated!'));
         } catch (\Throwable $e) {
             $this->application->refresh();
             $this->syncData();

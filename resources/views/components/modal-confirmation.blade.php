@@ -76,12 +76,12 @@
         this.selectedActions = @js(collect($checkboxes)->pluck('id')->filter(fn($id) => $this->$id)->values()->all());
         $wire.$refresh();
     },
-    step1ButtonText: @js($step1ButtonText),
-    step2ButtonText: @js($effectiveStep2ButtonText),
-    step3ButtonText: @js($step3ButtonText),
+    step1ButtonText: @js(__($step1ButtonText)),
+    step2ButtonText: @js(__($effectiveStep2ButtonText)),
+    step3ButtonText: @js(__($step3ButtonText)),
     validatePassword() {
         if (this.confirmWithPassword && !this.password) {
-            return 'Password is required.';
+            return @js(__('Password is required.'));
         }
         return '';
     },
@@ -134,13 +134,16 @@
             {{ $trigger }}
         </div>
     @elseif ($customButton)
+        @php
+            $customButtonContent = $customButton instanceof \Illuminate\View\ComponentSlot ? $customButton : __($customButton);
+        @endphp
         @if ($buttonFullWidth)
             <x-forms.button @click="modalOpen=true" class="w-full">
-                {{ $customButton }}
+                {{ $customButtonContent }}
             </x-forms.button>
         @else
             <x-forms.button @click="modalOpen=true">
-                {{ $customButton }}
+                {{ $customButtonContent }}
             </x-forms.button>
         @endif
     @else
@@ -152,31 +155,31 @@
             @if ($disabled)
                 @if ($buttonFullWidth)
                     <x-forms.button class="w-full" isError disabled wire:target>
-                        {{ $buttonTitle }}
+                        {{ __($buttonTitle) }}
                     </x-forms.button>
                 @else
                     <x-forms.button isError disabled wire:target>
-                        {{ $buttonTitle }}
+                        {{ __($buttonTitle) }}
                     </x-forms.button>
                 @endif
             @elseif ($isErrorButton)
                 @if ($buttonFullWidth)
                     <x-forms.button class="w-full" isError @click="modalOpen=true">
-                        {{ $buttonTitle }}
+                        {{ __($buttonTitle) }}
                     </x-forms.button>
                 @else
                     <x-forms.button isError @click="modalOpen=true">
-                        {{ $buttonTitle }}
+                        {{ __($buttonTitle) }}
                     </x-forms.button>
                 @endif
             @elseif($isHighlightedButton)
                 @if ($buttonFullWidth)
                     <x-forms.button @click="modalOpen=true" class="flex gap-2 w-full" isHighlighted wire:target>
-                        {{ $buttonTitle }}
+                        {{ __($buttonTitle) }}
                     </x-forms.button>
                 @else
                     <x-forms.button @click="modalOpen=true" class="flex gap-2" isHighlighted wire:target>
-                        {{ $buttonTitle }}
+                        {{ __($buttonTitle) }}
                     </x-forms.button>
                 @endif
             @else
@@ -205,7 +208,7 @@
                 x-transition:leave-end="opacity-0 -translate-y-2 sm:scale-95"
                 class="relative w-full border rounded-none sm:rounded-sm min-w-full lg:min-w-[36rem] max-w-full sm:max-w-[48rem] h-screen sm:h-auto max-h-screen sm:max-h-[calc(100vh-2rem)] bg-neutral-100 border-neutral-400 dark:bg-base dark:border-coolgray-300 flex flex-col">
                 <div class="flex justify-between items-center py-6 px-7 shrink-0">
-                    <h3 class="pr-8 text-2xl font-bold">{{ $title }}</h3>
+                    <h3 class="pr-8 text-2xl font-bold">{{ __($title) }}</h3>
                     <button @click="modalOpen = false; resetModal()"
                         class="flex absolute top-2 right-2 justify-center items-center w-8 h-8 rounded-full dark:text-white hover:bg-coolgray-300">
                         <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -230,7 +233,7 @@
                             <div class="flex flex-wrap gap-2 justify-between mt-4">
                                 <x-forms.button @click="modalOpen = false; resetModal()"
                                     class="w-24 dark:bg-coolgray-200 dark:hover:bg-coolgray-300">
-                                    Cancel
+                                    {{ __('Cancel') }}
                                 </x-forms.button>
                                 <x-forms.button @click="step++" class="w-auto" isError>
                                     <span x-text="step1ButtonText"></span>
@@ -241,10 +244,10 @@
 
                     <!-- Step 2: Confirm deletion -->
                     <div x-show="step === 2">
-                        <x-callout type="danger" title="Warning" class="mb-4">
-                            {!! $warningMessage ?: 'This operation is permanent and cannot be undone. Please think again before proceeding!' !!}
+                        <x-callout type="danger" :title="__('Warning')" class="mb-4">
+                            {!! $warningMessage ?: __('This operation is permanent and cannot be undone. Please think again before proceeding!') !!}
                         </x-callout>
-                        <div class="mb-4">The following actions will be performed:</div>
+                        <div class="mb-4">{{ __('The following actions will be performed:') }}</div>
                         <ul class="mb-4 space-y-2">
                             @foreach ($actions as $action)
                                 <li class="flex items-center text-red-500">
@@ -284,8 +287,8 @@
                         @if (!$disableTwoStepConfirmation)
                             @if ($confirmWithText)
                                 <div class="mb-4">
-                                    <h4 class="mb-2 text-lg font-semibold">Confirm Actions</h4>
-                                    <p class="mb-2 text-sm">{{ $confirmationLabel }}</p>
+                                    <h4 class="mb-2 text-lg font-semibold">{{ __('Confirm Actions') }}</h4>
+                                    <p class="mb-2 text-sm">{{ __($confirmationLabel) }}</p>
                                     <div class="relative mb-2" x-data="{ decodedText: confirmationText }">
                                         <div class="relative">
                                             <input type="text" x-model="decodedText" readonly class="input">
@@ -305,7 +308,7 @@
 
                                     <label for="userConfirmationText"
                                         class="block mt-4 text-sm font-medium text-gray-700 dark:text-gray-300">
-                                        {{ $shortConfirmationLabel }}
+                                        {{ __($shortConfirmationLabel) }}
                                     </label>
                                     <input type="text" x-model="userConfirmationText"
                                         class="p-2 mt-1 px-3 w-full  rounded-sm input">
@@ -317,12 +320,12 @@
                             @if (!empty($checkboxes))
                                 <x-forms.button @click="step--"
                                     class="w-24 dark:bg-coolgray-200 dark:hover:bg-coolgray-300">
-                                    Back
+                                    {{ __('Back') }}
                                 </x-forms.button>
                             @else
                                 <x-forms.button @click="modalOpen = false; resetModal()"
                                     class="w-24 dark:bg-coolgray-200 dark:hover:bg-coolgray-300">
-                                    Cancel
+                                    {{ __('Cancel') }}
                                 </x-forms.button>
                             @endif
                             <x-forms.button
@@ -347,7 +350,7 @@
                                     }
                                 ">
                                 <span x-show="!submitting" x-text="step2ButtonText"></span>
-                                <x-loading x-show="submitting" text="Processing..." />
+                                <x-loading x-show="submitting" :text="__('Processing...')" />
                             </x-forms.button>
                         </div>
                     </div>
@@ -355,8 +358,8 @@
                     <!-- Step 3: Password confirmation -->
                     @if (!$skipPasswordConfirmation)
                         <div x-show="step === 3 && confirmWithPassword">
-                            <x-callout type="danger" title="Final Confirmation" class="mb-4">
-                                Please enter your password to confirm this destructive action.
+                            <x-callout type="danger" :title="__('Final Confirmation')" class="mb-4">
+                                {{ __('Please enter your password to confirm this destructive action.') }}
                             </x-callout>
                             <div class="flex flex-col gap-2 mb-4">
                                 @php
@@ -364,13 +367,13 @@
                                 @endphp
                                 <label for="password-confirm-{{ $passwordConfirm }}"
                                     class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                    Your Password
+                                    {{ __('Your Password') }}
                                 </label>
                                 <form @submit.prevent="false" @keydown.enter.prevent>
                                     <input type="text" name="username" autocomplete="username"
                                         value="{{ auth()->user()->email }}" style="display: none;">
                                     <input type="password" id="password-confirm-{{ $passwordConfirm }}"
-                                        x-model="password" class="w-full input" placeholder="Enter your password"
+                                        x-model="password" class="w-full input" placeholder="{{ __('Enter your password') }}"
                                         autocomplete="current-password">
                                 </form>
                                 <p x-show="passwordError" x-text="passwordError" class="mt-1 text-sm text-red-500">
@@ -383,7 +386,7 @@
                             <div class="flex flex-wrap gap-2 justify-between mt-4">
                                 <x-forms.button @click="step--"
                                     class="w-24 dark:bg-coolgray-200 dark:hover:bg-coolgray-300">
-                                    Back
+                                    {{ __('Back') }}
                                 </x-forms.button>
                                 <x-forms.button x-bind:disabled="!password || submitting" class="w-auto" isError
                                     @click="
@@ -405,7 +408,7 @@
                                     });
                                     ">
                                     <span x-show="!submitting" x-text="step3ButtonText"></span>
-                                    <x-loading x-show="submitting" text="Processing..." />
+                                    <x-loading x-show="submitting" :text="__('Processing...')" />
                                 </x-forms.button>
                             </div>
                         </div>

@@ -97,7 +97,7 @@ class DeploymentNavbar extends Component
 
                 $new_log_entry = [
                     'command' => $kill_command,
-                    'output' => 'Deployment cancelled by user.',
+                    'output' => __('Deployment cancelled by user.'),
                     'type' => 'stderr',
                     'order' => count($previous_logs) + 1,
                     'timestamp' => Carbon::now('UTC'),

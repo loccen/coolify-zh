@@ -2,7 +2,10 @@
 
 namespace App\Livewire\Project\Shared\ScheduledTask;
 
+use App\Models\Application;
 use App\Models\ScheduledTask;
+use App\Models\Service;
+use App\Models\StandalonePostgresql;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Locked;
@@ -44,6 +47,19 @@ class Add extends Component
         'timeout' => 'required|integer|min:60|max:36000',
     ];
 
+    protected function messages(): array
+    {
+        return [
+            'name.required' => __('The scheduled task name field is required.'),
+            'command.required' => __('The scheduled task command field is required.'),
+            'frequency.required' => __('The scheduled task frequency field is required.'),
+            'timeout.required' => __('The scheduled task timeout field is required.'),
+            'timeout.integer' => __('The scheduled task timeout must be an integer.'),
+            'timeout.min' => __('The scheduled task timeout must be at least :min seconds.'),
+            'timeout.max' => __('The scheduled task timeout must not be greater than :max seconds.'),
+        ];
+    }
+
     protected $validationAttributes = [
         'name' => 'name',
         'command' => 'command',
@@ -59,16 +75,16 @@ class Add extends Component
         // Get the resource based on type and id
         switch ($this->type) {
             case 'application':
-                $this->resource = \App\Models\Application::findOrFail($this->id);
+                $this->resource = Application::findOrFail($this->id);
                 break;
             case 'service':
-                $this->resource = \App\Models\Service::findOrFail($this->id);
+                $this->resource = Service::findOrFail($this->id);
                 break;
             case 'standalone-postgresql':
-                $this->resource = \App\Models\StandalonePostgresql::findOrFail($this->id);
+                $this->resource = StandalonePostgresql::findOrFail($this->id);
                 break;
             default:
-                throw new \Exception('Invalid resource type');
+                throw new \Exception(__('Invalid resource type.'));
         }
 
         if ($this->containerNames->count() > 0) {
@@ -83,7 +99,7 @@ class Add extends Component
             $this->validate();
             $isValid = validate_cron_expression($this->frequency);
             if (! $isValid) {
-                $this->dispatch('error', 'Invalid Cron / Human expression.');
+                $this->dispatch('error', __('Invalid Cron / Human expression.'));
 
                 return;
             }
@@ -123,7 +139,7 @@ class Add extends Component
             }
             $task->save();
             $this->dispatch('refreshTasks');
-            $this->dispatch('success', 'Scheduled task added.');
+            $this->dispatch('success', __('Scheduled task added.'));
         } catch (\Throwable $e) {
             return handleError($e, $this);
         }

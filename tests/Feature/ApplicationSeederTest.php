@@ -30,14 +30,14 @@ it('seeds a railpack nodejs fastify example alongside the existing nixpacks exam
 
     expect($nixpacksExample)
         ->not->toBeNull()
-        ->and($nixpacksExample->name)->toBe('NodeJS Fastify Example')
+        ->and($nixpacksExample->name)->toBe('NodeJS Fastify 示例')
         ->and($nixpacksExample->build_pack)->toBe('nixpacks')
         ->and($nixpacksExample->base_directory)->toBe('/nodejs')
         ->and($nixpacksExample->ports_exposes)->toBe('3000');
 
     expect($railpackExample)
         ->not->toBeNull()
-        ->and($railpackExample->name)->toBe('Railpack NodeJS Fastify Example')
+        ->and($railpackExample->name)->toBe('Railpack NodeJS Fastify 示例')
         ->and($railpackExample->fqdn)->toBe('http://railpack-nodejs.127.0.0.1.sslip.io')
         ->and($railpackExample->repository_project_id)->toBe(603035348)
         ->and($railpackExample->git_repository)->toBe('coollabsio/coolify-examples')

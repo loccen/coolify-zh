@@ -6,22 +6,39 @@ use App\Actions\Stripe\CancelSubscription;
 use App\Actions\User\DeleteUserResources;
 use App\Actions\User\DeleteUserServers;
 use App\Actions\User\DeleteUserTeams;
+use App\Models\Application;
+use App\Models\Service;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
 class AdminDeleteUser extends Command
 {
     protected $signature = 'admin:delete-user {email}
-                            {--dry-run : Preview what will be deleted without actually deleting}
-                            {--skip-stripe : Skip Stripe subscription cancellation}
-                            {--skip-resources : Skip resource deletion}
-                            {--auto-confirm : Skip all confirmation prompts between phases}
-                            {--force : Bypass the lock check and force deletion (use with caution)}';
+                            {--dry-run}
+                            {--skip-stripe}
+                            {--skip-resources}
+                            {--auto-confirm}
+                            {--force}';
 
-    protected $description = 'Delete a user with comprehensive resource cleanup and phase-by-phase confirmation (works on cloud and self-hosted)';
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->setDescription(trans('console.admin_delete_user.description', locale: app()->getLocale()));
+        $this->setDefinition([
+            new InputArgument('email', InputArgument::REQUIRED, trans('console.admin_delete_user.arguments.email', locale: app()->getLocale())),
+            new InputOption('dry-run', null, InputOption::VALUE_NONE, trans('console.admin_delete_user.options.dry_run', locale: app()->getLocale())),
+            new InputOption('skip-stripe', null, InputOption::VALUE_NONE, trans('console.admin_delete_user.options.skip_stripe', locale: app()->getLocale())),
+            new InputOption('skip-resources', null, InputOption::VALUE_NONE, trans('console.admin_delete_user.options.skip_resources', locale: app()->getLocale())),
+            new InputOption('auto-confirm', null, InputOption::VALUE_NONE, trans('console.admin_delete_user.options.auto_confirm', locale: app()->getLocale())),
+            new InputOption('force', null, InputOption::VALUE_NONE, trans('console.admin_delete_user.options.force', locale: app()->getLocale())),
+        ]);
+    }
 
     private bool $isDryRun = false;
 
@@ -55,42 +72,42 @@ class AdminDeleteUser extends Command
         $force = $this->option('force');
 
         if ($force) {
-            $this->warn('⚠️  FORCE MODE - Lock check will be bypassed');
-            $this->warn('   Use this flag only if you are certain no other deletion is running');
+            $this->warn(trans('console.admin_delete_user.intro.force_mode_title'));
+            $this->warn(trans('console.admin_delete_user.intro.force_mode_warning'));
             $this->newLine();
         }
 
         if ($this->isDryRun) {
-            $this->info('🔍 DRY RUN MODE - No data will be deleted');
+            $this->info(trans('console.admin_delete_user.intro.dry_run_mode'));
             $this->newLine();
         }
 
         if ($this->output->isVerbose()) {
-            $this->info('📊 VERBOSE MODE - Full stack traces will be shown on errors');
+            $this->info(trans('console.admin_delete_user.intro.verbose_mode'));
             $this->newLine();
         } else {
-            $this->comment('💡 Tip: Use -v flag for detailed error stack traces');
+            $this->comment(trans('console.admin_delete_user.intro.verbose_tip'));
             $this->newLine();
         }
 
         if (! $this->isDryRun && ! $this->option('auto-confirm')) {
-            $this->info('🔄 INTERACTIVE MODE - You will be asked to confirm after each phase');
-            $this->comment('   Use --auto-confirm to skip phase confirmations');
+            $this->info(trans('console.admin_delete_user.intro.interactive_mode'));
+            $this->comment(trans('console.admin_delete_user.intro.auto_confirm_tip'));
             $this->newLine();
         }
 
         // Notify about instance type and Stripe
         if (isCloud()) {
-            $this->comment('☁️  Cloud instance - Stripe subscriptions will be handled');
+            $this->comment(trans('console.admin_delete_user.intro.cloud_instance'));
         } else {
-            $this->comment('🏠 Self-hosted instance - Stripe operations will be skipped');
+            $this->comment(trans('console.admin_delete_user.intro.self_hosted_instance'));
         }
         $this->newLine();
 
         try {
             $this->user = User::whereEmail($email)->firstOrFail();
         } catch (\Exception $e) {
-            $this->error("User with email '{$email}' not found.");
+            $this->error(trans('console.admin_delete_user.gate.user_not_found', ['email' => $email]));
 
             return 1;
         }
@@ -101,8 +118,8 @@ class AdminDeleteUser extends Command
 
         if (! $force) {
             if (! $this->lock->get()) {
-                $this->error('Another deletion process is already running for this user.');
-                $this->error('Use --force to bypass this lock (use with extreme caution).');
+                $this->error(trans('console.admin_delete_user.gate.lock_running'));
+                $this->error(trans('console.admin_delete_user.gate.lock_force_tip'));
                 $this->logAction("Deletion blocked for user {$email}: Another process is already running");
 
                 return 1;
@@ -110,8 +127,8 @@ class AdminDeleteUser extends Command
         } else {
             // In force mode, try to get lock but continue even if it fails
             if (! $this->lock->get()) {
-                $this->warn('⚠️  Lock exists but proceeding due to --force flag');
-                $this->warn('   There may be another deletion process running!');
+                $this->warn(trans('console.admin_delete_user.gate.lock_force_proceed'));
+                $this->warn(trans('console.admin_delete_user.gate.lock_force_warning'));
                 $this->newLine();
             }
         }
@@ -121,7 +138,7 @@ class AdminDeleteUser extends Command
 
             // Phase 1: Show User Overview (outside transaction)
             if (! $this->showUserOverview()) {
-                $this->info('User deletion cancelled by operator.');
+                $this->info(trans('console.admin_delete_user.cancel.by_operator'));
 
                 return 0;
             }
@@ -151,10 +168,10 @@ class AdminDeleteUser extends Command
                     // Confirmation to continue after Phase 2
                     if (! $this->skipResources && ! $this->option('auto-confirm')) {
                         $this->newLine();
-                        if (! $this->confirm('Phase 2 completed. Continue to Phase 3 (Delete Servers)?', true)) {
+                        if (! $this->confirm(trans('console.admin_delete_user.confirm.phase_2_to_3'), true)) {
                             DB::rollBack();
-                            $this->info('User deletion cancelled by operator after Phase 2.');
-                            $this->info('Database changes have been rolled back.');
+                            $this->info(trans('console.admin_delete_user.cancel.after_phase_2'));
+                            $this->info(trans('console.admin_delete_user.cancel.database_rolled_back'));
 
                             return 0;
                         }
@@ -176,10 +193,10 @@ class AdminDeleteUser extends Command
                     // Confirmation to continue after Phase 3
                     if (! $this->option('auto-confirm')) {
                         $this->newLine();
-                        if (! $this->confirm('Phase 3 completed. Continue to Phase 4 (Handle Teams)?', true)) {
+                        if (! $this->confirm(trans('console.admin_delete_user.confirm.phase_3_to_4'), true)) {
                             DB::rollBack();
-                            $this->info('User deletion cancelled by operator after Phase 3.');
-                            $this->info('Database changes have been rolled back.');
+                            $this->info(trans('console.admin_delete_user.cancel.after_phase_3'));
+                            $this->info(trans('console.admin_delete_user.cancel.database_rolled_back'));
 
                             return 0;
                         }
@@ -199,10 +216,10 @@ class AdminDeleteUser extends Command
                     // Confirmation to continue after Phase 4
                     if (! $this->option('auto-confirm')) {
                         $this->newLine();
-                        if (! $this->confirm('Phase 4 completed. Continue to Phase 5 (Delete User Profile)?', true)) {
+                        if (! $this->confirm(trans('console.admin_delete_user.confirm.phase_4_to_5'), true)) {
                             DB::rollBack();
-                            $this->info('User deletion cancelled by operator after Phase 4.');
-                            $this->info('Database changes have been rolled back.');
+                            $this->info(trans('console.admin_delete_user.cancel.after_phase_4'));
+                            $this->info(trans('console.admin_delete_user.cancel.database_rolled_back'));
 
                             return 0;
                         }
@@ -222,15 +239,16 @@ class AdminDeleteUser extends Command
                     // CRITICAL CONFIRMATION: Database commit is next (PERMANENT)
                     if (! $this->option('auto-confirm')) {
                         $this->newLine();
-                        $this->warn('⚠️  CRITICAL DECISION POINT');
-                        $this->warn('Next step: COMMIT database changes (PERMANENT and IRREVERSIBLE)');
-                        $this->warn('All resources, servers, teams, and user profile will be permanently deleted');
+                        $this->warn(trans('console.admin_delete_user.commit.critical_decision_point'));
+                        $this->warn(trans('console.admin_delete_user.commit.next_step'));
+                        $this->warn(trans('console.admin_delete_user.commit.cannot_be_undone'));
+                        $this->warn(trans('console.admin_delete_user.commit.permanent_delete_warning'));
                         $this->newLine();
-                        if (! $this->confirm('Phase 5 completed. Commit database changes? (THIS IS PERMANENT)', false)) {
+                        if (! $this->confirm(trans('console.admin_delete_user.confirm.phase_5_commit'), false)) {
                             DB::rollBack();
-                            $this->info('User deletion cancelled by operator before commit.');
-                            $this->info('Database changes have been rolled back.');
-                            $this->warn('⚠️  Note: Some Docker containers may have been deleted on remote servers.');
+                            $this->info(trans('console.admin_delete_user.cancel.before_commit'));
+                            $this->info(trans('console.admin_delete_user.cancel.database_rolled_back'));
+                            $this->warn(trans('console.admin_delete_user.commit.pre_commit_remote_warning'));
 
                             return 0;
                         }
@@ -242,20 +260,19 @@ class AdminDeleteUser extends Command
 
                     $this->newLine();
                     $this->info('✅ Database operations completed successfully!');
-                    $this->info('✅ Transaction committed - database changes are now PERMANENT.');
+                    $this->info(trans('console.admin_delete_user.commit.transaction_committed'));
                     $this->logAction("Database deletion completed for: {$email}");
 
                     // Confirmation to continue to Stripe (after commit)
                     if (! $this->skipStripe && isCloud() && ! $this->option('auto-confirm')) {
                         $this->newLine();
-                        $this->warn('⚠️  Database changes are committed (permanent)');
-                        $this->info('Next: Cancel Stripe subscriptions');
-                        if (! $this->confirm('Continue to Phase 6 (Cancel Stripe Subscriptions)?', true)) {
-                            $this->warn('User deletion stopped after database commit.');
-                            $this->error('⚠️  IMPORTANT: User deleted from database but Stripe subscriptions remain active!');
-                            $this->error('You must cancel subscriptions manually in Stripe Dashboard.');
-                            $this->error('Go to: https://dashboard.stripe.com/');
-                            $this->error('Search for: '.$email);
+                        $this->warn(trans('console.admin_delete_user.commit.post_commit_warning'));
+                        $this->info(trans('console.admin_delete_user.commit.next_stripe_step'));
+                        if (! $this->confirm(trans('console.admin_delete_user.confirm.phase_6_stripe'), true)) {
+                            $this->warn(trans('console.admin_delete_user.stripe.stopped_after_commit'));
+                            $this->error(trans('console.admin_delete_user.stripe.subscriptions_still_active'));
+                            $this->error(trans('console.admin_delete_user.stripe.manual_dashboard_step').': https://dashboard.stripe.com/');
+                            $this->error(trans('console.admin_delete_user.stripe.manual_search_step').': '.$email);
 
                             return 1;
                         }
@@ -268,18 +285,18 @@ class AdminDeleteUser extends Command
                         if (! $this->cancelStripeSubscriptions()) {
                             $this->newLine();
                             $this->error('═══════════════════════════════════════');
-                            $this->error('⚠️  CRITICAL: INCONSISTENT STATE DETECTED');
+                            $this->error(trans('console.admin_delete_user.stripe.inconsistent_state'));
                             $this->error('═══════════════════════════════════════');
-                            $this->error('✓ User data DELETED from database (committed)');
-                            $this->error('✗ Stripe subscription cancellation FAILED');
+                            $this->error(trans('console.admin_delete_user.stripe.database_deleted'));
+                            $this->error(trans('console.admin_delete_user.stripe.cancellation_failed'));
                             $this->newLine();
                             $this->displayErrorState('Phase 6: Stripe Cancellation (Post-Commit)');
                             $this->newLine();
-                            $this->error('MANUAL ACTION REQUIRED:');
-                            $this->error('1. Go to Stripe Dashboard: https://dashboard.stripe.com/');
-                            $this->error('2. Search for customer email: '.$email);
-                            $this->error('3. Cancel all active subscriptions');
-                            $this->error('4. Check storage/logs/user-deletions.log for subscription IDs');
+                            $this->error(trans('console.admin_delete_user.stripe.manual_action_required'));
+                            $this->error('1. '.trans('console.admin_delete_user.stripe.manual_dashboard_step').': https://dashboard.stripe.com/');
+                            $this->error('2. '.trans('console.admin_delete_user.stripe.manual_search_customer_step').': '.$email);
+                            $this->error('3. '.trans('console.admin_delete_user.stripe.manual_cancel_step'));
+                            $this->error('4. '.trans('console.admin_delete_user.stripe.manual_check_log_step'));
                             $this->newLine();
                             $this->logAction("INCONSISTENT STATE: User {$email} deleted but Stripe cancellation failed");
 
@@ -308,7 +325,7 @@ class AdminDeleteUser extends Command
                         $this->error($e->getTraceAsString());
                         $this->newLine();
                     } else {
-                        $this->info('Run with -v for full stack trace');
+                        $this->info(trans('console.admin_delete_user.intro.verbose_retry_tip'));
                         $this->newLine();
                     }
 
@@ -374,7 +391,7 @@ class AdminDeleteUser extends Command
     private function showUserOverview(): bool
     {
         $this->info('═══════════════════════════════════════');
-        $this->info('PHASE 1: USER OVERVIEW');
+        $this->info(trans('console.admin_delete_user.overview.phase_title'));
         $this->info('═══════════════════════════════════════');
         $this->newLine();
 
@@ -410,9 +427,9 @@ class AdminDeleteUser extends Command
             foreach ($servers as $server) {
                 $resources = $server->definedResources();
                 foreach ($resources as $resource) {
-                    if ($resource instanceof \App\Models\Application) {
+                    if ($resource instanceof Application) {
                         $allApplications->push($resource);
-                    } elseif ($resource instanceof \App\Models\Service) {
+                    } elseif ($resource instanceof Service) {
                         $allServices->push($resource);
                     } else {
                         $allDatabases->push($resource);
@@ -428,32 +445,35 @@ class AdminDeleteUser extends Command
 
         // Build table data
         $tableData = [
-            ['User', $this->user->email],
-            ['User ID', $this->user->id],
-            ['Created', $this->user->created_at->format('Y-m-d H:i:s')],
-            ['Last Login', $this->user->updated_at->format('Y-m-d H:i:s')],
-            ['Teams (Total)', $teams->count()],
-            ['Teams (Owner)', $ownedTeams->count()],
-            ['Teams (Member)', $memberTeams->count()],
-            ['Servers', $allServers->unique('id')->count()],
-            ['Applications', $allApplications->count()],
-            ['Databases', $allDatabases->count()],
-            ['Services', $allServices->count()],
+            [trans('console.admin_delete_user.overview.fields.user'), $this->user->email],
+            [trans('console.admin_delete_user.overview.fields.user_id'), $this->user->id],
+            [trans('console.admin_delete_user.overview.fields.created'), $this->user->created_at->format('Y-m-d H:i:s')],
+            [trans('console.admin_delete_user.overview.fields.last_login'), $this->user->updated_at->format('Y-m-d H:i:s')],
+            [trans('console.admin_delete_user.overview.fields.teams_total'), $teams->count()],
+            [trans('console.admin_delete_user.overview.fields.teams_owner'), $ownedTeams->count()],
+            [trans('console.admin_delete_user.overview.fields.teams_member'), $memberTeams->count()],
+            [trans('console.admin_delete_user.overview.fields.servers'), $allServers->unique('id')->count()],
+            [trans('console.admin_delete_user.overview.fields.applications'), $allApplications->count()],
+            [trans('console.admin_delete_user.overview.fields.databases'), $allDatabases->count()],
+            [trans('console.admin_delete_user.overview.fields.services'), $allServices->count()],
         ];
 
         // Only show Stripe subscriptions on cloud instances
         if (isCloud()) {
-            $tableData[] = ['Active Stripe Subscriptions', $activeSubscriptions->count()];
+            $tableData[] = [trans('console.admin_delete_user.overview.fields.active_stripe_subscriptions'), $activeSubscriptions->count()];
         }
 
-        $this->table(['Property', 'Value'], $tableData);
+        $this->table([
+            trans('console.admin_delete_user.overview.table_headers.property'),
+            trans('console.admin_delete_user.overview.table_headers.value'),
+        ], $tableData);
 
         $this->newLine();
 
-        $this->warn('⚠️  WARNING: This will permanently delete the user and all associated data!');
+        $this->warn(trans('console.admin_delete_user.overview.permanent_warning'));
         $this->newLine();
 
-        if (! $this->confirm('Do you want to continue with the deletion process?', false)) {
+        if (! $this->confirm(trans('console.admin_delete_user.overview.continue_prompt'), false)) {
             return false;
         }
 
@@ -464,7 +484,7 @@ class AdminDeleteUser extends Command
     {
         $this->newLine();
         $this->info('═══════════════════════════════════════');
-        $this->info('PHASE 2: DELETE RESOURCES');
+        $this->info(trans('console.admin_delete_user.resources.phase_title'));
         $this->info('═══════════════════════════════════════');
         $this->newLine();
 
@@ -474,18 +494,23 @@ class AdminDeleteUser extends Command
         if ($resources['applications']->isEmpty() &&
             $resources['databases']->isEmpty() &&
             $resources['services']->isEmpty()) {
-            $this->info('No resources to delete.');
+            $this->info(trans('console.admin_delete_user.resources.no_resources'));
 
             return true;
         }
 
-        $this->info('Resources to be deleted:');
+        $this->info(trans('console.admin_delete_user.resources.summary_title'));
         $this->newLine();
 
         if ($resources['applications']->isNotEmpty()) {
-            $this->warn("Applications to be deleted ({$resources['applications']->count()}):");
+            $this->warn(trans('console.admin_delete_user.resources.applications_title', ['count' => $resources['applications']->count()]));
             $this->table(
-                ['Name', 'UUID', 'Server', 'Status'],
+                [
+                    trans('console.admin_delete_user.resources.table_headers.name'),
+                    trans('console.admin_delete_user.resources.table_headers.uuid'),
+                    trans('console.admin_delete_user.resources.table_headers.server'),
+                    trans('console.admin_delete_user.resources.table_headers.status'),
+                ],
                 $resources['applications']->map(function ($app) {
                     return [
                         $app->name,
@@ -499,9 +524,14 @@ class AdminDeleteUser extends Command
         }
 
         if ($resources['databases']->isNotEmpty()) {
-            $this->warn("Databases to be deleted ({$resources['databases']->count()}):");
+            $this->warn(trans('console.admin_delete_user.resources.databases_title', ['count' => $resources['databases']->count()]));
             $this->table(
-                ['Name', 'Type', 'UUID', 'Server'],
+                [
+                    trans('console.admin_delete_user.resources.table_headers.name'),
+                    trans('console.admin_delete_user.resources.table_headers.type'),
+                    trans('console.admin_delete_user.resources.table_headers.uuid'),
+                    trans('console.admin_delete_user.resources.table_headers.server'),
+                ],
                 $resources['databases']->map(function ($db) {
                     return [
                         $db->name,
@@ -515,9 +545,13 @@ class AdminDeleteUser extends Command
         }
 
         if ($resources['services']->isNotEmpty()) {
-            $this->warn("Services to be deleted ({$resources['services']->count()}):");
+            $this->warn(trans('console.admin_delete_user.resources.services_title', ['count' => $resources['services']->count()]));
             $this->table(
-                ['Name', 'UUID', 'Server'],
+                [
+                    trans('console.admin_delete_user.resources.table_headers.name'),
+                    trans('console.admin_delete_user.resources.table_headers.uuid'),
+                    trans('console.admin_delete_user.resources.table_headers.server'),
+                ],
                 $resources['services']->map(function ($service) {
                     return [
                         $service->name,
@@ -529,25 +563,29 @@ class AdminDeleteUser extends Command
             $this->newLine();
         }
 
-        $this->error('⚠️  THIS ACTION CANNOT BE UNDONE!');
-        if (! $this->confirm('Are you sure you want to delete all these resources?', false)) {
+        $this->error(trans('console.admin_delete_user.resources.irreversible_warning'));
+        if (! $this->confirm(trans('console.admin_delete_user.resources.confirm_delete_all'), false)) {
             return false;
         }
 
         if (! $this->isDryRun) {
-            $this->info('Deleting resources...');
+            $this->info(trans('console.admin_delete_user.resources.deleting'));
             try {
                 $result = $action->execute();
-                $this->info("✓ Deleted: {$result['applications']} applications, {$result['databases']} databases, {$result['services']} services");
+                $this->info(trans('console.admin_delete_user.resources.deleted_summary', [
+                    'applications' => $result['applications'],
+                    'databases' => $result['databases'],
+                    'services' => $result['services'],
+                ]));
                 $this->logAction("Deleted resources for user {$this->user->email}: {$result['applications']} apps, {$result['databases']} databases, {$result['services']} services");
             } catch (\Exception $e) {
-                $this->error('Failed to delete resources:');
-                $this->error('Exception: '.get_class($e));
-                $this->error('Message: '.$e->getMessage());
-                $this->error('File: '.$e->getFile().':'.$e->getLine());
+                $this->error(trans('console.admin_delete_user.resources.delete_failed'));
+                $this->error(trans('console.admin_delete_user.resources.exception_label').': '.get_class($e));
+                $this->error(trans('console.admin_delete_user.resources.message_label').': '.$e->getMessage());
+                $this->error(trans('console.admin_delete_user.resources.file_label').': '.$e->getFile().':'.$e->getLine());
 
                 if ($this->output->isVerbose()) {
-                    $this->error('Stack Trace:');
+                    $this->error(trans('console.admin_delete_user.resources.stack_trace_label'));
                     $this->error($e->getTraceAsString());
                 }
 
@@ -562,7 +600,7 @@ class AdminDeleteUser extends Command
     {
         $this->newLine();
         $this->info('═══════════════════════════════════════');
-        $this->info('PHASE 3: DELETE SERVERS');
+        $this->info(trans('console.admin_delete_user.servers.phase_title'));
         $this->info('═══════════════════════════════════════');
         $this->newLine();
 
@@ -570,14 +608,20 @@ class AdminDeleteUser extends Command
         $servers = $action->getServersPreview();
 
         if ($servers->isEmpty()) {
-            $this->info('No servers to delete.');
+            $this->info(trans('console.admin_delete_user.servers.no_servers'));
 
             return true;
         }
 
-        $this->warn("Servers to be deleted ({$servers->count()}):");
+        $this->warn(trans('console.admin_delete_user.servers.summary_title', ['count' => $servers->count()]));
         $this->table(
-            ['ID', 'Name', 'IP', 'Description', 'Resources Count'],
+            [
+                trans('console.admin_delete_user.servers.table_headers.id'),
+                trans('console.admin_delete_user.servers.table_headers.name'),
+                trans('console.admin_delete_user.servers.table_headers.ip'),
+                trans('console.admin_delete_user.servers.table_headers.description'),
+                trans('console.admin_delete_user.servers.table_headers.resources_count'),
+            ],
             $servers->map(function ($server) {
                 $resourceCount = $server->definedResources()->count();
 
@@ -592,25 +636,25 @@ class AdminDeleteUser extends Command
         );
         $this->newLine();
 
-        $this->error('⚠️  WARNING: Deleting servers will remove all server configurations!');
-        if (! $this->confirm('Are you sure you want to delete all these servers?', false)) {
+        $this->error(trans('console.admin_delete_user.servers.irreversible_warning'));
+        if (! $this->confirm(trans('console.admin_delete_user.servers.confirm_delete_all'), false)) {
             return false;
         }
 
         if (! $this->isDryRun) {
-            $this->info('Deleting servers...');
+            $this->info(trans('console.admin_delete_user.servers.deleting'));
             try {
                 $result = $action->execute();
-                $this->info("✓ Deleted {$result['servers']} servers");
+                $this->info(trans('console.admin_delete_user.servers.deleted_summary', ['count' => $result['servers']]));
                 $this->logAction("Deleted {$result['servers']} servers for user {$this->user->email}");
             } catch (\Exception $e) {
-                $this->error('Failed to delete servers:');
-                $this->error('Exception: '.get_class($e));
-                $this->error('Message: '.$e->getMessage());
-                $this->error('File: '.$e->getFile().':'.$e->getLine());
+                $this->error(trans('console.admin_delete_user.servers.delete_failed'));
+                $this->error(trans('console.admin_delete_user.servers.exception_label').': '.get_class($e));
+                $this->error(trans('console.admin_delete_user.servers.message_label').': '.$e->getMessage());
+                $this->error(trans('console.admin_delete_user.servers.file_label').': '.$e->getFile().':'.$e->getLine());
 
                 if ($this->output->isVerbose()) {
-                    $this->error('Stack Trace:');
+                    $this->error(trans('console.admin_delete_user.servers.stack_trace_label'));
                     $this->error($e->getTraceAsString());
                 }
 
@@ -625,7 +669,7 @@ class AdminDeleteUser extends Command
     {
         $this->newLine();
         $this->info('═══════════════════════════════════════');
-        $this->info('PHASE 4: HANDLE TEAMS');
+        $this->info(trans('console.admin_delete_user.teams.phase_title'));
         $this->info('═══════════════════════════════════════');
         $this->newLine();
 
@@ -635,21 +679,28 @@ class AdminDeleteUser extends Command
         // Check for edge cases first - EXIT IMMEDIATELY if found
         if ($preview['edge_cases']->isNotEmpty()) {
             $this->error('═══════════════════════════════════════');
-            $this->error('⚠️  EDGE CASES DETECTED - CANNOT PROCEED');
+            $this->error(trans('console.admin_delete_user.teams.edge_cases.detected_cannot_proceed'));
             $this->error('═══════════════════════════════════════');
             $this->newLine();
 
             foreach ($preview['edge_cases'] as $edgeCase) {
                 $team = $edgeCase['team'];
                 $reason = $edgeCase['reason'];
-                $this->error("Team: {$team->name} (ID: {$team->id})");
-                $this->error("Issue: {$reason}");
+                $this->error(trans('console.admin_delete_user.teams.edge_cases.team_line', [
+                    'team' => $team->name,
+                    'id' => $team->id,
+                ]));
+                $this->error(trans('console.admin_delete_user.teams.edge_cases.issue_line', ['issue' => $reason]));
 
                 // Show team members for context
-                $this->info('Current members:');
+                $this->info(trans('console.admin_delete_user.teams.edge_cases.current_members'));
                 foreach ($team->members as $member) {
                     $role = $member->pivot->role;
-                    $this->line("  - {$member->name} ({$member->email}) - Role: {$role}");
+                    $this->line(trans('console.admin_delete_user.teams.edge_cases.member_line', [
+                        'name' => $member->name,
+                        'email' => $member->email,
+                        'role' => $role,
+                    ]));
                 }
 
                 // Check for active resources
@@ -660,12 +711,14 @@ class AdminDeleteUser extends Command
                 }
 
                 if ($resourceCount > 0) {
-                    $this->warn("  ⚠️  This team has {$resourceCount} active resources!");
+                    $this->warn(trans('console.admin_delete_user.teams.edge_cases.active_resources_warning', [
+                        'count' => $resourceCount,
+                    ]));
                 }
 
                 // Show subscription details if relevant
                 if ($team->subscription && $team->subscription->stripe_subscription_id) {
-                    $this->warn('  ⚠️  Active Stripe subscription details:');
+                    $this->warn(trans('console.admin_delete_user.teams.edge_cases.active_stripe_subscription_details'));
                     $this->warn("    Subscription ID: {$team->subscription->stripe_subscription_id}");
                     $this->warn("    Customer ID: {$team->subscription->stripe_customer_id}");
 
@@ -677,7 +730,7 @@ class AdminDeleteUser extends Command
                         });
 
                     if ($otherOwners->isNotEmpty()) {
-                        $this->info('  Other owners who could take over billing:');
+                        $this->info(trans('console.admin_delete_user.teams.edge_cases.other_owners_billing'));
                         foreach ($otherOwners as $owner) {
                             $this->line("    - {$owner->name} ({$owner->email})");
                         }
@@ -687,7 +740,7 @@ class AdminDeleteUser extends Command
                 $this->newLine();
             }
 
-            $this->error('Please resolve these issues manually before retrying:');
+            $this->error(trans('console.admin_delete_user.teams.edge_cases.manual_resolution_title'));
 
             // Check if any edge case involves subscription payment issues
             $hasSubscriptionIssue = $preview['edge_cases']->contains(function ($edgeCase) {
@@ -695,10 +748,10 @@ class AdminDeleteUser extends Command
             });
 
             if ($hasSubscriptionIssue) {
-                $this->info('For teams with subscription payment issues:');
-                $this->info('1. Cancel the subscription through Stripe dashboard, OR');
-                $this->info('2. Transfer the subscription to another owner\'s payment method, OR');
-                $this->info('3. Have the other owner create a new subscription after cancelling this one');
+                $this->info(trans('console.admin_delete_user.teams.edge_cases.subscription_payment_issues.title'));
+                $this->info(trans('console.admin_delete_user.teams.edge_cases.subscription_payment_issues.step_1'));
+                $this->info(trans('console.admin_delete_user.teams.edge_cases.subscription_payment_issues.step_2'));
+                $this->info(trans('console.admin_delete_user.teams.edge_cases.subscription_payment_issues.step_3'));
                 $this->newLine();
             }
 
@@ -707,14 +760,14 @@ class AdminDeleteUser extends Command
             });
 
             if ($hasNoOwnerReplacement) {
-                $this->info('For teams with no suitable owner replacement:');
-                $this->info('1. Assign an admin role to a trusted member, OR');
-                $this->info('2. Transfer team resources to another team, OR');
-                $this->info('3. Delete the team manually if no longer needed');
+                $this->info(trans('console.admin_delete_user.teams.edge_cases.no_owner_replacement.title'));
+                $this->info(trans('console.admin_delete_user.teams.edge_cases.no_owner_replacement.step_1'));
+                $this->info(trans('console.admin_delete_user.teams.edge_cases.no_owner_replacement.step_2'));
+                $this->info(trans('console.admin_delete_user.teams.edge_cases.no_owner_replacement.step_3'));
                 $this->newLine();
             }
 
-            $this->error('USER DELETION ABORTED DUE TO EDGE CASES');
+            $this->error(trans('console.admin_delete_user.teams.edge_cases.user_deletion_aborted'));
             $this->logAction("User deletion aborted for {$this->user->email}: Edge cases in team handling");
 
             // Return false to trigger proper cleanup and lock release
@@ -724,15 +777,20 @@ class AdminDeleteUser extends Command
         if ($preview['to_delete']->isEmpty() &&
             $preview['to_transfer']->isEmpty() &&
             $preview['to_leave']->isEmpty()) {
-            $this->info('No team changes needed.');
+            $this->info(trans('console.admin_delete_user.teams.no_changes_needed'));
 
             return true;
         }
 
         if ($preview['to_delete']->isNotEmpty()) {
-            $this->warn('Teams to be DELETED (user is the only member):');
+            $this->warn(trans('console.admin_delete_user.teams.delete_summary_title'));
             $this->table(
-                ['ID', 'Name', 'Resources', 'Subscription'],
+                [
+                    trans('console.admin_delete_user.teams.table_headers.id'),
+                    trans('console.admin_delete_user.teams.table_headers.name'),
+                    trans('console.admin_delete_user.teams.table_headers.resources'),
+                    trans('console.admin_delete_user.teams.table_headers.subscription'),
+                ],
                 $preview['to_delete']->map(function ($team) {
                     $resourceCount = 0;
                     foreach ($team->servers()->get() as $server) {
@@ -754,9 +812,14 @@ class AdminDeleteUser extends Command
         }
 
         if ($preview['to_transfer']->isNotEmpty()) {
-            $this->warn('Teams where ownership will be TRANSFERRED:');
+            $this->warn(trans('console.admin_delete_user.teams.transfer_summary_title'));
             $this->table(
-                ['Team ID', 'Team Name', 'New Owner', 'New Owner Email'],
+                [
+                    trans('console.admin_delete_user.teams.transfer_table_headers.team_id'),
+                    trans('console.admin_delete_user.teams.transfer_table_headers.team_name'),
+                    trans('console.admin_delete_user.teams.transfer_table_headers.new_owner'),
+                    trans('console.admin_delete_user.teams.transfer_table_headers.new_owner_email'),
+                ],
                 $preview['to_transfer']->map(function ($item) {
                     return [
                         $item['team']->id,
@@ -770,10 +833,15 @@ class AdminDeleteUser extends Command
         }
 
         if ($preview['to_leave']->isNotEmpty()) {
-            $this->warn('Teams where user will be REMOVED (other owners/admins exist):');
+            $this->warn(trans('console.admin_delete_user.teams.leave_summary_title'));
             $userId = $this->user->id;
             $this->table(
-                ['ID', 'Name', 'User Role', 'Other Members'],
+                [
+                    trans('console.admin_delete_user.teams.leave_table_headers.id'),
+                    trans('console.admin_delete_user.teams.leave_table_headers.name'),
+                    trans('console.admin_delete_user.teams.leave_table_headers.user_role'),
+                    trans('console.admin_delete_user.teams.leave_table_headers.other_members'),
+                ],
                 $preview['to_leave']->map(function ($team) use ($userId) {
                     $userRole = $team->members->where('id', $userId)->first()->pivot->role;
                     $otherMembers = $team->members->count() - 1;
@@ -789,25 +857,29 @@ class AdminDeleteUser extends Command
             $this->newLine();
         }
 
-        $this->error('⚠️  WARNING: Team changes affect access control and ownership!');
-        if (! $this->confirm('Are you sure you want to proceed with these team changes?', false)) {
+        $this->error(trans('console.admin_delete_user.teams.final_warning'));
+        if (! $this->confirm(trans('console.admin_delete_user.teams.confirm_proceed'), false)) {
             return false;
         }
 
         if (! $this->isDryRun) {
-            $this->info('Processing team changes...');
+            $this->info(trans('console.admin_delete_user.teams.processing'));
             try {
                 $result = $action->execute();
-                $this->info("✓ Teams deleted: {$result['deleted']}, ownership transferred: {$result['transferred']}, left: {$result['left']}");
+                $this->info(trans('console.admin_delete_user.teams.processed_summary', [
+                    'deleted' => $result['deleted'],
+                    'transferred' => $result['transferred'],
+                    'left' => $result['left'],
+                ]));
                 $this->logAction("Team changes for user {$this->user->email}: deleted {$result['deleted']}, transferred {$result['transferred']}, left {$result['left']}");
             } catch (\Exception $e) {
-                $this->error('Failed to process team changes:');
-                $this->error('Exception: '.get_class($e));
-                $this->error('Message: '.$e->getMessage());
-                $this->error('File: '.$e->getFile().':'.$e->getLine());
+                $this->error(trans('console.admin_delete_user.teams.process_failed'));
+                $this->error(trans('console.admin_delete_user.teams.exception_label').': '.get_class($e));
+                $this->error(trans('console.admin_delete_user.teams.message_label').': '.$e->getMessage());
+                $this->error(trans('console.admin_delete_user.teams.file_label').': '.$e->getFile().':'.$e->getLine());
 
                 if ($this->output->isVerbose()) {
-                    $this->error('Stack Trace:');
+                    $this->error(trans('console.admin_delete_user.teams.stack_trace_label'));
                     $this->error($e->getTraceAsString());
                 }
 
@@ -822,7 +894,7 @@ class AdminDeleteUser extends Command
     {
         $this->newLine();
         $this->info('═══════════════════════════════════════');
-        $this->info('PHASE 6: CANCEL STRIPE SUBSCRIPTIONS');
+        $this->info(trans('console.admin_delete_user.stripe.phase_title'));
         $this->info('═══════════════════════════════════════');
         $this->newLine();
 
@@ -830,17 +902,17 @@ class AdminDeleteUser extends Command
         $subscriptions = $action->getSubscriptionsPreview();
 
         if ($subscriptions->isEmpty()) {
-            $this->info('No Stripe subscriptions to cancel.');
+            $this->info(trans('console.admin_delete_user.stripe.no_subscriptions'));
 
             return true;
         }
 
         // Verify subscriptions in Stripe before showing details
-        $this->info('Verifying subscriptions in Stripe...');
+        $this->info(trans('console.admin_delete_user.stripe.verifying'));
         $verification = $action->verifySubscriptionsInStripe();
 
         if (! empty($verification['errors'])) {
-            $this->warn('⚠️  Errors occurred during verification:');
+            $this->warn(trans('console.admin_delete_user.stripe.verification_errors_title'));
             foreach ($verification['errors'] as $error) {
                 $this->warn("  - {$error}");
             }
@@ -848,7 +920,7 @@ class AdminDeleteUser extends Command
         }
 
         if ($verification['not_found']->isNotEmpty()) {
-            $this->warn('⚠️  Subscriptions not found or inactive in Stripe:');
+            $this->warn(trans('console.admin_delete_user.stripe.not_found_or_inactive'));
             foreach ($verification['not_found'] as $item) {
                 $subscription = $item['subscription'];
                 $reason = $item['reason'];
@@ -858,12 +930,12 @@ class AdminDeleteUser extends Command
         }
 
         if ($verification['verified']->isEmpty()) {
-            $this->info('No active subscriptions found in Stripe to cancel.');
+            $this->info(trans('console.admin_delete_user.stripe.no_active_subscriptions'));
 
             return true;
         }
 
-        $this->info('Active Stripe subscriptions to cancel:');
+        $this->info(trans('console.admin_delete_user.stripe.active_subscriptions_title'));
         $this->newLine();
 
         $totalMonthlyValue = 0;
@@ -878,33 +950,36 @@ class AdminDeleteUser extends Command
             $totalMonthlyValue += $monthlyValue;
 
             $this->line("  - {$subscription->stripe_subscription_id} (Team: {$team->name})");
-            $this->line("    Stripe Status: {$stripeStatus}");
+            $this->line(trans('console.admin_delete_user.stripe.status', ['status' => $stripeStatus]));
             if ($monthlyValue > 0) {
-                $this->line("    Monthly value: \${$monthlyValue}");
+                $this->line(trans('console.admin_delete_user.stripe.monthly_value', ['amount' => $monthlyValue]));
             }
             if ($subscription->stripe_cancel_at_period_end) {
-                $this->line('    ⚠️  Already set to cancel at period end');
+                $this->line(trans('console.admin_delete_user.stripe.already_cancel_at_period_end'));
             }
         }
 
         if ($totalMonthlyValue > 0) {
             $this->newLine();
-            $this->warn("Total monthly value: \${$totalMonthlyValue}");
+            $this->warn(trans('console.admin_delete_user.stripe.total_monthly_value', ['amount' => $totalMonthlyValue]));
         }
         $this->newLine();
 
-        $this->error('⚠️  WARNING: Subscriptions will be cancelled IMMEDIATELY (not at period end)!');
-        $this->warn('⚠️  NOTE: This operation happens AFTER database commit and cannot be rolled back!');
-        if (! $this->confirm('Are you sure you want to cancel all these subscriptions immediately?', false)) {
+        $this->error(trans('console.admin_delete_user.stripe.immediate_cancellation_warning'));
+        $this->warn(trans('console.admin_delete_user.stripe.irreversible_note'));
+        if (! $this->confirm(trans('console.admin_delete_user.stripe.confirm_immediate_cancellation'), false)) {
             return false;
         }
 
         if (! $this->isDryRun) {
-            $this->info('Cancelling subscriptions...');
+            $this->info(trans('console.admin_delete_user.stripe.cancelling'));
             $result = $action->execute();
-            $this->info("Cancelled {$result['cancelled']} subscriptions, {$result['failed']} failed");
+            $this->info(trans('console.admin_delete_user.stripe.cancelled_summary', [
+                'cancelled' => $result['cancelled'],
+                'failed' => $result['failed'],
+            ]));
             if ($result['failed'] > 0 && ! empty($result['errors'])) {
-                $this->error('Failed subscriptions:');
+                $this->error(trans('console.admin_delete_user.stripe.failed_subscriptions_title'));
                 foreach ($result['errors'] as $error) {
                     $this->error("  - {$error}");
                 }
@@ -921,52 +996,57 @@ class AdminDeleteUser extends Command
     {
         $this->newLine();
         $this->info('═══════════════════════════════════════');
-        $this->info('PHASE 5: DELETE USER PROFILE');
+        $this->info(trans('console.admin_delete_user.user_profile.phase_title'));
         $this->info('═══════════════════════════════════════');
         $this->newLine();
 
-        $this->warn('⚠️  FINAL STEP - This action is IRREVERSIBLE!');
+        $this->warn(trans('console.admin_delete_user.user_profile.final_warning'));
         $this->newLine();
 
-        $this->info('User profile to be deleted:');
+        $this->info(trans('console.admin_delete_user.user_profile.summary_title'));
         $this->table(
-            ['Property', 'Value'],
             [
-                ['Email', $this->user->email],
-                ['Name', $this->user->name],
-                ['User ID', $this->user->id],
-                ['Created', $this->user->created_at->format('Y-m-d H:i:s')],
-                ['Email Verified', $this->user->email_verified_at ? 'Yes' : 'No'],
-                ['2FA Enabled', $this->user->two_factor_confirmed_at ? 'Yes' : 'No'],
+                trans('console.admin_delete_user.user_profile.table_headers.property'),
+                trans('console.admin_delete_user.user_profile.table_headers.value'),
+            ],
+            [
+                [trans('console.admin_delete_user.user_profile.fields.email'), $this->user->email],
+                [trans('console.admin_delete_user.user_profile.fields.name'), $this->user->name],
+                [trans('console.admin_delete_user.user_profile.fields.user_id'), $this->user->id],
+                [trans('console.admin_delete_user.user_profile.fields.created'), $this->user->created_at->format('Y-m-d H:i:s')],
+                [trans('console.admin_delete_user.user_profile.fields.email_verified'), $this->user->email_verified_at ? 'Yes' : 'No'],
+                [trans('console.admin_delete_user.user_profile.fields.two_factor_enabled'), $this->user->two_factor_confirmed_at ? 'Yes' : 'No'],
             ]
         );
 
         $this->newLine();
 
-        $this->warn("Type 'DELETE {$this->user->email}' to confirm final deletion:");
-        $confirmation = $this->ask('Confirmation');
+        $this->warn(trans('console.admin_delete_user.user_profile.confirmation_instruction', [
+            'confirmation_text' => "DELETE {$this->user->email}",
+        ]));
+        $confirmation = $this->ask(trans('console.admin_delete_user.user_profile.confirmation_label'));
 
         if ($confirmation !== "DELETE {$this->user->email}") {
-            $this->error('Confirmation text does not match. Deletion cancelled.');
+            $this->error(trans('console.admin_delete_user.user_profile.confirmation_mismatch'));
 
             return false;
         }
 
         if (! $this->isDryRun) {
-            $this->info('Deleting user profile...');
+            $this->info(trans('console.admin_delete_user.user_profile.deleting'));
 
             try {
                 $this->user->delete();
-                $this->info('✓ User profile deleted successfully.');
+                $this->info(trans('console.admin_delete_user.user_profile.deleted_successfully'));
                 $this->logAction("User profile deleted: {$this->user->email}");
             } catch (\Exception $e) {
-                $this->error('Failed to delete user profile:');
-                $this->error('Exception: '.get_class($e));
-                $this->error('Message: '.$e->getMessage());
-                $this->error('File: '.$e->getFile().':'.$e->getLine());
+                $this->error(trans('console.admin_delete_user.user_profile.delete_failed'));
+                $this->error(trans('console.admin_delete_user.user_profile.exception_label').': '.get_class($e));
+                $this->error(trans('console.admin_delete_user.user_profile.message_label').': '.$e->getMessage());
+                $this->error(trans('console.admin_delete_user.user_profile.file_label').': '.$e->getFile().':'.$e->getLine());
 
                 if ($this->output->isVerbose()) {
-                    $this->error('Stack Trace:');
+                    $this->error(trans('console.admin_delete_user.user_profile.stack_trace_label'));
                     $this->error($e->getTraceAsString());
                 }
 
@@ -1026,95 +1106,100 @@ class AdminDeleteUser extends Command
     {
         $this->newLine();
         $this->error('═══════════════════════════════════════');
-        $this->error('DELETION STATE AT FAILURE');
+        $this->error(trans('console.admin_delete_user.error_state.title'));
         $this->error('═══════════════════════════════════════');
-        $this->error("Failed at: {$failedAt}");
+        $this->error(trans('console.admin_delete_user.error_state.failed_at', ['phase' => $failedAt]));
         $this->newLine();
 
         $stateTable = [];
         foreach ($this->deletionState as $phase => $completed) {
             $phaseLabel = str_replace('_', ' ', ucwords($phase, '_'));
-            $status = $completed ? '✓ Completed' : '✗ Not completed';
+            $status = $completed
+                ? trans('console.admin_delete_user.error_state.status.completed')
+                : trans('console.admin_delete_user.error_state.status.not_completed');
             $stateTable[] = [$phaseLabel, $status];
         }
 
-        $this->table(['Phase', 'Status'], $stateTable);
+        $this->table([
+            trans('console.admin_delete_user.error_state.table_headers.phase'),
+            trans('console.admin_delete_user.error_state.table_headers.status'),
+        ], $stateTable);
         $this->newLine();
 
         // Show what was rolled back vs what remains
         if ($this->deletionState['db_committed']) {
-            $this->error('⚠️  DATABASE COMMITTED - Changes CANNOT be rolled back!');
+            $this->error(trans('console.admin_delete_user.error_state.database_committed'));
         } else {
-            $this->info('✓ Database changes were ROLLED BACK');
+            $this->info(trans('console.admin_delete_user.error_state.database_rolled_back'));
         }
 
         $this->newLine();
-        $this->error('User email: '.$this->user->email);
-        $this->error('User ID: '.$this->user->id);
-        $this->error('Timestamp: '.now()->format('Y-m-d H:i:s'));
+        $this->error(trans('console.admin_delete_user.error_state.user_email', ['email' => $this->user->email]));
+        $this->error(trans('console.admin_delete_user.error_state.user_id', ['id' => $this->user->id]));
+        $this->error(trans('console.admin_delete_user.error_state.timestamp', ['timestamp' => now()->format('Y-m-d H:i:s')]));
         $this->newLine();
     }
 
     private function displayRecoverySteps(): void
     {
         $this->error('═══════════════════════════════════════');
-        $this->error('RECOVERY STEPS');
+        $this->error(trans('console.admin_delete_user.recovery.title'));
         $this->error('═══════════════════════════════════════');
 
         if (! $this->deletionState['db_committed']) {
-            $this->info('✓ Database was rolled back - no recovery needed for database');
+            $this->info(trans('console.admin_delete_user.recovery.database_rolled_back'));
             $this->newLine();
 
             if ($this->deletionState['phase_2_resources'] || $this->deletionState['phase_3_servers']) {
-                $this->warn('However, some remote operations may have occurred:');
+                $this->warn(trans('console.admin_delete_user.recovery.remote_operations_warning'));
                 $this->newLine();
 
                 if ($this->deletionState['phase_2_resources']) {
-                    $this->warn('Phase 2 (Resources) was attempted:');
-                    $this->warn('- Check remote servers for orphaned Docker containers');
-                    $this->warn('- Use: docker ps -a | grep coolify');
-                    $this->warn('- Manually remove if needed: docker rm -f <container_id>');
+                    $this->warn(trans('console.admin_delete_user.recovery.phase_2_attempted'));
+                    $this->warn(trans('console.admin_delete_user.recovery.check_orphaned_containers'));
+                    $this->warn(trans('console.admin_delete_user.recovery.use_command').': docker ps -a | grep coolify');
+                    $this->warn(trans('console.admin_delete_user.recovery.remove_command').': docker rm -f <container_id>');
                     $this->newLine();
                 }
 
                 if ($this->deletionState['phase_3_servers']) {
-                    $this->warn('Phase 3 (Servers) was attempted:');
-                    $this->warn('- Check for orphaned server configurations');
-                    $this->warn('- Verify SSH access to servers listed for this user');
+                    $this->warn(trans('console.admin_delete_user.recovery.phase_3_attempted'));
+                    $this->warn(trans('console.admin_delete_user.recovery.check_server_configurations'));
+                    $this->warn(trans('console.admin_delete_user.recovery.verify_ssh_access'));
                     $this->newLine();
                 }
             }
         } else {
-            $this->error('⚠️  DATABASE WAS COMMITTED - Manual recovery required!');
+            $this->error(trans('console.admin_delete_user.recovery.database_committed'));
             $this->newLine();
-            $this->error('The following data has been PERMANENTLY deleted:');
+            $this->error(trans('console.admin_delete_user.recovery.permanently_deleted'));
 
             if ($this->deletionState['phase_5_user_profile']) {
-                $this->error('- User profile (email: '.$this->user->email.')');
+                $this->error(trans('console.admin_delete_user.recovery.deleted_user_profile', ['email' => $this->user->email]));
             }
             if ($this->deletionState['phase_4_teams']) {
-                $this->error('- Team memberships and owned teams');
+                $this->error(trans('console.admin_delete_user.recovery.deleted_teams'));
             }
             if ($this->deletionState['phase_3_servers']) {
-                $this->error('- Server records and configurations');
+                $this->error(trans('console.admin_delete_user.recovery.deleted_servers'));
             }
             if ($this->deletionState['phase_2_resources']) {
-                $this->error('- Applications, databases, and services');
+                $this->error(trans('console.admin_delete_user.recovery.deleted_resources'));
             }
 
             $this->newLine();
 
             if (! $this->deletionState['phase_6_stripe']) {
-                $this->error('Stripe subscriptions were NOT cancelled:');
-                $this->error('1. Go to Stripe Dashboard: https://dashboard.stripe.com/');
-                $this->error('2. Search for: '.$this->user->email);
-                $this->error('3. Cancel all active subscriptions manually');
+                $this->error(trans('console.admin_delete_user.recovery.stripe_not_cancelled'));
+                $this->error('1. '.trans('console.admin_delete_user.stripe.manual_dashboard_step').': https://dashboard.stripe.com/');
+                $this->error('2. '.trans('console.admin_delete_user.stripe.manual_search_step').': '.$this->user->email);
+                $this->error('3. '.trans('console.admin_delete_user.recovery.cancel_subscriptions_manually'));
                 $this->newLine();
             }
         }
 
-        $this->error('Log file: storage/logs/user-deletions.log');
-        $this->error('Check logs for detailed error information');
+        $this->error(trans('console.admin_delete_user.recovery.log_file').': storage/logs/user-deletions.log');
+        $this->error(trans('console.admin_delete_user.recovery.check_logs'));
         $this->newLine();
     }
 
@@ -1132,11 +1217,11 @@ class AdminDeleteUser extends Command
         pcntl_signal(SIGINT, function () {
             $this->newLine();
             $this->warn('═══════════════════════════════════════');
-            $this->warn('⚠️  PROCESS INTERRUPTED (Ctrl+C)');
+            $this->warn(trans('console.admin_delete_user.signals.process_interrupted'));
             $this->warn('═══════════════════════════════════════');
-            $this->info('Cleaning up and releasing lock...');
+            $this->info(trans('console.admin_delete_user.signals.cleanup_and_release_lock'));
             $this->releaseLock();
-            $this->info('Lock released. Exiting gracefully.');
+            $this->info(trans('console.admin_delete_user.signals.lock_released_exit_gracefully'));
             exit(130); // Standard exit code for SIGINT
         });
 
@@ -1144,11 +1229,11 @@ class AdminDeleteUser extends Command
         pcntl_signal(SIGTERM, function () {
             $this->newLine();
             $this->warn('═══════════════════════════════════════');
-            $this->warn('⚠️  PROCESS TERMINATED (SIGTERM)');
+            $this->warn(trans('console.admin_delete_user.signals.process_terminated'));
             $this->warn('═══════════════════════════════════════');
-            $this->info('Cleaning up and releasing lock...');
+            $this->info(trans('console.admin_delete_user.signals.cleanup_and_release_lock'));
             $this->releaseLock();
-            $this->info('Lock released. Exiting gracefully.');
+            $this->info(trans('console.admin_delete_user.signals.lock_released_exit_gracefully'));
             exit(143); // Standard exit code for SIGTERM
         });
 

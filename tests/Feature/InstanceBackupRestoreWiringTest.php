@@ -14,6 +14,8 @@ test('instance restore host script exists with rollback and health checks', func
 
 test('instance backup executions component wires local and s3 restore through host script', function () {
     $source = file_get_contents(app_path('Livewire/Project/Database/BackupExecutions.php'));
+    $backupEditView = file_get_contents(resource_path('views/livewire/project/database/backup-edit.blade.php'));
+    $backupExecutionsView = file_get_contents(resource_path('views/livewire/project/database/backup-executions.blade.php'));
     $reflection = new ReflectionClass(BackupExecutions::class);
 
     expect($reflection->hasMethod('restoreLocalBackup'))->toBeTrue();
@@ -25,6 +27,9 @@ test('instance backup executions component wires local and s3 restore through ho
     expect($source)->toContain('nohup sh -lc');
     expect($source)->toContain('/data/coolify/source/restore-instance-');
     expect($source)->toContain("dispatch('instancerestore')");
+    expect($source)->toContain('isInstanceBackup()');
+    expect($backupEditView)->toContain('$backup->isInstanceBackup()');
+    expect($backupExecutionsView)->toContain('$backup->isInstanceBackup()');
 });
 
 test('settings backup page exposes instance restore activity monitor', function () {

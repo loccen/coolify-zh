@@ -21,6 +21,11 @@ class RunScheduledJobsManually extends Command
 
     protected $description = 'Manually run scheduled database backups and tasks when cron fails';
 
+    public function getDescription(): string
+    {
+        return trans('console.run_scheduled_jobs_manually.description');
+    }
+
     public function handle()
     {
         $type = $this->option('type');
@@ -30,11 +35,13 @@ class RunScheduledJobsManually extends Command
         $maxJobs = $this->option('max') ? (int) $this->option('max') : null;
         $dryRun = $this->option('dry-run');
 
-        $this->info('Starting manual execution of scheduled jobs...'.($dryRun ? ' (DRY RUN)' : ''));
+        $this->info(trans('console.run_scheduled_jobs_manually.info.starting', [
+            'suffix' => $dryRun ? trans('console.run_scheduled_jobs_manually.values.dry_run_suffix') : '',
+        ]));
         $this->info("Type: {$type}".($frequency ? ", Frequency: {$frequency}" : '').", Chunk size: {$chunkSize}, Delay: {$delay}s".($maxJobs ? ", Max jobs: {$maxJobs}" : '').($dryRun ? ', Dry run: enabled' : ''));
 
         if ($dryRun) {
-            $this->warn('DRY RUN MODE: No jobs will actually be dispatched');
+            $this->warn(trans('console.run_scheduled_jobs_manually.warn.dry_run_mode'));
         }
 
         if ($type === 'all' || $type === 'backups') {
@@ -45,12 +52,14 @@ class RunScheduledJobsManually extends Command
             $this->runScheduledTasks($chunkSize, $delay, $maxJobs, $dryRun, $frequency);
         }
 
-        $this->info('Completed manual execution of scheduled jobs.'.($dryRun ? ' (DRY RUN)' : ''));
+        $this->info(trans('console.run_scheduled_jobs_manually.info.completed', [
+            'suffix' => $dryRun ? trans('console.run_scheduled_jobs_manually.values.dry_run_suffix') : '',
+        ]));
     }
 
     private function runScheduledBackups(int $chunkSize, int $delay, ?int $maxJobs = null, bool $dryRun = false, ?string $frequency = null): void
     {
-        $this->info('Processing scheduled database backups...');
+        $this->info(trans('console.run_scheduled_jobs_manually.info.processing_scheduled_database_backups'));
 
         $query = ScheduledDatabaseBackup::where('enabled', true);
 
@@ -69,7 +78,9 @@ class RunScheduledJobsManually extends Command
         $scheduled_backups = $query->get();
 
         if ($scheduled_backups->isEmpty()) {
-            $this->info('No enabled scheduled backups found'.($frequency ? " with frequency '{$frequency}'" : '').'.');
+            $this->info(trans('console.run_scheduled_jobs_manually.info.no_enabled_scheduled_backups_found', [
+                'frequency' => $frequency ? trans('console.run_scheduled_jobs_manually.values.with_frequency', ['frequency' => $frequency]) : '',
+            ]));
 
             return;
         }
@@ -141,7 +152,7 @@ class RunScheduledJobsManually extends Command
 
     private function runScheduledTasks(int $chunkSize, int $delay, ?int $maxJobs = null, bool $dryRun = false, ?string $frequency = null): void
     {
-        $this->info('Processing scheduled tasks...');
+        $this->info(trans('console.run_scheduled_jobs_manually.info.processing_scheduled_tasks'));
 
         $query = ScheduledTask::where('enabled', true);
 
@@ -160,7 +171,9 @@ class RunScheduledJobsManually extends Command
         $scheduled_tasks = $query->get();
 
         if ($scheduled_tasks->isEmpty()) {
-            $this->info('No enabled scheduled tasks found'.($frequency ? " with frequency '{$frequency}'" : '').'.');
+            $this->info(trans('console.run_scheduled_jobs_manually.info.no_enabled_scheduled_tasks_found', [
+                'frequency' => $frequency ? trans('console.run_scheduled_jobs_manually.values.with_frequency', ['frequency' => $frequency]) : '',
+            ]));
 
             return;
         }

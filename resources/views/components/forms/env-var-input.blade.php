@@ -199,7 +199,7 @@
         @if ($type === 'password' && $allowToPeak)
             <button type="button" x-on:click="type = type === 'password' ? 'text' : 'password'"
                 class="flex absolute inset-y-0 right-0 z-10 items-center pr-2 cursor-pointer dark:hover:text-white"
-                aria-label="Toggle password visibility">
+                aria-label="{{ __('Toggle password visibility') }}">
                 <svg x-show="type === 'password'" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -248,11 +248,11 @@
 
             <template x-if="suggestions.length === 0 && currentScope">
                 <div class="px-3 py-2 text-sm text-neutral-500 dark:text-neutral-400">
-                    <div>No shared variables found in <span class="font-semibold" x-text="currentScope"></span> scope.</div>
+                    <div>{{ __('No shared variables found in') }} <span class="font-semibold" x-text="currentScope"></span> {{ __('scope.') }}</div>
                     <a :href="getScopeUrl(currentScope)"
                        class="text-coollabs dark:text-warning hover:underline text-xs mt-1 inline-block"
                        target="_blank">
-                        Add <span x-text="currentScope"></span> variables →
+                        {{ __('Add') }} <span x-text="currentScope"></span> {{ __('variables') }} →
                     </a>
                 </div>
             </template>

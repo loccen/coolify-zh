@@ -57,7 +57,7 @@ class Add extends Component
 
     protected function messages(): array
     {
-        return ValidationPatterns::environmentVariableKeyMessages('key');
+        return ValidationPatterns::environmentVariableKeyMessages('key', 'Key');
     }
 
     protected $validationAttributes = [

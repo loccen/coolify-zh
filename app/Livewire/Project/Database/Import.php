@@ -5,6 +5,15 @@ namespace App\Livewire\Project\Database;
 use App\Models\S3Storage;
 use App\Models\Server;
 use App\Models\Service;
+use App\Models\ServiceDatabase;
+use App\Models\StandaloneClickhouse;
+use App\Models\StandaloneDragonfly;
+use App\Models\StandaloneKeydb;
+use App\Models\StandaloneMariadb;
+use App\Models\StandaloneMongodb;
+use App\Models\StandaloneMysql;
+use App\Models\StandalonePostgresql;
+use App\Models\StandaloneRedis;
 use App\Support\ValidationPatterns;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
@@ -219,7 +228,7 @@ class Import extends Component
         $morphClass = $this->resource->getMorphClass();
 
         // Handle ServiceDatabase by checking the database type
-        if ($morphClass === \App\Models\ServiceDatabase::class) {
+        if ($morphClass === ServiceDatabase::class) {
             $dbType = $this->resource->databaseType();
             if (str_contains($dbType, 'mysql')) {
                 $morphClass = 'mysql';
@@ -231,7 +240,7 @@ class Import extends Component
         }
 
         switch ($morphClass) {
-            case \App\Models\StandaloneMariadb::class:
+            case StandaloneMariadb::class:
             case 'mariadb':
                 if ($value === true) {
                     $this->mariadbRestoreCommand = <<<'EOD'
@@ -247,7 +256,7 @@ EOD;
                     $this->mariadbRestoreCommand = 'mariadb -u $MARIADB_USER -p$MARIADB_PASSWORD $MARIADB_DATABASE';
                 }
                 break;
-            case \App\Models\StandaloneMysql::class:
+            case StandaloneMysql::class:
             case 'mysql':
                 if ($value === true) {
                     $this->mysqlRestoreCommand = <<<'EOD'
@@ -263,7 +272,7 @@ EOD;
                     $this->mysqlRestoreCommand = 'mysql -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE';
                 }
                 break;
-            case \App\Models\StandalonePostgresql::class:
+            case StandalonePostgresql::class:
             case 'postgresql':
                 if ($value === true) {
                     $this->postgresqlRestoreCommand = <<<'EOD'
@@ -321,10 +330,10 @@ EOD;
         $this->resourceStatus = $resource->status ?? '';
 
         // Handle ServiceDatabase server access differently
-        if ($resource->getMorphClass() === \App\Models\ServiceDatabase::class) {
+        if ($resource->getMorphClass() === ServiceDatabase::class) {
             $server = $resource->service?->server;
             if (! $server) {
-                abort(404, 'Server not found for this service database.');
+                abort(404, __('Server not found for this service database.'));
             }
             $this->serverId = $server->id;
             $this->container = $resource->name.'-'.$resource->service->uuid;
@@ -346,7 +355,7 @@ EOD;
         } else {
             $server = $resource->destination?->server;
             if (! $server) {
-                abort(404, 'Server not found for this database.');
+                abort(404, __('Server not found for this database.'));
             }
             $this->serverId = $server->id;
             $this->container = $resource->uuid;
@@ -359,16 +368,16 @@ EOD;
         }
 
         if (
-            $resource->getMorphClass() === \App\Models\StandaloneRedis::class ||
-            $resource->getMorphClass() === \App\Models\StandaloneKeydb::class ||
-            $resource->getMorphClass() === \App\Models\StandaloneDragonfly::class ||
-            $resource->getMorphClass() === \App\Models\StandaloneClickhouse::class
+            $resource->getMorphClass() === StandaloneRedis::class ||
+            $resource->getMorphClass() === StandaloneKeydb::class ||
+            $resource->getMorphClass() === StandaloneDragonfly::class ||
+            $resource->getMorphClass() === StandaloneClickhouse::class
         ) {
             $this->unsupported = true;
         }
 
         // Mark unsupported ServiceDatabase types (Redis, KeyDB, etc.)
-        if ($resource->getMorphClass() === \App\Models\ServiceDatabase::class) {
+        if ($resource->getMorphClass() === ServiceDatabase::class) {
             $dbType = $resource->databaseType();
             if (str_contains($dbType, 'redis') || str_contains($dbType, 'keydb') ||
                 str_contains($dbType, 'dragonfly') || str_contains($dbType, 'clickhouse')) {
@@ -382,13 +391,13 @@ EOD;
         if (filled($this->customLocation)) {
             // Validate the custom location to prevent command injection
             if (! $this->validateServerPath($this->customLocation)) {
-                $this->dispatch('error', 'Invalid file path. Path must be absolute and contain only safe characters (alphanumerics, dots, dashes, underscores, slashes).');
+                $this->dispatch('error', __('Invalid file path. Path must be absolute and contain only safe characters (alphanumerics, dots, dashes, underscores, slashes).'));
 
                 return;
             }
 
             if (! $this->server) {
-                $this->dispatch('error', 'Server not found. Please refresh the page.');
+                $this->dispatch('error', __('Server not found. Please refresh the page.'));
 
                 return;
             }
@@ -397,12 +406,12 @@ EOD;
                 $escapedPath = escapeshellarg($this->customLocation);
                 $result = instant_remote_process(["ls -l {$escapedPath}"], $this->server, throwError: false);
                 if (blank($result)) {
-                    $this->dispatch('error', 'The file does not exist or has been deleted.');
+                    $this->dispatch('error', __('The file does not exist or has been deleted.'));
 
                     return;
                 }
                 $this->filename = $this->customLocation;
-                $this->dispatch('success', 'The file exists.');
+                $this->dispatch('success', __('The file exists.'));
             } catch (\Throwable $e) {
                 return handleError($e, $this);
             }
@@ -412,25 +421,25 @@ EOD;
     public function runImport(string $password = ''): bool|string
     {
         if (! verifyPasswordConfirmation($password, $this)) {
-            return 'The provided password is incorrect.';
+            return __('The provided password is incorrect.');
         }
 
         $this->authorize('update', $this->resource);
 
         if (! ValidationPatterns::isValidContainerName($this->container)) {
-            $this->dispatch('error', 'Invalid container name.');
+            $this->dispatch('error', __('Invalid container name.'));
 
             return true;
         }
 
         if ($this->filename === '') {
-            $this->dispatch('error', 'Please select a file to import.');
+            $this->dispatch('error', __('Please select a file to import.'));
 
             return true;
         }
 
         if (! $this->server) {
-            $this->dispatch('error', 'Server not found. Please refresh the page.');
+            $this->dispatch('error', __('Server not found. Please refresh the page.'));
 
             return true;
         }
@@ -450,7 +459,7 @@ EOD;
             } elseif (filled($this->customLocation)) {
                 // Validate the custom location to prevent command injection
                 if (! $this->validateServerPath($this->customLocation)) {
-                    $this->dispatch('error', 'Invalid file path. Path must be absolute and contain only safe characters.');
+                    $this->dispatch('error', __('Invalid file path. Path must be absolute and contain only safe characters.'));
 
                     return true;
                 }
@@ -458,7 +467,7 @@ EOD;
                 $escapedCustomLocation = escapeshellarg($this->customLocation);
                 $this->importCommands[] = "docker cp {$escapedCustomLocation} {$this->container}:{$tmpPath}";
             } else {
-                $this->dispatch('error', 'The file does not exist or has been deleted.');
+                $this->dispatch('error', __('The file does not exist or has been deleted.'));
 
                 return true;
             }
@@ -536,13 +545,13 @@ EOD;
     public function checkS3File()
     {
         if (! $this->s3StorageId) {
-            $this->dispatch('error', 'Please select an S3 storage.');
+            $this->dispatch('error', __('Please select an S3 storage.'));
 
             return;
         }
 
         if (blank($this->s3Path)) {
-            $this->dispatch('error', 'Please provide an S3 path.');
+            $this->dispatch('error', __('Please provide an S3 path.'));
 
             return;
         }
@@ -552,7 +561,7 @@ EOD;
 
         // Validate the S3 path early to prevent command injection in subsequent operations
         if (! $this->validateS3Path($cleanPath)) {
-            $this->dispatch('error', 'Invalid S3 path. Path must contain only safe characters (alphanumerics, dots, dashes, underscores, slashes).');
+            $this->dispatch('error', __('Invalid S3 path. Path must contain only safe characters (alphanumerics, dots, dashes, underscores, slashes).'));
 
             return;
         }
@@ -562,7 +571,7 @@ EOD;
 
             // Validate bucket name early
             if (! $this->validateBucketName($s3Storage->bucket)) {
-                $this->dispatch('error', 'Invalid S3 bucket name. Bucket name must contain only alphanumerics, dots, dashes, and underscores.');
+                $this->dispatch('error', __('Invalid S3 bucket name. Bucket name must contain only alphanumerics, dots, dashes, and underscores.'));
 
                 return;
             }
@@ -583,7 +592,7 @@ EOD;
 
             // Check if file exists
             if (! $disk->exists($cleanPath)) {
-                $this->dispatch('error', 'File not found in S3. Please check the path.');
+                $this->dispatch('error', __('File not found in S3. Please check the path.'));
 
                 return;
             }
@@ -591,7 +600,7 @@ EOD;
             // Get file size
             $this->s3FileSize = $disk->size($cleanPath);
 
-            $this->dispatch('success', 'File found in S3. Size: '.formatBytes($this->s3FileSize));
+            $this->dispatch('success', __('File found in S3. Size: :size', ['size' => formatBytes($this->s3FileSize)]));
         } catch (\Throwable $e) {
             $this->s3FileSize = null;
 
@@ -602,31 +611,31 @@ EOD;
     public function restoreFromS3(string $password = ''): bool|string
     {
         if (! verifyPasswordConfirmation($password, $this)) {
-            return 'The provided password is incorrect.';
+            return __('The provided password is incorrect.');
         }
 
         $this->authorize('update', $this->resource);
 
         if (! ValidationPatterns::isValidContainerName($this->container)) {
-            $this->dispatch('error', 'Invalid container name.');
+            $this->dispatch('error', __('Invalid container name.'));
 
             return true;
         }
 
         if (! $this->s3StorageId || blank($this->s3Path)) {
-            $this->dispatch('error', 'Please select S3 storage and provide a path first.');
+            $this->dispatch('error', __('Please select S3 storage and provide a path first.'));
 
             return true;
         }
 
         if (is_null($this->s3FileSize)) {
-            $this->dispatch('error', 'Please check the file first by clicking "Check File".');
+            $this->dispatch('error', __('Please check the file first by clicking :action.', ['action' => '“'.__('Check File').'”']));
 
             return true;
         }
 
         if (! $this->server) {
-            $this->dispatch('error', 'Server not found. Please refresh the page.');
+            $this->dispatch('error', __('Server not found. Please refresh the page.'));
 
             return true;
         }
@@ -643,7 +652,7 @@ EOD;
 
             // Validate bucket name to prevent command injection
             if (! $this->validateBucketName($bucket)) {
-                $this->dispatch('error', 'Invalid S3 bucket name. Bucket name must contain only alphanumerics, dots, dashes, and underscores.');
+                $this->dispatch('error', __('Invalid S3 bucket name. Bucket name must contain only alphanumerics, dots, dashes, and underscores.'));
 
                 return true;
             }
@@ -653,7 +662,7 @@ EOD;
 
             // Validate the S3 path to prevent command injection
             if (! $this->validateS3Path($cleanPath)) {
-                $this->dispatch('error', 'Invalid S3 path. Path must contain only safe characters (alphanumerics, dots, dashes, underscores, slashes).');
+                $this->dispatch('error', __('Invalid S3 path. Path must contain only safe characters (alphanumerics, dots, dashes, underscores, slashes).'));
 
                 return true;
             }
@@ -664,7 +673,7 @@ EOD;
             $fullImageName = "{$helperImage}:{$latestVersion}";
 
             // Get the database destination network
-            if ($this->resource->getMorphClass() === \App\Models\ServiceDatabase::class) {
+            if ($this->resource->getMorphClass() === ServiceDatabase::class) {
                 $destinationNetwork = $this->resource->service->destination->network ?? 'coolify';
             } else {
                 $destinationNetwork = $this->resource->destination->network ?? 'coolify';
@@ -740,7 +749,7 @@ EOD;
             // Dispatch activity to the monitor and open slide-over
             $this->dispatch('activityMonitor', $activity->id);
             $this->dispatch('databaserestore');
-            $this->dispatch('info', 'Restoring database from S3. Progress will be shown in the activity monitor...');
+            $this->dispatch('info', __('Restoring database from S3. Progress will be shown in the activity monitor...'));
         } catch (\Throwable $e) {
             $this->importRunning = false;
             handleError($e, $this);
@@ -756,7 +765,7 @@ EOD;
         $morphClass = $this->resource->getMorphClass();
 
         // Handle ServiceDatabase by checking the database type
-        if ($morphClass === \App\Models\ServiceDatabase::class) {
+        if ($morphClass === ServiceDatabase::class) {
             $dbType = $this->resource->databaseType();
             if (str_contains($dbType, 'mysql')) {
                 $morphClass = 'mysql';
@@ -770,7 +779,7 @@ EOD;
         }
 
         switch ($morphClass) {
-            case \App\Models\StandaloneMariadb::class:
+            case StandaloneMariadb::class:
             case 'mariadb':
                 $restoreCommand = $this->mariadbRestoreCommand;
                 if ($this->dumpAll) {
@@ -779,7 +788,7 @@ EOD;
                     $restoreCommand .= " < {$tmpPath}";
                 }
                 break;
-            case \App\Models\StandaloneMysql::class:
+            case StandaloneMysql::class:
             case 'mysql':
                 $restoreCommand = $this->mysqlRestoreCommand;
                 if ($this->dumpAll) {
@@ -788,7 +797,7 @@ EOD;
                     $restoreCommand .= " < {$tmpPath}";
                 }
                 break;
-            case \App\Models\StandalonePostgresql::class:
+            case StandalonePostgresql::class:
             case 'postgresql':
                 $restoreCommand = $this->postgresqlRestoreCommand;
                 if ($this->dumpAll) {
@@ -797,7 +806,7 @@ EOD;
                     $restoreCommand .= " {$tmpPath}";
                 }
                 break;
-            case \App\Models\StandaloneMongodb::class:
+            case StandaloneMongodb::class:
             case 'mongodb':
                 $restoreCommand = $this->mongodbRestoreCommand;
                 if ($this->dumpAll === false) {

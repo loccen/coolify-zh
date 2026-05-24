@@ -9,7 +9,12 @@ class GenerateTestingSchema extends Command
 {
     protected $signature = 'schema:generate-testing {--connection=pgsql : The database connection to read from}';
 
-    protected $description = 'Generate SQLite testing schema from the PostgreSQL database';
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->setDescription(trans('console.generate_testing_schema.description', locale: app()->getLocale()));
+    }
 
     private array $typeMap = [
         '/\bbigint\b/' => 'INTEGER',
@@ -42,12 +47,12 @@ class GenerateTestingSchema extends Command
         $connection = $this->option('connection');
 
         if (DB::connection($connection)->getDriverName() !== 'pgsql') {
-            $this->error("Connection '{$connection}' is not PostgreSQL.");
+            $this->error(trans('console.generate_testing_schema.error.not_postgresql', ['connection' => $connection], locale: app()->getLocale()));
 
             return self::FAILURE;
         }
 
-        $this->info('Reading schema from PostgreSQL...');
+        $this->info(trans('console.generate_testing_schema.info.reading_schema', locale: app()->getLocale()));
 
         $tables = $this->getTables($connection);
         $lastMigration = DB::connection($connection)
@@ -88,8 +93,8 @@ class GenerateTestingSchema extends Command
 
         file_put_contents($path, implode("\n", $output)."\n");
 
-        $this->info("Schema written to {$path}");
-        $this->info(count($tables).' tables, '.count($migrations).' migration records.');
+        $this->info(trans('console.generate_testing_schema.info.schema_written', ['path' => $path], locale: app()->getLocale()));
+        $this->info(trans('console.generate_testing_schema.info.summary', ['tables' => count($tables), 'migrations' => count($migrations)], locale: app()->getLocale()));
 
         return self::SUCCESS;
     }

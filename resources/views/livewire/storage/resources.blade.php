@@ -1,5 +1,5 @@
 <div x-data="{ search: '' }">
-    <x-forms.input placeholder="Search resources..." x-model="search" id="null" />
+    <x-forms.input :placeholder="__('Search resources...')" x-model="search" id="null" />
     @if ($groupedBackups->count() > 0)
         <div class="overflow-x-auto pt-4">
             <div class="inline-block min-w-full">
@@ -7,10 +7,10 @@
                     <table class="min-w-full">
                         <thead>
                             <tr>
-                                <th class="px-5 py-3 text-xs font-medium text-left uppercase">Database</th>
-                                <th class="px-5 py-3 text-xs font-medium text-left uppercase">Frequency</th>
-                                <th class="px-5 py-3 text-xs font-medium text-left uppercase">Status</th>
-                                <th class="px-5 py-3 text-xs font-medium text-left uppercase">S3 Storage</th>
+                                <th class="px-5 py-3 text-xs font-medium text-left uppercase">{{ __('Database') }}</th>
+                                <th class="px-5 py-3 text-xs font-medium text-left uppercase">{{ __('Frequency') }}</th>
+                                <th class="px-5 py-3 text-xs font-medium text-left uppercase">{{ __('Status') }}</th>
+                                <th class="px-5 py-3 text-xs font-medium text-left uppercase">{{ __('S3 Storage') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -18,7 +18,7 @@
                                 @php
                                     $firstBackup = $backups->first();
                                     $database = $firstBackup->database;
-                                    $databaseName = $database?->name ?? 'Deleted database';
+                                    $databaseName = $database?->name ?? __('Deleted database');
                                     $resourceLink = null;
                                     $backupParams = null;
                                     if ($database && $database instanceof \App\Models\ServiceDatabase) {
@@ -77,20 +77,20 @@
                                         </td>
                                         <td class="px-5 py-4 text-sm font-medium whitespace-nowrap">
                                             @if ($backup->enabled)
-                                                <span class="text-green-500">Enabled</span>
+                                                <span class="text-green-500">{{ __('Enabled') }}</span>
                                             @else
-                                                <span class="text-yellow-500">Disabled</span>
+                                                <span class="text-yellow-500">{{ __('Disabled') }}</span>
                                             @endif
                                         </td>
                                         <td class="px-5 py-4 text-sm whitespace-nowrap">
                                             <div class="flex items-center gap-2">
                                                 <select wire:model="selectedStorages.{{ $backup->id }}" class="w-full input">
                                                     @foreach ($allStorages as $s3)
-                                                        <option value="{{ $s3->id }}" @disabled(!$s3->is_usable)>{{ $s3->name }}@if (!$s3->is_usable) (unusable)@endif</option>
+                                                        <option value="{{ $s3->id }}" @disabled(!$s3->is_usable)>{{ $s3->name }}@if (!$s3->is_usable) ({{ __('unusable') }})@endif</option>
                                                     @endforeach
                                                 </select>
-                                                <x-forms.button wire:click="moveBackup({{ $backup->id }})">Save</x-forms.button>
-                                                <x-forms.button isError wire:click="disableS3({{ $backup->id }})" wire:confirm="Are you sure you want to disable S3 for this backup schedule?">Disable S3</x-forms.button>
+                                                <x-forms.button wire:click="moveBackup({{ $backup->id }})">{{ __('Save') }}</x-forms.button>
+                                                <x-forms.button isError wire:click="disableS3({{ $backup->id }})" wire:confirm="{{ __('Are you sure you want to disable S3 for this backup schedule?') }}">{{ __('Disable S3') }}</x-forms.button>
                                             </div>
                                         </td>
                                     </tr>
@@ -102,6 +102,6 @@
             </div>
         </div>
     @else
-        <div class="pt-4">No backup schedules are using this storage.</div>
+        <div class="pt-4">{{ __('No backup schedules are using this storage.') }}</div>
     @endif
 </div>

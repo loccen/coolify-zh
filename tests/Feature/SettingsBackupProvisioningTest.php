@@ -85,3 +85,50 @@ test('settings backup provisioning accepts docker envs as collection', function 
     expect($database->postgres_user)->toBe('coolify');
     expect($database->postgres_db)->toBe('coolify');
 });
+
+test('instance backup detection supports coolify database resources that are not id zero', function () {
+    $database = StandalonePostgresql::create([
+        'id' => 7,
+        'name' => 'coolify-db',
+        'description' => 'Coolify database',
+        'postgres_user' => 'coolify',
+        'postgres_password' => 'password',
+        'postgres_db' => 'coolify',
+        'status' => 'running',
+        'destination_type' => StandaloneDocker::class,
+        'destination_id' => 0,
+    ]);
+
+    $instanceBackup = ScheduledDatabaseBackup::create([
+        'enabled' => true,
+        'save_s3' => false,
+        'frequency' => '0 0 * * *',
+        'database_id' => $database->id,
+        'database_type' => StandalonePostgresql::class,
+        'team_id' => 0,
+    ])->fresh();
+
+    $regularDatabase = StandalonePostgresql::create([
+        'id' => 8,
+        'name' => 'app-db',
+        'description' => 'Regular database',
+        'postgres_user' => 'app',
+        'postgres_password' => 'password',
+        'postgres_db' => 'app',
+        'status' => 'running',
+        'destination_type' => StandaloneDocker::class,
+        'destination_id' => 0,
+    ]);
+
+    $regularBackup = ScheduledDatabaseBackup::create([
+        'enabled' => true,
+        'save_s3' => false,
+        'frequency' => '0 0 * * *',
+        'database_id' => $regularDatabase->id,
+        'database_type' => StandalonePostgresql::class,
+        'team_id' => 0,
+    ])->fresh();
+
+    expect($instanceBackup->load('database')->isInstanceBackup())->toBeTrue();
+    expect($regularBackup->load('database')->isInstanceBackup())->toBeFalse();
+});

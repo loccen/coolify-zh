@@ -39,7 +39,7 @@ class Destinations extends Component
             $this->authorize('create', SwarmDocker::class);
             $found = $this->server->swarmDockers()->where('network', $name)->first();
             if ($found) {
-                $this->dispatch('error', 'Network already added to this server.');
+                $this->dispatch('error', __('server.toasts.network_already_added'));
 
                 return;
             } else {
@@ -53,7 +53,7 @@ class Destinations extends Component
             $this->authorize('create', StandaloneDocker::class);
             $found = $this->server->standaloneDockers()->where('network', $name)->first();
             if ($found) {
-                $this->dispatch('error', 'Network already added to this server.');
+                $this->dispatch('error', __('server.toasts.network_already_added'));
 
                 return;
             } else {
@@ -81,11 +81,11 @@ class Destinations extends Component
             return ! $alreadyAddedNetworks->contains('network', $network['Name']);
         });
         if ($this->networks->count() === 0) {
-            $this->dispatch('success', 'No new destinations found on this server.');
+            $this->dispatch('success', __('server.toasts.no_new_destinations_found'));
 
             return;
         }
-        $this->dispatch('success', 'Scan done.');
+        $this->dispatch('success', __('server.toasts.scan_done'));
     }
 
     public function render()

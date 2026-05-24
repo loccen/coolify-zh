@@ -109,7 +109,7 @@ class Previews extends Component
             $preview = $this->application->previews->find($preview_id);
 
             if (! $preview) {
-                throw new \Exception('Preview not found');
+                throw new \Exception(__('Preview not found.'));
             }
 
             // Find the key for this preview in the collection
@@ -127,7 +127,14 @@ class Previews extends Component
                     $this->previewFqdns[$previewKey] = $fqdn;
 
                     if (! validateDNSEntry($fqdn, $this->application->destination->server)) {
-                        $this->dispatch('error', 'Validating DNS failed.', "Make sure you have added the DNS records correctly.<br><br>$fqdn->{$this->application->destination->server->ip}<br><br>Check this <a target='_blank' class='underline dark:text-white' href='https://coolify.io/docs/knowledge-base/dns-configuration'>documentation</a> for further help.");
+                        $this->dispatch(
+                            'error',
+                            __('Validating DNS failed.'),
+                            __('Make sure you have added the DNS records correctly.<br><br>:fqdn->:ip<br><br>Check this <a target="_blank" class="underline dark:text-white" href="https://coolify.io/docs/knowledge-base/dns-configuration">documentation</a> for further help.', [
+                                'fqdn' => $fqdn,
+                                'ip' => $this->application->destination->server->ip,
+                            ])
+                        );
                         $success = false;
                     }
 
@@ -151,7 +158,7 @@ class Previews extends Component
             if ($success) {
                 $this->syncData(true);
                 $preview->save();
-                $this->dispatch('success', 'Preview saved.<br><br>Do not forget to redeploy the preview to apply the changes.');
+                $this->dispatch('success', __('Preview saved.<br><br>Do not forget to redeploy the preview to apply the changes.'));
             }
         } catch (\Throwable $e) {
             return handleError($e, $this);
@@ -165,7 +172,7 @@ class Previews extends Component
 
             $preview = $this->application->previews->find($preview_id);
             if (! $preview) {
-                $this->dispatch('error', 'Preview not found.');
+                $this->dispatch('error', __('Preview not found.'));
 
                 return;
             }
@@ -173,7 +180,7 @@ class Previews extends Component
                 $preview->generate_preview_fqdn_compose();
                 $this->application->refresh();
                 $this->syncData(false);
-                $this->dispatch('success', 'Domain generated.');
+                $this->dispatch('success', __('Domain generated.'));
 
                 return;
             }
@@ -182,7 +189,7 @@ class Previews extends Component
             $this->application->refresh();
             $this->syncData(false);
             $this->dispatch('update_links');
-            $this->dispatch('success', 'Domain generated.');
+            $this->dispatch('success', __('Domain generated.'));
         } catch (\Throwable $e) {
             return handleError($e, $this);
         }
@@ -225,7 +232,7 @@ class Previews extends Component
                 $this->application->refresh();
                 $this->syncData(false);
                 $this->dispatch('update_links');
-                $this->dispatch('success', 'Preview added.');
+                $this->dispatch('success', __('Preview added.'));
             }
         } catch (\Throwable $e) {
             return handleError($e, $this);
@@ -282,12 +289,12 @@ class Previews extends Component
                 docker_registry_image_tag: $docker_registry_image_tag,
             );
             if ($result['status'] === 'queue_full') {
-                $this->dispatch('error', 'Deployment queue full', $result['message']);
+                $this->dispatch('error', __('Deployment queue full'), $result['message']);
 
                 return;
             }
             if ($result['status'] === 'skipped') {
-                $this->dispatch('success', 'Deployment skipped', $result['message']);
+                $this->dispatch('success', __('Deployment skipped'), $result['message']);
 
                 return;
             }
@@ -316,13 +323,13 @@ class Previews extends Component
         $this->validateOnly('manualDockerTag');
 
         if ($this->application->build_pack !== 'dockerimage') {
-            $this->dispatch('error', 'Manual Docker Image previews are only available for Docker Image applications.');
+            $this->dispatch('error', __('Manual Docker Image previews are only available for Docker Image applications.'));
 
             return;
         }
 
         if ($this->manualPullRequestId === null || str($this->manualDockerTag)->isEmpty()) {
-            $this->dispatch('error', 'Both pull request id and docker tag are required.');
+            $this->dispatch('error', __('Both pull request id and docker tag are required.'));
 
             return;
         }
@@ -365,7 +372,7 @@ class Previews extends Component
             GetContainersStatus::run($server);
             $this->application->refresh();
             $this->dispatch('containerStatusUpdated');
-            $this->dispatch('success', 'Preview Deployment stopped.');
+            $this->dispatch('success', __('Preview Deployment stopped.'));
         } catch (\Throwable $e) {
             return handleError($e, $this);
         }
@@ -380,7 +387,7 @@ class Previews extends Component
                 ->first();
 
             if (! $preview) {
-                $this->dispatch('error', 'Preview not found.');
+                $this->dispatch('error', __('Preview not found.'));
 
                 return;
             }
@@ -394,7 +401,7 @@ class Previews extends Component
             // Refresh the application and its previews relationship to reflect the soft delete
             $this->application->load('previews');
             $this->dispatch('update_links');
-            $this->dispatch('success', 'Preview deletion started. It may take a few moments to complete.');
+            $this->dispatch('success', __('Preview deletion started. It may take a few moments to complete.'));
         } catch (\Throwable $e) {
             return handleError($e, $this);
         }

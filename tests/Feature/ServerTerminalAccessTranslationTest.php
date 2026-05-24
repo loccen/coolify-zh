@@ -1,0 +1,37 @@
+<?php
+
+use Illuminate\Support\Facades\App;
+
+it('uses explicit translation lookups in the server terminal access component', function () {
+    $component = file_get_contents(app_path('Livewire/Server/Security/TerminalAccess.php'));
+
+    expect($component)
+        ->toContain("__('The provided password is incorrect.')")
+        ->toContain("__('server.toasts.terminal_access_enabled')")
+        ->toContain("__('server.toasts.terminal_access_disabled')")
+        ->toContain("__('server.toasts.terminal_access_admin_only')");
+});
+
+it('resolves server terminal access translations in en and zh_CN', function () {
+    App::setLocale('en');
+
+    expect(__('The provided password is incorrect.'))
+        ->toBe('The provided password is incorrect.')
+        ->and(__('server.toasts.terminal_access_enabled'))
+        ->toBe('Terminal access is enabled.')
+        ->and(__('server.toasts.terminal_access_disabled'))
+        ->toBe('Terminal access is disabled.')
+        ->and(__('server.toasts.terminal_access_admin_only'))
+        ->toBe('Only team administrators and owners can modify terminal access.');
+
+    App::setLocale('zh_CN');
+
+    expect(__('The provided password is incorrect.'))
+        ->toBe('输入的密码不正确。')
+        ->and(__('server.toasts.terminal_access_enabled'))
+        ->toBe('终端访问已启用。')
+        ->and(__('server.toasts.terminal_access_disabled'))
+        ->toBe('终端访问已禁用。')
+        ->and(__('server.toasts.terminal_access_admin_only'))
+        ->toBe('只有团队管理员和拥有者可以修改终端访问。');
+});

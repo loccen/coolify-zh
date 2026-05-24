@@ -1,24 +1,24 @@
 <div x-init="$wire.loadImages">
     <div class="flex items-center gap-2">
-        <h2>Rollback</h2>
+        <h2>{{ __('Rollback') }}</h2>
         @can('view', $application)
-            <x-forms.button wire:click='loadImages(true)'>Reload Available Images</x-forms.button>
+            <x-forms.button wire:click='loadImages(true)'>{{ __('Reload Available Images') }}</x-forms.button>
         @endcan
     </div>
-    <div class="pb-4">You can easily rollback to a previously built (local) images quickly.</div>
+    <div class="pb-4">{{ __('You can easily rollback to a previously built (local) images quickly.') }}</div>
 
     @if($serverRetentionDisabled)
         <x-callout type="warning" class="mb-4">
-            Image retention is disabled at the server level. This setting has no effect until the server administrator enables it.
+            {{ __('Image retention is disabled at the server level. This setting has no effect until the server administrator enables it.') }}
         </x-callout>
     @endif
 
     <div class="pb-4">
         <form wire:submit="saveSettings" class="flex items-end gap-2 w-96">
-            <x-forms.input id="dockerImagesToKeep" type="number" min="0" max="100" label="Images to keep for rollback"
-                helper="Number of Docker images to keep for rollback during cleanup. Set to 0 to only keep the currently running image. PR images are always deleted during cleanup.<br><br><strong>Note:</strong> Server administrators can disable image retention at the server level, which overrides this setting."
+            <x-forms.input id="dockerImagesToKeep" type="number" min="0" max="100" :label="__('Images to keep for rollback')"
+                :helper="__('Number of Docker images to keep for rollback during cleanup. Set to 0 to only keep the currently running image. PR images are always deleted during cleanup.<br><br><strong>Note:</strong> Server administrators can disable image retention at the server level, which overrides this setting.')"
                 canGate="update" :canResource="$application" :disabled="$serverRetentionDisabled" />
-            <x-forms.button canGate="update" :canResource="$application" type="submit" :disabled="$serverRetentionDisabled">Save</x-forms.button>
+            <x-forms.button canGate="update" :canResource="$application" type="submit" :disabled="$serverRetentionDisabled">{{ __('Save') }}</x-forms.button>
         </form>
     </div>
     <div wire:target='loadImages' wire:loading.remove>
@@ -39,7 +39,7 @@
                         <div class="p-2">
                             <div class="">
                                 @if (data_get($image, 'is_current'))
-                                    <span class="font-bold dark:text-warning">LIVE</span>
+                                    <span class="font-bold dark:text-warning">{{ __('running') }}</span>
                                     |
                                 @endif
                                 @if ($isCommitSha)
@@ -47,7 +47,7 @@
                                 @elseif ($isPrTag)
                                     PR: {{ $tag }}
                                 @else
-                                    Tag: {{ $tag }}
+                                    {{ __('Tag') }}: {{ $tag }}
                                 @endif
                             </div>
                             <div class="text-xs">{{ $interval->diffForHumans() }}</div>
@@ -56,17 +56,17 @@
                         <div class="flex justify-end p-2">
                             @can('deploy', $application)
                                 @if (data_get($image, 'is_current'))
-                                    <x-forms.button disabled tooltip="This image is currently running.">
-                                        Rollback
+                                    <x-forms.button disabled :tooltip="__('This image is currently running.')">
+                                        {{ __('Rollback') }}
                                     </x-forms.button>
                                 @elseif (!$isRollbackable)
-                                    <x-forms.button disabled tooltip="Rollback not available for '{{ $tag }}' tag. Only commit-based tags support rollback. Re-deploy to create a rollback-enabled image.">
-                                        Rollback
+                                    <x-forms.button disabled :tooltip="__('Rollback not available for :tag tag. Only commit-based tags support rollback. Re-deploy to create a rollback-enabled image.', ['tag' => $tag])">
+                                        {{ __('Rollback') }}
                                     </x-forms.button>
                                 @else
                                     <x-forms.button class="dark:bg-coolgray-100"
                                         wire:click="rollbackImage('{{ $tag }}')">
-                                        Rollback
+                                        {{ __('Rollback') }}
                                     </x-forms.button>
                                 @endif
                             @endcan
@@ -74,9 +74,9 @@
                     </div>
                 </div>
             @empty
-                <div>No images found locally.</div>
+                <div>{{ __('No images found locally.') }}</div>
             @endforelse
         </div>
     </div>
-    <div wire:target='loadImages' wire:loading>Loading available docker images...</div>
+    <div wire:target='loadImages' wire:loading>{{ __('Loading available docker images...') }}</div>
 </div>

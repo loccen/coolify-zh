@@ -9,20 +9,25 @@ class CheckTraefikVersionCommand extends Command
 {
     protected $signature = 'traefik:check-version';
 
-    protected $description = 'Check Traefik proxy versions on all servers and send notifications for outdated versions';
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->setDescription(trans('console.traefik_check_version.description', locale: app()->getLocale()));
+    }
 
     public function handle(): int
     {
-        $this->info('Checking Traefik versions on all servers...');
+        $this->info(trans('console.traefik_check_version.checking', locale: app()->getLocale()));
 
         try {
             CheckTraefikVersionJob::dispatch();
-            $this->info('Traefik version check job dispatched successfully.');
-            $this->info('Notifications will be sent to teams with outdated Traefik versions.');
+            $this->info(trans('console.traefik_check_version.dispatched', locale: app()->getLocale()));
+            $this->info(trans('console.traefik_check_version.notifications_pending', locale: app()->getLocale()));
 
             return Command::SUCCESS;
         } catch (\Exception $e) {
-            $this->error('Failed to dispatch Traefik version check job: '.$e->getMessage());
+            $this->error(trans('console.traefik_check_version.dispatch_failed', ['message' => $e->getMessage()], locale: app()->getLocale()));
 
             return Command::FAILURE;
         }

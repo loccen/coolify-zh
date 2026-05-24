@@ -31,36 +31,36 @@ class Resources extends Component
     public function startUnmanaged($id)
     {
         if (! ValidationPatterns::isValidContainerName($id)) {
-            $this->dispatch('error', 'Invalid container identifier.');
+            $this->dispatch('error', __('server.toasts.invalid_container_identifier'));
 
             return;
         }
         $this->server->startUnmanaged($id);
-        $this->dispatch('success', 'Container started.');
+        $this->dispatch('success', __('server.toasts.container_started'));
         $this->loadUnmanagedContainers();
     }
 
     public function restartUnmanaged($id)
     {
         if (! ValidationPatterns::isValidContainerName($id)) {
-            $this->dispatch('error', 'Invalid container identifier.');
+            $this->dispatch('error', __('server.toasts.invalid_container_identifier'));
 
             return;
         }
         $this->server->restartUnmanaged($id);
-        $this->dispatch('success', 'Container restarted.');
+        $this->dispatch('success', __('server.toasts.container_restarted'));
         $this->loadUnmanagedContainers();
     }
 
     public function stopUnmanaged($id)
     {
         if (! ValidationPatterns::isValidContainerName($id)) {
-            $this->dispatch('error', 'Invalid container identifier.');
+            $this->dispatch('error', __('server.toasts.invalid_container_identifier'));
 
             return;
         }
         $this->server->stopUnmanaged($id);
-        $this->dispatch('success', 'Container stopped.');
+        $this->dispatch('success', __('server.toasts.container_stopped'));
         $this->loadUnmanagedContainers();
     }
 
@@ -72,7 +72,7 @@ class Resources extends Component
         } else {
             $this->loadUnmanagedContainers();
         }
-        $this->dispatch('success', 'Resource statuses refreshed.');
+        $this->dispatch('success', __('server.toasts.resource_statuses_refreshed'));
     }
 
     public function loadManagedContainers()

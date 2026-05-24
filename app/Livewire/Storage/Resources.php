@@ -36,7 +36,11 @@ class Resources extends Component
 
         unset($this->selectedStorages[$backupId]);
 
-        $this->dispatch('success', 'S3 disabled.', 'S3 backup has been disabled for this schedule.');
+        $this->dispatch(
+            'success',
+            trans('toast.livewire.storage.s3_disabled'),
+            trans('toast.livewire.storage.s3_backup_disabled')
+        );
     }
 
     public function moveBackup(int $backupId): void
@@ -47,7 +51,11 @@ class Resources extends Component
         $newStorageId = $this->selectedStorages[$backupId] ?? null;
 
         if (! $newStorageId || (int) $newStorageId === $this->storage->id) {
-            $this->dispatch('error', 'No change.', 'The backup is already using this storage.');
+            $this->dispatch(
+                'error',
+                trans('toast.livewire.storage.no_change'),
+                trans('toast.livewire.storage.backup_already_using_storage')
+            );
 
             return;
         }
@@ -57,7 +65,7 @@ class Resources extends Component
             ->first();
 
         if (! $newStorage) {
-            $this->dispatch('error', 'Storage not found.');
+            $this->dispatch('error', trans('toast.livewire.storage.storage_not_found'));
 
             return;
         }
@@ -66,7 +74,11 @@ class Resources extends Component
 
         unset($this->selectedStorages[$backupId]);
 
-        $this->dispatch('success', 'Backup moved.', "Moved to {$newStorage->name}.");
+        $this->dispatch(
+            'success',
+            trans('toast.livewire.storage.backup_moved'),
+            trans('toast.livewire.storage.moved_to', ['name' => $newStorage->name])
+        );
     }
 
     public function render()

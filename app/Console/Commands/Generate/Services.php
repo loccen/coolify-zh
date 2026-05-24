@@ -18,6 +18,11 @@ class Services extends Command
      */
     protected $description = 'Generates service-templates json file based on /templates/compose directory';
 
+    public function getDescription(): string
+    {
+        return trans('console.generate_services.description');
+    }
+
     public function handle(): int
     {
         $serviceTemplatesJson = collect(array_merge(
@@ -52,12 +57,12 @@ class Services extends Command
         });
 
         if (str($data->get('ignore'))->toBoolean()) {
-            $this->info("Ignoring $file");
+            $this->info(trans('console.generate_services.info.ignoring', ['file' => $file]));
 
             return false;
         }
 
-        $this->info("Processing $file");
+        $this->info(trans('console.generate_services.info.processing', ['file' => $file]));
 
         $documentation = $data->get('documentation');
         $documentation = $documentation ? $documentation.'?utm_source=coolify.io' : 'https://coolify.io/docs';

@@ -32,7 +32,7 @@ return [
     'title' => '设置',
     'transactional_email' => '事务邮件',
     'updates' => '更新',
-    'whats_new' => '最新内容',
+    'whats_new' => '最新动态',
     'width' => '宽度',
     'width_options' => [
         'center' => '居中',

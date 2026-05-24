@@ -58,7 +58,7 @@
         @if($dismissible && $onDismiss)
             <button type="button" @click.stop="{{ $onDismiss }}"
                     class="absolute top-2 right-2 p-1 rounded hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
-                    aria-label="Dismiss">
+                    aria-label="{{ __('Dismiss') }}">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                      stroke="currentColor" class="w-4 h-4 {{ $colorScheme['text'] }}">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />

@@ -32,7 +32,7 @@ class CleanupNames extends Command
                             {--backup : Create database backup before changes}
                             {--force : Skip confirmation prompt}';
 
-    protected $description = 'Sanitize name fields by removing dangerous characters';
+    protected $description = '';
 
     protected array $modelsToClean = [
         'Project' => Project::class,
@@ -61,6 +61,13 @@ class CleanupNames extends Command
 
     protected int $totalCleaned = 0;
 
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->setDescription(trans('console.cleanup_names.description', locale: app()->getLocale()));
+    }
+
     public function handle(): int
     {
         if ($this->option('backup') && ! $this->option('dry-run')) {
@@ -73,8 +80,8 @@ class CleanupNames extends Command
             : $this->modelsToClean;
 
         if ($modelFilter && ! isset($this->modelsToClean[$modelFilter])) {
-            $this->error("Unknown model: {$modelFilter}");
-            $this->info('Available models: '.implode(', ', array_keys($this->modelsToClean)));
+            $this->error(trans('console.cleanup_names.error.unknown_model', ['model' => $modelFilter]));
+            $this->info(trans('console.cleanup_names.info.available_models', ['models' => implode(', ', array_keys($this->modelsToClean))]));
 
             return self::FAILURE;
         }
@@ -91,9 +98,9 @@ class CleanupNames extends Command
         }
 
         if ($this->option('dry-run')) {
-            $this->info("Name cleanup: would sanitize {$this->totalCleaned} records");
+            $this->info(trans('console.cleanup_names.info.would_sanitize', ['count' => $this->totalCleaned]));
         } else {
-            $this->info("Name cleanup: sanitized {$this->totalCleaned} records");
+            $this->info(trans('console.cleanup_names.info.sanitized', ['count' => $this->totalCleaned]));
         }
 
         return self::SUCCESS;
@@ -130,15 +137,22 @@ class CleanupNames extends Command
 
                     // Only log in dry-run mode to preview changes
                     if ($this->option('dry-run')) {
-                        $this->warn("  🧹 {$modelName} #{$record->id}:");
-                        $this->line('    From: '.$this->truncate($originalName, 80));
-                        $this->line('    To:   '.$this->truncate($sanitizedName, 80));
+                        $this->warn(trans('console.cleanup_names.preview.header', [
+                            'model' => $modelName,
+                            'id' => $record->id,
+                        ]));
+                        $this->line(trans('console.cleanup_names.preview.from', [
+                            'value' => $this->truncate($originalName, 80),
+                        ]));
+                        $this->line(trans('console.cleanup_names.preview.to', [
+                            'value' => $this->truncate($sanitizedName, 80),
+                        ]));
                     }
                 }
             }
 
         } catch (\Exception $e) {
-            $this->error("Error processing {$modelName}: ".$e->getMessage());
+            $this->error(trans('console.cleanup_names.error.processing', ['model' => $modelName, 'error' => $e->getMessage()]));
         }
     }
 

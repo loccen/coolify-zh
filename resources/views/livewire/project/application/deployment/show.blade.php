@@ -1,8 +1,8 @@
 <div class="flex h-[calc(100vh-10rem)] min-h-[50rem] flex-col overflow-hidden">
     <x-slot:title>
-        {{ data_get_str($application, 'name')->limit(10) }} > Deployment | Coolify
+        {{ data_get_str($application, 'name')->limit(10) }} > {{ __('Deployment') }} | Coolify
         </x-slot>
-        <h1 class="py-0">Deployment</h1>
+        <h1 class="py-0">{{ __('Deployment') }}</h1>
         <livewire:project.shared.configuration-checker :resource="$application" />
         <livewire:project.application.heading :application="$application" />
         <div x-data="{
@@ -240,14 +240,21 @@
                         <div class="flex items-center gap-3">
                             @if (data_get($application_deployment_queue, 'status') === 'in_progress')
                                 <div class="flex items-center gap-1">
-                                    <span>Deployment is</span>
-                                    <span class="dark:text-warning">In Progress</span>
+                                    <span>{{ __('Deployment is') }}</span>
+                                    <span class="dark:text-warning">{{ __('In Progress') }}</span>
                                     <x-loading class="loading-ring loading-xs" />
                                 </div>
                             @else
                                 <div class="flex items-center gap-1">
-                                    <span>Deployment is</span>
-                                    <span class="dark:text-warning">{{ Str::headline(data_get($application_deployment_queue, 'status')) }}</span>
+                                    <span>{{ __('Deployment is') }}</span>
+                                    <span class="dark:text-warning">{{ match (data_get($application_deployment_queue, 'status')) {
+                                        'finished' => __('Success'),
+                                        'failed' => __('Failed'),
+                                        'in_progress' => __('In Progress'),
+                                        'cancelled-by-user' => __('Cancelled'),
+                                        'queued' => __('Queued'),
+                                        default => __(Str::headline(data_get($application_deployment_queue, 'status'))),
+                                    } }}</span>
                                 </div>
                             @endif
                             <span x-show="searchQuery.trim()" x-text="matchCountLabel()"
@@ -414,7 +421,7 @@
                                         ])>{{ $lineContent }}</span>
                                 </div>
                             @empty
-                                <span class="font-logs text-neutral-400 mb-2">No logs yet.</span>
+                                <span class="font-logs text-neutral-400 mb-2">{{ __('No logs yet.') }}</span>
                             @endforelse
                         </div>
                     </div>

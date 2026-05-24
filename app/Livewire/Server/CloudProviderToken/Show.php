@@ -50,7 +50,7 @@ class Show extends Component
     {
         $ownedToken = CloudProviderToken::ownedByCurrentTeam()->find($tokenId);
         if (is_null($ownedToken)) {
-            $this->dispatch('error', 'You are not allowed to use this token.');
+            $this->dispatch('error', __('server.toasts.hetzner_token_unauthorized'));
 
             return;
         }
@@ -67,7 +67,7 @@ class Show extends Component
 
             $this->server->cloudProviderToken()->associate($ownedToken);
             $this->server->save();
-            $this->dispatch('success', 'Hetzner token updated successfully.');
+            $this->dispatch('success', __('server.toasts.hetzner_token_updated'));
             $this->dispatch('refreshServerShow');
         } catch (\Exception $e) {
             $this->server->refresh();
@@ -86,7 +86,7 @@ class Show extends Component
             if (! $response->successful()) {
                 return [
                     'valid' => false,
-                    'error' => 'This token is invalid or has insufficient permissions.',
+                    'error' => __('server.toasts.hetzner_token_invalid_permissions'),
                 ];
             }
 
@@ -99,7 +99,7 @@ class Show extends Component
                 if (! $serverResponse->successful()) {
                     return [
                         'valid' => false,
-                        'error' => 'This token cannot access this server. It may belong to a different Hetzner project.',
+                        'error' => __('server.toasts.hetzner_token_cannot_access_server'),
                     ];
                 }
             }
@@ -108,7 +108,7 @@ class Show extends Component
         } catch (\Throwable $e) {
             return [
                 'valid' => false,
-                'error' => 'Failed to validate token: '.$e->getMessage(),
+                'error' => __('server.toasts.hetzner_token_validation_failed', ['error' => $e->getMessage()]),
             ];
         }
     }
@@ -118,7 +118,7 @@ class Show extends Component
         try {
             $token = $this->server->cloudProviderToken;
             if (! $token) {
-                $this->dispatch('error', 'No Hetzner token is associated with this server.');
+                $this->dispatch('error', __('server.toasts.hetzner_token_missing'));
 
                 return;
             }
@@ -128,9 +128,9 @@ class Show extends Component
             ])->timeout(10)->get('https://api.hetzner.cloud/v1/servers');
 
             if ($response->successful()) {
-                $this->dispatch('success', 'Hetzner token is valid and working.');
+                $this->dispatch('success', __('server.toasts.hetzner_token_valid'));
             } else {
-                $this->dispatch('error', 'Hetzner token is invalid or has insufficient permissions.');
+                $this->dispatch('error', __('server.toasts.hetzner_token_invalid_permissions'));
             }
         } catch (\Throwable $e) {
             return handleError($e, $this);

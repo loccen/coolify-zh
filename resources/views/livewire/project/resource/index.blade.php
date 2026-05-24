@@ -236,28 +236,27 @@
                                     <div class="pb-2 truncate box-title" x-text="item.name"></div>
                                     <div class="flex-1"></div>
                                     <template x-if="item.status.startsWith('running')">
-                                        <div title="running" class="bg-success badge-dashboard"></div>
+                                        <div title="{{ __('running') }}" class="bg-success badge-dashboard"></div>
                                     </template>
                                     <template x-if="item.status.startsWith('exited')">
-                                        <div title="exited" class="bg-error badge-dashboard"></div>
+                                        <div title="{{ __('exited') }}" class="bg-error badge-dashboard"></div>
                                     </template>
                                     <template x-if="item.status.startsWith('starting')">
-                                        <div title="starting" class="bg-warning badge-dashboard"></div>
+                                        <div title="{{ __('starting') }}" class="bg-warning badge-dashboard"></div>
                                     </template>
                                     <template x-if="item.status.startsWith('restarting')">
-                                        <div title="restarting" class="bg-warning badge-dashboard"></div>
+                                        <div title="{{ __('restarting') }}" class="bg-warning badge-dashboard"></div>
                                     </template>
                                     <template x-if="item.status.startsWith('degraded')">
-                                        <div title="degraded" class="bg-warning badge-dashboard"></div>
+                                        <div title="{{ __('degraded') }}" class="bg-warning badge-dashboard"></div>
                                     </template>
                                 </div>
                                 <div class="max-w-full px-4 truncate box-description" x-text="item.description"></div>
                                 <div class="max-w-full px-4 truncate box-description" x-text="item.fqdn"></div>
-                                <div class="max-w-full px-4 pt-1 truncate box-description">Server: <span
+                                <div class="max-w-full px-4 pt-1 truncate box-description">{{ __('Server:') }} <span
                                         x-text="item.destination?.server?.name || 'Unknown'"></span></div>
                                 <template x-if="item.server_status == false">
-                                    <div class="px-4 text-xs font-bold text-error">Server is unreachable or
-                                        misconfigured
+                                    <div class="px-4 text-xs font-bold text-error">{{ __('Server is unreachable or misconfigured') }}
                                     </div>
                                 </template>
                             </div>
@@ -269,7 +268,7 @@
                                 </a>
                             </template>
                             <a :href="`${item.hrefLink}/tags`" class="add-tag">
-                                Add tag
+                                {{ __('Add tag') }}
                             </a>
                         </div>
                     </span>
@@ -288,28 +287,27 @@
                                     <div class="pb-2 truncate box-title" x-text="item.name"></div>
                                     <div class="flex-1"></div>
                                     <template x-if="item.status.startsWith('running')">
-                                        <div title="running" class="bg-success badge-dashboard"></div>
+                                        <div title="{{ __('running') }}" class="bg-success badge-dashboard"></div>
                                     </template>
                                     <template x-if="item.status.startsWith('exited')">
-                                        <div title="exited" class="bg-error badge-dashboard"></div>
+                                        <div title="{{ __('exited') }}" class="bg-error badge-dashboard"></div>
                                     </template>
                                     <template x-if="item.status.startsWith('starting')">
-                                        <div title="starting" class="bg-warning badge-dashboard"></div>
+                                        <div title="{{ __('starting') }}" class="bg-warning badge-dashboard"></div>
                                     </template>
                                     <template x-if="item.status.startsWith('restarting')">
-                                        <div title="restarting" class="bg-warning badge-dashboard"></div>
+                                        <div title="{{ __('restarting') }}" class="bg-warning badge-dashboard"></div>
                                     </template>
                                     <template x-if="item.status.startsWith('degraded')">
-                                        <div title="degraded" class="bg-warning badge-dashboard"></div>
+                                        <div title="{{ __('degraded') }}" class="bg-warning badge-dashboard"></div>
                                     </template>
                                 </div>
                                 <div class="max-w-full px-4 truncate box-description" x-text="item.description"></div>
                                 <div class="max-w-full px-4 truncate box-description" x-text="item.fqdn"></div>
-                                <div class="max-w-full px-4 pt-1 truncate box-description">Server: <span
+                                <div class="max-w-full px-4 pt-1 truncate box-description">{{ __('Server:') }} <span
                                         x-text="item.destination?.server?.name || 'Unknown'"></span></div>
                                 <template x-if="item.server_status == false">
-                                    <div class="px-4 text-xs font-bold text-error">Server is unreachable or
-                                        misconfigured
+                                    <div class="px-4 text-xs font-bold text-error">{{ __('Server is unreachable or misconfigured') }}
                                     </div>
                                 </template>
                             </div>
@@ -321,7 +319,7 @@
                                 </a>
                             </template>
                             <a :href="`${item.hrefLink}/tags`" class="add-tag">
-                                Add tag
+                                {{ __('Add tag') }}
                             </a>
                         </div>
                     </span>
@@ -340,28 +338,27 @@
                                     <div class="pb-2 truncate box-title" x-text="item.name"></div>
                                     <div class="flex-1"></div>
                                     <template x-if="item.status.startsWith('running')">
-                                        <div title="running" class="bg-success badge-dashboard"></div>
+                                        <div title="{{ __('running') }}" class="bg-success badge-dashboard"></div>
                                     </template>
                                     <template x-if="item.status.startsWith('exited')">
-                                        <div title="exited" class="bg-error badge-dashboard"></div>
+                                        <div title="{{ __('exited') }}" class="bg-error badge-dashboard"></div>
                                     </template>
                                     <template x-if="item.status.startsWith('starting')">
-                                        <div title="starting" class="bg-warning badge-dashboard"></div>
+                                        <div title="{{ __('starting') }}" class="bg-warning badge-dashboard"></div>
                                     </template>
                                     <template x-if="item.status.startsWith('restarting')">
-                                        <div title="restarting" class="bg-warning badge-dashboard"></div>
+                                        <div title="{{ __('restarting') }}" class="bg-warning badge-dashboard"></div>
                                     </template>
                                     <template x-if="item.status.startsWith('degraded')">
-                                        <div title="degraded" class="bg-warning badge-dashboard"></div>
+                                        <div title="{{ __('degraded') }}" class="bg-warning badge-dashboard"></div>
                                     </template>
                                 </div>
                                 <div class="max-w-full px-4 truncate box-description" x-text="item.description"></div>
                                 <div class="max-w-full px-4 truncate box-description" x-text="item.fqdn"></div>
-                                <div class="max-w-full px-4 pt-1 truncate box-description">Server: <span
+                                <div class="max-w-full px-4 pt-1 truncate box-description">{{ __('Server:') }} <span
                                         x-text="item.destination?.server?.name || 'Unknown'"></span></div>
                                 <template x-if="item.server_status == false">
-                                    <div class="px-4 text-xs font-bold text-error">Server is unreachable or
-                                        misconfigured
+                                    <div class="px-4 text-xs font-bold text-error">{{ __('Server is unreachable or misconfigured') }}
                                     </div>
                                 </template>
                             </div>
@@ -373,7 +370,7 @@
                                 </a>
                             </template>
                             <a :href="`${item.hrefLink}/tags`" class="add-tag">
-                                Add tag
+                                {{ __('Add tag') }}
                             </a>
                         </div>
                     </span>

@@ -8,16 +8,37 @@ use Livewire\Livewire;
 
 uses(RefreshDatabase::class);
 
-it('initializes latest version during mount from cached versions data', function () {
-    config(['constants.coolify.version' => '4.0.0-beta.998']);
-    InstanceSettings::create([
-        'id' => 0,
-        'new_version_available' => true,
+function setUpgradeLocale(): void
+{
+    config([
+        'app.env' => 'production',
+        'app.locale' => 'en',
+        'app.fallback_locale' => 'en',
     ]);
+
+    app()->setLocale('en');
+}
+
+function createRootInstanceSettings(bool $newVersionAvailable): InstanceSettings
+{
+    $settings = new InstanceSettings;
+    $settings->forceFill([
+        'id' => 0,
+        'new_version_available' => $newVersionAvailable,
+    ])->save();
+
+    return $settings;
+}
+
+it('initializes latest version during mount from cached versions data', function () {
+    setUpgradeLocale();
+
+    config(['constants.coolify.version' => '4.0.0-beta.998']);
+    createRootInstanceSettings(true);
 
     Cache::shouldReceive('remember')
         ->once()
-        ->with('coolify:versions:all', 3600, Mockery::type(\Closure::class))
+        ->with('coolify:versions:all', 3600, Mockery::type(Closure::class))
         ->andReturn([
             'coolify' => [
                 'v4' => [
@@ -31,18 +52,21 @@ it('initializes latest version during mount from cached versions data', function
         ->assertSet('latestVersion', '4.0.0-beta.999')
         ->assertSet('isUpgradeAvailable', true)
         ->assertSee('4.0.0-beta.998')
-        ->assertSee('4.0.0-beta.999');
+        ->assertSee('4.0.0-beta.999')
+        ->assertSee('Upgrade')
+        ->assertSee('Upgrade Available')
+        ->assertSee('Cancel')
+        ->assertSee('Upgrade Now')
+        ->assertSee('Any deployments running during the update process will fail.');
 });
 
 it('falls back to 0.0.0 during mount when cached versions data is unavailable', function () {
-    InstanceSettings::create([
-        'id' => 0,
-        'new_version_available' => false,
-    ]);
+    setUpgradeLocale();
+    createRootInstanceSettings(false);
 
     Cache::shouldReceive('remember')
         ->once()
-        ->with('coolify:versions:all', 3600, Mockery::type(\Closure::class))
+        ->with('coolify:versions:all', 3600, Mockery::type(Closure::class))
         ->andReturn(null);
 
     Livewire::test(Upgrade::class)
@@ -50,15 +74,13 @@ it('falls back to 0.0.0 during mount when cached versions data is unavailable', 
 });
 
 it('clears stale upgrade availability when current version already matches latest version', function () {
+    setUpgradeLocale();
     config(['constants.coolify.version' => '4.0.0-beta.999']);
-    InstanceSettings::create([
-        'id' => 0,
-        'new_version_available' => true,
-    ]);
+    $settings = createRootInstanceSettings(true);
 
     Cache::shouldReceive('remember')
         ->once()
-        ->with('coolify:versions:all', 3600, Mockery::type(\Closure::class))
+        ->with('coolify:versions:all', 3600, Mockery::type(Closure::class))
         ->andReturn([
             'coolify' => [
                 'v4' => [
@@ -71,19 +93,17 @@ it('clears stale upgrade availability when current version already matches lates
         ->assertSet('latestVersion', '4.0.0-beta.999')
         ->assertSet('isUpgradeAvailable', false);
 
-    expect(InstanceSettings::findOrFail(0)->new_version_available)->toBeFalse();
+    expect((bool) $settings->refresh()->new_version_available)->toBeFalse();
 });
 
 it('clears stale upgrade availability when current version is newer than cached latest version', function () {
+    setUpgradeLocale();
     config(['constants.coolify.version' => '4.0.0-beta.1000']);
-    InstanceSettings::create([
-        'id' => 0,
-        'new_version_available' => true,
-    ]);
+    $settings = createRootInstanceSettings(true);
 
     Cache::shouldReceive('remember')
         ->once()
-        ->with('coolify:versions:all', 3600, Mockery::type(\Closure::class))
+        ->with('coolify:versions:all', 3600, Mockery::type(Closure::class))
         ->andReturn([
             'coolify' => [
                 'v4' => [
@@ -96,5 +116,5 @@ it('clears stale upgrade availability when current version is newer than cached 
         ->assertSet('latestVersion', '4.0.0-beta.999')
         ->assertSet('isUpgradeAvailable', false);
 
-    expect(InstanceSettings::findOrFail(0)->new_version_available)->toBeFalse();
+    expect((bool) $settings->refresh()->new_version_available)->toBeFalse();
 });

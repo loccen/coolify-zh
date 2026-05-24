@@ -43,6 +43,19 @@ class Show extends Component
     #[Validate(['integer', 'required', 'min:60', 'max:36000'])]
     public $timeout = 300;
 
+    protected function messages(): array
+    {
+        return [
+            'name.required' => __('The scheduled task name field is required.'),
+            'command.required' => __('The scheduled task command field is required.'),
+            'frequency.required' => __('The scheduled task frequency field is required.'),
+            'timeout.required' => __('The scheduled task timeout field is required.'),
+            'timeout.integer' => __('The scheduled task timeout must be an integer.'),
+            'timeout.min' => __('The scheduled task timeout must be at least :min seconds.'),
+            'timeout.max' => __('The scheduled task timeout must not be greater than :max seconds.'),
+        ];
+    }
+
     #[Locked]
     public ?string $application_uuid;
 
@@ -92,7 +105,7 @@ class Show extends Component
             $isValid = validate_cron_expression($this->frequency);
             if (! $isValid) {
                 $this->frequency = $this->task->frequency;
-                throw new \Exception('Invalid Cron / Human expression.');
+                throw new \Exception(__('Invalid Cron / Human expression.'));
             }
             $this->task->enabled = $this->isEnabled;
             $this->task->name = str($this->name)->trim()->value();
@@ -118,7 +131,7 @@ class Show extends Component
             $this->isEnabled = ! $this->isEnabled;
             $this->task->enabled = $this->isEnabled;
             $this->task->save();
-            $this->dispatch('success', $this->isEnabled ? 'Scheduled task enabled.' : 'Scheduled task disabled.');
+            $this->dispatch('success', $this->isEnabled ? __('Scheduled task enabled.') : __('Scheduled task disabled.'));
         } catch (\Exception $e) {
             return handleError($e);
         }
@@ -129,7 +142,7 @@ class Show extends Component
         try {
             $this->authorize('update', $this->resource);
             $this->syncData(true);
-            $this->dispatch('success', 'Scheduled task updated.');
+            $this->dispatch('success', __('Scheduled task updated.'));
             $this->refreshTasks();
         } catch (\Exception $e) {
             return handleError($e);
@@ -141,7 +154,7 @@ class Show extends Component
         try {
             $this->authorize('update', $this->resource);
             $this->syncData(true);
-            $this->dispatch('success', 'Scheduled task updated.');
+            $this->dispatch('success', __('Scheduled task updated.'));
         } catch (\Exception $e) {
             return handleError($e, $this);
         }
@@ -177,7 +190,7 @@ class Show extends Component
         try {
             $this->authorize('update', $this->resource);
             ScheduledTaskJob::dispatch($this->task);
-            $this->dispatch('success', 'Scheduled task executed.');
+            $this->dispatch('success', __('Scheduled task executed.'));
         } catch (\Exception $e) {
             return handleError($e);
         }

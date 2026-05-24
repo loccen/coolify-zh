@@ -1,44 +1,44 @@
 <div>
     <x-slot:title>
-        {{ data_get_str($service, 'name')->limit(10) }} > Configuration | Coolify
+        {{ data_get_str($service, 'name')->limit(10) }} > {{ __('Configuration') }} | Coolify
     </x-slot>
     <livewire:project.service.heading :service="$service" :parameters="$parameters" :query="$query" />
 
     <div class="flex flex-col h-full gap-8 sm:flex-row">
         <div class="sub-menu-wrapper">
-            <a class="sub-menu-item" target="_blank" href="{{ $service->documentation() }}"><span class="menu-item-label">Documentation</span>
+            <a class="sub-menu-item" target="_blank" href="{{ $service->documentation() }}"><span class="menu-item-label">{{ __('Documentation') }}</span>
                 <x-external-link /></a>
             <a class='sub-menu-item' wire:current.exact="menu-item-active" {{ wireNavigate() }}
-                href="{{ route('project.service.configuration', ['project_uuid' => $project->uuid, 'environment_uuid' => $environment->uuid, 'service_uuid' => $service->uuid]) }}"><span class="menu-item-label">General</span></a>
+                href="{{ route('project.service.configuration', ['project_uuid' => $project->uuid, 'environment_uuid' => $environment->uuid, 'service_uuid' => $service->uuid]) }}"><span class="menu-item-label">{{ __('General') }}</span></a>
             <a class='sub-menu-item' wire:current.exact="menu-item-active" {{ wireNavigate() }}
-                href="{{ route('project.service.environment-variables', ['project_uuid' => $project->uuid, 'environment_uuid' => $environment->uuid, 'service_uuid' => $service->uuid]) }}"><span class="menu-item-label">Environment Variables</span></a>
+                href="{{ route('project.service.environment-variables', ['project_uuid' => $project->uuid, 'environment_uuid' => $environment->uuid, 'service_uuid' => $service->uuid]) }}"><span class="menu-item-label">{{ __('Environment Variables') }}</span></a>
             <a class='sub-menu-item' wire:current.exact="menu-item-active" {{ wireNavigate() }}
-                href="{{ route('project.service.storages', ['project_uuid' => $project->uuid, 'environment_uuid' => $environment->uuid, 'service_uuid' => $service->uuid]) }}"><span class="menu-item-label">Persistent Storages</span></a>
+                href="{{ route('project.service.storages', ['project_uuid' => $project->uuid, 'environment_uuid' => $environment->uuid, 'service_uuid' => $service->uuid]) }}"><span class="menu-item-label">{{ __('Persistent Storages') }}</span></a>
             <a @class(['sub-menu-item', 'menu-item-active' => str($currentRoute)->startsWith('project.service.scheduled-tasks')]) {{ wireNavigate() }}
-                href="{{ route('project.service.scheduled-tasks.show', ['project_uuid' => $project->uuid, 'environment_uuid' => $environment->uuid, 'service_uuid' => $service->uuid]) }}"><span class="menu-item-label">Scheduled Tasks</span></a>
+                href="{{ route('project.service.scheduled-tasks.show', ['project_uuid' => $project->uuid, 'environment_uuid' => $environment->uuid, 'service_uuid' => $service->uuid]) }}"><span class="menu-item-label">{{ __('Scheduled Tasks') }}</span></a>
             <a class='sub-menu-item' wire:current.exact="menu-item-active" {{ wireNavigate() }}
-                href="{{ route('project.service.webhooks', ['project_uuid' => $project->uuid, 'environment_uuid' => $environment->uuid, 'service_uuid' => $service->uuid]) }}"><span class="menu-item-label">Webhooks</span></a>
+                href="{{ route('project.service.webhooks', ['project_uuid' => $project->uuid, 'environment_uuid' => $environment->uuid, 'service_uuid' => $service->uuid]) }}"><span class="menu-item-label">{{ __('Webhooks') }}</span></a>
             <a class='sub-menu-item' wire:current.exact="menu-item-active" {{ wireNavigate() }}
-                href="{{ route('project.service.resource-operations', ['project_uuid' => $project->uuid, 'environment_uuid' => $environment->uuid, 'service_uuid' => $service->uuid]) }}"><span class="menu-item-label">Resource Operations</span></a>
+                href="{{ route('project.service.resource-operations', ['project_uuid' => $project->uuid, 'environment_uuid' => $environment->uuid, 'service_uuid' => $service->uuid]) }}"><span class="menu-item-label">{{ __('Resource Operations') }}</span></a>
 
             <a class='sub-menu-item' wire:current.exact="menu-item-active" {{ wireNavigate() }}
-                href="{{ route('project.service.tags', ['project_uuid' => $project->uuid, 'environment_uuid' => $environment->uuid, 'service_uuid' => $service->uuid]) }}"><span class="menu-item-label">Tags</span></a>
+                href="{{ route('project.service.tags', ['project_uuid' => $project->uuid, 'environment_uuid' => $environment->uuid, 'service_uuid' => $service->uuid]) }}"><span class="menu-item-label">{{ __('Tags') }}</span></a>
 
             <a class='sub-menu-item' wire:current.exact="menu-item-active" {{ wireNavigate() }}
-                href="{{ route('project.service.danger', ['project_uuid' => $project->uuid, 'environment_uuid' => $environment->uuid, 'service_uuid' => $service->uuid]) }}"><span class="menu-item-label">Danger Zone</span></a>
+                href="{{ route('project.service.danger', ['project_uuid' => $project->uuid, 'environment_uuid' => $environment->uuid, 'service_uuid' => $service->uuid]) }}"><span class="menu-item-label">{{ __('Danger Zone') }}</span></a>
         </div>
         <div class="w-full">
             @if ($currentRoute === 'project.service.configuration')
                 <livewire:project.service.stack-form :service="$service" />
-                <h3>Services</h3>
+                <h3>{{ __('Services') }}</h3>
                 <div class="grid grid-cols-1 gap-2 pt-4 xl:grid-cols-1">
                     @if ($applications->isEmpty() && $databases->isEmpty())
                         <div class="p-4 text-sm text-neutral-500">
-                            No services defined in this Docker Compose file.
+                            {{ __('No services defined in this Docker Compose file.') }}
                         </div>
                     @elseif($applications->isEmpty())
                         <div class="p-4 text-sm text-neutral-500">
-                            No applications with domains defined. Only database services are available.
+                            {{ __('No applications with domains defined. Only database services are available.') }}
                         </div>
                     @endif
 
@@ -63,7 +63,7 @@
                                         <span class="text-xs">({{ $application->image }})</span>
                                     </div>
                                     @if ($application->configuration_required)
-                                        <span class="text-xs text-error">(configuration required)</span>
+                                        <span class="text-xs text-error">({{ __('configuration required') }})</span>
                                     @endif
                                     @if ($application->description)
                                         <span class="text-xs">{{ Str::limit($application->description, 60) }}</span>
@@ -71,7 +71,7 @@
                                     @if ($application->fqdn)
                                         <span class="flex gap-1 text-xs">{{ Str::limit($application->fqdn, 60) }}
                                             @can('update', $service)
-                                                <x-modal-input title="Edit Domains" :closeOutside="false">
+                                                <x-modal-input :title="__('Edit Domains')" :closeOutside="false">
                                                     <x-slot:content>
                                                         <span class="cursor-pointer">
                                                             <svg xmlns="http://www.w3.org/2000/svg"
@@ -100,18 +100,18 @@
                                 <div class="flex items-center px-4">
                                     <a class="mx-4 text-xs font-bold hover:underline" {{ wireNavigate() }}
                                         href="{{ route('project.service.index', ['project_uuid' => $project->uuid, 'environment_uuid' => $environment->uuid, 'service_uuid' => $service->uuid, 'stack_service_uuid' => $application->uuid]) }}">
-                                        Settings
+                                        {{ __('Settings') }}
                                     </a>
                                     @if (str($application->status)->contains('running'))
                                         @can('update', $service)
-                                            <x-modal-confirmation title="Confirm Service Application Restart?"
-                                                buttonTitle="Restart"
+                                            <x-modal-confirmation :title="__('Confirm Service Application Restart?')"
+                                                :buttonTitle="__('Restart')"
                                                 submitAction="restartApplication({{ $application->id }})" :actions="[
-                                                    'The selected service application will be unavailable during the restart.',
-                                                    'If the service application is currently in use data could be lost.',
+                                                    __('The selected service application will be unavailable during the restart.'),
+                                                    __('If the service application is currently in use data could be lost.'),
                                                 ]"
                                                 :confirmWithText="false" :confirmWithPassword="false"
-                                                step2ButtonText="Restart Service Container" />
+                                                :step2ButtonText="__('Restart Service Container')" />
                                         @endcan
                                     @endif
                                 </div>
@@ -150,22 +150,22 @@
                                     @if ($database->isBackupSolutionAvailable() || $database->is_migrated)
                                         <a class="mx-4 text-xs font-bold hover:underline" {{ wireNavigate() }}
                                             href="{{ route('project.service.database.backups', ['project_uuid' => $project->uuid, 'environment_uuid' => $environment->uuid, 'service_uuid' => $service->uuid, 'stack_service_uuid' => $database->uuid]) }}">
-                                            Backups
+                                            {{ __('Backups') }}
                                         </a>
                                     @endif
                                     <a class="mx-4 text-xs font-bold hover:underline" {{ wireNavigate() }}
                                         href="{{ route('project.service.index', ['project_uuid' => $project->uuid, 'environment_uuid' => $environment->uuid, 'service_uuid' => $service->uuid, 'stack_service_uuid' => $database->uuid]) }}">
-                                        Settings
+                                        {{ __('Settings') }}
                                     </a>
                                     @if (str($database->status)->contains('running'))
                                         @can('update', $service)
-                                            <x-modal-confirmation title="Confirm Service Database Restart?"
-                                                buttonTitle="Restart" submitAction="restartDatabase({{ $database->id }})"
+                                            <x-modal-confirmation :title="__('Confirm Service Database Restart?')"
+                                                :buttonTitle="__('Restart')" submitAction="restartDatabase({{ $database->id }})"
                                                 :actions="[
-                                                    'This service database will be unavailable during the restart.',
-                                                    'If the service database is currently in use data could be lost.',
+                                                    __('This service database will be unavailable during the restart.'),
+                                                    __('If the service database is currently in use data could be lost.'),
                                                 ]" :confirmWithText="false" :confirmWithPassword="false"
-                                                step2ButtonText="Restart Database" />
+                                                :step2ButtonText="__('Restart Database')" />
                                         @endcan
                                     @endif
                                 </div>
@@ -177,9 +177,9 @@
                 <livewire:project.shared.environment-variable.all :resource="$service" />
             @elseif ($currentRoute === 'project.service.storages')
                 <div class="flex gap-2 items-center">
-                    <h2>Storages</h2>
+                    <h2>{{ __('Persistent Storages') }}</h2>
                 </div>
-                <div class="pb-4">Persistent storage to preserve data between deployments.</div>
+                <div class="pb-4">{{ __('Persistent storage to preserve data between deployments.') }}</div>
                 @foreach ($applications as $application)
                     <livewire:project.service.storage wire:key="application-{{ $application->id }}"
                         :resource="$application" />

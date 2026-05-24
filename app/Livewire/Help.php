@@ -44,7 +44,11 @@ class Help extends Component
             } else {
                 send_user_an_email($mail, auth()->user()?->email, 'feedback@coollabs.io');
             }
-            $this->dispatch('success', 'Feedback sent.', 'We will get in touch with you as soon as possible.');
+            $this->dispatch(
+                'success',
+                trans('toast.livewire.help.feedback_sent'),
+                trans('toast.livewire.help.feedback_follow_up')
+            );
             $this->reset('description', 'subject');
         } catch (\Throwable $e) {
             return handleError($e, $this);

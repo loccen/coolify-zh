@@ -83,7 +83,7 @@ class Show extends Component
                     force_regeneration: true
                 ));
             }
-            $this->dispatch('success', 'CA Certificate saved successfully.');
+            $this->dispatch('success', __('server.toasts.ca_certificate_saved_successfully'));
         } catch (\Throwable $e) {
             return handleError($e, $this);
         }
@@ -110,7 +110,7 @@ class Show extends Component
             ));
 
             $this->loadCaCertificate();
-            $this->dispatch('success', 'CA Certificate regenerated successfully.');
+            $this->dispatch('success', __('server.toasts.ca_certificate_regenerated_successfully'));
         } catch (\Throwable $e) {
             return handleError($e, $this);
         }

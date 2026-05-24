@@ -11,7 +11,7 @@ $defaultRepositoryUrl = 'https://github.com/loccen/coolify-zh';
 
 return [
     'coolify' => [
-        'version' => '4.1.3',
+        'version' => '4.1.4',
         'helper_version' => '1.0.14',
         'realtime_version' => '1.0.15',
         'railpack_version' => '0.23.0',

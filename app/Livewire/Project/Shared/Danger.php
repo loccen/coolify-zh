@@ -59,13 +59,13 @@ class Danger extends Component
         }
 
         if (! method_exists($this->resource, 'type')) {
-            $this->resourceName = 'Unknown Resource';
+            $this->resourceName = __('Unknown Resource');
 
             return;
         }
 
         $this->resourceName = match ($this->resource->type()) {
-            'application' => $this->resource->name ?? 'Application',
+            'application' => $this->resource->name ?? __('Application'),
             'standalone-postgresql',
             'standalone-redis',
             'standalone-mongodb',
@@ -73,11 +73,11 @@ class Danger extends Component
             'standalone-mariadb',
             'standalone-keydb',
             'standalone-dragonfly',
-            'standalone-clickhouse' => $this->resource->name ?? 'Database',
-            'service' => $this->resource->name ?? 'Service',
-            'service-application' => $this->resource->name ?? 'Service Application',
-            'service-database' => $this->resource->name ?? 'Service Database',
-            default => 'Unknown Resource',
+            'standalone-clickhouse' => $this->resource->name ?? __('Database'),
+            'service' => $this->resource->name ?? __('Service'),
+            'service-application' => $this->resource->name ?? __('Service Application'),
+            'service-database' => $this->resource->name ?? __('Service Database'),
+            default => __('Unknown Resource'),
         };
 
         // Check if user can delete this resource
@@ -91,11 +91,11 @@ class Danger extends Component
     public function delete($password, $selectedActions = [])
     {
         if (! verifyPasswordConfirmation($password, $this)) {
-            return 'The provided password is incorrect.';
+            return __('The provided password is incorrect.');
         }
 
         if (! $this->resource) {
-            return 'Resource not found.';
+            return __('Resource not found.');
         }
 
         if (! empty($selectedActions)) {

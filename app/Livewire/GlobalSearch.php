@@ -690,9 +690,9 @@ class GlobalSearch extends Component
                     'search_text' => 'tags labels organize',
                 ],
                 [
-                    'name' => 'Terminal',
+                    'name' => __('Terminal'),
                     'type' => 'navigation',
-                    'description' => 'Access server terminal',
+                    'description' => __('terminal.navigation.access_server'),
                     'link' => route('terminal'),
                     'search_text' => 'terminal ssh console shell command line',
                 ],
@@ -1208,7 +1208,7 @@ class GlobalSearch extends Component
         if (! $server) {
             $this->loadingDestinations = false;
 
-            return $this->dispatch('error', message: 'Server not found');
+            return $this->dispatch('error', message: trans('toast.livewire.global_search.server_not_found'));
         }
 
         $destinations = $server->destinations();
@@ -1216,7 +1216,7 @@ class GlobalSearch extends Component
         if ($destinations->isEmpty()) {
             $this->loadingDestinations = false;
 
-            return $this->dispatch('error', message: 'No destinations found on this server');
+            return $this->dispatch('error', message: trans('toast.livewire.global_search.no_destinations_found'));
         }
 
         $this->availableDestinations = $destinations->map(fn ($d) => [
@@ -1252,7 +1252,7 @@ class GlobalSearch extends Component
         if ($projects->isEmpty()) {
             $this->loadingProjects = false;
 
-            return $this->dispatch('error', message: 'Please create a project first');
+            return $this->dispatch('error', message: trans('toast.livewire.global_search.create_project_first'));
         }
 
         $this->availableProjects = $projects->map(fn ($p) => [
@@ -1293,7 +1293,7 @@ class GlobalSearch extends Component
         if ($environments->isEmpty()) {
             $this->loadingEnvironments = false;
 
-            return $this->dispatch('error', message: 'No environments found in project');
+            return $this->dispatch('error', message: trans('toast.livewire.global_search.no_environments_found'));
         }
 
         $this->availableEnvironments = $environments->map(fn ($e) => [

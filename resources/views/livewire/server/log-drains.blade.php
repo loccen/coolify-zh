@@ -15,7 +15,7 @@
                 <div class="flex flex-col gap-4 pt-4">
                     <div class="p-4 border dark:border-coolgray-300 border-neutral-200">
                         <form wire:submit='submit("newrelic")' class="flex flex-col">
-                            <h3>New Relic</h3>
+                            <h3>{{ __('New Relic') }}</h3>
                             <div class="w-32">
                                 @if ($isLogDrainAxiomEnabled || $isLogDrainCustomEnabled)
                                     <x-forms.checkbox disabled id="isLogDrainNewRelicEnabled" :label="__('Enabled')" />
@@ -51,7 +51,7 @@
                             </div>
                         </form>
 
-                        <h3>Axiom</h3>
+                        <h3>{{ __('Axiom') }}</h3>
                         <div class="w-32">
                             @if ($isLogDrainNewRelicEnabled || $isLogDrainCustomEnabled)
                                 <x-forms.checkbox disabled id="isLogDrainAxiomEnabled" :label="__('Enabled')" />
@@ -82,7 +82,7 @@
                                 </x-forms.button>
                             </div>
                         </form>
-                        <h3>Custom FluentBit</h3>
+                        <h3>{{ __('Custom FluentBit') }}</h3>
                         <div class="w-32">
                             @if ($isLogDrainNewRelicEnabled || $isLogDrainAxiomEnabled)
                                 <x-forms.checkbox disabled id="isLogDrainCustomEnabled" :label="__('Enabled')" />

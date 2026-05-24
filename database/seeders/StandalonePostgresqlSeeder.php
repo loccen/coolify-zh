@@ -12,8 +12,8 @@ class StandalonePostgresqlSeeder extends Seeder
     {
         StandalonePostgresql::create([
             'uuid' => 'postgresql',
-            'name' => 'Local PostgreSQL',
-            'description' => 'Local PostgreSQL for testing',
+            'name' => '本地 PostgreSQL',
+            'description' => '用于测试的本地 PostgreSQL',
             'postgres_password' => 'postgres',
             'environment_id' => 1,
             'destination_id' => 0,

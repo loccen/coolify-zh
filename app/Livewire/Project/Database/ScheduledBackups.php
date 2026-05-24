@@ -3,6 +3,7 @@
 namespace App\Livewire\Project\Database;
 
 use App\Models\ScheduledDatabaseBackup;
+use App\Models\ServiceDatabase;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 
@@ -34,7 +35,7 @@ class ScheduledBackups extends Component
             $this->setSelectedBackup($this->selectedBackupId, true);
         }
         $this->parameters = get_route_parameters();
-        if ($this->database->getMorphClass() === \App\Models\ServiceDatabase::class) {
+        if ($this->database->getMorphClass() === ServiceDatabase::class) {
             $this->type = 'service-database';
         } else {
             $this->type = 'database';
@@ -60,7 +61,7 @@ class ScheduledBackups extends Component
 
         $this->database->custom_type = $this->custom_type;
         $this->database->save();
-        $this->dispatch('success', 'Database type set.');
+        $this->dispatch('success', __('Database type set.'));
         $this->refreshScheduledBackups();
     }
 
@@ -70,7 +71,7 @@ class ScheduledBackups extends Component
         $this->authorize('manageBackups', $this->database);
 
         $backup->delete();
-        $this->dispatch('success', 'Scheduled backup deleted.');
+        $this->dispatch('success', __('Scheduled backup deleted.'));
         $this->refreshScheduledBackups();
     }
 

@@ -38,26 +38,26 @@ class ResourceLimits extends Component
     ];
 
     protected $validationAttributes = [
-        'limitsMemory' => 'memory',
-        'limitsMemorySwap' => 'swap',
-        'limitsMemorySwappiness' => 'swappiness',
-        'limitsMemoryReservation' => 'reservation',
-        'limitsCpus' => 'cpus',
-        'limitsCpuset' => 'cpuset',
-        'limitsCpuShares' => 'cpu shares',
+        'limitsMemory' => '内存',
+        'limitsMemorySwap' => '交换内存',
+        'limitsMemorySwappiness' => '交换倾向',
+        'limitsMemoryReservation' => '预留内存',
+        'limitsCpus' => 'CPU 数量',
+        'limitsCpuset' => 'CPU 集',
+        'limitsCpuShares' => 'CPU 权重',
     ];
 
     protected $messages = [
-        'limitsMemory.regex' => 'Maximum Memory Limit must be a number followed by a unit (b, k, m, g). Example: 256m, 1g. Use 0 for unlimited.',
-        'limitsMemorySwap.regex' => 'Maximum Swap Limit must be a number followed by a unit (b, k, m, g). Example: 256m, 1g. Use 0 for unlimited.',
-        'limitsMemoryReservation.regex' => 'Soft Memory Limit must be a number followed by a unit (b, k, m, g). Example: 256m, 1g. Use 0 for unlimited.',
-        'limitsCpus.regex' => 'Number of CPUs must be a number (integer or decimal). Example: 0.5, 2.',
-        'limitsCpuset.regex' => 'CPU sets must be a comma-separated list of CPU numbers or ranges. Example: 0-2 or 0,1,3.',
-        'limitsMemorySwappiness.integer' => 'Swappiness must be a whole number between 0 and 100.',
-        'limitsMemorySwappiness.min' => 'Swappiness must be between 0 and 100.',
-        'limitsMemorySwappiness.max' => 'Swappiness must be between 0 and 100.',
-        'limitsCpuShares.integer' => 'CPU Weight must be a whole number.',
-        'limitsCpuShares.min' => 'CPU Weight must be a positive number.',
+        'limitsMemory.regex' => '最大内存限制必须是带单位的数字（b、k、m、g）。例如 256m、1g。填 0 表示不限制。',
+        'limitsMemorySwap.regex' => '最大交换内存限制必须是带单位的数字（b、k、m、g）。例如 256m、1g。填 0 表示不限制。',
+        'limitsMemoryReservation.regex' => '软内存限制必须是带单位的数字（b、k、m、g）。例如 256m、1g。填 0 表示不限制。',
+        'limitsCpus.regex' => 'CPU 数量必须是数字（整数或小数）。例如 0.5、2。',
+        'limitsCpuset.regex' => 'CPU 集必须是用逗号分隔的 CPU 编号或范围列表。例如 0-2 或 0,1,3。',
+        'limitsMemorySwappiness.integer' => '交换倾向必须是 0 到 100 之间的整数。',
+        'limitsMemorySwappiness.min' => '交换倾向必须在 0 到 100 之间。',
+        'limitsMemorySwappiness.max' => '交换倾向必须在 0 到 100 之间。',
+        'limitsCpuShares.integer' => 'CPU 权重必须是整数。',
+        'limitsCpuShares.min' => 'CPU 权重必须是正数。',
     ];
 
     /**
@@ -125,7 +125,7 @@ class ResourceLimits extends Component
 
             $this->syncData(true);
             $this->resource->save();
-            $this->dispatch('success', 'Resource limits updated.');
+            $this->dispatch('success', __('Resource limits updated.'));
         } catch (ValidationException $e) {
             foreach ($e->validator->errors()->all() as $message) {
                 $this->dispatch('error', $message);

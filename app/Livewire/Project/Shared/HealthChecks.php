@@ -147,7 +147,7 @@ class HealthChecks extends Component
         $this->resource->health_check_start_period = $this->healthCheckStartPeriod;
         $this->resource->custom_healthcheck_found = $this->customHealthcheckFound;
         $this->resource->save();
-        $this->dispatch('success', 'Health check updated.');
+        $this->dispatch('success', __('Health check updated.'));
     }
 
     public function submit()
@@ -173,7 +173,7 @@ class HealthChecks extends Component
             $this->resource->health_check_start_period = $this->healthCheckStartPeriod;
             $this->resource->custom_healthcheck_found = $this->customHealthcheckFound;
             $this->resource->save();
-            $this->dispatch('success', 'Health check updated.');
+            $this->dispatch('success', __('Health check updated.'));
         } catch (\Throwable $e) {
             return handleError($e, $this);
         }
@@ -205,9 +205,9 @@ class HealthChecks extends Component
             $this->resource->save();
 
             if ($this->healthCheckEnabled && ! $wasEnabled && $this->resource->isRunning()) {
-                $this->dispatch('info', 'Health check has been enabled. A restart is required to apply the new settings.');
+                $this->dispatch('info', __('Health check has been enabled. A restart is required to apply the new settings.'));
             } else {
-                $this->dispatch('success', 'Health check '.($this->healthCheckEnabled ? 'enabled' : 'disabled').'.');
+                $this->dispatch('success', $this->healthCheckEnabled ? __('Health check enabled.') : __('Health check disabled.'));
             }
         } catch (\Throwable $e) {
             return handleError($e, $this);

@@ -51,9 +51,9 @@ class StackForm extends Component
         return array_merge(
             ValidationPatterns::combinedMessages(),
             [
-                'name.required' => 'The Name field is required.',
-                'dockerComposeRaw.required' => 'The Docker Compose Raw field is required.',
-                'dockerCompose.required' => 'The Docker Compose field is required.',
+                'name.required' => __('The Name field is required.'),
+                'dockerComposeRaw.required' => __('The Docker Compose Raw field is required.'),
+                'dockerCompose.required' => __('The Docker Compose field is required.'),
             ]
         );
     }
@@ -106,7 +106,7 @@ class StackForm extends Component
                     'customHelper' => $customHelper,
                 ]);
 
-                $this->validationAttributes["fields.$key.value"] = $fieldKey;
+                $this->validationAttributes["fields.$key.value"] = __($fieldKey);
             }
         }
         $this->fields = $this->fields->groupBy('serviceName')->map(function ($group) {
@@ -130,7 +130,7 @@ class StackForm extends Component
     {
         $this->syncData(true);
         $this->service->save();
-        $this->dispatch('success', 'Service settings saved.');
+        $this->dispatch('success', __('Service settings saved.'));
     }
 
     public function submit($notify = true)
@@ -154,7 +154,7 @@ class StackForm extends Component
 
             $this->dispatch('refreshEnvs');
             $this->dispatch('refreshServices');
-            $notify && $this->dispatch('success', 'Service saved.');
+            $notify && $this->dispatch('success', __('Service saved.'));
         } catch (\Throwable $e) {
             // On error, refresh from database to restore clean state
             $this->service->refresh();

@@ -1,4 +1,7 @@
 <div>
+    <x-slot:title>
+        {{ __('GitHub App') }} | Coolify
+    </x-slot:title>
     @if (data_get($github_app, 'app_id'))
         <form wire:submit='submit'>
             <div class="flex flex-col sm:flex-row sm:items-center gap-2">
@@ -127,15 +130,15 @@
                     </div>
                     <div class="flex flex-col sm:flex-row gap-2">
                         <x-forms.input id="contents" :helper="__('read - mandatory.')" :label="__('Content')" readonly
-                            placeholder="N/A" />
+                            :placeholder="__('N/A')" />
                         <x-forms.input id="metadata" :helper="__('read - mandatory.')" :label="__('Metadata')" readonly
-                            placeholder="N/A" />
+                            :placeholder="__('N/A')" />
                         {{-- <x-forms.input id="administration"
                             helper="read:write access needed to setup servers as GitHub Runner." label="Administration"
                             readonly placeholder="N/A" /> --}}
                         <x-forms.input id="pullRequests"
                             :helper="__('write access needed to use deployment status update in previews.')"
-                            :label="__('Pull Request')" readonly placeholder="N/A" />
+                            :label="__('Pull Request')" readonly :placeholder="__('N/A')" />
                     </div>
                 </div>
             @endif
@@ -189,7 +192,7 @@
                                                                     <x-internal-link /></a>
                                                             </td>
                                                             <td class="px-5 py-4 text-sm whitespace-nowrap">
-                                                                {{ str($resource->type())->headline() }}</td>
+                                                                {{ __(str($resource->type())->headline()->value()) }}</td>
                                                         </tr>
                                                     @endforeach
                                                 </tbody>

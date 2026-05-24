@@ -31,7 +31,7 @@ class UploadConfig extends Component
         try {
             $application = Application::findOrFail($this->applicationId);
             $application->setConfig($this->config);
-            $this->dispatch('success', 'Application settings updated');
+            $this->dispatch('success', __('Application settings updated'));
         } catch (\Exception $e) {
             $this->dispatch('error', $e->getMessage());
 

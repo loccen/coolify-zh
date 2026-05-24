@@ -26,9 +26,14 @@ class UpdateServiceVersions extends Command
 
     protected array $majorVersionUpdates = [];
 
+    public function getDescription(): string
+    {
+        return trans('console.update_service_versions.description');
+    }
+
     public function handle(): int
     {
-        $this->info('Starting service version update...');
+        $this->info(trans('console.update_service_versions.info.starting'));
 
         $templateFiles = $this->getTemplateFiles();
 
@@ -59,14 +64,14 @@ class UpdateServiceVersions extends Command
     protected function processTemplate(string $filePath): void
     {
         $filename = basename($filePath);
-        $this->info("Processing: {$filename}");
+        $this->info(trans('console.update_service_versions.info.processing', ['filename' => $filename]));
 
         try {
             $content = file_get_contents($filePath);
             $yaml = Yaml::parse($content);
 
             if (! isset($yaml['services'])) {
-                $this->warn("  No services found in {$filename}");
+                $this->warn('  '.trans('console.update_service_versions.warn.no_services_found', ['filename' => $filename]));
                 $this->stats['skipped']++;
 
                 return;
@@ -85,20 +90,30 @@ class UpdateServiceVersions extends Command
                 // Check if using 'latest' tag and log for manual review
                 if (str_contains($currentImage, ':latest')) {
                     $registryUrl = $this->getRegistryUrl($currentImage);
-                    $this->warn("  {$serviceName}: {$currentImage} (using 'latest' tag)");
+                    $this->warn('  '.trans('console.update_service_versions.warn.using_latest_tag', [
+                        'service_name' => $serviceName,
+                        'current_image' => $currentImage,
+                    ]));
                     if ($registryUrl) {
-                        $this->line("    → Manual review: {$registryUrl}");
+                        $this->line('    → '.trans('console.update_service_versions.info.manual_review', ['registry_url' => $registryUrl]));
                     }
                 }
 
                 $latestVersion = $this->getLatestVersion($currentImage);
 
                 if ($latestVersion && $latestVersion !== $currentImage) {
-                    $this->line("  {$serviceName}: {$currentImage} → {$latestVersion}");
+                    $this->line('  '.trans('console.update_service_versions.info.image_updated', [
+                        'service_name' => $serviceName,
+                        'current_image' => $currentImage,
+                        'latest_version' => $latestVersion,
+                    ]));
                     $updatedYaml['services'][$serviceName]['image'] = $latestVersion;
                     $updated = true;
                 } else {
-                    $this->line("  {$serviceName}: {$currentImage} (up to date)");
+                    $this->line('  '.trans('console.update_service_versions.info.image_up_to_date', [
+                        'service_name' => $serviceName,
+                        'current_image' => $currentImage,
+                    ]));
                 }
             }
 
@@ -107,7 +122,7 @@ class UpdateServiceVersions extends Command
                     $this->updateYamlFile($filePath, $content, $updatedYaml);
                     $this->stats['updated']++;
                 } else {
-                    $this->warn('  [DRY RUN] Would update this file');
+                    $this->warn('  '.trans('console.update_service_versions.warn.dry_run_would_update_file'));
                     $this->stats['updated']++;
                 }
             } else {
@@ -115,7 +130,7 @@ class UpdateServiceVersions extends Command
             }
 
         } catch (\Throwable $e) {
-            $this->error("  Failed: {$e->getMessage()}");
+            $this->error('  '.trans('console.update_service_versions.error.failed', ['message' => $e->getMessage()]));
             $this->stats['failed']++;
         }
 
@@ -139,7 +154,7 @@ class UpdateServiceVersions extends Command
             $result = $this->getDockerHubLatestVersion($repository, $currentTag);
         } elseif ($this->isCustomRegistry($repository)) {
             // Custom registries - skip for now, log warning
-            $this->warn("  Skipping custom registry: {$repository}");
+            $this->warn('  '.trans('console.update_service_versions.warn.skipping_custom_registry', ['repository' => $repository]));
             $result = null;
         } else {
             // DockerHub (default registry - no prefix or docker.io/index.docker.io)
@@ -265,7 +280,7 @@ class UpdateServiceVersions extends Command
                 // Cache the tags for this repository
                 $this->registryCache[$repository.'_tags'] = $tags;
             } else {
-                $this->line("    [cached] Using cached tags for {$repository}");
+                $this->line('    '.trans('console.update_service_versions.info.using_cached_tags', ['repository' => $repository]));
                 $tags = $this->registryCache[$repository.'_tags'];
             }
 
@@ -273,7 +288,11 @@ class UpdateServiceVersions extends Command
             return $this->findBestTag($tags, $currentTag, $repository);
 
         } catch (\Throwable $e) {
-            $this->warn("  DockerHub API error for {$repository}: {$e->getMessage()}");
+            $this->warn('  '.trans('console.update_service_versions.warn.registry_api_error', [
+                'registry' => 'DockerHub',
+                'repository' => $repository,
+                'message' => $e->getMessage(),
+            ]));
 
             return null;
         }
@@ -337,7 +356,7 @@ class UpdateServiceVersions extends Command
             if (! $response->successful()) {
                 // Most GHCR packages require authentication
                 if ($currentTag === 'latest') {
-                    $this->warn('    ⚠ GHCR requires authentication - manual review needed');
+                    $this->warn('    ⚠ '.trans('console.update_service_versions.warn.ghcr_requires_authentication'));
                 }
 
                 return null;
@@ -363,7 +382,11 @@ class UpdateServiceVersions extends Command
             return $this->findBestTag($tags, $currentTag, $repository);
 
         } catch (\Throwable $e) {
-            $this->warn("  GHCR API error for {$repository}: {$e->getMessage()}");
+            $this->warn('  '.trans('console.update_service_versions.warn.registry_api_error', [
+                'registry' => 'GHCR',
+                'repository' => $repository,
+                'message' => $e->getMessage(),
+            ]));
 
             return null;
         }
@@ -390,14 +413,18 @@ class UpdateServiceVersions extends Command
                 // Cache the tags for this repository
                 $this->registryCache[$repository.'_tags'] = $tags;
             } else {
-                $this->line("    [cached] Using cached tags for {$repository}");
+                $this->line('    '.trans('console.update_service_versions.info.using_cached_tags', ['repository' => $repository]));
                 $tags = $this->registryCache[$repository.'_tags'];
             }
 
             return $this->findBestTag($tags, $currentTag, $repository);
 
         } catch (\Throwable $e) {
-            $this->warn("  Quay API error for {$repository}: {$e->getMessage()}");
+            $this->warn('  '.trans('console.update_service_versions.warn.registry_api_error', [
+                'registry' => 'Quay',
+                'repository' => $repository,
+                'message' => $e->getMessage(),
+            ]));
 
             return null;
         }
@@ -442,14 +469,18 @@ class UpdateServiceVersions extends Command
                 // Cache the tags for this repository
                 $this->registryCache[$repository.'_tags'] = $tags;
             } else {
-                $this->line("    [cached] Using cached tags for {$repository}");
+                $this->line('    '.trans('console.update_service_versions.info.using_cached_tags', ['repository' => $repository]));
                 $tags = $this->registryCache[$repository.'_tags'];
             }
 
             return $this->findBestTag($tags, $currentTag, $repository);
 
         } catch (\Throwable $e) {
-            $this->warn("  Codeberg API error for {$repository}: {$e->getMessage()}");
+            $this->warn('  '.trans('console.update_service_versions.warn.registry_api_error', [
+                'registry' => 'Codeberg',
+                'repository' => $repository,
+                'message' => $e->getMessage(),
+            ]));
 
             return null;
         }
@@ -473,7 +504,7 @@ class UpdateServiceVersions extends Command
                 if (! empty($versionTags)) {
                     // Prefer shorter version tags (1.8 over 1.8.1)
                     $bestVersion = $this->preferShorterVersion($versionTags);
-                    $this->info("    ✓ Found 'latest' points to: {$bestVersion}");
+                    $this->info('    ✓ '.trans('console.update_service_versions.info.latest_points_to', ['best_version' => $bestVersion]));
 
                     return $repository.':'.$bestVersion;
                 }
@@ -752,21 +783,24 @@ class UpdateServiceVersions extends Command
 
     protected function displayStats(): void
     {
-        $this->info('Summary:');
+        $this->info(trans('console.update_service_versions.info.summary'));
         $this->table(
-            ['Metric', 'Count'],
             [
-                ['Total Templates', $this->stats['total']],
-                ['Updated', $this->stats['updated']],
-                ['Skipped (up to date)', $this->stats['skipped']],
-                ['Failed', $this->stats['failed']],
+                trans('console.update_service_versions.labels.metric'),
+                trans('console.update_service_versions.labels.count'),
+            ],
+            [
+                [trans('console.update_service_versions.labels.total_templates'), $this->stats['total']],
+                [trans('console.update_service_versions.labels.updated'), $this->stats['updated']],
+                [trans('console.update_service_versions.labels.skipped_up_to_date'), $this->stats['skipped']],
+                [trans('console.update_service_versions.labels.failed'), $this->stats['failed']],
             ]
         );
 
         // Display major version updates if any
         if (! empty($this->majorVersionUpdates)) {
             $this->newLine();
-            $this->warn('⚠ Services with available MAJOR version updates:');
+            $this->warn('⚠ '.trans('console.update_service_versions.warn.major_version_updates_available'));
             $this->newLine();
 
             $tableData = [];
@@ -780,12 +814,17 @@ class UpdateServiceVersions extends Command
             }
 
             $this->table(
-                ['Repository', 'Current', 'Available', 'Registry URL'],
+                [
+                    trans('console.update_service_versions.labels.repository'),
+                    trans('console.update_service_versions.labels.current'),
+                    trans('console.update_service_versions.labels.available'),
+                    trans('console.update_service_versions.labels.registry_url'),
+                ],
                 $tableData
             );
 
             $this->newLine();
-            $this->comment('💡 Major version updates may include breaking changes. Review before upgrading.');
+            $this->comment('💡 '.trans('console.update_service_versions.info.major_version_review_notice'));
         }
     }
 }

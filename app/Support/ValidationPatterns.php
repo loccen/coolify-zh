@@ -135,9 +135,11 @@ class ValidationPatterns
      */
     public static function environmentVariableKeyMessages(string $field = 'key', string $label = 'key'): array
     {
+        $label = __($label);
+
         return [
-            "{$field}.regex" => "The {$label} must be a non-empty Docker-compatible environment variable key and cannot contain '=' or NUL characters.",
-            "{$field}.max" => "The {$label} may not be greater than :max characters.",
+            "{$field}.regex" => __('The :label must be a non-empty Docker-compatible environment variable key and cannot contain "=" or NUL characters.', ['label' => $label]),
+            "{$field}.max" => __('The :label may not be greater than :max characters.', ['label' => $label]),
         ];
     }
 
@@ -196,12 +198,12 @@ class ValidationPatterns
      */
     public static function databaseIdentifierMessages(string $field, string $label = ''): array
     {
-        $label = $label ?: $field;
+        $label = __($label ?: $field);
 
         return [
-            "{$field}.regex" => "The {$label} may only contain letters, digits, and underscores, and must start with a letter or underscore.",
-            "{$field}.min" => "The {$label} must be at least :min character.",
-            "{$field}.max" => "The {$label} may not be greater than :max characters.",
+            "{$field}.regex" => __('The :label may only contain letters, digits, and underscores, and must start with a letter or underscore.', ['label' => $label]),
+            "{$field}.min" => __('The :label must be at least :min character.', ['label' => $label]),
+            "{$field}.max" => __('The :label may not be greater than :max characters.', ['label' => $label]),
         ];
     }
 
@@ -238,12 +240,12 @@ class ValidationPatterns
      */
     public static function databasePasswordMessages(string $field, string $label = ''): array
     {
-        $label = $label ?: $field;
+        $label = __($label ?: $field);
 
         return [
-            "{$field}.regex" => "The {$label} may not contain shell-unsafe characters (backtick, \$, ;, |, &, <, >, \\, quotes, spaces, or control characters).",
-            "{$field}.min" => "The {$label} must be at least :min character.",
-            "{$field}.max" => "The {$label} may not be greater than :max characters.",
+            "{$field}.regex" => __('The :label may not contain shell-unsafe characters (backtick, $, ;, |, &, <, >, \\, quotes, spaces, or control characters).', ['label' => $label]),
+            "{$field}.min" => __('The :label must be at least :min character.', ['label' => $label]),
+            "{$field}.max" => __('The :label may not be greater than :max characters.', ['label' => $label]),
         ];
     }
 
@@ -302,9 +304,9 @@ class ValidationPatterns
     public static function nameMessages(): array
     {
         return [
-            'name.regex' => 'The name may only contain letters (including Unicode), numbers, spaces, and these characters: - _ . / @ & ( ) # , : +',
-            'name.min' => 'The name must be at least :min characters.',
-            'name.max' => 'The name may not be greater than :max characters.',
+            'name.regex' => __('The name may only contain letters (including Unicode), numbers, spaces, and these characters: - _ . / @ & ( ) # , : +'),
+            'name.min' => __('The name must be at least :min characters.'),
+            'name.max' => __('The name may not be greater than :max characters.'),
         ];
     }
 
@@ -314,8 +316,8 @@ class ValidationPatterns
     public static function descriptionMessages(): array
     {
         return [
-            'description.regex' => "The description may only contain letters (including Unicode), numbers, spaces, and common punctuation: - _ . , ! ? ( ) ' \" + = * / @ &",
-            'description.max' => 'The description may not be greater than :max characters.',
+            'description.regex' => __('The description may only contain letters (including Unicode), numbers, spaces, and common punctuation: - _ . , ! ? ( ) \' " + = * / @ &'),
+            'description.max' => __('The description may not be greater than :max characters.'),
         ];
     }
 
@@ -332,8 +334,10 @@ class ValidationPatterns
      */
     public static function filePathMessages(string $field = 'dockerfileLocation', string $label = 'Dockerfile'): array
     {
+        $label = __($label);
+
         return [
-            "{$field}.regex" => "The {$label} location must be a valid path starting with / and containing only alphanumeric characters, dots, hyphens, underscores, slashes, @, ~, and +.",
+            "{$field}.regex" => __('The :label location must be a valid path starting with / and containing only alphanumeric characters, dots, hyphens, underscores, slashes, @, ~, and +.', ['label' => $label]),
         ];
     }
 
@@ -387,7 +391,7 @@ class ValidationPatterns
     public static function volumeNameMessages(string $field = 'name'): array
     {
         return [
-            "{$field}.regex" => 'The volume name must start with an alphanumeric character and contain only alphanumeric characters, dots, hyphens, and underscores.',
+            "{$field}.regex" => __('The volume name must start with an alphanumeric character and contain only alphanumeric characters, dots, hyphens, and underscores.'),
         ];
     }
 
@@ -433,7 +437,7 @@ class ValidationPatterns
     public static function portMappingMessages(string $field = 'portsMappings'): array
     {
         return [
-            "{$field}.regex" => 'Port mappings must be a comma-separated list of port pairs or ranges with optional IP and protocol (e.g. 3000:3000, 8080:80/udp, 127.0.0.1:8080:80, [::1]::80).',
+            "{$field}.regex" => __('Port mappings must be a comma-separated list of port pairs or ranges with optional IP and protocol (e.g. 3000:3000, 8080:80/udp, 127.0.0.1:8080:80, [::1]::80).'),
         ];
     }
 
@@ -471,7 +475,7 @@ class ValidationPatterns
     public static function dockerNetworkMessages(string $field = 'network'): array
     {
         return [
-            "{$field}.regex" => 'The network name must start with an alphanumeric character and contain only alphanumeric characters, dots, hyphens, and underscores.',
+            "{$field}.regex" => __('The network name must start with an alphanumeric character and contain only alphanumeric characters, dots, hyphens, and underscores.'),
         ];
     }
 

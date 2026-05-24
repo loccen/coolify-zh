@@ -101,17 +101,17 @@ class ByIp extends Component
             $foundServer = Server::whereIp($this->ip)->first();
             if ($foundServer) {
                 if ($foundServer->team_id === currentTeam()->id) {
-                    return $this->dispatch('error', 'A server with this IP/Domain already exists in your team.');
+                    return $this->dispatch('error', message: __('server.toasts.server_with_same_ip_exists_in_team'));
                 }
 
-                return $this->dispatch('error', 'A server with this IP/Domain is already in use by another team.');
+                return $this->dispatch('error', message: __('server.toasts.server_with_same_ip_in_use_by_another_team'));
             }
 
             if (is_null($this->private_key_id)) {
-                return $this->dispatch('error', 'You must select a private key');
+                return $this->dispatch('error', message: __('server.toasts.select_private_key'));
             }
             if (Team::serverLimitReached()) {
-                return $this->dispatch('error', 'You have reached the server limit for your subscription.');
+                return $this->dispatch('error', message: __('server.toasts.server_limit_reached'));
             }
             $payload = [
                 'name' => $this->name,

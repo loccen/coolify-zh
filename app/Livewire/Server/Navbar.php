@@ -159,7 +159,7 @@ class Navbar extends Component
                 // Only show "Proxy is running" notification when transitioning from a stopped/error state
                 // Don't show during normal start/restart flows (starting, restarting, stopping)
                 if (in_array($previousStatus, ['exited', 'stopped', 'unknown', null])) {
-                    $this->dispatch('success', 'Proxy is running.');
+                    $this->dispatch('success', __('server.toasts.proxy_running'));
                     $this->lastNotifiedStatus = $this->proxyStatus;
                 }
                 break;
@@ -167,7 +167,7 @@ class Navbar extends Component
                 // Only show "Proxy has exited" notification when transitioning from running state
                 // Don't show during normal stop/restart flows (stopping, restarting)
                 if (in_array($previousStatus, ['running'])) {
-                    $this->dispatch('info', 'Proxy has exited.');
+                    $this->dispatch('info', __('server.toasts.proxy_exited'));
                     $this->lastNotifiedStatus = $this->proxyStatus;
                 }
                 break;
@@ -184,7 +184,7 @@ class Navbar extends Component
                 $this->lastNotifiedStatus = $this->proxyStatus;
                 break;
             case 'error':
-                $this->dispatch('error', 'Proxy restart failed. Check logs.');
+                $this->dispatch('error', __('server.toasts.proxy_restart_failed'));
                 $this->lastNotifiedStatus = $this->proxyStatus;
                 break;
             case 'unknown':

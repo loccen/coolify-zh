@@ -12,12 +12,17 @@ class RestoreDatabase extends Command
 
     private bool $debug = false;
 
+    public function getDescription(): string
+    {
+        return trans('console.restore_database.description');
+    }
+
     public function handle(): int
     {
         $this->debug = $this->option('debug');
 
         if (! $this->isDevelopment()) {
-            $this->error('This command can only be run in development mode.');
+            $this->error(trans('console.restore_database.error.development_only'));
 
             return 1;
         }
@@ -25,19 +30,19 @@ class RestoreDatabase extends Command
         $filePath = $this->argument('file');
 
         if (! file_exists($filePath)) {
-            $this->error("File not found: {$filePath}");
+            $this->error(trans('console.restore_database.error.file_not_found', ['file' => $filePath]));
 
             return 1;
         }
 
         if (! is_readable($filePath)) {
-            $this->error("File is not readable: {$filePath}");
+            $this->error(trans('console.restore_database.error.file_not_readable', ['file' => $filePath]));
 
             return 1;
         }
 
         try {
-            $this->info('Starting database restoration...');
+            $this->info(trans('console.restore_database.info.starting'));
 
             $database = config('database.connections.pgsql.database');
             $host = config('database.connections.pgsql.host');
@@ -46,12 +51,12 @@ class RestoreDatabase extends Command
             $password = config('database.connections.pgsql.password');
 
             if (! $database || ! $username) {
-                $this->error('Database configuration is incomplete.');
+                $this->error(trans('console.restore_database.error.database_configuration_incomplete'));
 
                 return 1;
             }
 
-            $this->info("Restoring to database: {$database}");
+            $this->info(trans('console.restore_database.info.restoring_to_database', ['database' => $database]));
 
             // Drop all tables
             if (! $this->dropAllTables($database, $host, $port, $username, $password)) {
@@ -63,11 +68,11 @@ class RestoreDatabase extends Command
                 return 1;
             }
 
-            $this->info('Database restoration completed successfully!');
+            $this->info(trans('console.restore_database.info.completed_successfully'));
 
             return 0;
         } catch (\Exception $e) {
-            $this->error("An error occurred: {$e->getMessage()}");
+            $this->error(trans('console.restore_database.error.an_error_occurred', ['message' => $e->getMessage()]));
 
             return 1;
         }
@@ -75,7 +80,7 @@ class RestoreDatabase extends Command
 
     private function dropAllTables(string $database, string $host, string $port, string $username, string $password): bool
     {
-        $this->info('Dropping all tables...');
+        $this->info(trans('console.restore_database.info.dropping_all_tables'));
 
         // SQL to drop all tables
         $dropTablesSQL = <<<'SQL'
@@ -100,30 +105,30 @@ class RestoreDatabase extends Command
         );
 
         if ($this->debug) {
-            $this->line('<comment>Executing drop command:</comment>');
+            $this->line('<comment>'.trans('console.restore_database.debug.executing_drop_command').'</comment>');
             $this->line($command);
         }
 
         $output = shell_exec($command.' 2>&1');
 
         if ($this->debug) {
-            $this->line("<comment>Output:</comment> {$output}");
+            $this->line('<comment>'.trans('console.restore_database.debug.output')."</comment> {$output}");
         }
 
-        $this->info('All tables dropped successfully.');
+        $this->info(trans('console.restore_database.info.all_tables_dropped_successfully'));
 
         return true;
     }
 
     private function restoreDatabaseDump(string $filePath, string $database, string $host, string $port, string $username, string $password): bool
     {
-        $this->info('Restoring database from dump file...');
+        $this->info(trans('console.restore_database.info.restoring_database_from_dump_file'));
 
         // Handle gzipped files by decompressing first
         $actualFile = $filePath;
         if (str_ends_with($filePath, '.gz')) {
             $actualFile = rtrim($filePath, '.gz');
-            $this->info('Decompressing gzipped dump file...');
+            $this->info(trans('console.restore_database.info.decompressing_gzipped_dump_file'));
 
             $decompressCommand = sprintf(
                 'gunzip -c %s > %s',
@@ -132,13 +137,13 @@ class RestoreDatabase extends Command
             );
 
             if ($this->debug) {
-                $this->line('<comment>Executing decompress command:</comment>');
+                $this->line('<comment>'.trans('console.restore_database.debug.executing_decompress_command').'</comment>');
                 $this->line($decompressCommand);
             }
 
             $decompressOutput = shell_exec($decompressCommand.' 2>&1');
             if ($this->debug && $decompressOutput) {
-                $this->line("<comment>Decompress output:</comment> {$decompressOutput}");
+                $this->line('<comment>'.trans('console.restore_database.debug.decompress_output')."</comment> {$decompressOutput}");
             }
         }
 
@@ -154,7 +159,7 @@ class RestoreDatabase extends Command
         );
 
         if ($this->debug) {
-            $this->line('<comment>Executing restore command:</comment>');
+            $this->line('<comment>'.trans('console.restore_database.debug.executing_restore_command').'</comment>');
             $this->line($command);
         }
 
@@ -169,7 +174,7 @@ class RestoreDatabase extends Command
         );
 
         if (! is_resource($process)) {
-            $this->error('Failed to start restoration process.');
+            $this->error(trans('console.restore_database.error.failed_to_start_restoration_process'));
 
             return false;
         }
@@ -185,20 +190,20 @@ class RestoreDatabase extends Command
 
         if ($this->debug) {
             if ($output) {
-                $this->line('<comment>Output:</comment>');
+                $this->line('<comment>'.trans('console.restore_database.debug.output').'</comment>');
                 $this->line($output);
             }
             if ($error) {
-                $this->line('<comment>Error output:</comment>');
+                $this->line('<comment>'.trans('console.restore_database.debug.error_output').'</comment>');
                 $this->line($error);
             }
-            $this->line("<comment>Exit code:</comment> {$exitCode}");
+            $this->line('<comment>'.trans('console.restore_database.debug.exit_code')."</comment> {$exitCode}");
         }
 
         if ($exitCode !== 0) {
-            $this->error("Restoration failed with exit code: {$exitCode}");
+            $this->error(trans('console.restore_database.error.restoration_failed_with_exit_code', ['exit_code' => $exitCode]));
             if ($error) {
-                $this->error('Error details:');
+                $this->error(trans('console.restore_database.error.error_details'));
                 $this->error($error);
             }
 
