@@ -582,7 +582,7 @@ class AdminDeleteUser extends Command
     {
         $this->newLine();
         $this->info('═══════════════════════════════════════');
-        $this->info('PHASE 3: DELETE SERVERS');
+        $this->info(trans('console.admin_delete_user.servers.phase_title'));
         $this->info('═══════════════════════════════════════');
         $this->newLine();
 
@@ -590,14 +590,20 @@ class AdminDeleteUser extends Command
         $servers = $action->getServersPreview();
 
         if ($servers->isEmpty()) {
-            $this->info('No servers to delete.');
+            $this->info(trans('console.admin_delete_user.servers.no_servers'));
 
             return true;
         }
 
-        $this->warn("Servers to be deleted ({$servers->count()}):");
+        $this->warn(trans('console.admin_delete_user.servers.summary_title', ['count' => $servers->count()]));
         $this->table(
-            ['ID', 'Name', 'IP', 'Description', 'Resources Count'],
+            [
+                trans('console.admin_delete_user.servers.table_headers.id'),
+                trans('console.admin_delete_user.servers.table_headers.name'),
+                trans('console.admin_delete_user.servers.table_headers.ip'),
+                trans('console.admin_delete_user.servers.table_headers.description'),
+                trans('console.admin_delete_user.servers.table_headers.resources_count'),
+            ],
             $servers->map(function ($server) {
                 $resourceCount = $server->definedResources()->count();
 
@@ -612,25 +618,25 @@ class AdminDeleteUser extends Command
         );
         $this->newLine();
 
-        $this->error('⚠️  WARNING: Deleting servers will remove all server configurations!');
-        if (! $this->confirm('Are you sure you want to delete all these servers?', false)) {
+        $this->error(trans('console.admin_delete_user.servers.irreversible_warning'));
+        if (! $this->confirm(trans('console.admin_delete_user.servers.confirm_delete_all'), false)) {
             return false;
         }
 
         if (! $this->isDryRun) {
-            $this->info('Deleting servers...');
+            $this->info(trans('console.admin_delete_user.servers.deleting'));
             try {
                 $result = $action->execute();
-                $this->info("✓ Deleted {$result['servers']} servers");
+                $this->info(trans('console.admin_delete_user.servers.deleted_summary', ['count' => $result['servers']]));
                 $this->logAction("Deleted {$result['servers']} servers for user {$this->user->email}");
             } catch (\Exception $e) {
-                $this->error('Failed to delete servers:');
-                $this->error('Exception: '.get_class($e));
-                $this->error('Message: '.$e->getMessage());
-                $this->error('File: '.$e->getFile().':'.$e->getLine());
+                $this->error(trans('console.admin_delete_user.servers.delete_failed'));
+                $this->error(trans('console.admin_delete_user.servers.exception_label').': '.get_class($e));
+                $this->error(trans('console.admin_delete_user.servers.message_label').': '.$e->getMessage());
+                $this->error(trans('console.admin_delete_user.servers.file_label').': '.$e->getFile().':'.$e->getLine());
 
                 if ($this->output->isVerbose()) {
-                    $this->error('Stack Trace:');
+                    $this->error(trans('console.admin_delete_user.servers.stack_trace_label'));
                     $this->error($e->getTraceAsString());
                 }
 
