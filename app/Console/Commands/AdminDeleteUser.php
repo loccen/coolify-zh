@@ -923,52 +923,57 @@ class AdminDeleteUser extends Command
     {
         $this->newLine();
         $this->info('═══════════════════════════════════════');
-        $this->info('PHASE 5: DELETE USER PROFILE');
+        $this->info(trans('console.admin_delete_user.user_profile.phase_title'));
         $this->info('═══════════════════════════════════════');
         $this->newLine();
 
-        $this->warn('⚠️  FINAL STEP - This action is IRREVERSIBLE!');
+        $this->warn(trans('console.admin_delete_user.user_profile.final_warning'));
         $this->newLine();
 
-        $this->info('User profile to be deleted:');
+        $this->info(trans('console.admin_delete_user.user_profile.summary_title'));
         $this->table(
-            ['Property', 'Value'],
             [
-                ['Email', $this->user->email],
-                ['Name', $this->user->name],
-                ['User ID', $this->user->id],
-                ['Created', $this->user->created_at->format('Y-m-d H:i:s')],
-                ['Email Verified', $this->user->email_verified_at ? 'Yes' : 'No'],
-                ['2FA Enabled', $this->user->two_factor_confirmed_at ? 'Yes' : 'No'],
+                trans('console.admin_delete_user.user_profile.table_headers.property'),
+                trans('console.admin_delete_user.user_profile.table_headers.value'),
+            ],
+            [
+                [trans('console.admin_delete_user.user_profile.fields.email'), $this->user->email],
+                [trans('console.admin_delete_user.user_profile.fields.name'), $this->user->name],
+                [trans('console.admin_delete_user.user_profile.fields.user_id'), $this->user->id],
+                [trans('console.admin_delete_user.user_profile.fields.created'), $this->user->created_at->format('Y-m-d H:i:s')],
+                [trans('console.admin_delete_user.user_profile.fields.email_verified'), $this->user->email_verified_at ? 'Yes' : 'No'],
+                [trans('console.admin_delete_user.user_profile.fields.two_factor_enabled'), $this->user->two_factor_confirmed_at ? 'Yes' : 'No'],
             ]
         );
 
         $this->newLine();
 
-        $this->warn("Type 'DELETE {$this->user->email}' to confirm final deletion:");
-        $confirmation = $this->ask('Confirmation');
+        $this->warn(trans('console.admin_delete_user.user_profile.confirmation_instruction', [
+            'confirmation_text' => "DELETE {$this->user->email}",
+        ]));
+        $confirmation = $this->ask(trans('console.admin_delete_user.user_profile.confirmation_label'));
 
         if ($confirmation !== "DELETE {$this->user->email}") {
-            $this->error('Confirmation text does not match. Deletion cancelled.');
+            $this->error(trans('console.admin_delete_user.user_profile.confirmation_mismatch'));
 
             return false;
         }
 
         if (! $this->isDryRun) {
-            $this->info('Deleting user profile...');
+            $this->info(trans('console.admin_delete_user.user_profile.deleting'));
 
             try {
                 $this->user->delete();
-                $this->info('✓ User profile deleted successfully.');
+                $this->info(trans('console.admin_delete_user.user_profile.deleted_successfully'));
                 $this->logAction("User profile deleted: {$this->user->email}");
             } catch (\Exception $e) {
-                $this->error('Failed to delete user profile:');
-                $this->error('Exception: '.get_class($e));
-                $this->error('Message: '.$e->getMessage());
-                $this->error('File: '.$e->getFile().':'.$e->getLine());
+                $this->error(trans('console.admin_delete_user.user_profile.delete_failed'));
+                $this->error(trans('console.admin_delete_user.user_profile.exception_label').': '.get_class($e));
+                $this->error(trans('console.admin_delete_user.user_profile.message_label').': '.$e->getMessage());
+                $this->error(trans('console.admin_delete_user.user_profile.file_label').': '.$e->getFile().':'.$e->getLine());
 
                 if ($this->output->isVerbose()) {
-                    $this->error('Stack Trace:');
+                    $this->error(trans('console.admin_delete_user.user_profile.stack_trace_label'));
                     $this->error($e->getTraceAsString());
                 }
 
