@@ -107,7 +107,7 @@ class AdminDeleteUser extends Command
         try {
             $this->user = User::whereEmail($email)->firstOrFail();
         } catch (\Exception $e) {
-            $this->error("User with email '{$email}' not found.");
+            $this->error(trans('console.admin_delete_user.gate.user_not_found', ['email' => $email]));
 
             return 1;
         }
@@ -118,8 +118,8 @@ class AdminDeleteUser extends Command
 
         if (! $force) {
             if (! $this->lock->get()) {
-                $this->error('Another deletion process is already running for this user.');
-                $this->error('Use --force to bypass this lock (use with extreme caution).');
+                $this->error(trans('console.admin_delete_user.gate.lock_running'));
+                $this->error(trans('console.admin_delete_user.gate.lock_force_tip'));
                 $this->logAction("Deletion blocked for user {$email}: Another process is already running");
 
                 return 1;
@@ -127,8 +127,8 @@ class AdminDeleteUser extends Command
         } else {
             // In force mode, try to get lock but continue even if it fails
             if (! $this->lock->get()) {
-                $this->warn('⚠️  Lock exists but proceeding due to --force flag');
-                $this->warn('   There may be another deletion process running!');
+                $this->warn(trans('console.admin_delete_user.gate.lock_force_proceed'));
+                $this->warn(trans('console.admin_delete_user.gate.lock_force_warning'));
                 $this->newLine();
             }
         }

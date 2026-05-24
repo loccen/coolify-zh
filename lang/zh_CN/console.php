@@ -97,6 +97,13 @@ return [
             'self_hosted_instance' => '🏠 自托管实例 - 会跳过 Stripe 操作',
             'verbose_retry_tip' => '使用 -v 可查看完整堆栈跟踪',
         ],
+        'gate' => [
+            'user_not_found' => "未找到邮箱为 ':email' 的用户。",
+            'lock_running' => '该用户的另一个删除流程已在运行。',
+            'lock_force_tip' => '使用 --force 可绕过此锁（风险极高，请务必谨慎）。',
+            'lock_force_proceed' => '⚠️  检测到锁，但由于使用了 --force 标志，仍将继续执行',
+            'lock_force_warning' => '   可能还有另一个删除流程正在运行！',
+        ],
         'confirm' => [
             'phase_2_to_3' => '第 2 阶段已完成。继续进入第 3 阶段（删除服务器）吗？',
             'phase_3_to_4' => '第 3 阶段已完成。继续进入第 4 阶段（处理团队）吗？',
