@@ -275,6 +275,22 @@ return [
             'an_error_occurred' => 'An error occurred: :message',
         ],
     ],
+    'update_service_versions' => [
+        'description' => 'Update service template files with latest Docker image versions from registries',
+        'info' => [
+            'starting' => 'Starting service version update...',
+            'processing' => 'Processing: :filename',
+            'image_updated' => ':service_name: :current_image -> :latest_version',
+            'image_up_to_date' => ':service_name: :current_image (up to date)',
+        ],
+        'warn' => [
+            'no_services_found' => 'No services found in :filename',
+            'dry_run_would_update_file' => '[DRY RUN] Would update this file',
+        ],
+        'error' => [
+            'failed' => 'Failed: :message',
+        ],
+    ],
     'sync_stripe_subscriptions' => [
         'description' => 'Sync subscription status with Stripe. By default only checks, use --fix to apply changes.',
         'info' => [

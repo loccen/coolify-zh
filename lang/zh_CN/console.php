@@ -275,6 +275,22 @@ return [
             'an_error_occurred' => '发生错误：:message',
         ],
     ],
+    'update_service_versions' => [
+        'description' => '使用镜像仓库中的最新 Docker 镜像版本更新服务模板文件',
+        'info' => [
+            'starting' => '正在开始更新服务版本...',
+            'processing' => '正在处理：:filename',
+            'image_updated' => ':service_name：:current_image -> :latest_version',
+            'image_up_to_date' => ':service_name：:current_image（已是最新）',
+        ],
+        'warn' => [
+            'no_services_found' => ':filename 中未找到服务',
+            'dry_run_would_update_file' => '[DRY RUN] 将更新此文件',
+        ],
+        'error' => [
+            'failed' => '失败：:message',
+        ],
+    ],
     'sync_stripe_subscriptions' => [
         'description' => '同步 Stripe 订阅状态。默认只检查，使用 --fix 才会应用变更。',
         'info' => [
