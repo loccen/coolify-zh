@@ -56,6 +56,7 @@ return [
         'more_packages' => '... 以及另外 :count 个软件包',
         'more_critical_packages' => '... 以及另外 :count 个关键软件包',
         'notifications' => '通知',
+        'click_here' => '点击这里',
     ],
     'deployment_success' => [
         'discord_title' => ':white_check_mark: 新版本已成功部署',

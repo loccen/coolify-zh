@@ -56,6 +56,7 @@ return [
         'more_packages' => '... and :count more packages',
         'more_critical_packages' => '... and :count more critical packages',
         'notifications' => 'Notifications',
+        'click_here' => 'Click here',
     ],
     'deployment_success' => [
         'discord_title' => ':white_check_mark: New version successfully deployed',
