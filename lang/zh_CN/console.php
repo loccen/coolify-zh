@@ -186,6 +186,24 @@ return [
             'not_applicable' => '不适用',
         ],
     ],
+    'run_scheduled_jobs_manually' => [
+        'description' => '在 cron 失效时手动运行计划备份和计划任务',
+        'info' => [
+            'starting' => '正在开始手动执行计划任务...:suffix',
+            'completed' => '已完成手动执行计划任务。:suffix',
+            'processing_scheduled_database_backups' => '正在处理计划数据库备份...',
+            'no_enabled_scheduled_backups_found' => '未找到已启用的计划数据库备份:frequency。',
+            'processing_scheduled_tasks' => '正在处理计划任务...',
+            'no_enabled_scheduled_tasks_found' => '未找到已启用的计划任务:frequency。',
+        ],
+        'warn' => [
+            'dry_run_mode' => 'DRY RUN 模式：不会实际分发任何任务',
+        ],
+        'values' => [
+            'dry_run_suffix' => '（DRY RUN）',
+            'with_frequency' => "，频率为“:frequency”",
+        ],
+    ],
     'generate_testing_schema' => [
         'description' => '生成 PostgreSQL 数据库的 SQLite 测试 schema',
         'error' => [
