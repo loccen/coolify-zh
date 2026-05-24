@@ -376,7 +376,7 @@ class AdminDeleteUser extends Command
     private function showUserOverview(): bool
     {
         $this->info('═══════════════════════════════════════');
-        $this->info('PHASE 1: USER OVERVIEW');
+        $this->info(trans('console.admin_delete_user.overview.phase_title'));
         $this->info('═══════════════════════════════════════');
         $this->newLine();
 
@@ -430,25 +430,28 @@ class AdminDeleteUser extends Command
 
         // Build table data
         $tableData = [
-            ['User', $this->user->email],
-            ['User ID', $this->user->id],
-            ['Created', $this->user->created_at->format('Y-m-d H:i:s')],
-            ['Last Login', $this->user->updated_at->format('Y-m-d H:i:s')],
-            ['Teams (Total)', $teams->count()],
-            ['Teams (Owner)', $ownedTeams->count()],
-            ['Teams (Member)', $memberTeams->count()],
-            ['Servers', $allServers->unique('id')->count()],
-            ['Applications', $allApplications->count()],
-            ['Databases', $allDatabases->count()],
-            ['Services', $allServices->count()],
+            [trans('console.admin_delete_user.overview.fields.user'), $this->user->email],
+            [trans('console.admin_delete_user.overview.fields.user_id'), $this->user->id],
+            [trans('console.admin_delete_user.overview.fields.created'), $this->user->created_at->format('Y-m-d H:i:s')],
+            [trans('console.admin_delete_user.overview.fields.last_login'), $this->user->updated_at->format('Y-m-d H:i:s')],
+            [trans('console.admin_delete_user.overview.fields.teams_total'), $teams->count()],
+            [trans('console.admin_delete_user.overview.fields.teams_owner'), $ownedTeams->count()],
+            [trans('console.admin_delete_user.overview.fields.teams_member'), $memberTeams->count()],
+            [trans('console.admin_delete_user.overview.fields.servers'), $allServers->unique('id')->count()],
+            [trans('console.admin_delete_user.overview.fields.applications'), $allApplications->count()],
+            [trans('console.admin_delete_user.overview.fields.databases'), $allDatabases->count()],
+            [trans('console.admin_delete_user.overview.fields.services'), $allServices->count()],
         ];
 
         // Only show Stripe subscriptions on cloud instances
         if (isCloud()) {
-            $tableData[] = ['Active Stripe Subscriptions', $activeSubscriptions->count()];
+            $tableData[] = [trans('console.admin_delete_user.overview.fields.active_stripe_subscriptions'), $activeSubscriptions->count()];
         }
 
-        $this->table(['Property', 'Value'], $tableData);
+        $this->table([
+            trans('console.admin_delete_user.overview.table_headers.property'),
+            trans('console.admin_delete_user.overview.table_headers.value'),
+        ], $tableData);
 
         $this->newLine();
 
