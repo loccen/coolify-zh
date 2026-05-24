@@ -325,6 +325,12 @@ return [
             'user_id' => 'User ID: :id',
             'timestamp' => 'Timestamp: :timestamp',
         ],
+        'signals' => [
+            'process_interrupted' => '⚠️  PROCESS INTERRUPTED (Ctrl+C)',
+            'process_terminated' => '⚠️  PROCESS TERMINATED (SIGTERM)',
+            'cleanup_and_release_lock' => 'Cleaning up and releasing lock...',
+            'lock_released_exit_gracefully' => 'Lock released. Exiting gracefully.',
+        ],
     ],
     'migration' => [
         'description' => 'Start Migration',

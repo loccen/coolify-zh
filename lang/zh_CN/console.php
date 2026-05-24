@@ -325,6 +325,12 @@ return [
             'user_id' => '用户 ID：:id',
             'timestamp' => '时间戳：:timestamp',
         ],
+        'signals' => [
+            'process_interrupted' => '⚠️  进程已中断（Ctrl+C）',
+            'process_terminated' => '⚠️  进程已终止（SIGTERM）',
+            'cleanup_and_release_lock' => '正在清理并释放锁...',
+            'lock_released_exit_gracefully' => '锁已释放。正在正常退出。',
+        ],
     ],
     'migration' => [
         'description' => '开始迁移',

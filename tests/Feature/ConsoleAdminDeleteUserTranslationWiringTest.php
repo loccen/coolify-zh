@@ -168,7 +168,11 @@ it('wires admin delete user console translations through console language files'
         ->toContain("trans('console.admin_delete_user.stripe.confirm_immediate_cancellation')")
         ->toContain("trans('console.admin_delete_user.stripe.cancelling')")
         ->toContain("trans('console.admin_delete_user.stripe.cancelled_summary', [")
-        ->toContain("trans('console.admin_delete_user.stripe.failed_subscriptions_title')");
+        ->toContain("trans('console.admin_delete_user.stripe.failed_subscriptions_title')")
+        ->toContain("trans('console.admin_delete_user.signals.process_interrupted')")
+        ->toContain("trans('console.admin_delete_user.signals.process_terminated')")
+        ->toContain("trans('console.admin_delete_user.signals.cleanup_and_release_lock')")
+        ->toContain("trans('console.admin_delete_user.signals.lock_released_exit_gracefully')");
 });
 
 it('resolves admin delete user console translations in english', function () {
@@ -182,6 +186,14 @@ it('resolves admin delete user console translations in english', function () {
         ->toBe('Next step: COMMIT database changes (PERMANENT and IRREVERSIBLE)')
         ->and(trans('console.admin_delete_user.commit.cannot_be_undone'))
         ->toBe('⚠️  THIS ACTION CANNOT BE UNDONE')
+        ->and(trans('console.admin_delete_user.signals.process_interrupted'))
+        ->toBe('⚠️  PROCESS INTERRUPTED (Ctrl+C)')
+        ->and(trans('console.admin_delete_user.signals.process_terminated'))
+        ->toBe('⚠️  PROCESS TERMINATED (SIGTERM)')
+        ->and(trans('console.admin_delete_user.signals.cleanup_and_release_lock'))
+        ->toBe('Cleaning up and releasing lock...')
+        ->and(trans('console.admin_delete_user.signals.lock_released_exit_gracefully'))
+        ->toBe('Lock released. Exiting gracefully.')
         ->and(trans('console.admin_delete_user.overview.phase_title'))
         ->toBe('PHASE 1: USER OVERVIEW')
         ->and(trans('console.admin_delete_user.overview.table_headers.property'))
@@ -489,6 +501,14 @@ it('resolves admin delete user console translations in chinese', function () {
         ->toBe('下一步：提交数据库变更（永久且不可逆）')
         ->and(trans('console.admin_delete_user.commit.cannot_be_undone'))
         ->toBe('⚠️  此操作无法撤销')
+        ->and(trans('console.admin_delete_user.signals.process_interrupted'))
+        ->toBe('⚠️  进程已中断（Ctrl+C）')
+        ->and(trans('console.admin_delete_user.signals.process_terminated'))
+        ->toBe('⚠️  进程已终止（SIGTERM）')
+        ->and(trans('console.admin_delete_user.signals.cleanup_and_release_lock'))
+        ->toBe('正在清理并释放锁...')
+        ->and(trans('console.admin_delete_user.signals.lock_released_exit_gracefully'))
+        ->toBe('锁已释放。正在正常退出。')
         ->and(trans('console.admin_delete_user.overview.phase_title'))
         ->toBe('第 1 阶段：用户总览')
         ->and(trans('console.admin_delete_user.overview.table_headers.property'))

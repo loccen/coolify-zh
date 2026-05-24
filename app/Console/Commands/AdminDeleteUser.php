@@ -1202,11 +1202,11 @@ class AdminDeleteUser extends Command
         pcntl_signal(SIGINT, function () {
             $this->newLine();
             $this->warn('═══════════════════════════════════════');
-            $this->warn('⚠️  PROCESS INTERRUPTED (Ctrl+C)');
+            $this->warn(trans('console.admin_delete_user.signals.process_interrupted'));
             $this->warn('═══════════════════════════════════════');
-            $this->info('Cleaning up and releasing lock...');
+            $this->info(trans('console.admin_delete_user.signals.cleanup_and_release_lock'));
             $this->releaseLock();
-            $this->info('Lock released. Exiting gracefully.');
+            $this->info(trans('console.admin_delete_user.signals.lock_released_exit_gracefully'));
             exit(130); // Standard exit code for SIGINT
         });
 
@@ -1214,11 +1214,11 @@ class AdminDeleteUser extends Command
         pcntl_signal(SIGTERM, function () {
             $this->newLine();
             $this->warn('═══════════════════════════════════════');
-            $this->warn('⚠️  PROCESS TERMINATED (SIGTERM)');
+            $this->warn(trans('console.admin_delete_user.signals.process_terminated'));
             $this->warn('═══════════════════════════════════════');
-            $this->info('Cleaning up and releasing lock...');
+            $this->info(trans('console.admin_delete_user.signals.cleanup_and_release_lock'));
             $this->releaseLock();
-            $this->info('Lock released. Exiting gracefully.');
+            $this->info(trans('console.admin_delete_user.signals.lock_released_exit_gracefully'));
             exit(143); // Standard exit code for SIGTERM
         });
 
