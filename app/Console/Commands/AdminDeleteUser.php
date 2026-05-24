@@ -1160,16 +1160,16 @@ class AdminDeleteUser extends Command
             $this->error(trans('console.admin_delete_user.recovery.permanently_deleted'));
 
             if ($this->deletionState['phase_5_user_profile']) {
-                $this->error('- User profile (email: '.$this->user->email.')');
+                $this->error(trans('console.admin_delete_user.recovery.deleted_user_profile', ['email' => $this->user->email]));
             }
             if ($this->deletionState['phase_4_teams']) {
-                $this->error('- Team memberships and owned teams');
+                $this->error(trans('console.admin_delete_user.recovery.deleted_teams'));
             }
             if ($this->deletionState['phase_3_servers']) {
-                $this->error('- Server records and configurations');
+                $this->error(trans('console.admin_delete_user.recovery.deleted_servers'));
             }
             if ($this->deletionState['phase_2_resources']) {
-                $this->error('- Applications, databases, and services');
+                $this->error(trans('console.admin_delete_user.recovery.deleted_resources'));
             }
 
             $this->newLine();
