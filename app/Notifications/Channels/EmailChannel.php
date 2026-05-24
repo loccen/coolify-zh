@@ -68,7 +68,7 @@ class EmailChannel
                             get_class($notifiable),
                             json_encode($emailSettings, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
                         ));
-                        throw new Exception('Recipient is not part of the team');
+                        throw new Exception(trans('mail.channels.email.recipient_not_in_team'));
                     }
                 }
             }

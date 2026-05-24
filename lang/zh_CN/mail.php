@@ -23,6 +23,7 @@ return [
     'channels' => [
         'email' => [
             'no_email_recipients_found' => '未找到邮件收件人。',
+            'recipient_not_in_team' => '收件人不属于当前团队。',
             'resend' => [
                 'invalid_api_key' => 'Resend API Key 无效。请在 Resend 控制台检查 API Key，并在设置中更新。',
                 'restricted_api_key' => '当前 Resend API Key 权限受限。请使用具有 Full Access 权限的 API Key。',
