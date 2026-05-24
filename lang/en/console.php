@@ -111,6 +111,14 @@ return [
             'phase_5_commit' => 'Phase 5 completed. Commit database changes? (THIS IS PERMANENT)',
             'phase_6_stripe' => 'Continue to Phase 6 (Cancel Stripe Subscriptions)?',
         ],
+        'cancel' => [
+            'by_operator' => 'User deletion cancelled by operator.',
+            'after_phase_2' => 'User deletion cancelled by operator after Phase 2.',
+            'after_phase_3' => 'User deletion cancelled by operator after Phase 3.',
+            'after_phase_4' => 'User deletion cancelled by operator after Phase 4.',
+            'before_commit' => 'User deletion cancelled by operator before commit.',
+            'database_rolled_back' => 'Database changes have been rolled back.',
+        ],
         'commit' => [
             'critical_decision_point' => '⚠️  CRITICAL DECISION POINT',
             'next_step' => 'Next step: COMMIT database changes (PERMANENT and IRREVERSIBLE)',

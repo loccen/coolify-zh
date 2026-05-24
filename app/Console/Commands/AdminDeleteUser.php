@@ -138,7 +138,7 @@ class AdminDeleteUser extends Command
 
             // Phase 1: Show User Overview (outside transaction)
             if (! $this->showUserOverview()) {
-                $this->info('User deletion cancelled by operator.');
+                $this->info(trans('console.admin_delete_user.cancel.by_operator'));
 
                 return 0;
             }
@@ -170,8 +170,8 @@ class AdminDeleteUser extends Command
                         $this->newLine();
                         if (! $this->confirm(trans('console.admin_delete_user.confirm.phase_2_to_3'), true)) {
                             DB::rollBack();
-                            $this->info('User deletion cancelled by operator after Phase 2.');
-                            $this->info('Database changes have been rolled back.');
+                            $this->info(trans('console.admin_delete_user.cancel.after_phase_2'));
+                            $this->info(trans('console.admin_delete_user.cancel.database_rolled_back'));
 
                             return 0;
                         }
@@ -195,8 +195,8 @@ class AdminDeleteUser extends Command
                         $this->newLine();
                         if (! $this->confirm(trans('console.admin_delete_user.confirm.phase_3_to_4'), true)) {
                             DB::rollBack();
-                            $this->info('User deletion cancelled by operator after Phase 3.');
-                            $this->info('Database changes have been rolled back.');
+                            $this->info(trans('console.admin_delete_user.cancel.after_phase_3'));
+                            $this->info(trans('console.admin_delete_user.cancel.database_rolled_back'));
 
                             return 0;
                         }
@@ -218,8 +218,8 @@ class AdminDeleteUser extends Command
                         $this->newLine();
                         if (! $this->confirm(trans('console.admin_delete_user.confirm.phase_4_to_5'), true)) {
                             DB::rollBack();
-                            $this->info('User deletion cancelled by operator after Phase 4.');
-                            $this->info('Database changes have been rolled back.');
+                            $this->info(trans('console.admin_delete_user.cancel.after_phase_4'));
+                            $this->info(trans('console.admin_delete_user.cancel.database_rolled_back'));
 
                             return 0;
                         }
@@ -246,8 +246,8 @@ class AdminDeleteUser extends Command
                         $this->newLine();
                         if (! $this->confirm(trans('console.admin_delete_user.confirm.phase_5_commit'), false)) {
                             DB::rollBack();
-                            $this->info('User deletion cancelled by operator before commit.');
-                            $this->info('Database changes have been rolled back.');
+                            $this->info(trans('console.admin_delete_user.cancel.before_commit'));
+                            $this->info(trans('console.admin_delete_user.cancel.database_rolled_back'));
                             $this->warn(trans('console.admin_delete_user.commit.pre_commit_remote_warning'));
 
                             return 0;
