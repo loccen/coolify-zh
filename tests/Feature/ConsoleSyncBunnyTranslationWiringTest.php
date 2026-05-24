@@ -53,7 +53,7 @@ it('wires sync bunny console strings through console translations', function () 
         ->and($enTranslations['sync_bunny']['kinds']['production'])->toBe('production');
 
     expect($zhTranslations['sync_bunny']['description'])->toBe('将发布产物同步到 GitHub Pages 产物仓库')
-        ->and($zhTranslations['sync_bunny']['info']['preparing_artifacts'])->toBe('正在为 :repository 准备 :kind 发布产物。')
+        ->and($zhTranslations['sync_bunny']['info']['preparing_artifacts'])->toBe('正在为 :repository 准备:kind发布产物。')
         ->and($zhTranslations['sync_bunny']['info']['preparing_service_template_artifact'])->toBe('正在准备服务模板产物。')
         ->and($zhTranslations['sync_bunny']['info']['preparing_versions_and_releases_artifacts'])->toBe('正在准备 versions.json 和 releases.json 产物。')
         ->and($zhTranslations['sync_bunny']['info']['preparing_releases_artifact'])->toBe('正在准备 releases.json 产物。')
@@ -92,7 +92,7 @@ it('resolves sync bunny translations in en and zh_CN', function () {
     App::setLocale('zh_CN');
 
     expect(trans('console.sync_bunny.description'))->toBe('将发布产物同步到 GitHub Pages 产物仓库')
-        ->and(trans('console.sync_bunny.info.preparing_artifacts', ['kind' => trans('console.sync_bunny.kinds.nightly'), 'repository' => 'loccen/coolify-zh-artifacts']))->toBe('正在为 loccen/coolify-zh-artifacts 准备 夜间版 发布产物。')
+        ->and(trans('console.sync_bunny.info.preparing_artifacts', ['kind' => trans('console.sync_bunny.kinds.nightly'), 'repository' => 'loccen/coolify-zh-artifacts']))->toBe('正在为 loccen/coolify-zh-artifacts 准备夜间版发布产物。')
         ->and(trans('console.sync_bunny.info.preparing_service_template_artifact'))->toBe('正在准备服务模板产物。')
         ->and(trans('console.sync_bunny.info.preparing_versions_and_releases_artifacts'))->toBe('正在准备 versions.json 和 releases.json 产物。')
         ->and(trans('console.sync_bunny.info.preparing_releases_artifact'))->toBe('正在准备 releases.json 产物。')

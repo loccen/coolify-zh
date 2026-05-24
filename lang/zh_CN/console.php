@@ -252,7 +252,7 @@ return [
     'sync_bunny' => [
         'description' => '将发布产物同步到 GitHub Pages 产物仓库',
         'info' => [
-            'preparing_artifacts' => '正在为 :repository 准备 :kind 发布产物。',
+            'preparing_artifacts' => '正在为 :repository 准备:kind发布产物。',
             'preparing_service_template_artifact' => '正在准备服务模板产物。',
             'preparing_versions_and_releases_artifacts' => '正在准备 versions.json 和 releases.json 产物。',
             'preparing_releases_artifact' => '正在准备 releases.json 产物。',
