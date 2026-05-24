@@ -145,8 +145,6 @@ return [
             'instance_already_initialized' => 'Instance already initialized.',
             'cleaning_up_redis' => 'Cleaning up Redis (stuck jobs and stale locks)...',
             'redis_cleanup_completed' => 'Redis cleanup completed.',
-            'marked_stuck_scheduled_task_executions_as_failed' => 'Marked :count stuck scheduled task executions as failed.',
-            'marked_stuck_database_backup_executions_as_failed' => 'Marked :count stuck database backup executions as failed.',
         ],
     ],
     'scheduled_job_diagnostics' => [
@@ -245,6 +243,9 @@ return [
             'enabling_auto_update' => 'Enabling auto-update',
             'disabling_auto_update' => 'Disabling auto-update',
             'continuing_with_initialization' => 'Continuing with initialization - cleanup errors will not prevent Coolify from starting',
+            'marked_stuck_deployments_as_failed' => 'Marked :count stuck deployments as failed.',
+            'marked_stuck_scheduled_task_executions_as_failed' => 'Marked :count stuck scheduled task executions as failed.',
+            'marked_stuck_database_backup_executions_as_failed' => 'Marked :count stuck database backup executions as failed.',
         ],
         'error' => [
             'could_not_pull_templates_from_cdn' => 'Could not pull templates from CDN: :error',
