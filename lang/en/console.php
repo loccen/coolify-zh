@@ -95,6 +95,7 @@ return [
         'delete_scheduled_task_executions' => 'Delete :count entries from scheduled_task_executions.',
     ],
     'cleanup_redis' => [
+        'description' => 'Cleanup Redis (Horizon jobs, metrics, overlapping queues, cache locks, and related data)',
         'info' => [
             'would_delete' => 'Redis cleanup: would delete :count items',
             'deleted' => 'Redis cleanup: deleted :count items',
