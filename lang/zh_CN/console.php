@@ -244,6 +244,7 @@ return [
         ],
     ],
     'generate_services' => [
+        'description' => '根据 /templates/compose 目录生成 service-templates json 文件',
         'info' => [
             'ignoring' => '忽略 :file',
             'processing' => '正在处理 :file',

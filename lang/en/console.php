@@ -244,6 +244,7 @@ return [
         ],
     ],
     'generate_services' => [
+        'description' => 'Generates service-templates json file based on /templates/compose directory',
         'info' => [
             'ignoring' => 'Ignoring :file',
             'processing' => 'Processing :file',
