@@ -18,6 +18,11 @@ class Services extends Command
      */
     protected $description = 'Generates service-templates json file based on /templates/compose directory';
 
+    public function getDescription(): string
+    {
+        return trans('console.generate_services.description');
+    }
+
     public function handle(): int
     {
         $serviceTemplatesJson = collect(array_merge(
