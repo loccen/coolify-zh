@@ -21,6 +21,15 @@ return [
         'action_required' => 'Action Required',
     ],
     'channels' => [
+        'email' => [
+            'resend' => [
+                'invalid_api_key' => 'Invalid Resend API key. Please verify your API key in the Resend dashboard and update it in settings.',
+                'restricted_api_key' => 'Your Resend API key has restricted permissions. Please use an API key with Full Access permissions.',
+                'rate_limit_exceeded' => 'Resend rate limit exceeded. Please try again in a few minutes.',
+                'validation_failed' => 'Email validation failed: :message',
+                'send_failed' => 'Failed to send email via Resend: :message',
+            ],
+        ],
         'transactional_email' => [
             'no_email_settings_found' => 'No email settings found.',
         ],

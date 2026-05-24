@@ -118,11 +118,11 @@ class EmailChannel
         } catch (ErrorException $e) {
             // Map HTTP status codes to user-friendly messages
             $userMessage = match ($e->getErrorCode()) {
-                403 => 'Invalid Resend API key. Please verify your API key in the Resend dashboard and update it in settings.',
-                401 => 'Your Resend API key has restricted permissions. Please use an API key with Full Access permissions.',
-                429 => 'Resend rate limit exceeded. Please try again in a few minutes.',
-                400 => 'Email validation failed: '.$e->getErrorMessage(),
-                default => 'Failed to send email via Resend: '.$e->getErrorMessage(),
+                403 => trans('mail.channels.email.resend.invalid_api_key'),
+                401 => trans('mail.channels.email.resend.restricted_api_key'),
+                429 => trans('mail.channels.email.resend.rate_limit_exceeded'),
+                400 => trans('mail.channels.email.resend.validation_failed', ['message' => $e->getErrorMessage()]),
+                default => trans('mail.channels.email.resend.send_failed', ['message' => $e->getErrorMessage()]),
             };
 
             // Log detailed error for admin debugging (redact sensitive data)

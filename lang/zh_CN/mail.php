@@ -21,6 +21,15 @@ return [
         'action_required' => '需要处理',
     ],
     'channels' => [
+        'email' => [
+            'resend' => [
+                'invalid_api_key' => 'Resend API Key 无效。请在 Resend 控制台检查 API Key，并在设置中更新。',
+                'restricted_api_key' => '当前 Resend API Key 权限受限。请使用具有 Full Access 权限的 API Key。',
+                'rate_limit_exceeded' => '已达到 Resend 的速率限制。请几分钟后再试。',
+                'validation_failed' => '邮件校验失败：:message',
+                'send_failed' => '通过 Resend 发送邮件失败：:message',
+            ],
+        ],
         'transactional_email' => [
             'no_email_settings_found' => '未找到邮件设置。',
         ],
