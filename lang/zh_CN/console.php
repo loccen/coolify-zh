@@ -145,8 +145,6 @@ return [
             'instance_already_initialized' => '实例已初始化。',
             'cleaning_up_redis' => '正在清理 Redis（卡住的作业和过期锁）...',
             'redis_cleanup_completed' => 'Redis 清理完成。',
-            'marked_stuck_scheduled_task_executions_as_failed' => '已将 :count 条卡住的计划任务执行记录标记为失败。',
-            'marked_stuck_database_backup_executions_as_failed' => '已将 :count 条卡住的数据库备份执行记录标记为失败。',
         ],
     ],
     'scheduled_job_diagnostics' => [
@@ -245,6 +243,9 @@ return [
             'enabling_auto_update' => '正在启用自动更新',
             'disabling_auto_update' => '正在禁用自动更新',
             'continuing_with_initialization' => '继续初始化，清理错误不会阻止 Coolify 启动',
+            'marked_stuck_deployments_as_failed' => '已将 :count 个卡住的部署标记为失败。',
+            'marked_stuck_scheduled_task_executions_as_failed' => '已将 :count 条卡住的计划任务执行记录标记为失败。',
+            'marked_stuck_database_backup_executions_as_failed' => '已将 :count 条卡住的数据库备份执行记录标记为失败。',
         ],
         'error' => [
             'could_not_pull_templates_from_cdn' => '无法从 CDN 拉取模板：:error',

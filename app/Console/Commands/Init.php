@@ -109,7 +109,7 @@ class Init extends Command
             ]);
 
             if ($updatedCount > 0) {
-                echo "Marked {$updatedCount} stuck deployments as failed\n";
+                echo trans('console.init.info.marked_stuck_deployments_as_failed', ['count' => $updatedCount], locale: $locale)."\n";
             }
         } catch (\Throwable $e) {
             echo trans('console.init.error.could_not_cleanup_inprogress_deployments', ['error' => $e->getMessage()], locale: $locale)."\n";
@@ -123,7 +123,7 @@ class Init extends Command
             ]);
 
             if ($updatedTaskCount > 0) {
-                echo "Marked {$updatedTaskCount} stuck scheduled task executions as failed\n";
+                echo trans('console.init.info.marked_stuck_scheduled_task_executions_as_failed', ['count' => $updatedTaskCount], locale: $locale)."\n";
             }
         } catch (\Throwable $e) {
             echo trans('console.init.error.could_not_cleanup_stuck_scheduled_task_executions', ['error' => $e->getMessage()], locale: $locale)."\n";
@@ -137,7 +137,7 @@ class Init extends Command
             ]);
 
             if ($updatedBackupCount > 0) {
-                echo "Marked {$updatedBackupCount} stuck database backup executions as failed\n";
+                echo trans('console.init.info.marked_stuck_database_backup_executions_as_failed', ['count' => $updatedBackupCount], locale: $locale)."\n";
             }
         } catch (\Throwable $e) {
             echo trans('console.init.error.could_not_cleanup_stuck_database_backup_executions', ['error' => $e->getMessage()], locale: $locale)."\n";
