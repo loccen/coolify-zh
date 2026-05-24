@@ -238,6 +238,27 @@ return [
         'generating' => 'Generating OpenAPI documentation.',
         'converted' => 'Converted OpenAPI YAML to JSON.',
     ],
+    'init' => [
+        'description' => 'Cleanup instance related stuffs',
+        'info' => [
+            'changelog_fetch_initiated' => 'Changelog fetch initiated',
+            'enabling_auto_update' => 'Enabling auto-update',
+            'disabling_auto_update' => 'Disabling auto-update',
+            'continuing_with_initialization' => 'Continuing with initialization - cleanup errors will not prevent Coolify from starting',
+        ],
+        'error' => [
+            'could_not_pull_templates_from_cdn' => 'Could not pull templates from CDN: :error',
+            'could_not_changelogs_from_github' => 'Could not changelogs from github: :error',
+            'error_in_pull_helper_image_command' => 'Error in pullHelperImage command: :error',
+            'error_in_cleanup_redis_command' => 'Error in cleanup:redis command: :error',
+            'error_in_cleanup_names_command' => 'Error in cleanup:names command: :error',
+            'error_in_cleanup_stucked_resources_command' => 'Error in cleanup:stucked-resources command: :error',
+            'could_not_cleanup_inprogress_deployments' => 'Could not cleanup inprogress deployments: :error',
+            'could_not_cleanup_stuck_scheduled_task_executions' => 'Could not cleanup stuck scheduled task executions: :error',
+            'could_not_cleanup_stuck_database_backup_executions' => 'Could not cleanup stuck database backup executions: :error',
+            'could_not_setup_dynamic_configuration' => 'Could not setup dynamic configuration: :error',
+        ],
+    ],
     'horizon_manage' => [
         'description' => 'Manage Horizon',
         'job_status' => 'Job Status: :status',

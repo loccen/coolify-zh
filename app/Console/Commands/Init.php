@@ -25,33 +25,42 @@ class Init extends Command
 {
     protected $signature = 'app:init';
 
-    protected $description = 'Cleanup instance related stuffs';
+    protected $description = '';
 
     public $servers = null;
 
     public InstanceSettings $settings;
 
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->setDescription(trans('console.init.description', locale: app()->getLocale()));
+    }
+
     public function handle()
     {
+        $locale = app()->getLocale();
+
         Artisan::call('optimize:clear');
         Artisan::call('optimize');
 
         try {
             $this->pullTemplatesFromCDN();
         } catch (\Throwable $e) {
-            echo "Could not pull templates from CDN: {$e->getMessage()}\n";
+            echo trans('console.init.error.could_not_pull_templates_from_cdn', ['error' => $e->getMessage()], locale: $locale)."\n";
         }
 
         try {
             $this->pullChangelogFromGitHub();
         } catch (\Throwable $e) {
-            echo "Could not changelogs from github: {$e->getMessage()}\n";
+            echo trans('console.init.error.could_not_changelogs_from_github', ['error' => $e->getMessage()], locale: $locale)."\n";
         }
 
         try {
             $this->pullHelperImage();
         } catch (\Throwable $e) {
-            echo "Error in pullHelperImage command: {$e->getMessage()}\n";
+            echo trans('console.init.error.error_in_pull_helper_image_command', ['error' => $e->getMessage()], locale: $locale)."\n";
         }
 
         if (isCloud()) {
@@ -78,18 +87,18 @@ class Init extends Command
         try {
             $this->call('cleanup:redis', ['--restart' => true, '--clear-locks' => true]);
         } catch (\Throwable $e) {
-            echo "Error in cleanup:redis command: {$e->getMessage()}\n";
+            echo trans('console.init.error.error_in_cleanup_redis_command', ['error' => $e->getMessage()], locale: $locale)."\n";
         }
         try {
             $this->call('cleanup:names');
         } catch (\Throwable $e) {
-            echo "Error in cleanup:names command: {$e->getMessage()}\n";
+            echo trans('console.init.error.error_in_cleanup_names_command', ['error' => $e->getMessage()], locale: $locale)."\n";
         }
         try {
             $this->call('cleanup:stucked-resources');
         } catch (\Throwable $e) {
-            echo "Error in cleanup:stucked-resources command: {$e->getMessage()}\n";
-            echo "Continuing with initialization - cleanup errors will not prevent Coolify from starting\n";
+            echo trans('console.init.error.error_in_cleanup_stucked_resources_command', ['error' => $e->getMessage()], locale: $locale)."\n";
+            echo trans('console.init.info.continuing_with_initialization', locale: $locale)."\n";
         }
         try {
             $updatedCount = ApplicationDeploymentQueue::whereIn('status', [
@@ -103,7 +112,7 @@ class Init extends Command
                 echo "Marked {$updatedCount} stuck deployments as failed\n";
             }
         } catch (\Throwable $e) {
-            echo "Could not cleanup inprogress deployments: {$e->getMessage()}\n";
+            echo trans('console.init.error.could_not_cleanup_inprogress_deployments', ['error' => $e->getMessage()], locale: $locale)."\n";
         }
 
         try {
@@ -117,7 +126,7 @@ class Init extends Command
                 echo "Marked {$updatedTaskCount} stuck scheduled task executions as failed\n";
             }
         } catch (\Throwable $e) {
-            echo "Could not cleanup stuck scheduled task executions: {$e->getMessage()}\n";
+            echo trans('console.init.error.could_not_cleanup_stuck_scheduled_task_executions', ['error' => $e->getMessage()], locale: $locale)."\n";
         }
 
         try {
@@ -131,7 +140,7 @@ class Init extends Command
                 echo "Marked {$updatedBackupCount} stuck database backup executions as failed\n";
             }
         } catch (\Throwable $e) {
-            echo "Could not cleanup stuck database backup executions: {$e->getMessage()}\n";
+            echo trans('console.init.error.could_not_cleanup_stuck_database_backup_executions', ['error' => $e->getMessage()], locale: $locale)."\n";
         }
 
         try {
@@ -140,15 +149,15 @@ class Init extends Command
                 $localhost->setupDynamicProxyConfiguration();
             }
         } catch (\Throwable $e) {
-            echo "Could not setup dynamic configuration: {$e->getMessage()}\n";
+            echo trans('console.init.error.could_not_setup_dynamic_configuration', ['error' => $e->getMessage()], locale: $locale)."\n";
         }
 
         if (! is_null(config('constants.coolify.autoupdate', null))) {
             if (config('constants.coolify.autoupdate') == true) {
-                echo "Enabling auto-update\n";
+                echo trans('console.init.info.enabling_auto_update', locale: $locale)."\n";
                 $this->settings->update(['is_auto_update_enabled' => true]);
             } else {
-                echo "Disabling auto-update\n";
+                echo trans('console.init.info.disabling_auto_update', locale: $locale)."\n";
                 $this->settings->update(['is_auto_update_enabled' => false]);
             }
         }
@@ -172,7 +181,7 @@ class Init extends Command
     {
         try {
             PullChangelog::dispatch();
-            echo "Changelog fetch initiated\n";
+            echo trans('console.init.info.changelog_fetch_initiated', locale: app()->getLocale())."\n";
         } catch (\Throwable $e) {
             echo "Could not fetch changelog from GitHub: {$e->getMessage()}\n";
         }
