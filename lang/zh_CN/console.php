@@ -95,6 +95,7 @@ return [
         'delete_scheduled_task_executions' => '删除 scheduled_task_executions 中的 :count 条记录。',
     ],
     'cleanup_redis' => [
+        'description' => '清理 Redis（Horizon 作业、指标、重叠队列、缓存锁及相关数据）',
         'info' => [
             'would_delete' => 'Redis 清理：将删除 :count 项',
             'deleted' => 'Redis 清理：已删除 :count 项',

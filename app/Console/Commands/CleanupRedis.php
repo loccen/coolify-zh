@@ -9,7 +9,14 @@ class CleanupRedis extends Command
 {
     protected $signature = 'cleanup:redis {--dry-run : Show what would be deleted without actually deleting} {--skip-overlapping : Skip overlapping queue cleanup} {--clear-locks : Clear stale WithoutOverlapping locks} {--restart : Aggressive cleanup mode for system restart (marks all processing jobs as failed)}';
 
-    protected $description = 'Cleanup Redis (Horizon jobs, metrics, overlapping queues, cache locks, and related data)';
+    protected $description = '';
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->setDescription(trans('console.cleanup_redis.description', locale: app()->getLocale()));
+    }
 
     public function handle()
     {

@@ -7,6 +7,7 @@ it('wires cleanup redis summary lines through console translations', function ()
     $command = file_get_contents(app_path('Console/Commands/CleanupRedis.php'));
 
     expect($command)
+        ->toContain("trans('console.cleanup_redis.description', locale: app()->getLocale())")
         ->toContain("trans('console.cleanup_redis.info.would_delete'")
         ->toContain("trans('console.cleanup_redis.info.deleted'")
         ->toContain("trans('console.cleanup_redis.warn.would_delete_stale_lock'")
@@ -32,6 +33,7 @@ it('resolves cleanup redis summary translations in en and zh_CN', function () {
             'minutes' => 12.5,
             'reason' => 'Processing for more than 12 hours',
         ]))->toBe('Would mark as FAILED: App\\Jobs\\DemoJob (processing for 12.5 min) - Processing for more than 12 hours')
+        ->and(trans('console.cleanup_redis.description'))->toBe('Cleanup Redis (Horizon jobs, metrics, overlapping queues, cache locks, and related data)')
         ->and((new CleanupRedis)->getDescription())->toBe('Cleanup Redis (Horizon jobs, metrics, overlapping queues, cache locks, and related data)');
 
     App::setLocale('zh_CN');
@@ -50,5 +52,6 @@ it('resolves cleanup redis summary translations in en and zh_CN', function () {
             'minutes' => 12.5,
             'reason' => '处理超过 12 小时',
         ]))->toBe('将标记为失败：App\\Jobs\\DemoJob（处理了 12.5 分钟）- 处理超过 12 小时')
-        ->and((new CleanupRedis)->getDescription())->toBe('Cleanup Redis (Horizon jobs, metrics, overlapping queues, cache locks, and related data)');
+        ->and(trans('console.cleanup_redis.description'))->toBe('清理 Redis（Horizon 作业、指标、重叠队列、缓存锁及相关数据）')
+        ->and((new CleanupRedis)->getDescription())->toBe('清理 Redis（Horizon 作业、指标、重叠队列、缓存锁及相关数据）');
 });
