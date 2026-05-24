@@ -1091,32 +1091,37 @@ class AdminDeleteUser extends Command
     {
         $this->newLine();
         $this->error('═══════════════════════════════════════');
-        $this->error('DELETION STATE AT FAILURE');
+        $this->error(trans('console.admin_delete_user.error_state.title'));
         $this->error('═══════════════════════════════════════');
-        $this->error("Failed at: {$failedAt}");
+        $this->error(trans('console.admin_delete_user.error_state.failed_at', ['phase' => $failedAt]));
         $this->newLine();
 
         $stateTable = [];
         foreach ($this->deletionState as $phase => $completed) {
             $phaseLabel = str_replace('_', ' ', ucwords($phase, '_'));
-            $status = $completed ? '✓ Completed' : '✗ Not completed';
+            $status = $completed
+                ? trans('console.admin_delete_user.error_state.status.completed')
+                : trans('console.admin_delete_user.error_state.status.not_completed');
             $stateTable[] = [$phaseLabel, $status];
         }
 
-        $this->table(['Phase', 'Status'], $stateTable);
+        $this->table([
+            trans('console.admin_delete_user.error_state.table_headers.phase'),
+            trans('console.admin_delete_user.error_state.table_headers.status'),
+        ], $stateTable);
         $this->newLine();
 
         // Show what was rolled back vs what remains
         if ($this->deletionState['db_committed']) {
-            $this->error('⚠️  DATABASE COMMITTED - Changes CANNOT be rolled back!');
+            $this->error(trans('console.admin_delete_user.error_state.database_committed'));
         } else {
-            $this->info('✓ Database changes were ROLLED BACK');
+            $this->info(trans('console.admin_delete_user.error_state.database_rolled_back'));
         }
 
         $this->newLine();
-        $this->error('User email: '.$this->user->email);
-        $this->error('User ID: '.$this->user->id);
-        $this->error('Timestamp: '.now()->format('Y-m-d H:i:s'));
+        $this->error(trans('console.admin_delete_user.error_state.user_email', ['email' => $this->user->email]));
+        $this->error(trans('console.admin_delete_user.error_state.user_id', ['id' => $this->user->id]));
+        $this->error(trans('console.admin_delete_user.error_state.timestamp', ['timestamp' => now()->format('Y-m-d H:i:s')]));
         $this->newLine();
     }
 
