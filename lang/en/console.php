@@ -48,6 +48,12 @@ return [
         'server_not_found' => 'Server not found.',
         'sent_successfully' => 'Email sent to :email successfully.',
     ],
+    'notify_demo' => [
+        'description' => 'Send a demo notification. Run without a channel to see available options.',
+        'intro' => 'Demo Notify <strong class="text-coolify">=></strong> Send a demo notification to a given channel.',
+        'channels_label' => 'Channels:',
+        'prompt' => 'In which manner do you want a <strong class="text-coolify">coolify</strong> notification?',
+    ],
     'root_change_email' => [
         'description' => 'Change Root Email',
         'about_to_change' => 'You are about to change the root user\'s email.',
