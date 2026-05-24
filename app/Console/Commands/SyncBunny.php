@@ -12,11 +12,18 @@ class SyncBunny extends Command
 {
     protected $signature = 'sync:bunny {--templates} {--release} {--github-releases} {--github-versions} {--nightly}';
 
-    protected $description = 'Sync release artifacts to the GitHub Pages artifact repository';
+    protected $description = '';
 
     private string $artifactsRepository = 'loccen/coolify-zh-artifacts';
 
     private string $sourceRepository = 'loccen/coolify-zh';
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->setDescription(trans('console.sync_bunny.description', locale: app()->getLocale()));
+    }
 
     public function handle(): int
     {
@@ -61,9 +68,12 @@ class SyncBunny extends Command
         $targetDirectory = $nightly ? 'coolify-nightly' : 'coolify';
         $files = $nightly ? $this->nightlyArtifactFiles() : $this->productionArtifactFiles();
 
-        $this->info('Preparing '.($nightly ? 'nightly' : 'production').' artifacts for '.$this->artifactsRepository.'.');
+        $this->info(trans('console.sync_bunny.info.preparing_artifacts', [
+            'kind' => trans('console.sync_bunny.kinds.'.($nightly ? 'nightly' : 'production'), locale: app()->getLocale()),
+            'repository' => $this->artifactsRepository,
+        ], locale: app()->getLocale()));
 
-        if (! confirm('确认要同步这些 artifacts 吗？', default: true)) {
+        if (! confirm(trans('console.sync_bunny.confirm.sync_artifacts', locale: app()->getLocale()), default: true)) {
             return self::SUCCESS;
         }
 
@@ -78,9 +88,9 @@ class SyncBunny extends Command
 
     private function syncTemplates(string $tmpDir): int
     {
-        $this->info('Preparing service template artifact.');
+        $this->info(trans('console.sync_bunny.info.preparing_service_template_artifact', locale: app()->getLocale()));
 
-        if (! confirm('确认要同步 service template 吗？', default: true)) {
+        if (! confirm(trans('console.sync_bunny.confirm.sync_service_template', locale: app()->getLocale()), default: true)) {
             return self::SUCCESS;
         }
 
@@ -93,9 +103,9 @@ class SyncBunny extends Command
 
     private function syncReleaseBundle(string $tmpDir, bool $nightly): int
     {
-        $this->info('Preparing versions.json and releases.json artifacts.');
+        $this->info(trans('console.sync_bunny.info.preparing_versions_and_releases_artifacts', locale: app()->getLocale()));
 
-        if (! confirm('确认要同步版本与发布记录吗？', default: true)) {
+        if (! confirm(trans('console.sync_bunny.confirm.sync_versions_and_releases', locale: app()->getLocale()), default: true)) {
             return self::SUCCESS;
         }
 
@@ -107,9 +117,9 @@ class SyncBunny extends Command
 
     private function syncReleases(string $tmpDir): int
     {
-        $this->info('Preparing releases.json artifact.');
+        $this->info(trans('console.sync_bunny.info.preparing_releases_artifact', locale: app()->getLocale()));
 
-        if (! confirm('确认要同步 releases.json 吗？', default: true)) {
+        if (! confirm(trans('console.sync_bunny.confirm.sync_releases_json', locale: app()->getLocale()), default: true)) {
             return self::SUCCESS;
         }
 
@@ -120,9 +130,9 @@ class SyncBunny extends Command
 
     private function syncVersions(string $tmpDir, bool $nightly): int
     {
-        $this->info('Preparing versions.json artifact.');
+        $this->info(trans('console.sync_bunny.info.preparing_versions_artifact', locale: app()->getLocale()));
 
-        if (! confirm('确认要同步 versions.json 吗？', default: true)) {
+        if (! confirm(trans('console.sync_bunny.confirm.sync_versions_json', locale: app()->getLocale()), default: true)) {
             return self::SUCCESS;
         }
 
@@ -233,7 +243,7 @@ class SyncBunny extends Command
         }
 
         if (! array_filter($statusOutput)) {
-            $this->info('No artifact changes detected.');
+            $this->info(trans('console.sync_bunny.info.no_artifact_changes_detected', locale: app()->getLocale()));
 
             return self::SUCCESS;
         }
@@ -255,7 +265,9 @@ class SyncBunny extends Command
             return self::FAILURE;
         }
 
-        $this->info('Artifacts pushed to '.$this->artifactsRepository.' successfully.');
+        $this->info(trans('console.sync_bunny.info.artifacts_pushed_successfully', [
+            'repository' => $this->artifactsRepository,
+        ], locale: app()->getLocale()));
 
         return self::SUCCESS;
     }

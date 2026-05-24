@@ -249,6 +249,29 @@ return [
             'processing' => '正在处理 :file',
         ],
     ],
+    'sync_bunny' => [
+        'description' => '将发布产物同步到 GitHub Pages 产物仓库',
+        'info' => [
+            'preparing_artifacts' => '正在为 :repository 准备:kind发布产物。',
+            'preparing_service_template_artifact' => '正在准备服务模板产物。',
+            'preparing_versions_and_releases_artifacts' => '正在准备 versions.json 和 releases.json 产物。',
+            'preparing_releases_artifact' => '正在准备 releases.json 产物。',
+            'preparing_versions_artifact' => '正在准备 versions.json 产物。',
+            'no_artifact_changes_detected' => '未检测到产物变更。',
+            'artifacts_pushed_successfully' => '已成功将产物推送到 :repository。',
+        ],
+        'confirm' => [
+            'sync_artifacts' => '确定要同步这些发布产物吗？',
+            'sync_service_template' => '确定要同步服务模板产物吗？',
+            'sync_versions_and_releases' => '确定要同步版本和发布元数据吗？',
+            'sync_releases_json' => '确定要同步 releases.json 吗？',
+            'sync_versions_json' => '确定要同步 versions.json 吗？',
+        ],
+        'kinds' => [
+            'nightly' => '夜间版',
+            'production' => '正式版',
+        ],
+    ],
     'services_delete' => [
         'description' => '从数据库中删除服务及相关资源',
         'select_resource' => '你想删除哪种服务？',

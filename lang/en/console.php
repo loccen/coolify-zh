@@ -249,6 +249,29 @@ return [
             'processing' => 'Processing :file',
         ],
     ],
+    'sync_bunny' => [
+        'description' => 'Sync release artifacts to the GitHub Pages artifact repository',
+        'info' => [
+            'preparing_artifacts' => 'Preparing :kind artifacts for :repository.',
+            'preparing_service_template_artifact' => 'Preparing service template artifact.',
+            'preparing_versions_and_releases_artifacts' => 'Preparing versions.json and releases.json artifacts.',
+            'preparing_releases_artifact' => 'Preparing releases.json artifact.',
+            'preparing_versions_artifact' => 'Preparing versions.json artifact.',
+            'no_artifact_changes_detected' => 'No artifact changes detected.',
+            'artifacts_pushed_successfully' => 'Artifacts pushed to :repository successfully.',
+        ],
+        'confirm' => [
+            'sync_artifacts' => 'Do you want to sync these artifacts?',
+            'sync_service_template' => 'Do you want to sync the service template artifact?',
+            'sync_versions_and_releases' => 'Do you want to sync versions and release metadata?',
+            'sync_releases_json' => 'Do you want to sync releases.json?',
+            'sync_versions_json' => 'Do you want to sync versions.json?',
+        ],
+        'kinds' => [
+            'nightly' => 'nightly',
+            'production' => 'production',
+        ],
+    ],
     'services_delete' => [
         'description' => 'Delete services and related resources from the database',
         'select_resource' => 'What service do you want to delete?',
