@@ -111,6 +111,14 @@ return [
             'phase_5_commit' => '第 5 阶段已完成。要提交数据库变更吗？（这是永久操作）',
             'phase_6_stripe' => '继续进入第 6 阶段（取消 Stripe 订阅）吗？',
         ],
+        'cancel' => [
+            'by_operator' => '操作人员已取消用户删除。',
+            'after_phase_2' => '操作人员已在第 2 阶段后取消用户删除。',
+            'after_phase_3' => '操作人员已在第 3 阶段后取消用户删除。',
+            'after_phase_4' => '操作人员已在第 4 阶段后取消用户删除。',
+            'before_commit' => '操作人员已在提交前取消用户删除。',
+            'database_rolled_back' => '数据库变更已回滚。',
+        ],
         'commit' => [
             'critical_decision_point' => '⚠️  关键决定点',
             'next_step' => '下一步：提交数据库变更（永久且不可逆）',
