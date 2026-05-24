@@ -26,9 +26,14 @@ class UpdateServiceVersions extends Command
 
     protected array $majorVersionUpdates = [];
 
+    public function getDescription(): string
+    {
+        return trans('console.update_service_versions.description');
+    }
+
     public function handle(): int
     {
-        $this->info('Starting service version update...');
+        $this->info(trans('console.update_service_versions.info.starting'));
 
         $templateFiles = $this->getTemplateFiles();
 
@@ -59,14 +64,14 @@ class UpdateServiceVersions extends Command
     protected function processTemplate(string $filePath): void
     {
         $filename = basename($filePath);
-        $this->info("Processing: {$filename}");
+        $this->info(trans('console.update_service_versions.info.processing', ['filename' => $filename]));
 
         try {
             $content = file_get_contents($filePath);
             $yaml = Yaml::parse($content);
 
             if (! isset($yaml['services'])) {
-                $this->warn("  No services found in {$filename}");
+                $this->warn('  '.trans('console.update_service_versions.warn.no_services_found', ['filename' => $filename]));
                 $this->stats['skipped']++;
 
                 return;
@@ -94,11 +99,18 @@ class UpdateServiceVersions extends Command
                 $latestVersion = $this->getLatestVersion($currentImage);
 
                 if ($latestVersion && $latestVersion !== $currentImage) {
-                    $this->line("  {$serviceName}: {$currentImage} → {$latestVersion}");
+                    $this->line('  '.trans('console.update_service_versions.info.image_updated', [
+                        'service_name' => $serviceName,
+                        'current_image' => $currentImage,
+                        'latest_version' => $latestVersion,
+                    ]));
                     $updatedYaml['services'][$serviceName]['image'] = $latestVersion;
                     $updated = true;
                 } else {
-                    $this->line("  {$serviceName}: {$currentImage} (up to date)");
+                    $this->line('  '.trans('console.update_service_versions.info.image_up_to_date', [
+                        'service_name' => $serviceName,
+                        'current_image' => $currentImage,
+                    ]));
                 }
             }
 
@@ -107,7 +119,7 @@ class UpdateServiceVersions extends Command
                     $this->updateYamlFile($filePath, $content, $updatedYaml);
                     $this->stats['updated']++;
                 } else {
-                    $this->warn('  [DRY RUN] Would update this file');
+                    $this->warn('  '.trans('console.update_service_versions.warn.dry_run_would_update_file'));
                     $this->stats['updated']++;
                 }
             } else {
@@ -115,7 +127,7 @@ class UpdateServiceVersions extends Command
             }
 
         } catch (\Throwable $e) {
-            $this->error("  Failed: {$e->getMessage()}");
+            $this->error('  '.trans('console.update_service_versions.error.failed', ['message' => $e->getMessage()]));
             $this->stats['failed']++;
         }
 
