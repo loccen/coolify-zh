@@ -32,7 +32,7 @@ class CleanupNames extends Command
                             {--backup : Create database backup before changes}
                             {--force : Skip confirmation prompt}';
 
-    protected $description = 'Sanitize name fields by removing dangerous characters';
+    protected $description = '';
 
     protected array $modelsToClean = [
         'Project' => Project::class,
@@ -60,6 +60,13 @@ class CleanupNames extends Command
     protected int $totalProcessed = 0;
 
     protected int $totalCleaned = 0;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->setDescription(trans('console.cleanup_names.description', locale: app()->getLocale()));
+    }
 
     public function handle(): int
     {

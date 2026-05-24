@@ -110,6 +110,7 @@ return [
         ],
     ],
     'cleanup_names' => [
+        'description' => 'Sanitize name fields by removing dangerous characters',
         'error' => [
             'unknown_model' => 'Unknown model: :model',
             'processing' => 'Error processing :model: :error',

@@ -1,16 +1,23 @@
 <?php
 
+use App\Console\Commands\CleanupNames;
+
 it('wires cleanup names console translations in english', function () {
     app()->setLocale('en');
 
     expect(file_get_contents(base_path('app/Console/Commands/CleanupNames.php')))
+        ->toContain("trans('console.cleanup_names.description', locale: app()->getLocale())")
         ->toContain("trans('console.cleanup_names.error.unknown_model'")
         ->toContain("trans('console.cleanup_names.info.available_models'")
         ->toContain("trans('console.cleanup_names.info.would_sanitize'")
         ->toContain("trans('console.cleanup_names.info.sanitized'")
         ->toContain("trans('console.cleanup_names.error.processing'");
 
-    expect(trans('console.cleanup_names.error.unknown_model', ['model' => 'Foo']))
+    expect(trans('console.cleanup_names.description'))
+        ->toBe('Sanitize name fields by removing dangerous characters')
+        ->and((new CleanupNames)->getDescription())
+        ->toBe('Sanitize name fields by removing dangerous characters')
+        ->and(trans('console.cleanup_names.error.unknown_model', ['model' => 'Foo']))
         ->toBe('Unknown model: Foo')
         ->and(trans('console.cleanup_names.info.available_models', ['models' => 'Foo, Bar']))
         ->toBe('Available models: Foo, Bar')
@@ -25,7 +32,11 @@ it('wires cleanup names console translations in english', function () {
 it('wires cleanup names console translations in chinese', function () {
     app()->setLocale('zh_CN');
 
-    expect(trans('console.cleanup_names.error.unknown_model', ['model' => 'Foo']))
+    expect(trans('console.cleanup_names.description'))
+        ->toBe('清理名称字段中的危险字符')
+        ->and((new CleanupNames)->getDescription())
+        ->toBe('清理名称字段中的危险字符')
+        ->and(trans('console.cleanup_names.error.unknown_model', ['model' => 'Foo']))
         ->toBe('未知模型：Foo')
         ->and(trans('console.cleanup_names.info.available_models', ['models' => 'Foo, Bar']))
         ->toBe('可用模型：Foo, Bar')
