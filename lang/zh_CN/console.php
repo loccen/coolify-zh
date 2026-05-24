@@ -48,6 +48,12 @@ return [
         'server_not_found' => '未找到服务器。',
         'sent_successfully' => '邮件已成功发送至 :email。',
     ],
+    'notify_demo' => [
+        'description' => '发送演示通知。不带 channel 运行时会显示可用选项。',
+        'intro' => 'Demo Notify <strong class="text-coolify">=></strong> 向指定 channel 发送演示通知。',
+        'channels_label' => '渠道：',
+        'prompt' => '你想以哪种方式接收 <strong class="text-coolify">coolify</strong> 通知？',
+    ],
     'root_change_email' => [
         'description' => '更改 Root 邮箱',
         'about_to_change' => '即将更改 Root 用户的邮箱。',
