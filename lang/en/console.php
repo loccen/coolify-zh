@@ -186,6 +186,24 @@ return [
             'not_applicable' => 'N/A',
         ],
     ],
+    'run_scheduled_jobs_manually' => [
+        'description' => 'Manually run scheduled database backups and tasks when cron fails',
+        'info' => [
+            'starting' => 'Starting manual execution of scheduled jobs...:suffix',
+            'completed' => 'Completed manual execution of scheduled jobs.:suffix',
+            'processing_scheduled_database_backups' => 'Processing scheduled database backups...',
+            'no_enabled_scheduled_backups_found' => 'No enabled scheduled backups found:frequency.',
+            'processing_scheduled_tasks' => 'Processing scheduled tasks...',
+            'no_enabled_scheduled_tasks_found' => 'No enabled scheduled tasks found:frequency.',
+        ],
+        'warn' => [
+            'dry_run_mode' => 'DRY RUN MODE: No jobs will actually be dispatched',
+        ],
+        'values' => [
+            'dry_run_suffix' => ' (DRY RUN)',
+            'with_frequency' => " with frequency ':frequency'",
+        ],
+    ],
     'generate_testing_schema' => [
         'description' => 'Generate SQLite testing schema from the PostgreSQL database',
         'error' => [
