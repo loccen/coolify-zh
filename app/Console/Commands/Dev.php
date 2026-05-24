@@ -14,7 +14,14 @@ class Dev extends Command
 {
     protected $signature = 'dev {--init}';
 
-    protected $description = 'Helper commands for development.';
+    protected $description = '';
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->setDescription(trans('console.dev.description', locale: app()->getLocale()));
+    }
 
     public function handle()
     {
@@ -27,33 +34,35 @@ class Dev extends Command
 
     public function init()
     {
+        $locale = app()->getLocale();
+
         // Generate APP_KEY if not exists
 
         if (empty(config('app.key'))) {
-            echo "   INFO  Generating APP_KEY.\n";
+            echo '   INFO  '.trans('console.dev.info.generating_app_key', locale: $locale)."\n";
             Artisan::call('key:generate');
         }
 
         // Generate STORAGE link if not exists
         if (! file_exists(public_path('storage'))) {
-            echo "   INFO  Generating storage link.\n";
+            echo '   INFO  '.trans('console.dev.info.generating_storage_link', locale: $locale)."\n";
             Artisan::call('storage:link');
         }
 
         // Seed database if it's empty
         $settings = InstanceSettings::find(0);
         if (! $settings) {
-            echo "   INFO  Initializing instance, seeding database.\n";
+            echo '   INFO  '.trans('console.dev.info.initializing_instance', locale: $locale)."\n";
             Artisan::call('migrate --seed');
         } else {
-            echo "   INFO  Instance already initialized.\n";
+            echo '   INFO  '.trans('console.dev.info.instance_already_initialized', locale: $locale)."\n";
         }
 
         // Clean up stuck jobs and stale locks on development startup
         try {
-            echo "   INFO  Cleaning up Redis (stuck jobs and stale locks)...\n";
+            echo '   INFO  '.trans('console.dev.info.cleaning_up_redis', locale: $locale)."\n";
             Artisan::call('cleanup:redis', ['--restart' => true, '--clear-locks' => true]);
-            echo "   INFO  Redis cleanup completed.\n";
+            echo '   INFO  '.trans('console.dev.info.redis_cleanup_completed', locale: $locale)."\n";
         } catch (\Throwable $e) {
             echo "   ERROR  Redis cleanup failed: {$e->getMessage()}\n";
         }

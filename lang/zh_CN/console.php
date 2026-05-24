@@ -131,6 +131,17 @@ return [
         'running' => '正在清理不可达服务器...',
         'cleanup_server' => '清理不可达服务器 :id，名称为 :name',
     ],
+    'dev' => [
+        'description' => '开发辅助命令。',
+        'info' => [
+            'generating_app_key' => '正在生成 APP_KEY。',
+            'generating_storage_link' => '正在生成 storage 链接。',
+            'initializing_instance' => '正在初始化实例并填充数据库。',
+            'instance_already_initialized' => '实例已初始化。',
+            'cleaning_up_redis' => '正在清理 Redis（卡住的作业和过期锁）...',
+            'redis_cleanup_completed' => 'Redis 清理完成。',
+        ],
+    ],
     'scheduled_job_diagnostics' => [
         'description' => '检查所有计划任务的去重缓存状态和调度决策',
         'heartbeat' => '调度器心跳：:heartbeat（:age）',

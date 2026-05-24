@@ -131,6 +131,17 @@ return [
         'running' => 'Running unreachable server cleanup...',
         'cleanup_server' => 'Cleanup unreachable server :id with name :name',
     ],
+    'dev' => [
+        'description' => 'Helper commands for development.',
+        'info' => [
+            'generating_app_key' => 'Generating APP_KEY.',
+            'generating_storage_link' => 'Generating storage link.',
+            'initializing_instance' => 'Initializing instance, seeding database.',
+            'instance_already_initialized' => 'Instance already initialized.',
+            'cleaning_up_redis' => 'Cleaning up Redis (stuck jobs and stale locks)...',
+            'redis_cleanup_completed' => 'Redis cleanup completed.',
+        ],
+    ],
     'scheduled_job_diagnostics' => [
         'description' => 'Inspect dedup cache state and scheduling decisions for all scheduled jobs',
         'heartbeat' => 'Scheduler heartbeat: :heartbeat (:age)',
