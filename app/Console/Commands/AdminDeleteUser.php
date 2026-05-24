@@ -466,7 +466,7 @@ class AdminDeleteUser extends Command
     {
         $this->newLine();
         $this->info('═══════════════════════════════════════');
-        $this->info('PHASE 2: DELETE RESOURCES');
+        $this->info(trans('console.admin_delete_user.resources.phase_title'));
         $this->info('═══════════════════════════════════════');
         $this->newLine();
 
@@ -476,18 +476,23 @@ class AdminDeleteUser extends Command
         if ($resources['applications']->isEmpty() &&
             $resources['databases']->isEmpty() &&
             $resources['services']->isEmpty()) {
-            $this->info('No resources to delete.');
+            $this->info(trans('console.admin_delete_user.resources.no_resources'));
 
             return true;
         }
 
-        $this->info('Resources to be deleted:');
+        $this->info(trans('console.admin_delete_user.resources.summary_title'));
         $this->newLine();
 
         if ($resources['applications']->isNotEmpty()) {
-            $this->warn("Applications to be deleted ({$resources['applications']->count()}):");
+            $this->warn(trans('console.admin_delete_user.resources.applications_title', ['count' => $resources['applications']->count()]));
             $this->table(
-                ['Name', 'UUID', 'Server', 'Status'],
+                [
+                    trans('console.admin_delete_user.resources.table_headers.name'),
+                    trans('console.admin_delete_user.resources.table_headers.uuid'),
+                    trans('console.admin_delete_user.resources.table_headers.server'),
+                    trans('console.admin_delete_user.resources.table_headers.status'),
+                ],
                 $resources['applications']->map(function ($app) {
                     return [
                         $app->name,
@@ -501,9 +506,14 @@ class AdminDeleteUser extends Command
         }
 
         if ($resources['databases']->isNotEmpty()) {
-            $this->warn("Databases to be deleted ({$resources['databases']->count()}):");
+            $this->warn(trans('console.admin_delete_user.resources.databases_title', ['count' => $resources['databases']->count()]));
             $this->table(
-                ['Name', 'Type', 'UUID', 'Server'],
+                [
+                    trans('console.admin_delete_user.resources.table_headers.name'),
+                    trans('console.admin_delete_user.resources.table_headers.type'),
+                    trans('console.admin_delete_user.resources.table_headers.uuid'),
+                    trans('console.admin_delete_user.resources.table_headers.server'),
+                ],
                 $resources['databases']->map(function ($db) {
                     return [
                         $db->name,
@@ -517,9 +527,13 @@ class AdminDeleteUser extends Command
         }
 
         if ($resources['services']->isNotEmpty()) {
-            $this->warn("Services to be deleted ({$resources['services']->count()}):");
+            $this->warn(trans('console.admin_delete_user.resources.services_title', ['count' => $resources['services']->count()]));
             $this->table(
-                ['Name', 'UUID', 'Server'],
+                [
+                    trans('console.admin_delete_user.resources.table_headers.name'),
+                    trans('console.admin_delete_user.resources.table_headers.uuid'),
+                    trans('console.admin_delete_user.resources.table_headers.server'),
+                ],
                 $resources['services']->map(function ($service) {
                     return [
                         $service->name,
@@ -531,25 +545,29 @@ class AdminDeleteUser extends Command
             $this->newLine();
         }
 
-        $this->error('⚠️  THIS ACTION CANNOT BE UNDONE!');
-        if (! $this->confirm('Are you sure you want to delete all these resources?', false)) {
+        $this->error(trans('console.admin_delete_user.resources.irreversible_warning'));
+        if (! $this->confirm(trans('console.admin_delete_user.resources.confirm_delete_all'), false)) {
             return false;
         }
 
         if (! $this->isDryRun) {
-            $this->info('Deleting resources...');
+            $this->info(trans('console.admin_delete_user.resources.deleting'));
             try {
                 $result = $action->execute();
-                $this->info("✓ Deleted: {$result['applications']} applications, {$result['databases']} databases, {$result['services']} services");
+                $this->info(trans('console.admin_delete_user.resources.deleted_summary', [
+                    'applications' => $result['applications'],
+                    'databases' => $result['databases'],
+                    'services' => $result['services'],
+                ]));
                 $this->logAction("Deleted resources for user {$this->user->email}: {$result['applications']} apps, {$result['databases']} databases, {$result['services']} services");
             } catch (\Exception $e) {
-                $this->error('Failed to delete resources:');
-                $this->error('Exception: '.get_class($e));
-                $this->error('Message: '.$e->getMessage());
-                $this->error('File: '.$e->getFile().':'.$e->getLine());
+                $this->error(trans('console.admin_delete_user.resources.delete_failed'));
+                $this->error(trans('console.admin_delete_user.resources.exception_label').': '.get_class($e));
+                $this->error(trans('console.admin_delete_user.resources.message_label').': '.$e->getMessage());
+                $this->error(trans('console.admin_delete_user.resources.file_label').': '.$e->getFile().':'.$e->getLine());
 
                 if ($this->output->isVerbose()) {
-                    $this->error('Stack Trace:');
+                    $this->error(trans('console.admin_delete_user.resources.stack_trace_label'));
                     $this->error($e->getTraceAsString());
                 }
 
