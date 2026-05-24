@@ -133,6 +133,11 @@ return [
     ],
     'dev' => [
         'description' => 'Helper commands for development.',
+        'error' => [
+            'redis_cleanup_failed' => 'Redis cleanup failed: :error',
+            'could_not_clean_up_stuck_scheduled_task_executions' => 'Could not clean up stuck scheduled task executions: :error',
+            'could_not_clean_up_stuck_database_backup_executions' => 'Could not clean up stuck database backup executions: :error',
+        ],
         'info' => [
             'generating_app_key' => 'Generating APP_KEY.',
             'generating_storage_link' => 'Generating storage link.',
@@ -140,6 +145,8 @@ return [
             'instance_already_initialized' => 'Instance already initialized.',
             'cleaning_up_redis' => 'Cleaning up Redis (stuck jobs and stale locks)...',
             'redis_cleanup_completed' => 'Redis cleanup completed.',
+            'marked_stuck_scheduled_task_executions_as_failed' => 'Marked :count stuck scheduled task executions as failed.',
+            'marked_stuck_database_backup_executions_as_failed' => 'Marked :count stuck database backup executions as failed.',
         ],
     ],
     'scheduled_job_diagnostics' => [
